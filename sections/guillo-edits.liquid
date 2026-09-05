@@ -1,0 +1,131 @@
+{% comment %}
+  Two-up full-bleed collection tiles ("The Coastal Edit", "The Chino Edit"…)
+  with a bottom gradient, uppercase name and underlined "Shop now".
+{% endcomment %}
+
+<section class="guillo-edits">
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign tile_collection = block.settings.collection
+      assign tile_url = block.settings.link
+      if tile_url == blank and tile_collection != blank
+        assign tile_url = tile_collection.url
+      endif
+      assign tile_name = block.settings.title
+      if tile_name == blank and tile_collection != blank
+        assign tile_name = tile_collection.title
+      endif
+      assign tile_image = block.settings.image
+      if tile_image == blank and block.settings.fallback_asset == blank and tile_collection != blank
+        assign tile_image = tile_collection.featured_image
+      endif
+    -%}
+    <a href="{{ tile_url | default: '#' }}" class="guillo-edits__tile" {{ block.shopify_attributes }}>
+      {% render 'guillo-img',
+        image: tile_image,
+        fallback: block.settings.fallback_asset,
+        alt: tile_name,
+        class: 'guillo-edits__img',
+        sizes: '(min-width: 750px) 50vw, 100vw',
+        position: block.settings.image_position
+      %}
+      <span class="guillo-edits__wash"></span>
+      <span class="guillo-edits__caption">
+        <span class="guillo-edits__name">{{ tile_name }}</span>
+        <span class="guillo-edits__cta">Shop now</span>
+      </span>
+    </a>
+  {%- endfor -%}
+</section>
+
+{% stylesheet %}
+  .guillo-edits {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .guillo-edits__tile {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--g-canvas);
+    display: block;
+  }
+  .guillo-edits__img,
+  .guillo-edits__tile svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .guillo-edits__tile:hover .guillo-edits__img { transform: scale(1.03); }
+  .guillo-edits__wash {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(12 13 16 / 0) 46%, rgb(12 13 16 / 0.62) 100%);
+  }
+  .guillo-edits__caption {
+    position: absolute;
+    left: 44px;
+    right: 44px;
+    bottom: 40px;
+  }
+  .guillo-edits__name {
+    display: block;
+    font: 400 24px/1.25 var(--g-sans);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  .guillo-edits__cta {
+    display: inline-block;
+    font: 400 10px/1 var(--g-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    border-bottom: 1px solid rgb(255 255 255 / 0.6);
+    padding-bottom: 5px;
+  }
+  @media screen and (max-width: 749px) {
+    .guillo-edits { grid-template-columns: 1fr; }
+    .guillo-edits__caption { left: 24px; right: 24px; bottom: 26px; }
+    .guillo-edits__name { font-size: 19px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo edit tiles",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "title", "label": "Title override" },
+        { "type": "url", "id": "link", "label": "Link override" },
+        { "type": "image_picker", "id": "image", "label": "Image override" },
+        { "type": "text", "id": "image_position", "label": "Image focal point", "default": "center 20%" },
+        { "type": "text", "id": "fallback_asset", "label": "Fallback asset filename", "info": "Theme asset used while no image or collection is set." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guillo edit tiles",
+      "category": "Guillo",
+      "blocks": [
+        { "type": "tile", "settings": { "title": "The Coastal Edit", "image_position": "center 22%", "fallback_asset": "guillo-bone-pool.jpg" } },
+        { "type": "tile", "settings": { "title": "The Chino Edit", "image_position": "center 14%", "fallback_asset": "guillo-brown-01.jpg" } },
+        { "type": "tile", "settings": { "title": "Shirts & Polos", "image_position": "center 20%", "fallback_asset": "guillo-bone-fountain.jpg" } },
+        { "type": "tile", "settings": { "title": "The Evening Edit", "image_position": "center 24%", "fallback_asset": "guillo-brown-04.jpg" } },
+        { "type": "tile", "settings": { "title": "New In", "image_position": "center 20%", "fallback_asset": "guillo-brown-02.jpg" } },
+        { "type": "tile", "settings": { "title": "The Travel Edit", "image_position": "center 26%", "fallback_asset": "guillo-brown-03.jpg" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

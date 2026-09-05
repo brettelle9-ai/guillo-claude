@@ -1,0 +1,59 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "guillo-collection-banner",
+      "settings": {
+        "fallback_asset": "guillo-brown-01.jpg"
+      }
+    },
+    "grid": {
+      "type": "guillo-collection-grid",
+      "blocks": {
+        "summer": {
+          "type": "filter_set",
+          "settings": {
+            "collection": "summer-preview",
+            "chips": "New:newest, Slim fit:fit-slim, Relaxed fit:fit-relaxed, Shirts:garment-shirt, Pants:pants"
+          }
+        }
+      },
+      "block_order": [
+        "summer"
+      ],
+      "settings": {
+        "filter_chips": "Slim fit:slim-fit, Stretch:stretch, Under $120:under-120",
+        "show_quick_add": true,
+        "show_break": true,
+        "break_eyebrow": "Not sure of your size",
+        "break_heading": "Two minutes now beats a return in a fortnight.",
+        "break_text": "The fit guide compares every cut side by side, with the waist and thigh measurements laid out plainly.",
+        "break_link_label": "Open the fit guide",
+        "break_link": "shopify://pages/fit-guide",
+        "break_image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_33_AM.png",
+        "seo_title_1": "Chinos built for real legs",
+        "seo_text_1": "<p>Stiff cotton pretending to stretch is why most men own one pair of chinos they tolerate. Our twill is blended with elastane, so it flexes when you sit, drive and walk, then returns to shape instead of bagging at the knee.</p><p>Space through the seat and thigh means no pulling across the quad. The taper from knee to ankle means no stacking over the shoe. Wear them to work, to dinner, or straight to the airport.</p>",
+        "seo_title_2": "Choosing between the cuts",
+        "seo_text_2": "<p>The Luxe Chino is slim and tailored, sitting close without restricting. The Signore is classic with a hint of slim, and its side fastening keeps the front clean under an untucked shirt.</p><p>If you train, start with your usual waist. Both cuts are drafted with room through the thigh, so sizing up is rarely the answer.</p>"
+      }
+    },
+    "pf-d3c52bc0": {
+      "type": "pf-d3c52bc0",
+      "settings": {}
+    }
+  },
+  "order": [
+    "banner",
+    "grid",
+    "pf-d3c52bc0"
+  ]
+}
+

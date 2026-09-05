@@ -1,0 +1,207 @@
+{% comment %}
+  Product anatomy: serif claim top-left, tall centre image, and four
+  callouts connected to it with hairline pointers (two per side).
+{% endcomment %}
+
+<section class="guillo-anatomy g-pad">
+  <div class="guillo-anatomy__grid">
+    <div class="guillo-anatomy__side guillo-anatomy__side--left">
+      <h2 class="guillo-anatomy__heading">{{ section.settings.heading }}</h2>
+      {%- assign left_blocks = section.blocks | where: 'type', 'callout_left' -%}
+      {%- for block in left_blocks -%}
+        <div class="guillo-anatomy__callout guillo-anatomy__callout--left" {{ block.shopify_attributes }}>
+          <div class="guillo-anatomy__callout-copy">
+            <div class="guillo-anatomy__callout-title">{{ block.settings.title }}</div>
+            <p class="guillo-anatomy__callout-text">{{ block.settings.text }}</p>
+            {%- if block.settings.spec != blank -%}
+              <div class="guillo-anatomy__callout-spec">{{ block.settings.spec }}</div>
+            {%- endif -%}
+          </div>
+          <span class="guillo-anatomy__tick" aria-hidden="true"></span>
+          <span class="guillo-anatomy__line" aria-hidden="true"></span>
+          <span class="guillo-anatomy__point" aria-hidden="true"></span>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="guillo-anatomy__media">
+      {% render 'guillo-img',
+        image: section.settings.image,
+        fallback: 'guillo-brown-01.jpg',
+        alt: section.settings.image_alt,
+        class: 'guillo-anatomy__img',
+        sizes: '(min-width: 990px) 30vw, 100vw',
+        position: section.settings.image_position
+      %}
+    </div>
+
+    <div class="guillo-anatomy__side guillo-anatomy__side--right">
+      {%- assign right_blocks = section.blocks | where: 'type', 'callout_right' -%}
+      {%- for block in right_blocks -%}
+        <div class="guillo-anatomy__callout guillo-anatomy__callout--right" {{ block.shopify_attributes }}>
+          <span class="guillo-anatomy__point" aria-hidden="true"></span>
+          <span class="guillo-anatomy__line" aria-hidden="true"></span>
+          <span class="guillo-anatomy__tick" aria-hidden="true"></span>
+          <div class="guillo-anatomy__callout-copy">
+            <div class="guillo-anatomy__callout-title">{{ block.settings.title }}</div>
+            <p class="guillo-anatomy__callout-text">{{ block.settings.text }}</p>
+            {%- if block.settings.spec != blank -%}
+              <div class="guillo-anatomy__callout-spec">{{ block.settings.spec }}</div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-anatomy {
+    padding-block: 104px 96px;
+    background: var(--g-grey);
+    border-top: 1px solid var(--g-line);
+  }
+  .guillo-anatomy__grid {
+    max-width: 1560px;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) minmax(240px, 400px) minmax(260px, 1fr);
+    align-items: stretch;
+  }
+  .guillo-anatomy__heading {
+    font: 500 clamp(28px, 2.6vw, 40px)/1.14 var(--g-serif);
+    letter-spacing: -0.004em;
+    margin: 12px 0 0;
+    max-width: 400px;
+  }
+  .guillo-anatomy__side {
+    display: flex;
+    flex-direction: column;
+  }
+  .guillo-anatomy__callout {
+    display: flex;
+    align-items: flex-start;
+  }
+  .guillo-anatomy__side--left .guillo-anatomy__callout:first-of-type { margin-top: 96px; }
+  .guillo-anatomy__side--left .guillo-anatomy__callout:nth-of-type(2) { margin-top: 150px; }
+  .guillo-anatomy__side--right .guillo-anatomy__callout:first-of-type { margin-top: 130px; }
+  .guillo-anatomy__side--right .guillo-anatomy__callout:nth-of-type(2) { margin-top: 170px; }
+  .guillo-anatomy__callout-copy {
+    width: 200px;
+    flex: 0 0 200px;
+  }
+  .guillo-anatomy__callout--left .guillo-anatomy__callout-copy { padding-right: 24px; }
+  .guillo-anatomy__callout--right .guillo-anatomy__callout-copy { padding-left: 24px; }
+  .guillo-anatomy__callout-title {
+    font: 500 11px/1 var(--g-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--g-ink);
+    margin-bottom: 14px;
+  }
+  .guillo-anatomy__callout-text {
+    font: 300 15px/1.7 var(--g-sans);
+    color: var(--g-muted);
+    margin: 0;
+  }
+  .guillo-anatomy__callout-spec {
+    font: 400 10px/1 var(--g-sans);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--g-whisper);
+    margin-top: 14px;
+  }
+  .guillo-anatomy__tick {
+    width: 1px;
+    height: 62px;
+    background: #C4C6CA;
+    flex-shrink: 0;
+  }
+  .guillo-anatomy__line {
+    flex: 1;
+    min-width: 24px;
+    height: 1px;
+    background: #C4C6CA;
+    margin-top: 9px;
+  }
+  .guillo-anatomy__point {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--g-whisper);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .guillo-anatomy__media {
+    position: relative;
+    min-height: 720px;
+  }
+  .guillo-anatomy__img,
+  .guillo-anatomy__media svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media screen and (max-width: 989px) {
+    .guillo-anatomy { padding-block: 56px; }
+    .guillo-anatomy__grid { grid-template-columns: 1fr; gap: 36px; }
+    .guillo-anatomy__media { min-height: 100vw; order: -1; }
+    .guillo-anatomy__side .guillo-anatomy__callout { margin-top: 28px !important; }
+    .guillo-anatomy__tick,
+    .guillo-anatomy__line,
+    .guillo-anatomy__point { display: none; }
+    .guillo-anatomy__callout-copy {
+      width: auto;
+      flex: 1;
+      padding: 0 !important;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo product anatomy",
+  "settings": [
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "A new standard of muscle fit chinos." },
+    { "type": "image_picker", "id": "image", "label": "Centre image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "The Luxe Chino in Chocolate, leg and taper" },
+    { "type": "text", "id": "image_position", "label": "Image focal point", "default": "center 74%" }
+  ],
+  "blocks": [
+    {
+      "type": "callout_left",
+      "name": "Callout (left)",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Muscle fit" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Extra room drafted through the seat and thigh, then a clean taper to the ankle." },
+        { "type": "text", "id": "spec", "label": "Spec line", "default": "Two centimetres over standard slim" }
+      ]
+    },
+    {
+      "type": "callout_right",
+      "name": "Callout (right)",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Stretch twill" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Cotton blended with elastane. It moves when you do and recovers on the hanger." },
+        { "type": "text", "id": "spec", "label": "Spec line", "default": "97% cotton · 3% elastane" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Guillo product anatomy",
+      "category": "Guillo",
+      "blocks": [
+        { "type": "callout_left", "settings": { "title": "Muscle fit", "text": "Extra room drafted through the seat and thigh, then a clean taper to the ankle.", "spec": "Two centimetres over standard slim" } },
+        { "type": "callout_left", "settings": { "title": "True to waist sizing", "text": "No sizing up. It fits at your waist and through your legs at the same time.", "spec": "Sizes 28 to 38" } },
+        { "type": "callout_right", "settings": { "title": "Stretch twill", "text": "Cotton blended with elastane. It moves when you do and recovers on the hanger.", "spec": "97% cotton · 3% elastane" } },
+        { "type": "callout_right", "settings": { "title": "Wrinkle resistant", "text": "Out of the case and straight on. Sharp enough for the office, no iron required.", "spec": "16.5cm at the hem" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,405 @@
+<!-- /snippets/guillo-pair-builder.liquid -->
+{%- comment -%}
+  Ported verbatim from the live theme so the second-item upsell behaves
+  identically on both. Only the palette and type are rebound to the redesign
+  tokens; the families, pricing, stock rules and JS are untouched.
+{%- endcomment -%}
+{%- comment -%}
+  "Add a second ..." pair builder for PDPs with a live pair discount.
+  Collapsed to a single "+ Add a second {noun}" row; expands to image cards
+  (the GPG custom_images the colour picker uses), sizes for both, ADD BOTH.
+
+  Families and pricing (mirrors the live automatic discounts):
+    chino  - options = ALL chinos (cross-style). 2 Signore = $46 off, else $36.
+    shirt  - options = own GPG group. 16% off the pair.
+    short  - options = own GPG group. $28 off the pair.
+    polo   - Portofino only. Own GPG group. $36 off the pair.
+    tee    - options = own GPG group. $18 off the pair.
+  Shown in every market. Only AUD quotes a computed total (see "exact");
+  elsewhere the bag shows the real saving. The discount applies itself in the bag.
+
+  Group options with zero on-hand stock are excluded even when orderable
+  (pre-order CONTINUE variants, e.g. the Blue Portofino) - they return
+  automatically once stock lands.
+
+  NB Liquid gotchas honoured here: file_reference lists cannot be
+  index-accessed (build a '|||' URL string and split); no negative literals
+  in assign; JSON arrays close with a trailing null so conditional entries
+  never break commas (JS filters it out).
+{%- endcomment -%}
+
+{%- liquid
+  assign fam = ''
+  assign noun = 'pair'
+  if product.tags contains 'garment:chino'
+    assign fam = 'chino'
+  elsif product.tags contains 'garment:shirt'
+    assign fam = 'shirt'
+    assign noun = 'shirt'
+  elsif product.tags contains 'garment:short'
+    assign fam = 'short'
+  elsif product.tags contains 'garment:polo'
+    if product.handle contains 'portofino'
+      assign fam = 'polo'
+      assign noun = 'polo'
+    endif
+  elsif product.tags contains 'garment:tee'
+    assign fam = 'tee'
+    assign noun = 'tee'
+  endif
+
+  if fam == 'chino'
+    assign has_current = false
+    for cp in collections.chinos.products
+      if cp.handle == product.handle
+        assign has_current = true
+      endif
+    endfor
+    unless has_current
+      assign fam = ''
+    endunless
+  elsif fam != ''
+    assign pb_group = product.metafields.custom.product_group.value
+    if pb_group == blank
+      assign fam = ''
+    endif
+  endif
+-%}
+
+{%- if fam != '' -%}
+
+<div class="gpb" data-gpb>
+  <script type="application/json" data-gpb-data>
+    {
+      "current": {{ product.handle | json }},
+      "family": {{ fam | json }},
+      "exact": {% if cart.currency.iso_code == 'AUD' %}true{% else %}false{% endif %},
+      "disc": {% case fam %}{% when 'chino' %}{ "mode": "chino" }{% when 'shirt' %}{ "mode": "flat", "amount": 4400 }{% when 'polo' %}{ "mode": "flat", "amount": 3600 }{% when 'tee' %}{ "mode": "flat", "amount": 1800 }{% else %}{ "mode": "flat", "amount": 2800 }{% endcase %},
+      "options": [
+        {%- if fam == 'chino' -%}
+          {%- for cp in collections.chinos.products -%}
+            {%- liquid
+              assign csig = false
+              assign csub = 'Luxe'
+              if cp.handle contains 'signore'
+                assign csig = true
+                assign csub = 'Signore'
+              endif
+              assign cname = cp.handle | split: '-' | last | capitalize
+              assign cimg_url = cp.featured_image | image_url: width: 360
+
+              assign g = cp.metafields.custom.product_group.value
+              if g != blank
+                assign gfound = false
+                assign gi = 0
+                for gp in g.products.value
+                  if gp.handle == cp.handle
+                    assign gfound = true
+                    assign gi = forloop.index0
+                  endif
+                endfor
+                if gfound
+                  assign gnames = g.display_names.value
+                  if gnames[gi] != blank
+                    assign cname = gnames[gi]
+                  endif
+                  capture gimg_str
+                    for gim in g.custom_images.value
+                      echo gim | image_url: width: 360
+                      unless forloop.last
+                        echo '|||'
+                      endunless
+                    endfor
+                  endcapture
+                  assign gimg_urls = gimg_str | split: '|||'
+                  if gimg_urls[gi] != blank
+                    assign cimg_url = gimg_urls[gi]
+                  endif
+                endif
+              endif
+            -%}
+            {
+              "h": {{ cp.handle | json }},
+              "sub": {{ csub | json }},
+              "name": {{ cname | json }},
+              "sig": {{ csig }},
+              "price": {{ cp.price }},
+              "img": {{ cimg_url | json }},
+              "variants": [
+                {%- for v in cp.variants -%}
+                  { "id": {{ v.id }}, "s": {{ v.title | json }}, "a": {{ v.available }} }{%- unless forloop.last -%},{%- endunless -%}
+                {%- endfor -%}
+              ]
+            },
+          {%- endfor -%}
+        {%- else -%}
+          {%- liquid
+            assign pnames = pb_group.display_names.value
+            assign pcolours = pb_group.colour_names.value
+            capture pimg_str
+              for pim in pb_group.custom_images.value
+                echo pim | image_url: width: 360
+                unless forloop.last
+                  echo '|||'
+                endunless
+              endfor
+            endcapture
+            assign pimg_urls = pimg_str | split: '|||'
+          -%}
+          {%- for gp in pb_group.products.value -%}
+            {%- liquid
+              assign pgi = forloop.index0
+
+              comment
+                On-hand stock across variants. Zero stock means the option is
+                skipped even if orderable (pre-order CONTINUE policies).
+              endcomment
+              assign gp_stock = 0
+              for v in gp.variants
+                if v.inventory_quantity > 0
+                  assign gp_stock = gp_stock | plus: v.inventory_quantity
+                endif
+              endfor
+
+              assign pname = pnames[pgi] | default: gp.title
+              assign psub = ''
+              if pcolours[pgi] != blank
+                assign psub = pcolours[pgi]
+              endif
+              assign pimg_url = pimg_urls[pgi]
+              if pimg_url == blank
+                assign pimg_url = gp.featured_image | image_url: width: 360
+              endif
+            -%}
+            {%- if gp_stock > 0 or gp.handle == product.handle -%}
+            {
+              "h": {{ gp.handle | json }},
+              "sub": {{ psub | json }},
+              "name": {{ pname | json }},
+              "sig": false,
+              "price": {{ gp.price }},
+              "img": {{ pimg_url | json }},
+              "variants": [
+                {%- for v in gp.variants -%}
+                  { "id": {{ v.id }}, "s": {{ v.title | json }}, "a": {{ v.available }} }{%- unless forloop.last -%},{%- endunless -%}
+                {%- endfor -%}
+              ]
+            },
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        null
+      ]
+    }
+  </script>
+
+  <button type="button" class="gpb__toggle" data-gpb-toggle aria-expanded="false">
+    <span class="gpb__plus" aria-hidden="true">+</span>
+    <span class="gpb__toggle-label">Add a second {{ noun }}</span>
+    <span class="gpb__deal" data-gpb-deal></span>
+  </button>
+
+  <div class="gpb__body" data-gpb-body hidden>
+    <div class="gpb__slot">
+      <span class="gpb__slot-label">Second {{ noun }} &middot; choose</span>
+      <div class="gpb__cards" data-gpb-picker></div>
+    </div>
+
+    <div class="gpb__slot">
+      <span class="gpb__slot-label" data-gpb-label-1></span>
+      <div class="gpb__sizes" data-gpb-sizes-1></div>
+    </div>
+
+    <div class="gpb__slot" data-gpb-slot-2 hidden>
+      <span class="gpb__slot-label" data-gpb-label-2></span>
+      <div class="gpb__sizes" data-gpb-sizes-2></div>
+    </div>
+
+    <button type="button" class="gpb__add" data-gpb-add disabled>Add both to bag</button>
+  </div>
+</div>
+
+<style>
+  .gpb { border: 1px solid var(--g-line); margin: 22px 0 6px; background: var(--g-paper); font-family: var(--g-sans); }
+  .gpb__toggle { display: flex; align-items: center; gap: 14px; width: 100%; background: none; border: 0; padding: 17px 18px; cursor: pointer; text-align: left; font-family: inherit; }
+  .gpb__plus { flex: 0 0 auto; width: 18px; font-size: 1.25rem; font-weight: 300; line-height: 1; color: var(--g-ink); transition: transform .3s ease; }
+  .gpb.is-open .gpb__plus { transform: rotate(45deg); }
+  .gpb__toggle-label { flex: 1; font-size: .76rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--g-ink); }
+  .gpb__deal { font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--g-ink); font-weight: 700; white-space: nowrap; }
+  .gpb__body { padding: 20px 18px 18px; border-top: 1px solid var(--g-line); }
+
+  .gpb__slot { margin: 0 0 20px; }
+  .gpb__slot-label { display: block; font-size: .64rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--g-whisper); margin: 0 0 10px; }
+
+  /* ---- image cards (same imagery as the colour picker) ---- */
+  .gpb__cards { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 6px; scrollbar-width: none; }
+  .gpb__cards::-webkit-scrollbar { display: none; }
+  .gpb__card { flex: 0 0 auto; width: 86px; background: none; border: 0; padding: 0; cursor: pointer; text-align: center; font-family: inherit; }
+  .gpb__card-img { position: relative; display: block; width: 86px; height: 108px; border: 1px solid var(--g-line); overflow: hidden; transition: border-color .25s ease; }
+  .gpb__card-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .gpb__card:hover .gpb__card-img { border-color: var(--g-ink); }
+  .gpb__card.is-on .gpb__card-img { border: 2px solid var(--g-ink); }
+  .gpb__card-check { position: absolute; top: 5px; right: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--g-ink); color: var(--g-off); display: none; align-items: center; justify-content: center; font-size: .6rem; line-height: 1; }
+  .gpb__card.is-on .gpb__card-check { display: flex; }
+  .gpb__card-style { display: block; margin-top: 7px; font-size: .52rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--g-bronze); min-height: .8em; }
+  .gpb__card-name { display: block; margin-top: 2px; font-size: .6rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--g-ink); }
+  .gpb__card.is-on .gpb__card-name { color: var(--g-ink); }
+
+  /* ---- sizes ---- */
+  .gpb__sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .gpb__size { border: 1px solid #CFD1D5; background: var(--g-paper); color: var(--g-ink); padding: 10px 0; min-width: 52px; cursor: pointer; font-family: inherit; font-size: .74rem; font-weight: 500; letter-spacing: .04em; transition: border-color .25s ease; }
+  .gpb__size:hover { border-color: var(--g-ink); }
+  .gpb__size.is-on { background: var(--g-ink); border-color: var(--g-ink); color: var(--g-off); }
+  .gpb__size[disabled] { opacity: .3; cursor: default; text-decoration: line-through; }
+  .gpb__size[disabled]:hover { border-color: #CFD1D5; }
+
+  /* ---- button ---- */
+  .gpb__add { width: 100%; border: 0; background: var(--g-ink); color: var(--g-off); padding: 16px 10px; cursor: pointer; font-family: inherit; font-size: .78rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; transition: background .3s ease, opacity .3s ease; }
+  .gpb__add:hover { background: #2C2E33; }
+  .gpb__add[disabled] { opacity: .45; cursor: default; }
+</style>
+
+<script>
+(function () {
+  var root = document.querySelector('[data-gpb]:not([data-gpb-ready])');
+  if (!root) return;
+  root.setAttribute('data-gpb-ready', '1');
+
+  var data;
+  try { data = JSON.parse(root.querySelector('[data-gpb-data]').textContent); } catch (e) { return; }
+  var options = (data.options || []).filter(Boolean);
+  var current = null;
+  for (var i = 0; i < options.length; i++) if (options[i].h === data.current) current = options[i];
+  if (!current) { root.style.display = 'none'; return; }
+
+  function q(sel) { return root.querySelector(sel); }
+  var els = {
+    toggle: q('[data-gpb-toggle]'), body: q('[data-gpb-body]'), deal: q('[data-gpb-deal]'),
+    picker: q('[data-gpb-picker]'),
+    label1: q('[data-gpb-label-1]'), sizes1: q('[data-gpb-sizes-1]'),
+    slot2: q('[data-gpb-slot-2]'), label2: q('[data-gpb-label-2]'), sizes2: q('[data-gpb-sizes-2]'),
+    add: q('[data-gpb-add]')
+  };
+
+  var state = { v1: null, second: null, v2: null };
+
+  function money(cents) { return '$' + (cents % 100 === 0 ? (cents / 100) : (cents / 100).toFixed(2)); }
+  function label(c) { return c.sub ? c.sub + ' · ' + c.name : c.name; }
+  // Mirrors the live automatic discounts.
+  function discount(a, b) {
+    if (data.disc.mode === 'chino') return (a.sig && b.sig) ? 4600 : 3600;
+    if (data.disc.mode === 'pct') return Math.round(a.price * data.disc.rate) + Math.round(b.price * data.disc.rate);
+    return data.disc.amount;
+  }
+
+  function sizeButtons(prod, holder, key) {
+    holder.innerHTML = '';
+    prod.variants.forEach(function (v) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'gpb__size';
+      b.textContent = v.s;
+      if (!v.a) b.disabled = true;
+      b.addEventListener('click', function () {
+        holder.querySelectorAll('.gpb__size').forEach(function (x) { x.classList.remove('is-on'); });
+        b.classList.add('is-on');
+        state[key] = v.id;
+        update();
+      });
+      holder.appendChild(b);
+    });
+  }
+
+  function pick(c, card) {
+    els.picker.querySelectorAll('.gpb__card').forEach(function (x) { x.classList.remove('is-on'); });
+    card.classList.add('is-on');
+    state.second = c;
+    state.v2 = null;
+    els.label2.textContent = label(c) + ' · size';
+    els.slot2.hidden = false;
+    sizeButtons(c, els.sizes2, 'v2');
+    update();
+  }
+
+  function buildPicker() {
+    var ordered = options.slice();
+    if (data.family === 'chino') {
+      // Same style as the page first (Signores first on Signore pages, etc.)
+      ordered.sort(function (a, b) {
+        return (b.sig === current.sig) - (a.sig === current.sig);
+      });
+    }
+    var built = 0;
+    ordered.forEach(function (c) {
+      if (!c.variants.some(function (v) { return v.a; })) return; // skip fully sold out
+      var card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'gpb__card';
+      card.setAttribute('aria-label', label(c));
+      card.innerHTML =
+        '<span class="gpb__card-img"><img src="' + c.img + '" alt="" loading="lazy"><span class="gpb__card-check" aria-hidden="true">&#10003;</span></span>' +
+        '<span class="gpb__card-style">' + (c.sub || '') + '</span>' +
+        '<span class="gpb__card-name">' + c.name + '</span>';
+      card.addEventListener('click', function () { pick(c, card); });
+      els.picker.appendChild(card);
+      built++;
+    });
+    return built;
+  }
+
+  function update() {
+    var other = state.second || current;
+    var was = current.price + other.price;
+    var ready = state.v1 && state.second && state.v2;
+    els.add.disabled = !ready;
+    // The discount amounts below are AUD cents and Liquid cannot convert
+    // currency, so only AUD may quote a computed total. Every other market
+    // gets the offer without a number; the bag then shows the real saving in
+    // that market's currency, which is always correct.
+    if (data.exact) {
+      var total = was - discount(current, other);
+      els.deal.textContent = 'Two for ' + money(total);
+      els.add.textContent = ready ? 'Add both to bag · ' + money(total) : 'Add both to bag';
+    } else {
+      els.deal.textContent = 'Pair saving applied in your bag';
+      els.add.textContent = 'Add both to bag';
+    }
+  }
+
+  els.toggle.addEventListener('click', function () {
+    var open = els.body.hidden;
+    els.body.hidden = !open;
+    root.classList.toggle('is-open', open);
+    els.toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  els.add.addEventListener('click', function () {
+    if (els.add.disabled) return;
+    els.add.disabled = true;
+    els.add.textContent = 'Adding...';
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ items: [{ id: state.v1, quantity: 1 }, { id: state.v2, quantity: 1 }] })
+    }).then(function (r) { return r.json(); }).then(function () {
+      els.add.textContent = 'Added';
+      if (window.GuilloCart) {
+        window.GuilloCart.refresh().then(function () {
+          (window.GuilloCart.notifyAdded || window.GuilloCart.open)();
+        });
+      } else { window.location.href = '/cart'; }
+      setTimeout(function () { update(); }, 2000);
+    }).catch(function () {
+      update();
+    });
+  });
+
+  els.label1.textContent = label(current) + ' · size';
+  sizeButtons(current, els.sizes1, 'v1');
+  if (buildPicker() === 0) { root.style.display = 'none'; return; }
+  update();
+})();
+</script>
+
+{%- endif -%}
+

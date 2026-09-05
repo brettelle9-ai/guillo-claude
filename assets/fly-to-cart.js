@@ -78,3 +78,4 @@ class FlyToCart extends Component {
 if (!customElements.get('fly-to-cart')) {
   customElements.define('fly-to-cart', FlyToCart);
 }
+

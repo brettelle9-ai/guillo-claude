@@ -1,0 +1,84 @@
+{% comment %}
+  Product row ("Best sellers"): eyebrow + serif heading + "View all",
+  then four elevated Guillo product cards from a chosen collection.
+{% endcomment %}
+
+<section class="guillo-products g-pad">
+  <div class="g-container">
+    <div class="g-section-head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="g-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+      </div>
+      {%- if section.settings.collection != blank -%}
+        <a href="{{ section.settings.collection.url }}" class="g-link">View all</a>
+      {%- endif -%}
+    </div>
+    <div class="guillo-products__grid">
+      {%- liquid
+        assign limit = section.settings.products_to_show
+        if section.settings.collection != blank
+          for product in section.settings.collection.products limit: limit
+            render 'guillo-product-card', product: product, show_quick: section.settings.show_quick_add
+          endfor
+        else
+          for i in (1..limit)
+            echo 'product-apparel-1' | placeholder_svg_tag: 'guillo-products__placeholder'
+          endfor
+        endif
+      -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-products {
+    padding-block: 98px 88px;
+    background: var(--g-paper);
+  }
+  .guillo-products__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 26px;
+  }
+  .guillo-products__grid .g-card {
+    padding-bottom: 4px;
+    box-shadow: 0 2px 4px rgb(23 24 27 / 0.05), 0 14px 34px rgb(23 24 27 / 0.1);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  }
+  .guillo-products__grid .g-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 4px 8px rgb(23 24 27 / 0.06), 0 26px 54px rgb(23 24 27 / 0.16);
+  }
+  .guillo-products__placeholder {
+    aspect-ratio: 3 / 4;
+    width: 100%;
+    background: var(--g-canvas);
+  }
+  @media screen and (max-width: 989px) {
+    .guillo-products { padding-block: 64px 56px; }
+    .guillo-products__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo product row",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Best sellers" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The pieces that earn their place in the bag." },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "label": "Products to show", "min": 2, "max": 12, "step": 1, "default": 4 },
+    { "type": "checkbox", "id": "show_quick_add", "label": "Show quick add on hover", "default": true }
+  ],
+  "presets": [
+    { "name": "Guillo product row", "category": "Guillo" }
+  ]
+}
+{% endschema %}
+

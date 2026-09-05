@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "blocks": {
     "load_video": "Tải video: {{ description }}",
@@ -64,24 +73,15 @@
     "discount_menu": "Mã giảm giá",
     "remove": "Xóa",
     "view_pricing_info": "Xem thông tin về giá",
+    "open_hotspot": "Mở điểm phát sóng",
     "slideshow": "Bản trình chiếu",
-    "header_navigation_label": "Chính",
-    "home_logo_alt": "{{ store_name }} – Trang chủ",
-    "active_filters": "Bộ lọc đang hoạt động:",
-    "product_details": "Chi tiết sản phẩm",
-    "show_product_details": "Hiển thị chi tiết sản phẩm {{ product_name }}",
-    "featured_product": "Sản phẩm nổi bật",
-    "search_suggestions_available": "Gợi ý tìm kiếm dành cho \"{{ query }}\"",
-    "price_filter_low": "Giá thấp",
-    "price_filter_high": "Giá cao",
-    "view_disclosure_information_for_product": "Xem thông tin công bố của {{ product_title }}",
-    "show_submenu": "Hiển thị menu phụ {{ title }}"
+    "header_navigation_label": "Chính"
   },
   "actions": {
     "add_to_cart": "Thêm vào giỏ hàng",
     "clear_all": "Xóa tất cả",
     "remove": "Xóa",
-    "view_in_your_space": "Xem trong không gian của bạn",
+    "view_in_your_space": "Xem tại không gian của bạn",
     "show_filters": "Bộ lọc",
     "clear": "Xóa",
     "continue_shopping": "Tiếp tục mua sắm",
@@ -98,7 +98,7 @@
     "show_more": "Hiển thị thêm",
     "close": "Đóng",
     "more": "Thêm",
-    "reset": "Thiết lập lại",
+    "reset": "Đặt lại",
     "zoom": "Thu phóng",
     "close_dialog": "Đóng hộp thoại",
     "back": "Quay lại",
@@ -115,10 +115,7 @@
     "open_image_in_full_screen": "Mở hình ảnh ở chế độ toàn màn hình",
     "sort": "Sắp xếp",
     "show_all_options": "Hiển thị tất cả tùy chọn",
-    "open": "Mở",
-    "back_to": "Quay lại {{ title }}",
-    "zoom_media": "Thu phóng nội dung {{ index }}",
-    "back_to_main_menu": "Quay lại menu chính"
+    "open": "Mở"
   },
   "content": {
     "reviews": "đánh giá",
@@ -216,7 +213,7 @@
     "taxes_included_shipping_at_checkout_with_policy_without_discounts_html": "Đã bao gồm thuế. Phí vận chuyển được tính khi thanh toán.",
     "taxes_included_shipping_at_checkout_without_policy_without_discounts": "Đã bao gồm thuế. Phí vận chuyển được tính khi thanh toán.",
     "wrong_password": "Sai mật khẩu!",
-    "view_more_details": "Xem thêm chi tiết",
+    "view_more_details": "Xem thêm thông tin",
     "inventory_low_stock": "Sắp hết hàng",
     "inventory_in_stock": "Còn hàng",
     "inventory_out_of_stock": "Hết hàng",
@@ -247,7 +244,7 @@
     "product_custom_property_character_count": "Đã sử dụng {{ used_chars }}/{{ max_chars }} ký tự",
     "terms_and_policies": "Điều khoản và chính sách",
     "pagination": {
-      "nav_label": "Phân trang",
+      "nav_label": "Điều hướng phân trang",
       "previous": "Trước",
       "next": "Tiếp",
       "page": "Trang {{ page }}"
@@ -274,9 +271,7 @@
       "one": "Đã thêm 1 mặt hàng vào giỏ hàng",
       "other": "Đã thêm {{ count }} mặt hàng vào giỏ hàng"
     },
-    "item_count_cutoff": "Hơn {{ count }} mặt hàng",
-    "quick_order_list": "Danh sách đặt hàng nhanh",
-    "product_disclosures": "Thông tin công bố sản phẩm"
+    "item_count_cutoff": "Hơn {{ count }} mặt hàng"
   },
   "gift_cards": {
     "issued": {
@@ -342,6 +337,51 @@
       "in_cart": "trong giỏ hàng",
       "default_title": "Tiêu đề mặc định",
       "sticky_add_to_cart": "Thanh thêm nhanh vào giỏ hàng"
+    }
+  },
+  "pagefly": {
+    "products": {
+      "product": {
+        "regular_price": "Regular price",
+        "sold_out": "Sold out",
+        "unavailable": "Unavailable",
+        "on_sale": "Sale",
+        "quantity": "Quantity",
+        "add_to_cart": "Add to cart",
+        "back_to_collection": "Back to {{ title }}",
+        "view_details": "View details"
+      }
+    },
+    "article": {
+      "tags": "Tags:",
+      "all_topics": "All topics",
+      "by_author": "by {{ author }}",
+      "posted_in": "Posted in",
+      "read_more": "Read more",
+      "back_to_blog": "Back to {{ title }}"
+    },
+    "comments": {
+      "title": "Leave a comment",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "post": "Post comment",
+      "moderated": "Please note, comments must be approved before they are published",
+      "success_moderated": "Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.",
+      "success": "Your comment was posted successfully! Thank you!",
+      "comments_with_count": {
+        "one": "{{ count }} comment",
+        "other": "{{ count }} comments"
+      }
+    },
+    "password_page": {
+      "login_form_message": "Enter store using password:",
+      "login_form_password_label": "Password",
+      "login_form_password_placeholder": "Your password",
+      "login_form_submit": "Enter",
+      "signup_form_email_label": "Email",
+      "signup_form_success": "We will send you an email right before we open!",
+      "password_link": "Enter using password"
     }
   }
 }

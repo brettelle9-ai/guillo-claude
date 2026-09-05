@@ -1,0 +1,267 @@
+{% comment %}
+  Guillo full-bleed hero: image, gradient wash, eyebrow, serif headline,
+  supporting copy and two CTAs.
+
+  Desktop and mobile are art-directed separately: each takes its own image
+  and its own focal point. The <picture> element means the phone downloads
+  only the mobile crop, and the two focal points ride on the img as custom
+  properties so a media query can pick between them.
+{% endcomment %}
+
+<section class="guillo-hero">
+  {%- liquid
+    assign hero_d = section.settings.image
+    assign hero_m = section.settings.image_mobile
+    assign hero_main = hero_d
+    if hero_main == blank
+      assign hero_main = hero_m
+    endif
+    assign pos_d = section.settings.image_position | default: '50% 50%'
+    assign pos_m = section.settings.image_position_mobile
+    if pos_m == blank
+      assign pos_m = pos_d
+    endif
+  -%}
+  {%- capture hero_pos -%}--hero-pos-d:{{ pos_d }};--hero-pos-m:{{ pos_m }}{%- endcapture -%}
+  <picture class="guillo-hero__picture">
+    {%- if hero_m != blank -%}
+      <source
+        media="(max-width: 749px)"
+        srcset="{{ hero_m | image_url: width: 750 }} 750w, {{ hero_m | image_url: width: 1125 }} 1125w, {{ hero_m | image_url: width: 1500 }} 1500w"
+        sizes="100vw"
+      >
+    {%- endif -%}
+    {%- if hero_main != blank -%}
+      <source
+        srcset="{{ hero_main | image_url: width: 1200 }} 1200w, {{ hero_main | image_url: width: 1600 }} 1600w, {{ hero_main | image_url: width: 2000 }} 2000w, {{ hero_main | image_url: width: 2400 }} 2400w"
+        sizes="100vw"
+      >
+      <img
+        src="{{ hero_main | image_url: width: 1600 }}"
+        alt="{{ section.settings.image_alt | escape }}"
+        class="guillo-hero__img"
+        loading="eager"
+        width="{{ hero_main.width }}"
+        height="{{ hero_main.height }}"
+        style="{{ hero_pos }}"
+      >
+    {%- else -%}
+      <img
+        src="{{ 'guillo-hero-olive.jpg' | asset_url }}"
+        alt="{{ section.settings.image_alt | escape }}"
+        class="guillo-hero__img"
+        loading="eager"
+        width="1600"
+        height="2000"
+        style="{{ hero_pos }}"
+      >
+    {%- endif -%}
+  </picture>
+  <div class="guillo-hero__wash"></div>
+  <div class="guillo-hero__content">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="guillo-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h1 class="guillo-hero__heading">{{ section.settings.heading | newline_to_br }}</h1>
+    {%- if section.settings.text != blank -%}
+      <p class="guillo-hero__text">{{ section.settings.text }}</p>
+    {%- endif -%}
+    <div class="guillo-hero__actions">
+      {%- if section.settings.cta_primary_label != blank -%}
+        <a href="{{ section.settings.cta_primary_link }}" class="g-btn g-btn--light">
+          {{- section.settings.cta_primary_label -}}
+        </a>
+      {%- endif -%}
+      {%- if section.settings.cta_secondary_label != blank -%}
+        <a href="{{ section.settings.cta_secondary_link }}" class="g-btn g-btn--outline-light">
+          {{- section.settings.cta_secondary_label -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-hero {
+    position: relative;
+    height: calc(100svh - 111px);
+    min-height: 560px;
+    max-height: 980px;
+    background: var(--g-canvas);
+    overflow: hidden;
+  }
+  .guillo-hero__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .guillo-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    object-position: var(--hero-pos-d, 50% 50%);
+  }
+  .guillo-hero__wash {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(12 13 16 / 0.62) 0%, rgb(12 13 16 / 0.28) 46%, rgb(12 13 16 / 0) 72%);
+  }
+  .guillo-hero__content {
+    position: absolute;
+    left: 48px;
+    bottom: 64px;
+    max-width: 620px;
+    animation: g-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .guillo-hero__eyebrow {
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: #C8CACF;
+    margin: 0 0 26px;
+  }
+  .guillo-hero__heading {
+    font: 500 clamp(46px, 5.6vw, 86px)/0.98 var(--g-serif);
+    letter-spacing: -0.008em;
+    color: #fff;
+    margin: 0 0 22px;
+  }
+  .guillo-hero__text {
+    font: 300 17px/1.65 var(--g-sans);
+    color: #D8DADE;
+    margin: 0 0 34px;
+    max-width: 430px;
+  }
+  .guillo-hero__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  @media screen and (max-width: 749px) {
+    /* Was height:auto with 60vh of top padding on the content, which made the
+       hero ~970px on a 812px screen: half a screen of dead image, and both
+       buttons pushed under the fold. A definite height with the content
+       anchored to the bottom keeps the whole hero on the first screen. */
+    .guillo-hero {
+      height: 78svh;
+      min-height: 520px;
+      max-height: 760px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .guillo-hero__picture {
+      position: absolute;
+      inset: 0;
+    }
+    .guillo-hero__img { object-position: var(--hero-pos-m, var(--hero-pos-d, 50% 50%)); }
+    .guillo-hero__content {
+      position: relative;
+      left: 0;
+      bottom: 0;
+      max-width: none;
+      padding: 0 20px 40px;
+    }
+    /* The heading's line break is composed for the desktop measure; on a
+       phone it strands "you are" on its own line. Let it wrap naturally. */
+    .guillo-hero__heading {
+      font-size: 40px;
+      text-wrap: balance;
+    }
+    .guillo-hero__heading br { display: none; }
+    .guillo-hero__eyebrow { margin-bottom: 18px; }
+    .guillo-hero__text {
+      font-size: 15px;
+      margin-bottom: 26px;
+    }
+    .guillo-hero__wash {
+      background: linear-gradient(180deg, rgb(12 13 16 / 0) 26%, rgb(12 13 16 / 0.72) 78%);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image (desktop)"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Man in a white shirt and olive Luxe Chino walking through a limestone courtyard"
+    },
+    {
+      "type": "text",
+      "id": "image_position",
+      "label": "Focal point (desktop)",
+      "default": "62% 22%",
+      "info": "Which part of the image to keep in frame, e.g. “62% 22%”: first value left→right, second top→bottom."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image (mobile)",
+      "info": "Optional. A separate crop for phones — leave empty to use the desktop image."
+    },
+    {
+      "type": "text",
+      "id": "image_position_mobile",
+      "label": "Focal point (mobile)",
+      "info": "Leave blank to use the desktop focal point."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "AW26 · The Coastal Edit"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Cut for the way\nyou are actually built."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Stretch twill that holds its shape from the office to the airport. Room through the thigh, a clean taper below the knee, no tailoring required."
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_label",
+      "label": "Primary button label",
+      "default": "Shop chinos"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_label",
+      "label": "Secondary button label",
+      "default": "The Luxe Chino"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_link",
+      "label": "Secondary button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guillo hero",
+      "category": "Guillo"
+    }
+  ]
+}
+{% endschema %}
+

@@ -60,3 +60,4 @@ class ThemePerformance {
 }
 
 export const cartPerformance = new ThemePerformance('cart-performance');
+

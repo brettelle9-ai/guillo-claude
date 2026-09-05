@@ -9,274 +9,367 @@
  */
 {
   "sections": {
-    "hero_jVaWmY": {
-      "type": "hero",
+    "hero": {
+      "type": "guillo-hero",
+      "settings": {
+        "image": "shopify://shop_images/0S0A2082_1_87d85963-a894-481e-9aca-e17dafe84a67.jpg",
+        "image_alt": "Man in a white shirt and olive Luxe Chino walking through a limestone courtyard",
+        "image_position": "72% 52%",
+        "image_position_mobile": "",
+        "eyebrow": "",
+        "heading": "Cut for the way\nyou are actually built.",
+        "text": "Stretch twill that holds its shape from the office to the airport. Room through the thigh, a clean taper below the knee, no tailoring required.",
+        "cta_primary_label": "Shop chinos",
+        "cta_primary_link": "shopify://collections/chinos",
+        "cta_secondary_label": "The Luxe Chino",
+        "cta_secondary_link": "shopify://products/the-luxe-chino-stone"
+      }
+    },
+    "usp": {
+      "type": "guillo-usp-bar",
       "blocks": {
-        "text_YLPk4p": {
-          "type": "text",
-          "name": "t:names.heading",
+        "usp1": {
+          "type": "usp",
           "settings": {
-            "text": "<p>Browse our latest products</p>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.background }}",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "title": "Holds its shape",
+            "text": "Cotton and elastane twill with a wrinkle-resistant finish. No ironing."
+          }
         },
-        "button_H9gpTf": {
-          "type": "button",
-          "name": "t:names.button",
+        "usp2": {
+          "type": "usp",
           "settings": {
-            "label": "Shop all",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button-custom",
-            "custom_button_background": "rgba(0, 0, 0, 0)",
-            "custom_button_text": "{{ settings.color_palette.background }}",
-            "custom_button_border": "{{ settings.color_palette.background }}",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
+            "title": "Dispatched today",
+            "text": "Order before 4pm and it leaves Brisbane the same afternoon."
+          }
+        },
+        "usp3": {
+          "type": "usp",
+          "settings": {
+            "title": "44 days to decide",
+            "text": "Free returns and exchanges. If the fit is not right, send it back."
+          }
+        },
+        "usp4": {
+          "type": "usp",
+          "settings": {
+            "title": "Duties included",
+            "text": "Every price covers duties and taxes. Nothing owed on arrival."
+          }
         }
       },
       "block_order": [
-        "text_YLPk4p",
-        "button_H9gpTf"
+        "usp1",
+        "usp2",
+        "usp3",
+        "usp4"
       ],
-      "name": "t:names.hero",
-      "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "toggle_overlay": true,
-        "overlay_color": "#12121266",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72
-      }
+      "settings": {}
     },
-    "product_list_fa6P9H": {
-      "type": "product-list",
+    "edits": {
+      "type": "guillo-edits",
       "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "static": true,
+        "tile5": {
+          "type": "tile",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_YFtzcL": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h4",
-                "font": "var(--font-body--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_MWeP9V": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "button-unstyled",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
-          ]
+            "collection": "new-arrivals",
+            "title": "New In",
+            "link": "",
+            "image": "shopify://shop_images/0S0A3052_2.jpg",
+            "image_position": "center 50%",
+            "fallback_asset": "guillo-olive-coffee.jpg"
+          }
         },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
+        "tile2": {
+          "type": "tile",
           "settings": {
-            "product_card_gap": 4,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_677WP3": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_YXxMTj": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_JQzVV4": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
-          ]
+            "collection": "polos",
+            "title": "POLOS",
+            "link": "",
+            "image": "shopify://shop_images/Generated_Image_July_05_2026_-_6_19PM.jpg",
+            "image_position": "center 44%",
+            "fallback_asset": "guillo-brown-01.jpg"
+          }
+        },
+        "tile1": {
+          "type": "tile",
+          "settings": {
+            "collection": "shirts",
+            "title": "SHIRTS",
+            "link": "",
+            "image_position": "center 22%",
+            "fallback_asset": "guillo-bone-pool.jpg"
+          }
+        },
+        "tile3": {
+          "type": "tile",
+          "settings": {
+            "collection": "shorts",
+            "title": "SHORTS",
+            "link": "",
+            "image": "shopify://shop_images/Generated_Image_February_25_2026_-_9_01PM_jpg.jpg",
+            "image_position": "center 60%",
+            "fallback_asset": "guillo-bone-fountain.jpg"
+          }
+        },
+        "tile4": {
+          "type": "tile",
+          "settings": {
+            "collection": "jeans",
+            "title": "JEANS",
+            "link": "",
+            "image": "shopify://shop_images/white-torino-jean-with-light-blue-tee-5.png",
+            "image_position": "center 94%",
+            "fallback_asset": "guillo-choc-blazer.jpg"
+          }
+        },
+        "tile6": {
+          "type": "tile",
+          "settings": {
+            "collection": "t-shirts",
+            "title": "T-SHIRTS",
+            "link": "",
+            "image": "shopify://shop_images/classico-raglan-off-white-dark-hanger_8af3a866-38c5-4284-8b69-cbfdeecec748.png",
+            "image_position": "center 26%",
+            "fallback_asset": "guillo-brown-03.jpg"
+          }
         }
       },
-      "name": "t:names.featured_collection",
+      "block_order": [
+        "tile5",
+        "tile2",
+        "tile1",
+        "tile3",
+        "tile4",
+        "tile6"
+      ],
+      "settings": {}
+    },
+    "bestsellers": {
+      "type": "guillo-products",
       "settings": {
-        "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 8,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "eyebrow": "Best sellers",
+        "heading": "The pieces that earn their place in the bag.",
+        "collection": "best-sellers",
+        "products_to_show": 4,
+        "show_quick_add": true
       }
+    },
+    "travel": {
+      "type": "guillo-travel",
+      "blocks": {
+        "story1": {
+          "type": "story",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_33_AM.png",
+            "image_position": "center 30%",
+            "fallback_asset": "",
+            "slot_brief": "Positano — terrace lunch, chino and shirt, natural light",
+            "place": "Blue hour",
+            "title": "When the lanterns come on",
+            "text": "Loungers stacked, towels folded, the pool holding the last of the light."
+          }
+        },
+        "story2": {
+          "type": "story",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_06_AM.png",
+            "image_position": "center 30%",
+            "fallback_asset": "",
+            "slot_brief": "Como — walking a stone street, olive chino in motion",
+            "place": "Villa on the Riviera",
+            "title": "Shade between the columns",
+            "text": "Cool tile underfoot and an open arcade. An afternoon spent looking at the water rather than getting in it."
+          }
+        },
+        "story3": {
+          "type": "story",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_19_AM.png",
+            "image_position": "center 30%",
+            "fallback_asset": "",
+            "slot_brief": "Airport or hotel — case open, folded chinos, early morning",
+            "place": "Golden hour",
+            "title": "The terrace, before dinner",
+            "text": "Curtains moving, bougainvillea over the balustrade, the heat finally going out of the day."
+          }
+        }
+      },
+      "block_order": [
+        "story1",
+        "story2",
+        "story3"
+      ],
+      "settings": {
+        "eyebrow": "Made to travel",
+        "heading": "Folded on Friday. Sharp wherever you land by Sunday.",
+        "text": "Wrinkle-resistant twill that comes out of a case looking like it came off a hanger. Pack two chinos and a shirt and the whole trip is covered.",
+        "image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_25_39_AM.png",
+        "image_alt": "",
+        "image_position": "center 40%",
+        "fallback_asset": "",
+        "image_label": "The SUMMER PREVIEW",
+        "image_link": "shopify://collections/summer-preview"
+      }
+    },
+    "bundle": {
+      "type": "guillo-bundle",
+      "blocks": {
+        "step1": {
+          "type": "step",
+          "settings": {
+            "title": "Pick your two chinos",
+            "text": "Chocolate and Olive is the pairing most men come back for."
+          }
+        },
+        "step2": {
+          "type": "step",
+          "settings": {
+            "title": "Add a shirt or a polo",
+            "text": "White Amalfi works over every colourway in the range."
+          }
+        },
+        "step3": {
+          "type": "step",
+          "settings": {
+            "title": "20% comes off automatically",
+            "text": "No code. Applied in the bag the moment the third piece lands."
+          }
+        }
+      },
+      "block_order": [
+        "step1",
+        "step2",
+        "step3"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/IMG-5287.png",
+        "image_alt": "Man in a black pinstripe Milano shirt and bone Luxe Chino",
+        "image_position": "center 64%",
+        "flip": false,
+        "eyebrow": "Build the three",
+        "heading": "Three pieces is a week of dressing solved.",
+        "text": "Two chinos and a shirt covers a working week or a week away without a single decision. Take any three and 20% comes off at checkout.",
+        "cta_label": "Start with the chinos",
+        "cta_link": "shopify://collections/all"
+      }
+    },
+    "cuts": {
+      "type": "guillo-cuts",
+      "blocks": {
+        "cut1": {
+          "type": "cut",
+          "settings": {
+            "product": "the-luxe-chino-sage",
+            "image_position": "center 54%",
+            "fallback_asset": "guillo-brown-01.jpg",
+            "tag": "Slim, tailored",
+            "name": "",
+            "price": "",
+            "text": "Sits close through the leg with room drafted into the seat and thigh, then tapers cleanly below the knee.",
+            "fit_position": "close",
+            "meta": "Sizes 28 to 40"
+          }
+        },
+        "cut2": {
+          "type": "cut",
+          "settings": {
+            "product": "the-signore-chino-latte",
+            "image_position": "center 64%",
+            "fallback_asset": "guillo-brown-03.jpg",
+            "tag": "Classic, hint of slim",
+            "name": "",
+            "price": "",
+            "text": "A touch more ease through the leg, with a side fastening that keeps the front clean under an untucked shirt.",
+            "fit_position": "balanced",
+            "meta": "Sizes 28 to 36"
+          }
+        },
+        "cut3": {
+          "type": "cut",
+          "settings": {
+            "product": "the-alassio-linen-pants-white",
+            "image": "shopify://shop_images/alassio-motion.png",
+            "image_position": "center 24%",
+            "fallback_asset": "guillo-bone-fountain.jpg",
+            "tag": "Light, comfortable",
+            "name": "The Alassio Linen Pants",
+            "price": "",
+            "text": "Linen pique cut for comfort rather than compression. Room straight down the leg.",
+            "fit_position": "easy",
+            "meta": "Sizes 28\" to 36\""
+          }
+        }
+      },
+      "block_order": [
+        "cut1",
+        "cut2",
+        "cut3"
+      ],
+      "settings": {
+        "eyebrow": "The fit",
+        "heading": "Three cuts. Pick the one built for your legs.",
+        "text": "Mass-market chinos are drafted to an average that does not exist. Ours are drafted three ways, so the room sits where you need it.",
+        "link_label": "Read the fit guide",
+        "link": "shopify://pages/fit-guide"
+      }
+    },
+    "story": {
+      "type": "guillo-story",
+      "settings": {
+        "eyebrow": "Brisbane, 2024",
+        "statement": "We started Guillo because everything on the rack was either too baggy, too stiff, or cut for someone else.",
+        "text": "Designed for movement, escapes and life beyond routine. Brought to life in Brisbane, made in small runs, and worn hard before it ever reaches the site.",
+        "link_label": "Our story",
+        "link": "",
+        "image": "shopify://shop_images/RESIZE_EMAN.png",
+        "image_alt": "Man seated wearing a navy blazer and brown Signore Chino",
+        "image_position": "center 22%",
+        "flip": false
+      }
+    },
+    "quotes": {
+      "type": "guillo-quotes",
+      "blocks": {
+        "q1": {
+          "type": "quote",
+          "settings": {
+            "quote": "Office to dinner in the same pair and I forgot I had them on. First chinos in years that do not pull across the thigh.",
+            "who": "Daniel M, Sydney"
+          }
+        },
+        "q2": {
+          "type": "quote",
+          "settings": {
+            "quote": "Two pairs, ten days in Europe. No creasing out of the case, no iron, still sharp on the flight home.",
+            "who": "Tom R, Melbourne"
+          }
+        },
+        "q3": {
+          "type": "quote",
+          "settings": {
+            "quote": "I squat and normally have to size up. Took my true waist as advised. Right first time.",
+            "who": "Alex P, Brisbane"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3"
+      ],
+      "settings": {}
     }
   },
   "order": [
-    "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "hero",
+    "usp",
+    "edits",
+    "bestsellers",
+    "travel",
+    "bundle",
+    "cuts",
+    "story",
+    "quotes"
   ]
 }
+

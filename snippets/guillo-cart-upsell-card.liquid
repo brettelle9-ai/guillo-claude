@@ -1,0 +1,91 @@
+{%- comment -%}
+  ============================================================================
+  GUILLO — Upsell card ("Complete the Look")
+  ----------------------------------------------------------------------------
+  Renders a single product card with image, title, price and a quick-add (+).
+  - Single-variant products: + adds that variant straight away.
+  - Multi-variant products (e.g. sizes): a compact size selector is shown and
+    the + adds the chosen variant. The customer must be able to pick a size.
+
+  Accepts:
+    product : a Shopify product object (required)
+    block   : optional section block (for per-product overrides)
+  ============================================================================
+{%- endcomment -%}
+
+{%- liquid
+  # The set of variants that can actually be purchased
+  assign available_variants = product.variants | where: 'available', true
+  assign avail_count = available_variants | size
+  assign first_available = available_variants.first
+
+  assign card_title = product.title
+  if block and block.settings.custom_title != blank
+    assign card_title = block.settings.custom_title
+  endif
+
+  # Show a size/variant selector only when there is a real choice to make
+  assign has_options = false
+  if avail_count > 1
+    assign has_options = true
+  endif
+-%}
+
+<article
+  class="gcart-card{% if has_options %} gcart-card--has-options{% endif %}"
+  data-gcart-upsell-card
+  data-product-id="{{ product.id }}"
+  {% if avail_count == 0 %}data-sold-out="true"{% endif %}
+>
+  <a href="{{ product.url }}" class="gcart-card__media" tabindex="-1" aria-hidden="true">
+    {%- if product.featured_image -%}
+      {{
+        product.featured_image
+        | image_url: width: 300
+        | image_tag:
+          loading: 'lazy',
+          widths: '150, 300, 450',
+          class: 'gcart-card__img',
+          alt: card_title
+      }}
+    {%- else -%}
+      <span class="gcart-card__placeholder">{{ product.title | truncate: 12 }}</span>
+    {%- endif -%}
+
+    {%- if avail_count > 0 -%}
+      <button
+        type="button"
+        class="gcart-card__add"
+        data-gcart-quickadd
+        data-variant-id="{{ first_available.id }}"
+        aria-label="Add {{ card_title | escape }} to cart"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.6" fill="none"/>
+        </svg>
+      </button>
+    {%- endif -%}
+  </a>
+
+  <h4 class="gcart-card__title">{{ card_title }}</h4>
+  <p class="gcart-card__price">
+    {%- if first_available.compare_at_price > first_available.price -%}
+      <span class="gcart-card__price--sale">{{ first_available.price | money }}</span>
+      <s class="gcart-card__price--was">{{ first_available.compare_at_price | money }}</s>
+    {%- else -%}
+      {{ first_available.price | money }}
+    {%- endif -%}
+  </p>
+
+  {%- comment -%} Size / variant picker — the + reads the chosen value {%- endcomment -%}
+  {%- if has_options -%}
+    <select class="gcart-card__size" data-gcart-variant-select aria-label="Select option for {{ card_title | escape }}">
+      {%- for v in product.variants -%}
+        <option value="{{ v.id }}"{% unless v.available %} disabled{% endunless %}>
+          {{- v.title }}{% unless v.available %} — Sold out{% endunless -%}
+        </option>
+      {%- endfor -%}
+    </select>
+  {%- endif -%}
+</article>
+

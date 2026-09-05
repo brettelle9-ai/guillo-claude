@@ -1,0 +1,506 @@
+{%- comment -%}
+  ============================================================================
+  GUILLO – FIND YOUR SIZE  ·  premium product-information block (modal UI)
+  ----------------------------------------------------------------------------
+  On the product page this renders ONLY a small "Guillo Find Your Size" trigger
+  link. Clicking it opens a premium popup modal containing the full size guide.
+  Rendered from a block inside sections/product.liquid:
+
+      {% render 'guillo-find-your-size', settings: block.settings, unique: block.id %}
+
+  Everything is editable from the block settings in the theme editor, including
+  every image (image_picker) and all copy. Tables use a simple text format:
+  one row per line, columns separated by "|", first line = header row.
+  ============================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign s = settings
+  assign uid = unique | default: 'gfys'
+
+  # Logo loader image (picker wins, else URL)
+  assign logo_src = ''
+  if s.logo_image != blank
+    assign logo_src = s.logo_image | image_url: width: 240
+  elsif s.logo_url != blank
+    assign logo_src = s.logo_url
+  endif
+
+  # "How it fits" annotated image (picker wins, else URL)
+  assign fit_src = ''
+  if s.measurement_image != blank
+    assign fit_src = s.measurement_image | image_url: width: 760
+  elsif s.measurement_image_url != blank
+    assign fit_src = s.measurement_image_url
+  endif
+-%}
+
+{%- comment -%} =========================== STYLES =========================== {%- endcomment -%}
+<style>
+  {%- comment -%} Bound to the Guillo redesign type tokens from guillo.css: Jost for body
+     copy, EB Garamond for headings, matching the rest of the theme. {%- endcomment -%}
+  .gfys{
+    --gfys-font-body:var(--g-sans, "Jost", system-ui, sans-serif);
+    --gfys-font-head:var(--g-serif, "EB Garamond", Georgia, serif);
+    font-family:var(--gfys-font-body);
+    --gfys-bg:#ffffff;            /* panel base                 */
+    --gfys-bg-alt:#F4F4F6;        /* card / zebra / pill track  */
+    --gfys-ink:#1a1d24;           /* near-black text            */
+    --gfys-ink-soft:#6f7480;      /* secondary text             */
+    --gfys-line:#e7e2d9;          /* thin hairline borders      */
+    --gfys-accent:#1a2747;        /* dark pill / dot            */
+    --gfys-accent-ink:#ffffff;
+    --gfys-navy:#16223f;          /* premium navy header        */
+    --gfys-radius:16px;
+    --gfys-radius-sm:12px;
+    --gfys-shadow:0 30px 80px rgba(15,20,35,.28);
+    --gfys-ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  /* Headings + body share the theme menu font (set above) for a menu-matching look */
+  .gfys-title,.gfys-stitle,.gfys-fp-h,.gfys-acc-sum,.gfys-note h4,.gfys-sit h4,.gfys-reco h4,.gfys-help strong,.gfys-fp-labels .is-center{font-family:var(--gfys-font-head)}
+
+  /* ---------- Trigger ---------- */
+  .gfys-trigger{
+    display:inline-flex;align-items:center;gap:.5em;
+    font:inherit;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--gfys-ink);background:transparent;border:0;
+    padding:.35em 0;margin:0;cursor:pointer;border-bottom:1px solid var(--gfys-ink);
+    transition:opacity .25s var(--gfys-ease);-webkit-appearance:none;appearance:none;
+  }
+  .gfys-trigger:hover{opacity:.6}
+  .gfys-trigger svg{width:1.05em;height:1.05em;flex:0 0 auto}
+
+  /* ---------- Modal shell ---------- */
+  .gfys-modal{
+    position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;
+    padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
+    pointer-events:none;
+  }
+  .gfys-modal.gfys-open{display:flex;pointer-events:auto}
+  .gfys-modal:not(.gfys-open){display:none !important}
+  .gfys-overlay{
+    position:absolute;inset:0;background:rgba(14,18,26,.62);
+    backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+    opacity:0;transition:opacity .25s var(--gfys-ease);
+  }
+  .gfys-modal.gfys-open .gfys-overlay{opacity:1}
+  .gfys-panel{
+    position:relative;display:flex;flex-direction:column;
+    width:min(960px,100%);max-height:min(920px,94vh);
+    background:var(--gfys-bg);color:var(--gfys-ink);font:inherit;
+    border:1px solid var(--gfys-line);border-radius:var(--gfys-radius);
+    box-shadow:var(--gfys-shadow);overflow:hidden;
+    opacity:0;transform:translateY(18px) scale(.985);
+    transition:opacity .28s var(--gfys-ease),transform .28s var(--gfys-ease);
+  }
+  .gfys-modal.gfys-open .gfys-panel{opacity:1;transform:none}
+
+  /* ---------- Header (navy) ---------- */
+  .gfys-head{position:relative;flex:0 0 auto;padding:28px 64px 24px 32px;background:var(--gfys-navy)}
+  .gfys-eyebrow{margin:0 0 8px;font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+  .gfys-title{margin:0;font-size:1.55rem;line-height:1.15;letter-spacing:.01em;font-weight:600;color:#fff}
+  .gfys-sub{margin:9px 0 0;font-size:.9rem;line-height:1.5;color:rgba(255,255,255,.8);max-width:52ch}
+  .gfys-close{
+    position:absolute;top:20px;right:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+    background:transparent;border:1px solid rgba(255,255,255,.4);border-radius:50%;color:#fff;cursor:pointer;
+    transition:background .25s var(--gfys-ease),transform .25s var(--gfys-ease);
+  }
+  .gfys-close:hover{background:rgba(255,255,255,.16);transform:rotate(90deg)}
+  .gfys-close svg{width:16px;height:16px}
+
+  /* ---------- Body ---------- */
+  .gfys-body{position:relative;flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:26px 32px 32px}
+  .gfys-section{margin-top:34px}
+  .gfys-section:first-child{margin-top:0}
+  .gfys-stitle{
+    margin:0 0 16px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gfys-ink);font-weight:600;
+    display:flex;align-items:center;gap:12px;
+  }
+  .gfys-stitle::after{content:"";flex:1 1 auto;height:1px;background:var(--gfys-line)}
+
+  /* ---------- Generic card ---------- */
+  .gfys-card{border:1px solid var(--gfys-line);border-radius:var(--gfys-radius-sm);background:var(--gfys-bg-alt);padding:20px 22px}
+
+  /* ---------- Top two-column row ---------- */
+  .gfys-top{display:grid;gap:22px}
+  @media(min-width:768px){
+    .gfys-top{grid-template-columns:1fr 1fr;gap:26px 28px;align-items:start}
+    .gfys-chart-wrap{grid-column:1 / -1;order:-1}
+  }
+  @media(max-width:767px){
+    .gfys-chart-wrap{order:1}
+    .gfys-fp-wrap{order:2}
+    .gfys-fit-wrap{order:3}
+  }
+
+  /* ---------- Fit profile (scale) ---------- */
+  .gfys-fp-h{margin:0 0 16px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600}
+  .gfys-fp-labels{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:14px}
+  .gfys-fp-labels span{font-size:.78rem;color:var(--gfys-ink-soft)}
+  .gfys-fp-labels .is-center{font-weight:700;color:var(--gfys-ink);text-align:center;flex:1 1 auto}
+  .gfys-fp-track{position:relative;height:2px;background:var(--gfys-line);border-radius:2px;margin:14px 6px 0}
+  .gfys-fp-track::before,.gfys-fp-track::after{content:"";position:absolute;top:50%;width:8px;height:8px;border:1px solid var(--gfys-ink-soft);border-radius:50%;transform:translateY(-50%);background:var(--gfys-bg-alt)}
+  .gfys-fp-track::before{left:-2px}
+  .gfys-fp-track::after{right:-2px}
+  .gfys-fp-dot{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--gfys-accent);transform:translate(-50%,-50%);box-shadow:0 2px 8px rgba(20,30,60,.35)}
+  .gfys-fp-note{margin:18px 0 0;text-align:center;font-size:.84rem;line-height:1.5;color:var(--gfys-ink-soft)}
+
+  /* ---------- "How it fits" image + callouts ---------- */
+  .gfys-fit{display:grid;gap:14px}
+  @media(min-width:680px){.gfys-fit{grid-template-columns:1.05fr .95fr;gap:10px;align-items:stretch}}
+  .gfys-fit-media{border:1px solid var(--gfys-line);border-radius:var(--gfys-radius-sm);overflow:hidden;background:var(--gfys-bg-alt)}
+  .gfys-fit-media img{display:block;width:100%;height:auto}
+  .gfys-ph{display:block;width:100%;height:100%;background:var(--gfys-bg-alt);fill:#cfc9bd}
+  .gfys-fit-media .gfys-ph{min-height:300px}
+  .gfys-fit-rail{position:relative;display:flex;flex-direction:column;gap:12px;justify-content:center}
+  .gfys-cal{display:flex;align-items:center;gap:10px}
+  .gfys-cal i{position:relative;display:block;flex:0 0 auto;width:26px;height:1px;background:var(--gfys-ink-soft)}
+  .gfys-cal i::before{content:"";position:absolute;left:-3px;top:50%;width:6px;height:6px;border-radius:50%;background:var(--gfys-accent);transform:translateY(-50%)}
+  .gfys-cal span{font-size:.82rem;line-height:1.35;color:var(--gfys-ink)}
+  @media(min-width:680px){
+    .gfys-fit-rail{display:block}
+    .gfys-cal{position:absolute;left:0;top:var(--t,50%);transform:translateY(-50%)}
+  }
+
+  /* ---------- CM / IN toggle ---------- */
+  .gfys-units{display:flex;justify-content:flex-start;margin:0 0 16px}
+  .gfys-pill{display:inline-flex;padding:4px;gap:4px;background:var(--gfys-bg-alt);border:1px solid var(--gfys-line);border-radius:999px}
+  .gfys-pill button{font:inherit;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;padding:.5em 1.2em;border:0;border-radius:999px;cursor:pointer;background:transparent;color:var(--gfys-ink-soft);transition:color .3s,background .3s,box-shadow .3s}
+  .gfys-pill button[aria-pressed="true"]{background:var(--gfys-accent);color:var(--gfys-accent-ink);box-shadow:0 2px 10px rgba(20,30,60,.25)}
+
+  /* ---------- Tables ---------- */
+  .gfys-table-wrap{border:1px solid var(--gfys-line);border-radius:var(--gfys-radius-sm);overflow:hidden}
+  .gfys-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table.gfys-table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:100%}
+  .gfys-table th,.gfys-table td{padding:13px 16px;text-align:center;white-space:nowrap;border-bottom:1px solid var(--gfys-line)}
+  .gfys-table thead th{background:var(--gfys-bg-alt);font-weight:600;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+  .gfys-table tbody tr:last-child td{border-bottom:0}
+  .gfys-table tbody tr:nth-child(even) td{background:rgba(246,244,239,.55)}
+  .gfys-table th:first-child,.gfys-table td:first-child{text-align:left;font-weight:600;position:sticky;left:0;background:var(--gfys-bg)}
+  .gfys-table thead th:first-child{background:var(--gfys-bg-alt)}
+  .gfys-unit[hidden]{display:none}
+
+  /* ---------- Collapsible accordion (International) ---------- */
+  .gfys-acc{border:1px solid var(--gfys-line);border-radius:var(--gfys-radius-sm);overflow:hidden;background:var(--gfys-bg)}
+  .gfys-acc-sum{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--gfys-ink)}
+  .gfys-acc-sum::-webkit-details-marker{display:none}
+  .gfys-acc-sum svg{width:15px;height:15px;flex:0 0 auto;transition:transform .25s var(--gfys-ease)}
+  .gfys-acc[open] .gfys-acc-sum{border-bottom:1px solid var(--gfys-line)}
+  .gfys-acc[open] .gfys-acc-sum svg{transform:rotate(180deg)}
+  .gfys-acc-body .gfys-table-wrap{border:0;border-radius:0}
+
+  /* ---------- Fit notes (icon cards) ---------- */
+  .gfys-grid3{display:grid;gap:14px}
+  @media(min-width:680px){.gfys-grid3{grid-template-columns:repeat(3,1fr)}}
+  .gfys-note{border:1px solid var(--gfys-line);border-radius:var(--gfys-radius-sm);background:var(--gfys-bg-alt);padding:18px 20px;display:flex;gap:14px;align-items:flex-start}
+  .gfys-note-ic{flex:0 0 auto;width:44px;height:44px;border:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--gfys-accent)}
+  .gfys-note-ic svg{width:21px;height:21px;stroke:var(--gfys-accent-ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .gfys-note h4{margin:0 0 4px;font-size:.84rem;font-weight:600}
+  .gfys-note p{margin:0;font-size:.82rem;line-height:1.45;color:var(--gfys-ink-soft)}
+
+  /* ---------- How they sit / model (image cards) ---------- */
+  .gfys-grid2{display:grid;gap:14px}
+  @media(min-width:680px){.gfys-grid2{grid-template-columns:repeat(2,1fr)}}
+  .gfys-sit{border:1px solid var(--gfys-line);border-radius:var(--gfys-radius-sm);background:var(--gfys-bg-alt);padding:18px;display:flex;gap:16px;align-items:center}
+  .gfys-sit-img{flex:0 0 auto;width:84px;height:104px;border-radius:10px;overflow:hidden;background:var(--gfys-bg);border:1px solid var(--gfys-line)}
+  .gfys-sit-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .gfys-sit h4{margin:0 0 5px;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+  .gfys-sit p{margin:0;font-size:.82rem;line-height:1.45;color:var(--gfys-ink-soft)}
+
+  /* ---------- Recommendation cross-sell ---------- */
+  .gfys-reco{border:1px solid var(--gfys-line);border-left:3px solid var(--gfys-navy);border-radius:var(--gfys-radius-sm);background:var(--gfys-bg);padding:18px 22px;display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center;justify-content:space-between}
+  .gfys-reco h4{margin:0 0 4px;font-size:.9rem;font-weight:600}
+  .gfys-reco p{margin:0;font-size:.83rem;line-height:1.45;color:var(--gfys-ink-soft);max-width:52ch}
+  .gfys-reco-link{flex:0 0 auto;display:inline-flex;align-items:center;gap:.5em;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--gfys-navy);border-radius:999px;padding:.7em 1.3em;text-decoration:none;transition:opacity .25s var(--gfys-ease)}
+  .gfys-reco-link:hover{opacity:.85}
+
+  /* ---------- Help bar ---------- */
+  .gfys-help{margin-top:26px;border:1px solid var(--gfys-line);border-radius:var(--gfys-radius-sm);background:var(--gfys-bg-alt);padding:18px 22px;display:flex;gap:16px;align-items:center}
+  .gfys-help svg{flex:0 0 auto;width:26px;height:26px;stroke:var(--gfys-navy);fill:none;stroke-width:1.4}
+  .gfys-help strong{font-weight:600}
+  .gfys-help p{margin:0;font-size:.85rem;line-height:1.5;color:var(--gfys-ink-soft)}
+
+  /* ---------- Logo loader ---------- */
+  .gfys-loader{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:var(--gfys-bg);pointer-events:none;transition:opacity .5s var(--gfys-ease),visibility .5s var(--gfys-ease)}
+  .gfys-loader[hidden]{opacity:0;visibility:hidden;display:flex;pointer-events:none}
+  .gfys-loader img,.gfys-loader .gfys-lfb{width:100px;max-width:42%;height:auto;animation:gfys-pulse 2.4s var(--gfys-ease) infinite}
+  .gfys-lfb{font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gfys-ink);border:1px solid var(--gfys-line);border-radius:50%;width:100px;height:100px;display:flex;align-items:center;justify-content:center;text-align:center}
+  @keyframes gfys-pulse{0%,100%{opacity:.25;transform:scale(.96)}50%{opacity:1;transform:scale(1)}}
+  @media (prefers-reduced-motion:reduce){.gfys-panel,.gfys-overlay,.gfys-close,.gfys-loader img,.gfys-lfb{transition:none!important;animation:none!important}}
+
+  body.gfys-lock{overflow:hidden}
+
+  @media(max-width:599px){
+    .gfys-panel{max-height:96vh;border-radius:18px 18px 0 0;width:100%}
+    .gfys-modal{align-items:flex-end;padding:0}
+    .gfys-title{font-size:1.3rem}
+    .gfys-head{padding:24px 58px 20px 22px}
+    .gfys-body{padding:22px 20px 26px}
+    .gfys-reco-link{width:100%;justify-content:center}
+  }
+</style>
+
+{%- comment -%} =========================== MARKUP =========================== {%- endcomment -%}
+<div class="gfys" data-gfys-root>
+  <button type="button" class="gfys-trigger" data-gfys-open="gfys-modal-{{ uid }}" aria-haspopup="dialog">
+    {%- if s.show_icon -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <rect x="2.5" y="7" width="19" height="10" rx="2"/><path d="M6 7v3M9 7v4M12 7v3M15 7v4M18 7v3"/>
+      </svg>
+    {%- endif -%}
+    {{ s.button_text | default: 'Guillo Find Your Size' | escape }}
+  </button>
+
+  <div class="gfys gfys-modal" id="gfys-modal-{{ uid }}" style="display:none" aria-hidden="true" role="dialog" aria-modal="true"
+       aria-labelledby="gfys-title-{{ uid }}" data-gfys-modal>
+    <div class="gfys-overlay" data-gfys-close></div>
+    <div class="gfys-panel" role="document">
+
+      {%- comment -%} loader {%- endcomment -%}
+      <div class="gfys-loader" data-gfys-loader>
+        {%- if s.logo_image != blank -%}
+          {{ s.logo_image | image_url: width: 240 | image_tag: alt: shop.name, data-gfys-loaderimg: '' }}
+        {%- elsif logo_src != blank -%}
+          <img src="{{ logo_src }}" alt="{{ shop.name | escape }} loading" width="240" height="240" data-gfys-loaderimg>
+        {%- else -%}
+          <span class="gfys-lfb">{{ s.heading | default: shop.name | slice: 0, 6 | escape }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} header {%- endcomment -%}
+      <header class="gfys-head">
+        <p class="gfys-eyebrow">{{ s.eyebrow | default: 'Size Guide' | escape }}</p>
+        <h2 class="gfys-title" id="gfys-title-{{ uid }}">{{ s.heading | default: 'Guillo Find Your Size' | escape }}</h2>
+        {%- if s.subheading != blank -%}<p class="gfys-sub">{{ s.subheading | escape }}</p>{%- endif -%}
+        <button type="button" class="gfys-close" data-gfys-close aria-label="Close size guide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+      </header>
+
+      <div class="gfys-body" data-gfys-scroll>
+
+        {%- comment -%} ===== Top: Fit profile + How it fits + Size chart =====
+            Desktop: fit profile (left) and fit image (right) side by side, size
+            chart full-width below. Mobile: size chart is ORDERED above the fit
+            image (fit profile -> size chart -> fit image). {%- endcomment -%}
+        <div class="gfys-section gfys-top">
+
+          {%- if s.show_fit_profile -%}
+          <div class="gfys-fp-wrap"><div class="gfys-card">
+            <p class="gfys-fp-h">{{ s.fit_profile_heading | default: 'Fit Profile' | escape }}</p>
+            <div class="gfys-fp-labels">
+              <span>{{ s.fit_profile_left | default: 'Relaxed' | escape }}</span>
+              <span class="is-center">{{ s.fit_profile_center | default: 'Tailored Stretch Fit' | escape }}</span>
+              <span>{{ s.fit_profile_right | default: 'Skinny' | escape }}</span>
+            </div>
+            <div class="gfys-fp-track"><span class="gfys-fp-dot" style="left:{{ s.fit_profile_position | default: 50 }}%"></span></div>
+            {%- if s.fit_profile_note != blank -%}<p class="gfys-fp-note">{{ s.fit_profile_note | escape }}</p>{%- endif -%}
+          </div></div>
+          {%- endif -%}
+
+          {%- if s.show_fit_image -%}
+          <div class="gfys-fit-wrap">
+            <p class="gfys-fp-h">{{ s.measure_heading | default: 'How It Fits' | escape }}</p>
+            <div class="gfys-fit">
+              <div class="gfys-fit-media">
+                {%- if s.measurement_image != blank -%}
+                  {{ s.measurement_image | image_url: width: 760 | image_tag: alt: s.measure_heading, loading: 'lazy', decoding: 'async', data-gfys-measureimg: '' }}
+                {%- elsif fit_src != blank -%}
+                  <img src="{{ fit_src }}" alt="{{ s.measure_heading | default: 'How it fits' | escape }}" loading="lazy" decoding="async" width="760" height="760" data-gfys-measureimg>
+                {%- elsif product.featured_image != blank -%}
+                  {{ product.featured_image | image_url: width: 760 | image_tag: alt: product.title, loading: 'lazy', decoding: 'async' }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'gfys-ph' }}
+                {%- endif -%}
+              </div>
+              <div class="gfys-fit-rail">
+                {%- assign calls = s.fit_callouts | newline_to_br | split: '<br />' -%}
+                {%- for c in calls -%}
+                  {%- assign p = c | strip | split: '|' -%}
+                  {%- if p[0] != blank -%}
+                    <div class="gfys-cal" style="--t:{{ p[1] | default: 50 | strip }}%"><i></i><span>{{ p[0] | strip | escape }}</span></div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+          {%- endif -%}
+
+          {%- comment -%} Size chart — full width on desktop, ordered above the fit image on mobile {%- endcomment -%}
+          <div class="gfys-chart-wrap">
+            <h3 class="gfys-stitle">{{ s.chart_heading | default: 'Size Chart' | escape }}</h3>
+            {%- assign default_unit = s.default_unit | default: 'cm' -%}
+            {%- if s.show_unit_toggle -%}
+              <div class="gfys-units">
+                <div class="gfys-pill" role="group" aria-label="Measurement units">
+                  <button type="button" data-gfys-unit="cm" aria-pressed="{% if default_unit == 'cm' %}true{% else %}false{% endif %}">CM</button>
+                  <button type="button" data-gfys-unit="in" aria-pressed="{% if default_unit == 'in' %}true{% else %}false{% endif %}">IN</button>
+                </div>
+              </div>
+            {%- endif -%}
+            <div class="gfys-unit" data-gfys-unitpanel="cm" {% unless default_unit == 'cm' %}hidden{% endunless %}>
+              {%- render 'guillo-find-your-size-table', data: s.measurements_cm, unit: 'cm' -%}
+            </div>
+            <div class="gfys-unit" data-gfys-unitpanel="in" {% unless default_unit == 'in' %}hidden{% endunless %}>
+              {%- render 'guillo-find-your-size-table', data: s.measurements_in, unit: 'in' -%}
+            </div>
+          </div>
+
+        </div>{%- comment -%} /.gfys-top {%- endcomment -%}
+
+        {%- comment -%} ===== Fit notes ===== {%- endcomment -%}
+        {%- if s.show_fit_notes -%}
+        <div class="gfys-section">
+          <h3 class="gfys-stitle">{{ s.fit_notes_heading | default: 'Fit Notes' | escape }}</h3>
+          <div class="gfys-grid3">
+            <div class="gfys-note">
+              <span class="gfys-note-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6v12M20 6v12"/><path d="M7 12h10"/><path d="M9.5 9.5 7 12l2.5 2.5M14.5 9.5 17 12l-2.5 2.5"/></svg></span>
+              <div><h4>{{ s.note1_title | default: 'Between sizes?' | escape }}</h4><p>{{ s.note1_text | default: 'Choose the larger size for more comfort.' | escape }}</p></div>
+            </div>
+            <div class="gfys-note">
+              <span class="gfys-note-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/><path d="M8.3 15.7 18 4M15.7 15.7 6 4"/></svg></span>
+              <div><h4>{{ s.note2_title | default: 'Prefer a sharper fit?' | escape }}</h4><p>{{ s.note2_text | default: 'Choose your usual waist size.' | escape }}</p></div>
+            </div>
+            <div class="gfys-note">
+              <span class="gfys-note-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l.5 8L16 21h-3l-1-8.5L11 21H8L7.5 11z"/><path d="M3 8h2M19 8h2"/></svg></span>
+              <div><h4>{{ s.note3_title | default: 'Bigger thighs?' | escape }}</h4><p>{{ s.note3_text | default: 'Size up for more room through the upper leg.' | escape }}</p></div>
+            </div>
+          </div>
+        </div>
+        {%- endif -%}
+
+        {%- comment -%} ===== How they sit (short / regular / long) ===== {%- endcomment -%}
+        {%- if s.show_sit -%}
+        <div class="gfys-section">
+          <h3 class="gfys-stitle">{{ s.sit_heading | default: 'How They Sit' | escape }}</h3>
+          <div class="gfys-grid3">
+            {%- assign sit_titles = 'Short Legs,Regular Legs,Long Legs' | split: ',' -%}
+            {%- assign sit_defs = "Sits a touch lower with a slight break for shorter heights.|Designed to sit cleanly at the ankle for a tailored look.|More break over the shoe for taller builds." | split: '|' -%}
+            {%- for i in (1..3) -%}
+              {%- assign img = 'sit' | append: i | append: '_image' -%}
+              {%- assign tt = 'sit' | append: i | append: '_title' -%}
+              {%- assign tx = 'sit' | append: i | append: '_text' -%}
+              <div class="gfys-sit">
+                <div class="gfys-sit-img">
+                  {%- if s[img] != blank -%}
+                    {{ s[img] | image_url: width: 220 | image_tag: alt: s[tt], loading: 'lazy', decoding: 'async' }}
+                  {%- elsif product.images[forloop.index0] != blank -%}
+                    {{ product.images[forloop.index0] | image_url: width: 220 | image_tag: alt: s[tt], loading: 'lazy', decoding: 'async' }}
+                  {%- else -%}
+                    {{ 'image' | placeholder_svg_tag: 'gfys-ph' }}
+                  {%- endif -%}
+                </div>
+                <div>
+                  <h4>{{ s[tt] | default: sit_titles[forloop.index0] | escape }}</h4>
+                  <p>{{ s[tx] | default: sit_defs[forloop.index0] | escape }}</p>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+        {%- endif -%}
+
+        {%- comment -%} ===== International conversion (collapsed accordion) ===== {%- endcomment -%}
+        {%- if s.conversion_table != blank -%}
+        <details class="gfys-section gfys-acc">
+          <summary class="gfys-acc-sum">
+            <span>{{ s.conversion_heading | default: 'International Size Conversion' | escape }}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="gfys-acc-body">
+            {%- render 'guillo-find-your-size-table', data: s.conversion_table, unit: '' -%}
+          </div>
+        </details>
+        {%- endif -%}
+
+        {%- comment -%} ===== Recommendation cross-sell ===== {%- endcomment -%}
+        {%- if s.show_reco and s.reco_link_url != blank -%}
+        <div class="gfys-section">
+          <div class="gfys-reco">
+            <div>
+              {%- if s.reco_title != blank -%}<h4>{{ s.reco_title | escape }}</h4>{%- endif -%}
+              {%- if s.reco_text != blank -%}<p>{{ s.reco_text | escape }}</p>{%- endif -%}
+            </div>
+            <a class="gfys-reco-link" href="{{ s.reco_link_url }}">{{ s.reco_link_label | default: 'View recommended fit' | escape }}
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+        {%- endif -%}
+
+        {%- comment -%} ===== Help bar ===== {%- endcomment -%}
+        {%- if s.help_title != blank or s.help_text != blank -%}
+        <div class="gfys-help">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          <p>{%- if s.help_title != blank -%}<strong>{{ s.help_title | escape }}</strong> {% endif %}{{ s.help_text | escape }}</p>
+        </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} =========================== SCRIPT =========================== {%- endcomment -%}
+{%- unless gfys_script_printed -%}
+{%- assign gfys_script_printed = true -%}
+<script>
+(function(){
+  "use strict";
+  if (window.__gfysInit) return; window.__gfysInit = true;
+  try { document.querySelectorAll('.gfys-modal').forEach(function(m){ m.classList.remove('gfys-open'); m.setAttribute('aria-hidden','true'); }); } catch(e){}
+  var lastFocused = null;
+  var lastGesture = 0;
+  document.addEventListener('pointerdown', function(){ lastGesture = Date.now(); }, true);
+  document.addEventListener('keydown', function(){ lastGesture = Date.now(); }, true);
+
+  function openModal(modal){
+    if(!modal) return;
+    if(Date.now() - lastGesture > 2000) return;
+    lastFocused = document.activeElement;
+    // Portal to <body> so position:fixed escapes any transformed/stacking
+    // ancestor in the theme (prevents the gallery bleeding through on mobile
+    // and keeps the close button tappable).
+    if(modal.parentNode !== document.body){ document.body.appendChild(modal); }
+    modal.setAttribute('aria-hidden','false');
+    modal.classList.add('gfys-open');
+    modal.style.display = '';
+    document.body.classList.add('gfys-lock');
+    runLoader(modal);
+    var c = modal.querySelector('.gfys-close');
+    if(c){ setTimeout(function(){ c.focus(); }, 80); }
+  }
+  function closeModal(modal){
+    if(!modal) return;
+    modal.setAttribute('aria-hidden','true');
+    modal.classList.remove('gfys-open');
+    modal.style.display = 'none';
+    document.body.classList.remove('gfys-lock');
+    if(lastFocused && lastFocused.focus){ lastFocused.focus(); }
+  }
+  /* Brief logo-pulse intro that always clears (decoupled from image loading). */
+  function runLoader(modal){
+    var l = modal.querySelector('[data-gfys-loader]');
+    if(!l) return;
+    l.hidden = false;
+    setTimeout(function(){ l.hidden = true; }, 550);
+  }
+  function setUnit(modal, unit){
+    modal.querySelectorAll('[data-gfys-unit]').forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-gfys-unit')===unit ? 'true':'false'); });
+    modal.querySelectorAll('[data-gfys-unitpanel]').forEach(function(p){ p.hidden = p.getAttribute('data-gfys-unitpanel')!==unit; });
+  }
+  document.addEventListener('click', function(e){
+    var o = e.target.closest('[data-gfys-open]');
+    if(o){ e.preventDefault(); openModal(document.getElementById(o.getAttribute('data-gfys-open'))); return; }
+    if(e.target.closest('[data-gfys-close]')){ e.preventDefault(); closeModal(e.target.closest('[data-gfys-modal]')); return; }
+    var u = e.target.closest('[data-gfys-unit]');
+    if(u){ setUnit(u.closest('[data-gfys-modal]'), u.getAttribute('data-gfys-unit')); return; }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ var m = document.querySelector('.gfys-modal[aria-hidden="false"]'); if(m) closeModal(m); }
+  });
+})();
+</script>
+{%- endunless -%}
+

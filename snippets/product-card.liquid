@@ -7,19 +7,18 @@
   @param {object} children - The children of the product card
   @param {object} [block] - The block object
   @param {number} [product_card_gap] - The gap between the product card children (overrides block settings)
-  @param {string} [product_view_context] - The context in which the product card is being rendered. Used for standard events.
 {%- enddoc -%}
 
 {% assign block_settings = block.settings %}
 
-{% if request.visual_preview_mode %}
-  {% style %}
+{% style %}
+  {% if request.visual_preview_mode %}
     product-card[data-product-transition] {
       width: 100%;
       min-width: 250px;
     }
-  {% endstyle %}
-{% endif %}
+  {% endif %}
+{% endstyle %}
 
 {% liquid
   assign has_quick_add = false
@@ -35,7 +34,7 @@
   assign product_card_id = 'product-card-link-' | append: block.id | append: '-' | append: product.id
   assign product_card_gap_value = product_card_gap | default: block_settings.product_card_gap
 
-  # variant_to_link drives the featured image used by the main-product view transition.
+  # Logic to determine which variant URL to use (matching swatch selection logic)
   assign variant_to_link = product.selected_or_first_available_variant
 
   if settings.transition_to_main_product
@@ -53,10 +52,6 @@
   if product.id == empty or product == blank
     assign onboarding = true
   endif
-
-  if block_settings.background_color != blank
-    render 'contrast-override', background_color: block_settings.background_color, text_color: block_settings.text_color, section_id: block.id
-  endif
 %}
 
 <product-card
@@ -73,21 +68,19 @@
   {% if onboarding %}
     data-placeholder="true"
   {% endif %}
-  {%- unless onboarding -%}
-    {% # theme-check-disable-next-line UnknownFilter %}
-    view-event-payload="{{ product | standard_event_data: 'view', context: product_view_context | escape }}"
-  {%- endunless -%}
 >
   <a
     id="{{ product_card_id | md5 }}"
     {% unless onboarding %}
-      {% # Link to product.url so algorithmic variant relevance and tracking params are maintained. %}
-      href="{{ product.url }}"
+      href="{{ variant_to_link.url }}"
     {% endunless %}
     class="product-card__link"
     ref="productCardLink"
-    aria-label="{{ product.title | escape }}"
-  ></a>
+  >
+    <span class="visually-hidden">
+      {{ product.title }}
+    </span>
+  </a>
   <div
     class="
       product-card__content
@@ -97,7 +90,7 @@
       spacing-style
       border-style
       gap-style
-      {% if block_settings.background_color != blank %} color-custom-{{ block.id }}{% endif %}
+      {% if block_settings.inherit_color_scheme == false %} color-{{ block_settings.color_scheme }}{% endif %}
     "
     style="
       {% render 'border-override', settings: block_settings %}
@@ -117,4 +110,15 @@
   </div>
 </product-card>
 
-{% render 'product-card-styles' %}
+{% stylesheet %}
+  .product-card__placeholder-image svg {
+    height: 100%;
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-card slideshow-arrows .slideshow-control {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+

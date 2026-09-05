@@ -1,0 +1,319 @@
+{% comment %}
+  Black utility bar above the header: uppercase messages separated by
+  hairline pipes. Each message can carry a shorter mobile wording, the way
+  the live store's gheader_announcement_m* settings do, so a phone shows the
+  same promises in fewer words rather than dropping them.
+
+  Messages are country-aware, like the live gscene-header: a message can be
+  limited to certain countries or hidden from them, so GB sees its own
+  delivery and duties lines and never the AUD ones. Codes are ISO-2 and
+  resolved from Shopify Markets via localization.country.iso_code.
+{% endcomment %}
+
+<div class="guillo-announce">
+  {%- liquid
+    assign cc = localization.country.iso_code | default: ''
+    assign shown = ''
+    for block in section.blocks
+      assign ok = true
+      if block.settings.only_countries != blank
+        assign only = block.settings.only_countries | upcase | replace: ' ', '' | split: ','
+        unless only contains cc
+          assign ok = false
+        endunless
+      endif
+      if block.settings.not_countries != blank
+        assign nope = block.settings.not_countries | upcase | replace: ' ', '' | split: ','
+        if nope contains cc
+          assign ok = false
+        endif
+      endif
+      if ok
+        # comma-delimited on BOTH sides: `contains` is substring matching on a
+        # string, so a bare id lets msg1 match inside msg10.
+        assign shown = shown | append: ',' | append: block.id | append: ','
+      endif
+    endfor
+  -%}
+  <button type="button" class="guillo-announce__nav" data-ann-prev aria-label="Previous announcement">
+    <span aria-hidden="true">&#8249;</span>
+  </button>
+  <div class="guillo-announce__messages" data-ann-track>
+    {%- assign shown_count = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- capture block_key -%},{{ block.id }},{%- endcapture -%}
+      {%- unless shown contains block_key -%}{%- continue -%}{%- endunless -%}
+      {%- if shown_count > 0 -%}<span class="guillo-announce__sep" aria-hidden="true">|</span>{%- endif -%}
+      {%- assign shown_count = shown_count | plus: 1 -%}
+      <span
+        class="guillo-announce__msg{% if block.settings.accent %} guillo-announce__msg--accent{% endif %}"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.text_mobile != blank -%}
+          <span class="guillo-announce__long">{{ block.settings.text }}</span>
+          <span class="guillo-announce__short">{{ block.settings.text_mobile }}</span>
+        {%- else -%}
+          {{- block.settings.text -}}
+        {%- endif -%}
+      </span>
+    {%- endfor -%}
+  </div>
+  <button type="button" class="guillo-announce__nav" data-ann-next aria-label="Next announcement">
+    <span aria-hidden="true">&#8250;</span>
+  </button>
+</div>
+
+{% stylesheet %}
+  .guillo-announce {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    height: 38px;
+    padding: 0 40px;
+    background: #000000;
+    /* Fine white hairline separating the pure-black utility bar from the
+       near-black header below it. rgba(255,255,255,.6) is the design's own
+       white hairline value. */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.75);
+    color: var(--g-faint);
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .guillo-announce__messages {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+  .guillo-announce__msg { white-space: nowrap; }
+  .guillo-announce__short { display: none; }
+  .guillo-announce__msg--accent { color: var(--g-bronze); }
+  .guillo-announce__sep { opacity: 0.35; }
+  /* The arrows are a phone affordance only. */
+  .guillo-announce__nav { display: none; }
+
+  @media screen and (max-width: 989px) {
+    .guillo-announce { padding: 0 6px; gap: 0; }
+    .guillo-announce__long { display: none; }
+    .guillo-announce__short { display: inline; }
+
+    /* One message at a time, stepped with the arrows, rather than four
+       competing for the width of a phone. */
+    .guillo-announce__messages {
+      position: relative;
+      flex: 1;
+      height: 38px;
+      gap: 0;
+      overflow: hidden;
+    }
+    /* The message travels across the bar rather than blinking over: the one
+       leaving slides out the way it is going, the next comes in behind it. */
+    .guillo-announce__msg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-inline: 4px;
+      white-space: normal;
+      opacity: 0;
+      transform: translateX(24px);
+      transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+    .guillo-announce__msg.is-leaving { opacity: 0; transform: translateX(-24px); }
+    .guillo-announce--back .guillo-announce__msg { transform: translateX(-24px); }
+    .guillo-announce--back .guillo-announce__msg.is-leaving { transform: translateX(24px); }
+    .guillo-announce__msg.is-current {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+    .guillo-announce__sep { display: none; }
+
+    .guillo-announce__nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      width: 26px;
+      height: 38px;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: inherit;
+      font: 300 17px/1 var(--g-sans);
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    .guillo-announce__nav:active { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .guillo-announce__msg { transition: none; }
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    const track = document.querySelector('[data-ann-track]');
+    if (!track) return;
+    const msgs = [...track.querySelectorAll('.guillo-announce__msg')];
+    if (msgs.length < 2) {
+      msgs.forEach((m) => m.classList.add('is-current'));
+      return;
+    }
+
+    const bar = track.closest('.guillo-announce');
+    const seconds = {{ section.settings.rotate_seconds | default: 2 }};
+    // Only one shows at a time below this width; above it they all sit in a
+    // row, so there is nothing to rotate.
+    const stacked = window.matchMedia('(max-width: 989px)');
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    let i = 0;
+    let timer = null;
+
+    const show = (n, back) => {
+      const from = i;
+      i = (n + msgs.length) % msgs.length;
+      if (bar) bar.classList.toggle('guillo-announce--back', !!back);
+      msgs.forEach((m, x) => {
+        m.classList.toggle('is-current', x === i);
+        m.classList.toggle('is-leaving', x === from && from !== i);
+      });
+    };
+
+    const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+    const start = () => {
+      stop();
+      // Auto-advance only where it is one at a time, the tab is visible, and
+      // the visitor has not asked for less motion. The arrows always work.
+      if (!stacked.matches || still.matches || document.hidden) return;
+      timer = setInterval(() => show(i + 1), seconds * 1000);
+    };
+
+    show(0);
+    start();
+
+    const step = (n, back) => { show(n, back); start(); };
+    const prev = document.querySelector('[data-ann-prev]');
+    const next = document.querySelector('[data-ann-next]');
+    if (prev) prev.addEventListener('click', () => step(i - 1, true));
+    if (next) next.addEventListener('click', () => step(i + 1));
+
+    // Pausing while it is being read or interacted with.
+    if (bar) {
+      bar.addEventListener('mouseenter', stop);
+      bar.addEventListener('mouseleave', start);
+      bar.addEventListener('focusin', stop);
+      bar.addEventListener('focusout', start);
+      bar.addEventListener('touchstart', stop, { passive: true });
+    }
+    document.addEventListener('visibilitychange', start);
+    stacked.addEventListener('change', start);
+
+    let x0 = null;
+    track.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) step(dx < 0 ? i + 1 : i - 1, dx > 0);
+      else start();
+      x0 = null;
+    }, { passive: true });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Guillo announcement",
+  "enabled_on": {
+    "groups": [
+      "header"
+    ]
+  },
+  "settings": [
+    {
+      "type": "range",
+      "id": "rotate_seconds",
+      "label": "Seconds per message (mobile)",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "unit": "s",
+      "info": "How long each message rests before the next slides in."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Same-day dispatch before 4pm"
+        },
+        {
+          "type": "text",
+          "id": "text_mobile",
+          "label": "Short text (mobile)",
+          "info": "Optional shorter wording for phones."
+        },
+        {
+          "type": "checkbox",
+          "id": "accent",
+          "label": "Bronze accent",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "only_countries",
+          "label": "Show only in",
+          "info": "ISO country codes, comma separated, e.g. GB or GB, IE. Leave blank to show everywhere."
+        },
+        {
+          "type": "text",
+          "id": "not_countries",
+          "label": "Hide in",
+          "info": "ISO country codes to hide this message from, e.g. GB, SG."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Guillo announcement",
+      "category": "Guillo",
+      "blocks": [
+        {
+          "type": "message",
+          "settings": {
+            "text": "Same-day dispatch before 4pm"
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "text": "15% off three or more",
+            "accent": true
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "text": "Packs without creasing"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+

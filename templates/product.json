@@ -10,406 +10,259 @@
 {
   "sections": {
     "main": {
-      "type": "product-information",
+      "type": "guillo-product",
       "blocks": {
-        "media-gallery": {
-          "type": "_product-media-gallery",
-          "static": true,
+        "tab1": {
+          "type": "tab",
           "settings": {
-            "media_presentation": "grid",
-            "media_columns": "two",
-            "image_gap": 4,
-            "large_first_image": false,
-            "icons_style": "arrow",
-            "slideshow_controls_style": "counter",
-            "slideshow_mobile_controls_style": "dots",
-            "thumbnail_position": "right",
-            "thumbnail_width": 44,
-            "aspect_ratio": "adapt",
-            "constrain_to_viewport": true,
-            "media_fit": "contain",
-            "media_radius": 0,
-            "extend_media": false,
-            "zoom": true,
-            "video_loop": false,
-            "hide_variants": true,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "title": "Fit & Care",
+            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+          }
         },
-        "product-details": {
-          "type": "_product-details",
-          "static": true,
+        "tab2": {
+          "type": "tab",
           "settings": {
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "details_position": "flex-start",
-            "gap": 28,
-            "sticky_details_desktop": true,
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 24,
-            "padding-block-end": 24,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "group_icgrde": {
-              "type": "group",
-              "name": "t:names.header",
-              "settings": {
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
-                "gap": 12,
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "custom_height": 100,
-                "background_media": "none",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "link": "",
-                "open_in_new_tab": false,
-                "placeholder": "",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "text_xpVMaM": {
-                  "type": "text",
-                  "name": "t:names.title",
-                  "settings": {
-                    "text": "<h1>{{ closest.product.title }}</h1>",
-                    "width": "fit-content",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "h3",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "price_tVjtKg": {
-                  "type": "price",
-                  "settings": {
-                    "show_sale_price_first": true,
-                    "show_installments": true,
-                    "show_tax_info": true,
-                    "type_preset": "paragraph",
-                    "width": "100%",
-                    "alignment": "left",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "padding-block-start": 4,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "text_xpVMaM",
-                "price_tVjtKg"
-              ]
-            },
-            "divider_VJhene": {
-              "type": "_divider",
-              "name": "t:names.divider",
-              "settings": {
-                "thickness": 1,
-                "corner_radius": "square",
-                "divider_color": "{{ settings.color_palette.color3 }}",
-                "width_percent": 100,
-                "padding-block-start": 0,
-                "padding-block-end": 0
-              },
-              "blocks": {}
-            },
-            "variant_picker_R3rGDr": {
-              "type": "variant-picker",
-              "settings": {
-                "variant_style": "buttons",
-                "show_swatches": false,
-                "alignment": "left",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "buy_buttons_eYQEYi": {
-              "type": "buy-buttons",
-              "settings": {
-                "stacking": true,
-                "show_pickup_availability": false,
-                "gift_card_form": true,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "quantity": {
-                  "type": "quantity",
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                },
-                "add-to-cart": {
-                  "type": "add-to-cart",
-                  "static": true,
-                  "settings": {
-                    "style_class": "button"
-                  },
-                  "blocks": {}
-                },
-                "accelerated-checkout": {
-                  "type": "accelerated-checkout",
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                }
-              },
-              "block_order": []
-            },
-            "text_aEtTtq": {
-              "type": "text",
-              "name": "t:names.product_description",
-              "settings": {
-                "text": "{{ closest.product.description }}",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "group_icgrde",
-            "divider_VJhene",
-            "variant_picker_R3rGDr",
-            "buy_buttons_eYQEYi",
-            "text_aEtTtq"
-          ]
+            "title": "Details",
+            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+          }
         },
-        "disclosures": {
-          "type": "disclosures",
+        "tab3": {
+          "type": "tab",
           "settings": {
-            "padding-block-start": 0,
-            "padding-block-end": 0
-          },
-          "blocks": {}
+            "title": "Shipping",
+            "content": "<p>Dispatched from Brisbane the same afternoon on orders placed before 4pm. Australia and New Zealand 2 to 4 days, Singapore and Hong Kong 4 to 6, the United Kingdom 5 to 8, Europe 6 to 9.</p><p>You do not pay duties or taxes. Every international order ships DDP, so all duties and import taxes are calculated and paid at checkout.</p><p>Free shipping over $150 in Australia.</p>"
+          }
+        },
+        "tab4": {
+          "type": "tab",
+          "settings": {
+            "title": "Exchanges & Returns",
+            "content": "<p>Free exchanges and returns within 44 days. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p>"
+          }
+        },
+        "feat1": {
+          "type": "feature",
+          "settings": {
+            "label": "Genuine leather",
+            "icon": "shield"
+          }
+        },
+        "feat2": {
+          "type": "feature",
+          "settings": {
+            "label": "Hand finished",
+            "icon": "dot"
+          }
+        },
+        "feat3": {
+          "type": "feature",
+          "settings": {
+            "label": "Ages with use",
+            "icon": "refresh"
+          }
+        },
+        "feat4": {
+          "type": "feature",
+          "settings": {
+            "label": "Made to travel",
+            "icon": "truck"
+          }
         }
       },
       "block_order": [
-        "disclosures"
+        "feat1",
+        "feat2",
+        "feat3",
+        "feat4",
+        "tab1",
+        "tab2",
+        "tab3",
+        "tab4"
       ],
       "settings": {
-        "content_width": "content-center-aligned",
-        "desktop_media_position": "left",
-        "equal_columns": false,
-        "limit_details_width": false,
-        "gap": 48,
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "short_description": "Cut for men who carry size through the chest, shoulders and thighs, in fabrics that move and recover.",
+        "fit_guide_link": "shopify://pages/fit-guide",
+        "size_guide_page": "shopify://pages/fit-guide",
+        "trust_line": "Same-day dispatch · 44-day returns and exchanges",
+        "show_pair": true,
+        "show_video_tile": true,
+        "video_caption": "Watch the fit in motion"
       }
     },
-    "product_recommendations_qggXJq": {
-      "type": "product-recommendations",
+    "trust": {
+      "type": "guillo-trust",
       "blocks": {
-        "text_cbcgyb": {
-          "type": "text",
-          "name": "t:names.header",
+        "card1": {
+          "type": "card",
           "settings": {
-            "text": "<h2>You may also like </h2>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h4",
-            "font": "var(--font-body--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "icon": "truck",
+            "title": "Fast, tracked shipping",
+            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order."
+          }
         },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
+        "card2": {
+          "type": "card",
           "settings": {
-            "product_card_gap": 8,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 8,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_DNizbJ": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_M7MJkb": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_gLWgA6": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_DNizbJ",
-            "product_title_M7MJkb",
-            "price_gLWgA6"
-          ]
+            "icon": "refresh",
+            "title": "Easy 44 day returns",
+            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
+          }
+        },
+        "card3": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Duties and taxes covered",
+            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship."
+          }
         }
       },
       "block_order": [
-        "text_cbcgyb"
+        "card1",
+        "card2",
+        "card3"
       ],
-      "name": "t:names.product_recommendations",
       "settings": {
-        "product": "{{ closest.product }}",
-        "recommendation_type": "related",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
-        "mobile_columns": "2",
-        "columns_gap": 12,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "gap": 28,
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "show_press": true,
+        "press_logo_alt": "7NEWS",
+        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
+      }
+    },
+    "anatomy": {
+      "type": "guillo-anatomy",
+      "blocks": {
+        "cl1": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Genuine leather",
+            "text": "Full grain leather, hand finished, built to be carried rather than kept for best.",
+            "spec": "Ages with use"
+          }
+        },
+        "cl2": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Built for travel",
+            "text": "Designed to carry the essentials, with dimensions listed in the product details.",
+            "spec": "Check your carry-on limits"
+          }
+        },
+        "cr1": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Care",
+            "text": "Spot clean with a damp cloth and air dry. Keep it out of prolonged direct sunlight.",
+            "spec": "Darkens, does not dry out"
+          }
+        },
+        "cr2": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Pairs with",
+            "text": "The rest of the travel edit. Pack a chino and a polo and you are ready.",
+            "spec": "The Travel Edit"
+          }
+        }
+      },
+      "block_order": [
+        "cl1",
+        "cl2",
+        "cr1",
+        "cr2"
+      ],
+      "settings": {
+        "heading": "Leather made to travel.",
+        "image_position": "center 74%"
+      }
+    },
+    "reviews": {
+      "type": "guillo-pdp-reviews",
+      "settings": {
+        "heading": "Worn, washed, reported back.",
+        "fit_marker": 50
+      }
+    },
+    "faq": {
+      "type": "guillo-faq",
+      "blocks": {
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "What fits inside?",
+            "answer": "<p>It is designed to carry the essentials. Dimensions are listed in the product details above.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I care for it?",
+            "answer": "<p>Spot clean with a damp cloth and air dry. Keep it away from prolonged direct sunlight.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I travel with it?",
+            "answer": "<p>It is built with travel in mind. Check your airline's carry on limits against the dimensions in the product details.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "What should I pair it with?",
+            "answer": "<p>The rest of the travel edit. Pack the Luxe Chino and a polo and you are ready.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>Complimentary returns &amp; exchanges within 44 days for AU/NZ orders. International orders: 44-day returns and exchanges, return shipping paid by the customer. All returns via our self-service portal, no emails, no waiting.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "question": "When will it arrive?",
+            "answer": "<p>All orders dispatched within 24 hours. Standard delivery to Australia in 2 to 8 business days. Express in 1 to 4. International shipping available to Singapore, UK, US and Europe.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6"
+      ],
+      "settings": {
+        "layout": "split",
+        "eyebrow": "Questions",
+        "heading": "Before you order.",
+        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time."
+      }
+    },
+    "wear": {
+      "type": "guillo-wear-with",
+      "settings": {
+        "heading": "The matching set",
+        "products_to_show": 8,
+        "products": [
+          "bellagio-leather-weekender-duffel-bag",
+          "the-bellagio-wash-bag",
+          "the-bellagio-passport-holder"
+        ]
       }
     }
   },
   "order": [
     "main",
-    "product_recommendations_qggXJq"
+    "wear",
+    "trust",
+    "anatomy",
+    "reviews",
+    "faq"
   ]
 }
+

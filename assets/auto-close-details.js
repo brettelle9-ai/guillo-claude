@@ -13,3 +13,4 @@
     for (const detailsElement of detailsToClose) detailsElement.removeAttribute('open');
   });
 })();
+

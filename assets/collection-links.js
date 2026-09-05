@@ -230,3 +230,4 @@ class CollectionLinks extends Component {
 if (!customElements.get('collection-links-component')) {
   customElements.define('collection-links-component', CollectionLinks);
 }
+

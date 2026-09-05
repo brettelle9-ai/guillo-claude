@@ -384,3 +384,4 @@ export class OverflowList extends DeclarativeShadowElement {
 if (!customElements.get('overflow-list')) {
   customElements.define('overflow-list', OverflowList);
 }
+

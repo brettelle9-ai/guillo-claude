@@ -1,0 +1,563 @@
+{% comment %}
+  Reviews section: the design's summary column (score, fit meter) beside the
+  real review list.
+
+  The list is an app block — add the Klaviyo Reviews widget to this section in
+  the theme editor (Add block > Apps) and it renders the store's actual
+  reviews. The score and count always come from the product's reviews
+  metafields, which the review app maintains, so they are never hand-typed.
+  The manual review blocks are only a fallback for when no app block has been
+  placed yet, and the rating histogram is off by default because that
+  breakdown is not exposed to the theme.
+{% endcomment %}
+
+{%- liquid
+  # ---- reviews rolled up across the product family ----
+  # Judge.me stores its payload per product, so a colourway with one review
+  # showed one review. Roll up over the Guillo Product Group instead.
+  # Shirts are the exception: the store splits them into three groups (short
+  # sleeve, long sleeve, grandad collar) for the swatches, but they are one
+  # shirt in different collars and Judge.me reviews them as one, so their
+  # reviews come from the whole Shirts collection.
+  assign gr_products = blank
+  assign gr_legacy = blank
+  if product.tags contains 'garment:shirt' and collections.shirts != blank
+    assign gr_products = collections.shirts.products
+  endif
+  if product.tags contains 'garment:chino' and collections.chinos != blank
+    # Every chino together, Luxe and Signore, but not the chino shorts -
+    # those are garment:short and sit in their own collection.
+    assign gr_products = collections.chinos.products
+    # Three retired Luxe products (Sand, and the two Tailored Fit colours)
+    # still hold reviews, and Liquid cannot read draft products at all, so
+    # they are kept as a shop metafield and merged back in here. If Judge.me
+    # grouping is ever switched back on, per-product counts become group
+    # totals and this whole roll-up needs revisiting.
+    assign gr_legacy = shop.metafields.custom.legacy_chino_reviews.value
+  endif
+  if gr_products == blank
+    assign gr_group = product.metafields.custom.product_group.value
+    if gr_group != blank
+      assign gr_products = gr_group.products.value
+    endif
+  endif
+  if gr_products == blank
+    assign gr_products = product.metafields.custom.colour_group.value
+  endif
+
+  assign gr_reviews = '' | split: ''
+  assign gr_count = 0
+  assign gr_weighted = 0
+
+  if gr_products != blank and gr_products.size > 0
+    for gr_p in gr_products
+      assign gr_d = gr_p.metafields.judgeme.review_widget_data.value
+      if gr_d != blank and gr_d.reviews != blank
+        assign gr_reviews = gr_reviews | concat: gr_d.reviews
+      endif
+      assign gr_c = gr_p.metafields.reviews.rating_count.value | default: 0
+      assign gr_a = gr_p.metafields.reviews.rating.value.rating | default: 0
+      if gr_c > 0
+        assign gr_count = gr_count | plus: gr_c
+        assign gr_part = gr_a | times: gr_c
+        assign gr_weighted = gr_weighted | plus: gr_part
+      endif
+    endfor
+  else
+    assign gr_d = product.metafields.judgeme.review_widget_data.value
+    if gr_d != blank and gr_d.reviews != blank
+      assign gr_reviews = gr_reviews | concat: gr_d.reviews
+    endif
+    assign gr_count = product.metafields.reviews.rating_count.value | default: 0
+    assign gr_a = product.metafields.reviews.rating.value.rating | default: 0
+    assign gr_weighted = gr_a | times: gr_count
+  endif
+
+  if gr_legacy != blank and gr_legacy.size > 0
+    assign gr_reviews = gr_reviews | concat: gr_legacy
+    for gr_l in gr_legacy
+      assign gr_count = gr_count | plus: 1
+      assign gr_weighted = gr_weighted | plus: gr_l.rating
+    endfor
+  endif
+
+  assign gr_rating = 0
+  if gr_count > 0
+    assign gr_weighted_f = gr_weighted | times: 1.0
+    assign gr_rating = gr_weighted_f | divided_by: gr_count | round: 2
+  endif
+  # Highest rated first, lowest last, and newest first inside each rating.
+  # Liquid's sort takes one key and is not guaranteed stable, so the list is
+  # date-ordered once and then poured into rating buckets.
+  assign gr_dated = gr_reviews | sort: 'created_at' | reverse
+  assign gr_ordered = '' | split: ''
+  for gr_star in (1..5) reversed
+    assign gr_bucket = gr_dated | where: 'rating', gr_star
+    assign gr_ordered = gr_ordered | concat: gr_bucket
+  endfor
+  # A review with an odd or missing rating would fall out of the buckets, so
+  # only take the reordered list when nothing was lost.
+  assign gr_reviews = gr_dated
+  if gr_ordered.size == gr_dated.size
+    assign gr_reviews = gr_ordered
+  endif
+-%}
+
+{%- liquid
+  # Judge.me keeps its payload per product, so a colourway with one review
+  # showed one review. These come from the whole group instead.
+  assign live_reviews = gr_reviews
+  assign rating = gr_rating
+  assign rating_count = gr_count
+  assign histogram = blank
+
+  assign app_blocks = section.blocks | where: 'type', '@app'
+  assign has_app_reviews = false
+  if app_blocks.size > 0
+    assign has_app_reviews = true
+  endif
+-%}
+
+{%- if live_reviews.size > 0 or has_app_reviews -%}
+<section class="guillo-reviews g-pad">
+  <div class="g-container g-container--wide">
+    <div class="g-section-head">
+      <div>
+        <span class="g-eyebrow">Reviews</span>
+        <h2>{{ section.settings.heading }}</h2>
+      </div>
+      {%- if section.settings.write_link != blank -%}
+        <a href="{{ section.settings.write_link }}" class="g-link">Write a review</a>
+      {%- endif -%}
+    </div>
+
+    <div class="guillo-reviews__layout">
+      <div class="guillo-reviews__summary">
+        <div class="guillo-reviews__score-row">
+          <span class="guillo-reviews__score">{{ rating }}</span>
+          <span class="guillo-reviews__outof">out of 5</span>
+        </div>
+        <div class="guillo-reviews__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="guillo-reviews__based">Based on {{ rating_count }} verified purchases</div>
+
+        {%- if live_reviews.size > 0 -%}
+          {%- comment -%}
+            Counted off the merged list: Judge.me's own histogram is per
+            product and would disagree with the grouped total beside it.
+          {%- endcomment -%}
+          <div class="guillo-reviews__bars">
+            {%- for star in (1..5) reversed -%}
+              {%- liquid
+                assign star_n = 0
+                for r in live_reviews
+                  if r.rating == star
+                    assign star_n = star_n | plus: 1
+                  endif
+                endfor
+                assign star_pct = 0
+                if live_reviews.size > 0
+                  assign star_f = star_n | times: 100.0
+                  assign star_pct = star_f | divided_by: live_reviews.size | round
+                endif
+              -%}
+              <div class="guillo-reviews__bar">
+                <span class="guillo-reviews__bar-label">{{ star }}</span>
+                <span class="guillo-reviews__bar-track">
+                  <span class="guillo-reviews__bar-fill" style="width: {{ star_pct }}%"></span>
+                </span>
+                <span class="guillo-reviews__bar-pct">{{ star_pct }}%</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+        {%- assign bar_blocks = section.blocks | where: 'type', 'bar' -%}
+        {%- if section.settings.show_histogram and bar_blocks.size > 0 -%}
+          <div class="guillo-reviews__bars">
+            {%- for block in bar_blocks -%}
+              <div class="guillo-reviews__bar" {{ block.shopify_attributes }}>
+                <span class="guillo-reviews__bar-label">{{ block.settings.label }}</span>
+                <span class="guillo-reviews__bar-track">
+                  <span class="guillo-reviews__bar-fill" style="width: {{ block.settings.pct }}%"></span>
+                </span>
+                <span class="guillo-reviews__bar-pct">{{ block.settings.pct }}%</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        {%- endif -%}
+
+        {%- if section.settings.show_fit_meter -%}
+        <div class="guillo-reviews__fit">
+          <div class="guillo-reviews__fit-title">How it fits</div>
+          <div class="guillo-reviews__fit-track">
+            <span class="guillo-reviews__fit-marker" style="left: {{ section.settings.fit_marker }}%"></span>
+          </div>
+          <div class="guillo-reviews__fit-scale">
+            <span>Runs small</span>
+            <span class="guillo-reviews__fit-on">True to size</span>
+            <span>Runs large</span>
+          </div>
+          {%- if section.settings.fit_note != blank -%}
+            <p class="guillo-reviews__fit-note">{{ section.settings.fit_note }}</p>
+          {%- endif -%}
+        </div>
+        {%- endif -%}
+      </div>
+
+      <div class="guillo-reviews__list{% if has_app_reviews %} guillo-reviews__list--app{% endif %}">
+        {%- if live_reviews != blank and live_reviews.size > 0 -%}
+          {%- assign visible = section.settings.reviews_visible | default: 3 -%}
+          {%- for r in live_reviews limit: section.settings.reviews_to_show -%}
+            <div
+              class="guillo-reviews__item"
+              {% if forloop.index > visible %}data-review-hidden hidden{% endif %}
+            >
+              <div class="guillo-reviews__item-side">
+                <div class="guillo-reviews__who">{{ r.reviewer_name }}</div>
+                {%- if r.verified_buyer -%}
+                  <div class="guillo-reviews__verified">Verified purchase</div>
+                {%- endif -%}
+                <div class="guillo-reviews__size">{{ r.created_at | date: '%-d %B %Y' }}</div>
+              </div>
+              <div>
+                <div class="guillo-reviews__item-stars" aria-label="{{ r.rating }} out of 5">
+                  {%- for i in (1..5) -%}
+                    {%- if i <= r.rating -%}&#9733;{%- else -%}&#9734;{%- endif -%}
+                  {%- endfor -%}
+                </div>
+                {%- if r.title != blank -%}
+                  <div class="guillo-reviews__item-title">{{ r.title }}</div>
+                {%- endif -%}
+                <div class="guillo-reviews__item-body">{{ r.body_html | default: r.body }}</div>
+                {%- if r.reply_content != blank -%}
+                  <div class="guillo-reviews__reply">
+                    <div class="guillo-reviews__reply-who">
+                      {{ r.shop_reply_name | default: shop.name }} replied
+                    </div>
+                    <div class="guillo-reviews__reply-body">{{ r.reply_content }}</div>
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+          {%- assign rendered = live_reviews.size | at_most: section.settings.reviews_to_show -%}
+          {%- assign held_back = rendered | minus: visible -%}
+          {%- if held_back > 0 -%}
+            <div class="guillo-reviews__more">
+              <button type="button" class="g-link" data-reviews-more>
+                Show {{ held_back }} more review{% if held_back > 1 %}s{% endif %}
+              </button>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.all_link != blank -%}
+            <div class="guillo-reviews__all">
+              <a href="{{ section.settings.all_link }}" class="g-link">Read all {{ rating_count }} reviews</a>
+            </div>
+          {%- endif -%}
+        {%- elsif has_app_reviews -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}
+              <div class="guillo-reviews__app" {{ block.shopify_attributes }}>{% render block %}</div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {%- if false -%}
+          <div class="guillo-reviews__all">
+            <a href="{{ section.settings.all_link }}" class="g-link">Read all {{ rating_count }} reviews</a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% stylesheet %}
+  .guillo-reviews {
+    padding-block: 88px;
+    border-top: 1px solid var(--g-line);
+    background: var(--g-paper);
+  }
+  .guillo-reviews__layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 72px;
+    align-items: start;
+  }
+  .guillo-reviews__score-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  .guillo-reviews__score {
+    font: 500 62px/1 var(--g-serif);
+    color: var(--g-ink);
+  }
+  .guillo-reviews__outof {
+    font: 300 14px/1 var(--g-sans);
+    color: var(--g-muted);
+  }
+  .guillo-reviews__stars {
+    font: 400 14px/1 var(--g-sans);
+    letter-spacing: 0.3em;
+    color: var(--g-ink);
+    margin-bottom: 8px;
+  }
+  .guillo-reviews__based {
+    font: 300 12px/1 var(--g-sans);
+    color: var(--g-whisper);
+    padding-bottom: 26px;
+    border-bottom: 1px solid var(--g-line);
+  }
+  .guillo-reviews__bars {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--g-line);
+  }
+  .guillo-reviews__bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 5px 0;
+  }
+  .guillo-reviews__bar-label {
+    font: 300 12px/1 var(--g-sans);
+    color: var(--g-muted);
+    width: 10px;
+  }
+  .guillo-reviews__bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--g-canvas);
+  }
+  .guillo-reviews__bar-fill {
+    display: block;
+    height: 4px;
+    background: var(--g-ink);
+  }
+  .guillo-reviews__bar-pct {
+    font: 300 12px/1 var(--g-sans);
+    color: var(--g-faint);
+    width: 34px;
+    text-align: right;
+  }
+  .guillo-reviews__fit { padding-top: 26px; }
+  .guillo-reviews__fit-title {
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--g-ink);
+    margin-bottom: 18px;
+  }
+  .guillo-reviews__fit-track {
+    position: relative;
+    height: 4px;
+    background: var(--g-canvas);
+    margin-bottom: 12px;
+  }
+  .guillo-reviews__fit-marker {
+    position: absolute;
+    top: -4px;
+    width: 2px;
+    height: 12px;
+    background: var(--g-bronze);
+  }
+  .guillo-reviews__fit-scale {
+    display: flex;
+    justify-content: space-between;
+    font: 300 11px/1 var(--g-sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--g-faint);
+  }
+  .guillo-reviews__fit-on { color: var(--g-ink); }
+  .guillo-reviews__fit-note {
+    font: 300 12px/1.7 var(--g-sans);
+    color: var(--g-whisper);
+    margin: 18px 0 0;
+  }
+  .guillo-reviews__list { border-top: 1px solid var(--g-line); }
+  .guillo-reviews__item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 44px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--g-line);
+  }
+  /* The display above outranks the browser's own [hidden] rule, so the
+     held-back reviews have to be hidden explicitly. */
+  .guillo-reviews__item[hidden] { display: none; }
+  .guillo-reviews__who {
+    font: 400 14px/1.3 var(--g-sans);
+    color: var(--g-ink);
+    margin-bottom: 8px;
+  }
+  .guillo-reviews__verified {
+    font: 300 10px/1.5 var(--g-sans);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--g-bronze);
+    margin-bottom: 10px;
+  }
+  .guillo-reviews__size {
+    font: 300 11px/1.5 var(--g-sans);
+    color: var(--g-whisper);
+  }
+  .guillo-reviews__item-stars {
+    font: 400 12px/1 var(--g-sans);
+    letter-spacing: 0.3em;
+    color: var(--g-ink);
+    margin-bottom: 16px;
+  }
+  .guillo-reviews__item-title {
+    font: 500 19px/1.35 var(--g-serif);
+    color: var(--g-ink);
+    margin-bottom: 11px;
+  }
+  .guillo-reviews__item-body p { margin: 0 0 10px; }
+  .guillo-reviews__item-body p:last-child { margin-bottom: 0; }
+  .guillo-reviews__item-body {
+    font: 300 14px/1.8 var(--g-sans);
+    color: #7A7D84;
+    margin: 0;
+    max-width: 620px;
+  }
+  .guillo-reviews__reply {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--g-off);
+    border-left: 2px solid var(--g-bronze);
+    max-width: 620px;
+  }
+  .guillo-reviews__reply-who {
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--g-bronze);
+    margin-bottom: 8px;
+  }
+  .guillo-reviews__reply-body {
+    font: 300 13px/1.7 var(--g-sans);
+    color: #55585E;
+  }
+  .guillo-reviews__reply-body p { margin: 0 0 8px; }
+  .guillo-reviews__reply-body p:last-child { margin-bottom: 0; }
+  .guillo-reviews__all { padding-top: 30px; }
+  .guillo-reviews__more { padding-top: 26px; }
+  .guillo-reviews__more button {
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--g-ink);
+    padding: 0 0 4px;
+    cursor: pointer;
+  }
+  /* Review app widget: strip its default card chrome so it sits on the
+     design's hairline grid, and inherit the Guillo type. */
+  .guillo-reviews__list--app { border-top: 0; }
+  .guillo-reviews__app {
+    font-family: var(--g-sans);
+  }
+  .guillo-reviews__app :is(h2, h3, .kl-heading) {
+    font-family: var(--g-serif);
+    font-weight: 500;
+  }
+  @media screen and (max-width: 989px) {
+    .guillo-reviews { padding-block: 56px; }
+    .guillo-reviews__layout { grid-template-columns: 1fr; gap: 44px; }
+    .guillo-reviews__item { grid-template-columns: 1fr; gap: 14px; }
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    document.querySelectorAll('[data-reviews-more]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const list = btn.closest('.guillo-reviews__list');
+        if (!list) return;
+        list.querySelectorAll('[data-review-hidden]').forEach((el) => {
+          el.hidden = false;
+          el.removeAttribute('data-review-hidden');
+        });
+        btn.closest('.guillo-reviews__more').remove();
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Guillo reviews",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Worn, washed, reported back."
+    },
+    {
+      "type": "url",
+      "id": "write_link",
+      "label": "Write a review link"
+    },
+    {
+      "type": "url",
+      "id": "all_link",
+      "label": "All reviews link",
+      "info": "Only shown when no review app block is added."
+    },
+    {
+      "type": "range",
+      "id": "fit_marker",
+      "label": "Fit marker position (%)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50
+    },
+    {
+      "type": "textarea",
+      "id": "fit_note",
+      "label": "Fit note",
+      "info": "Only shown if you enter a figure you can stand behind."
+    },
+    {
+      "type": "range",
+      "id": "reviews_to_show",
+      "label": "Reviews to load",
+      "min": 3,
+      "max": 60,
+      "step": 1,
+      "default": 60,
+      "info": "How many of the group’s reviews are available to reveal."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_fit_meter",
+      "label": "Show \"How it fits\" meter",
+      "default": false,
+      "info": "Off by default — the position is not derived from review data."
+    },
+    {
+      "type": "range",
+      "id": "reviews_visible",
+      "label": "Shown before “show more”",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guillo reviews",
+      "category": "Guillo"
+    }
+  ]
+}
+{% endschema %}
+

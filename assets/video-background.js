@@ -30,3 +30,4 @@ export class VideoBackgroundComponent extends Component {
 if (!customElements.get('video-background-component')) {
   customElements.define('video-background-component', VideoBackgroundComponent);
 }
+

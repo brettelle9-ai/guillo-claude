@@ -76,3 +76,4 @@ export default class ResultsList extends PaginatedList {
 if (!customElements.get('results-list')) {
   customElements.define('results-list', ResultsList);
 }
+

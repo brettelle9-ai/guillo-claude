@@ -1,0 +1,645 @@
+{%- comment -%}
+  ============================================================================
+  GUILLO — Custom Cart Drawer
+  ----------------------------------------------------------------------------
+  A premium, app-free AJAX cart drawer for the Pipeline theme (Markets-ready).
+  - Slides in from the side, updates without page refresh.
+  - "Build Your Wardrobe" progress bar (display-only offer).
+  - "Complete the Look" manually-selected upsells.
+  - All text/colours editable in the theme customizer (see {% schema %} below).
+
+  This file renders the *shell* + settings. Line items and totals are rendered
+  client-side by assets/cart-drawer.js from Shopify's /cart.js so the drawer
+  always reflects the live cart (and the active market's currency).
+  ============================================================================
+{%- endcomment -%}
+
+{%- liquid
+  # ---- Resolve the active market / country (Shopify Markets) -------------
+  assign cc = localization.country.iso_code | default: 'ZZ'
+
+  # ---- Per-market text overrides (fall back to the global defaults) -------
+  # Free shipping text
+  assign free_shipping_text = section.settings.free_shipping_text
+  case cc
+    when 'AU'
+      if section.settings.au_free_shipping_text != blank
+        assign free_shipping_text = section.settings.au_free_shipping_text
+      endif
+    when 'NZ'
+      if section.settings.nz_free_shipping_text != blank
+        assign free_shipping_text = section.settings.nz_free_shipping_text
+      endif
+    when 'US'
+      if section.settings.us_free_shipping_text != blank
+        assign free_shipping_text = section.settings.us_free_shipping_text
+      endif
+    when 'GB'
+      if section.settings.gb_free_shipping_text != blank
+        assign free_shipping_text = section.settings.gb_free_shipping_text
+      endif
+    when 'CA'
+      if section.settings.ca_free_shipping_text != blank
+        assign free_shipping_text = section.settings.ca_free_shipping_text
+      endif
+  endcase
+
+  # Returns text
+  assign returns_text = section.settings.returns_text
+  case cc
+    when 'AU'
+      if section.settings.au_returns_text != blank
+        assign returns_text = section.settings.au_returns_text
+      endif
+    when 'NZ'
+      if section.settings.nz_returns_text != blank
+        assign returns_text = section.settings.nz_returns_text
+      endif
+    when 'US'
+      if section.settings.us_returns_text != blank
+        assign returns_text = section.settings.us_returns_text
+      endif
+    when 'GB'
+      if section.settings.gb_returns_text != blank
+        assign returns_text = section.settings.gb_returns_text
+      endif
+    when 'CA'
+      if section.settings.ca_returns_text != blank
+        assign returns_text = section.settings.ca_returns_text
+      endif
+  endcase
+
+  # Payment / installments text ({payment} = subtotal / 4)
+  assign payment_text = section.settings.payment_text
+  case cc
+    when 'AU'
+      if section.settings.au_payment_text != blank
+        assign payment_text = section.settings.au_payment_text
+      endif
+    when 'NZ'
+      if section.settings.nz_payment_text != blank
+        assign payment_text = section.settings.nz_payment_text
+      endif
+    when 'US'
+      if section.settings.us_payment_text != blank
+        assign payment_text = section.settings.us_payment_text
+      endif
+    when 'GB'
+      if section.settings.gb_payment_text != blank
+        assign payment_text = section.settings.gb_payment_text
+      endif
+    when 'CA'
+      if section.settings.ca_payment_text != blank
+        assign payment_text = section.settings.ca_payment_text
+      endif
+  endcase
+
+  # ---- Shipping truth, per market ----------------------------------------
+  # These MUST mirror Settings > Shipping for the matching zone. If they drift,
+  # the drawer goes back to telling customers something checkout will contradict.
+  # Looked up dynamically as "<cc>_free_shipping_threshold" etc, so adding a
+  # market is a schema entry only, no Liquid change.
+  # Leave a market's fields blank and the drawer says "calculated at checkout"
+  # rather than guessing.
+  assign ship_threshold = section.settings.free_shipping_threshold
+  assign ship_rate = section.settings.shipping_rate
+  assign shipping_nudge_text = section.settings.shipping_nudge_text
+  assign ship_unlocked_text = section.settings.ship_unlocked_text
+  assign show_payment_market = section.settings.show_payment
+
+  case cc
+    when 'AU'
+      assign t = section.settings.au_free_shipping_threshold
+      assign r = section.settings.au_shipping_rate
+      assign n = section.settings.au_shipping_nudge_text
+      assign u = section.settings.au_ship_unlocked_text
+      assign h = section.settings.au_hide_payment
+    when 'NZ'
+      assign t = section.settings.nz_free_shipping_threshold
+      assign r = section.settings.nz_shipping_rate
+      assign n = section.settings.nz_shipping_nudge_text
+      assign u = section.settings.nz_ship_unlocked_text
+      assign h = section.settings.nz_hide_payment
+    when 'US'
+      assign t = section.settings.us_free_shipping_threshold
+      assign r = section.settings.us_shipping_rate
+      assign n = section.settings.us_shipping_nudge_text
+      assign u = section.settings.us_ship_unlocked_text
+      assign h = section.settings.us_hide_payment
+    when 'GB'
+      assign t = section.settings.gb_free_shipping_threshold
+      assign r = section.settings.gb_shipping_rate
+      assign n = section.settings.gb_shipping_nudge_text
+      assign u = section.settings.gb_ship_unlocked_text
+      assign h = section.settings.gb_hide_payment
+    when 'CA'
+      assign t = section.settings.ca_free_shipping_threshold
+      assign r = section.settings.ca_shipping_rate
+      assign n = section.settings.ca_shipping_nudge_text
+      assign u = section.settings.ca_ship_unlocked_text
+      assign h = section.settings.ca_hide_payment
+    when 'SG'
+      assign t = section.settings.sg_free_shipping_threshold
+      assign r = section.settings.sg_shipping_rate
+      assign n = section.settings.sg_shipping_nudge_text
+      assign u = section.settings.sg_ship_unlocked_text
+      assign h = section.settings.sg_hide_payment
+  endcase
+
+  if t != blank
+    assign ship_threshold = t
+  endif
+  if r != blank
+    assign ship_rate = r
+  endif
+  if n != blank
+    assign shipping_nudge_text = n
+  endif
+  if u != blank
+    assign ship_unlocked_text = u
+  endif
+  # Per-market kill switch for the instalments line, so we never name a BNPL
+  # provider in a market where it is not actually offered.
+  if h
+    assign show_payment_market = false
+  endif
+-%}
+
+{{ 'guillo-cart-drawer.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} Only schema-driven values live inline; all real styling is in the CSS file. {%- endcomment -%}
+<style>
+  #GuilloCartDrawer {
+    --gcart-bg: {{ section.settings.drawer_bg }};
+    --gcart-text: {{ section.settings.text_color }};
+    --gcart-muted: {{ section.settings.muted_color }};
+    --gcart-border: {{ section.settings.border_color }};
+    --gcart-btn-bg: {{ section.settings.button_bg }};
+    --gcart-btn-text: {{ section.settings.button_text }};
+    --gcart-checkout-hover: {{ section.settings.checkout_hover_color }};
+    --gcart-accent: {{ section.settings.accent_color }};
+    --gcart-base-size: {{ section.settings.base_font_size }}px;
+    --gcart-heading-size: {{ section.settings.heading_font_size }}px;
+    --gcart-width: {{ section.settings.drawer_width }}px;
+    --gcart-item-img-w: {{ section.settings.item_image_width }}px;
+    --gcart-item-img-ratio: {{ section.settings.item_image_ratio }};
+    --gcart-card-w: {{ section.settings.upsell_card_width }}px;
+    --gcart-card-ratio: {{ section.settings.upsell_image_ratio }};
+  }
+</style>
+
+{%- comment -%} ====================== CONFIG passed to the JS ====================== {%- endcomment -%}
+<script type="application/json" id="GuilloCartConfig">
+  {
+    "threshold": {{ section.settings.wardrobe_threshold | default: 3 }},
+    "discountPercent": {{ section.settings.wardrobe_discount_percent | default: 20 }},
+    "savedLabel": {{ section.settings.saved_label | default: 'Total saved' | json }},
+    "itemSavePrefix": {{ section.settings.item_save_prefix | default: 'You save' | json }},
+    "showWardrobe": {{ section.settings.wardrobe_show | default: true }},
+    "showDiscountEstimate": {{ section.settings.wardrobe_show_discount_estimate | default: true }},
+    "buildingMessage": {{ section.settings.wardrobe_building_message | json }},
+    "unlockedLabel": {{ section.settings.wardrobe_unlocked_label | json }},
+    "unlockedMessage": {{ section.settings.wardrobe_unlocked_message | json }},
+    "pieceSingular": {{ section.settings.piece_singular | json }},
+    "piecePlural": {{ section.settings.piece_plural | json }},
+    "subtotalLabel": {{ section.settings.subtotal_label | json }},
+    "shippingLabel": {{ section.settings.shipping_label | json }},
+    "discountLabel": {{ section.settings.discount_label | json }},
+    "totalLabel": {{ section.settings.total_label | json }},
+    "freeShippingText": {{ free_shipping_text | json }},
+    "freeShippingThreshold": {{ ship_threshold | default: 0 | json }},
+    "shippingRate": {{ ship_rate | default: 0 | json }},
+    "shippingNudgeText": {{ shipping_nudge_text | json }},
+    "shipUnlockedText": {{ ship_unlocked_text | default: 'Free delivery unlocked' | json }},
+    "shippingAtCheckoutText": {{ section.settings.shipping_at_checkout_text | default: 'Calculated at checkout' | json }},
+    "returnsText": {{ returns_text | json }},
+    "paymentText": {{ payment_text | json }},
+    "showPayment": {% if show_payment_market %}true{% else %}false{% endif %},
+    "showReturns": {{ section.settings.show_returns | default: true }},
+    "paymentInstallments": {{ section.settings.payment_installments | default: 4 }},
+    "checkoutText": {{ section.settings.checkout_text | json }},
+    "unlockedBadge": {{ section.settings.unlocked_badge | json }},
+    "emptyText": {{ section.settings.empty_cart_text | json }},
+    "hideUpsellInCart": {{ section.settings.upsell_hide_in_cart | default: true }},
+    "openOnAdd": {{ section.settings.open_on_add | default: true }},
+    "quietAdd": {% if section.settings.quiet_add == nil %}true{% else %}{{ section.settings.quiet_add }}{% endif %},
+    "toastText": {{ section.settings.toast_text | default: 'Added to bag' | json }},
+    "toastLinkText": {{ section.settings.toast_link_text | default: 'View bag' | json }},
+    "moneyDecimals": {{ section.settings.money_decimals | default: 2 }}
+  }
+</script>
+
+{%- comment -%}
+  Garment map for the bundle-ladder nudges. Rendered from the live collections
+  so it always matches the automatic discount scopes. Every entry ends with a
+  comma; a trailing "_" sentinel key keeps the JSON valid and is ignored by JS.
+  p = price in cents (presentment currency of the request).
+  Polos: only the Portofino handles are in the Polo Pair discount (Palermo is not),
+  so we tag those explicitly rather than the whole polos collection.
+{%- endcomment -%}
+<script type="application/json" id="GuilloCartGarments">
+  {
+    {%- for p in collections.chinos.products -%}
+      {{ p.handle | json }}: { "g": "chino", "t": "{% if p.handle contains 'signore' %}signore{% elsif p.handle contains 'luxe-chino' %}luxe{% endif %}", "p": {{ p.price }} },
+    {%- endfor -%}
+    {%- for p in collections.shirts.products -%}
+      {{ p.handle | json }}: { "g": "shirt", "p": {{ p.price }} },
+    {%- endfor -%}
+    {%- for p in collections.shorts.products -%}
+      {{ p.handle | json }}: { "g": "short", "p": {{ p.price }} },
+    {%- endfor -%}
+    {%- for p in collections.polos.products -%}
+      {%- if p.handle contains 'portofino' -%}{{ p.handle | json }}: { "g": "polo", "p": {{ p.price }} },{%- endif -%}
+    {%- endfor -%}
+    {%- for p in collections['t-shirts'].products -%}
+      {{ p.handle | json }}: { "g": "tee", "p": {{ p.price }} },
+    {%- endfor -%}
+    "_": 0
+  }
+</script>
+
+{%- comment -%}
+  Pre-order line-item notes, data-driven from variant custom.preorder and
+  the product-level custom.preorder_ships_by date. Sourced from the Pre Order
+  collection plus a theme-setting handle list, so new pre-orders need no code.
+{%- endcomment -%}
+{%- liquid
+  # Sources, unioned so nothing depends on editing this file again:
+  #   1. every product in the "Pre Order" collection
+  #   2. any extra handles in the theme setting "Pre-order product handles"
+  # A product only produces entries if its variants carry custom.preorder, so
+  # stale collection members are harmless. To run a new pre-order: tick
+  # custom.preorder on the variants, set custom.preorder_ships_by on the
+  # product, and drop it in the Pre Order collection. No code change.
+  assign gcart_pre_str = ''
+  for pcp in collections['pre-order'].products
+    assign gcart_pre_str = gcart_pre_str | append: pcp.handle | append: ','
+  endfor
+  assign gcart_pre_extra = settings.guillo_preorder_handles | default: 'the-luxe-chino-stone'
+  assign gcart_pre_str = gcart_pre_str | append: gcart_pre_extra
+  assign gcart_pre_handles = gcart_pre_str | split: ','
+-%}
+<script type="application/json" id="GuilloCartPreorder">
+  {
+    "items": [
+      {%- for ph in gcart_pre_handles -%}
+        {%- assign pp = all_products[ph] -%}
+        {%- if pp != blank -%}
+          {%- assign pp_ships = pp.metafields.custom.preorder_ships_by.value -%}
+          {%- for v in pp.variants -%}
+            {%- if v.metafields.custom.preorder.value -%}
+              { "id": {{ v.id }}, "shipsBy": {{ pp_ships | json }} },
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+      null
+    ]
+  }
+</script>
+
+{%- comment -%} ====================== OVERLAY + DRAWER ====================== {%- endcomment -%}
+<div id="GuilloCartOverlay" class="gcart-overlay" hidden></div>
+
+<aside
+  id="GuilloCartDrawer"
+  class="gcart-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ section.settings.cart_title | escape }}"
+  aria-hidden="true"
+  tabindex="-1"
+>
+  {%- comment -%} ---------- Luxury loading overlay ---------- {%- endcomment -%}
+  <div class="gcart-loader" data-gcart-loader aria-hidden="true">
+    {%- if section.settings.loader_logo != blank -%}
+      <img
+        class="gcart-loader__logo"
+        src="{{ section.settings.loader_logo | image_url: width: 280 }}"
+        alt="{{ shop.name | escape }}"
+        width="130"
+        height="{{ 130 | times: section.settings.loader_logo.height | divided_by: section.settings.loader_logo.width }}"
+        loading="lazy"
+      >
+    {%- else -%}
+      <span class="gcart-loader__word">{{ shop.name }}</span>
+    {%- endif -%}
+    <span class="gcart-loader__line"></span>
+  </div>
+
+  {%- comment -%} ---------- Header ---------- {%- endcomment -%}
+  <header class="gcart-header">
+    <h2 class="gcart-title">
+      {{ section.settings.cart_title }}
+      <span class="gcart-count" data-gcart-count>(0)</span>
+    </h2>
+    <button type="button" class="gcart-close" data-gcart-close aria-label="Close cart">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+    </button>
+  </header>
+
+  {%- comment -%} ---------- Scrollable body ---------- {%- endcomment -%}
+  <div class="gcart-body" data-gcart-body>
+
+    {%- comment -%} Line items (rendered by JS from /cart.js) ---------- {%- endcomment -%}
+    <div class="gcart-items" data-gcart-items aria-live="polite"></div>
+
+    {%- comment -%} Empty state ---------- {%- endcomment -%}
+    <div class="gcart-empty" data-gcart-empty hidden>
+      <p>{{ section.settings.empty_cart_text }}</p>
+    </div>
+
+    {%- comment -%} ---------- Build Your Wardrobe ---------- {%- endcomment -%}
+    {%- if section.settings.wardrobe_show -%}
+      <section class="gcart-wardrobe" data-gcart-wardrobe>
+        <div class="gcart-wardrobe__head">
+          <h3 class="gcart-eyebrow">{{ section.settings.wardrobe_title }}</h3>
+          <span class="gcart-wardrobe__unlocked" data-gcart-unlocked-label hidden></span>
+        </div>
+        <p class="gcart-wardrobe__msg" data-gcart-wardrobe-msg></p>
+
+        <div class="gcart-progress" data-gcart-progress>
+          <div class="gcart-progress__track">
+            <div class="gcart-progress__fill" data-gcart-progress-fill></div>
+          </div>
+          <div class="gcart-progress__nodes">
+            {%- assign threshold = section.settings.wardrobe_threshold | default: 3 -%}
+            {%- for i in (1..threshold) -%}
+              <div class="gcart-progress__node" data-gcart-node="{{ i }}">
+                <span class="gcart-progress__dot"></span>
+                <span class="gcart-progress__label">
+                  {{ i }}
+                  {%- if i == 1 -%} {{ section.settings.piece_singular }}
+                  {%- else -%} {{ section.settings.piece_plural }}{%- endif -%}
+                </span>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        {%- comment -%} ---------- Matching pieces ----------
+          Merged into Build Your Wardrobe rather than sitting in its own
+          "Complete the Look" block. Two headings plus two progress ideas made
+          the bag busy, and collapsing the cards hid the recommendations
+          entirely. One heading, one progress line, cards always visible.
+        {%- endcomment -%}
+        {%- if section.settings.upsell_show -%}
+          {%- assign upsell_count = 0 -%}
+          <div class="gcart-upsell" data-gcart-upsell>
+            <div class="gcart-upsell__scroll" data-gcart-upsell-scroll>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'upsell_product' and block.settings.product != blank -%}
+              {%- assign upsell_count = upsell_count | plus: 1 -%}
+              {%- render 'guillo-cart-upsell-card', product: block.settings.product, block: block -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- comment -%} Fallback: products picked in a single product_list setting {%- endcomment -%}
+          {%- for product in section.settings.upsell_products -%}
+              {%- assign upsell_count = upsell_count | plus: 1 -%}
+              {%- render 'guillo-cart-upsell-card', product: product -%}
+            {%- endfor -%}
+            </div>
+            {%- if upsell_count == 0 -%}
+              <p class="gcart-upsell__empty">{{ 'Add upsell products in the theme editor.' }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </section>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ---------- Footer (totals + checkout) ---------- {%- endcomment -%}
+  <footer class="gcart-footer" data-gcart-footer>
+    <div class="gcart-totals" data-gcart-totals>
+      <div class="gcart-row gcart-row--subtotal">
+        <span class="gcart-eyebrow">{{ section.settings.subtotal_label }}</span>
+        <span class="gcart-row__value" data-gcart-subtotal>—</span>
+      </div>
+      {%- comment -%} Duties are prepaid on every non-domestic destination. {%- endcomment -%}
+      {%- assign gcart_domestic = settings.guillo_domestic_markets | default: 'AU,NZ' | split: ',' -%}
+      {%- unless gcart_domestic contains cc -%}
+        {%- if cc != blank -%}<p class="gcart-duties">Duties and taxes included</p>{%- endif -%}
+      {%- endunless -%}
+      {%- comment -%} Discount + Total rows are toggled on by JS when unlocked {%- endcomment -%}
+      <div class="gcart-row gcart-row--discount" data-gcart-discount-row hidden>
+        <span class="gcart-eyebrow" data-gcart-discount-label></span>
+        <span class="gcart-row__value gcart-row__value--minus" data-gcart-discount-value></span>
+      </div>
+      <div class="gcart-row gcart-row--shipping">
+        <span class="gcart-eyebrow">{{ section.settings.shipping_label }}</span>
+        <span class="gcart-row__value gcart-row__value--free" data-gcart-shipping></span>
+      </div>
+      <div class="gcart-row gcart-row--total" data-gcart-total-row hidden>
+        <span class="gcart-eyebrow gcart-row__total-label" data-gcart-total-label></span>
+        <span class="gcart-row__value" data-gcart-total></span>
+      </div>
+    </div>
+
+    {%- comment -%}
+      Checkout is a real link to the checkout URL so no cart script can swallow
+      the click. (Disable any third-party cart app embed, e.g. Unicorn, so it
+      does not intercept the cart.)
+    {%- endcomment -%}
+    <a
+      href="/checkout"
+      class="gcart-checkout"
+      data-gcart-checkout
+      role="button"
+    >
+      {%- if section.settings.show_lock_icon -%}
+        <svg class="gcart-checkout__lock" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path d="M7 10V8a5 5 0 0110 0v2m-11 0h12v9H6v-9z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      {%- endif -%}
+      <span class="gcart-checkout__text">{{ section.settings.checkout_text }}</span>
+      <span class="gcart-checkout__badge" data-gcart-badge hidden></span>
+    </a>
+
+    {%- if show_payment_market -%}
+      <p class="gcart-payment" data-gcart-payment></p>
+    {%- endif -%}
+
+    {%- if section.settings.show_returns -%}
+      <p class="gcart-returns" data-gcart-returns>
+        <svg class="gcart-returns__icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+          <path d="M12 3l2.5 4.5L19 8.5l-3 3.5.7 5L12 14.8 7.3 17l.7-5-3-3.5 4.5-1L12 3z" stroke="currentColor" stroke-width="1.2" fill="none"/>
+        </svg>
+        <span>{{ returns_text }}</span>
+      </p>
+    {%- endif -%}
+  </footer>
+</aside>
+
+<script src="{{ 'guillo-cart-drawer.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Guillo Cart Drawer",
+  "tag": "section",
+  "class": "guillo-cart-drawer-section",
+  "settings": [
+    { "type": "header", "content": "General" },
+    { "type": "text", "id": "cart_title", "label": "Cart title", "default": "Your Cart" },
+    { "type": "text", "id": "empty_cart_text", "label": "Empty cart message", "default": "Your cart is empty." },
+    { "type": "checkbox", "id": "open_on_add", "label": "Take over add-to-cart (AJAX add)", "default": true },
+    { "type": "checkbox", "id": "quiet_add", "label": "Quiet add confirmation", "default": true, "info": "On add to cart, show a small toast and bump the cart icon instead of opening the drawer. Untick to restore the old auto-opening drawer." },
+    { "type": "text", "id": "toast_text", "label": "Toast text", "default": "Added to bag" },
+    { "type": "text", "id": "toast_link_text", "label": "Toast link text", "default": "View bag" },
+    { "type": "image_picker", "id": "loader_logo", "label": "Loading logo", "info": "Shown on the brief loading animation. Falls back to your shop name if empty." },
+
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "drawer_bg", "label": "Drawer background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#111111" },
+    { "type": "color", "id": "muted_color", "label": "Muted / secondary text", "default": "#8a8a8a" },
+    { "type": "color", "id": "border_color", "label": "Border colour", "default": "#e7e3dd" },
+    { "type": "color", "id": "button_bg", "label": "Checkout button background", "default": "#000000" },
+    { "type": "color", "id": "button_text", "label": "Checkout button text", "default": "#ffffff" },
+    { "type": "color", "id": "accent_color", "label": "Accent (progress / discount)", "default": "#111111" },
+
+    { "type": "header", "content": "Layout & Typography" },
+    { "type": "range", "id": "drawer_width", "label": "Drawer width (desktop)", "min": 360, "max": 560, "step": 10, "unit": "px", "default": 440 },
+    { "type": "range", "id": "base_font_size", "label": "Base font size", "min": 11, "max": 16, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "heading_font_size", "label": "Heading font size", "min": 16, "max": 30, "step": 1, "unit": "px", "default": 22 },
+
+    { "type": "header", "content": "Product Images" },
+    { "type": "range", "id": "item_image_width", "label": "Cart item image width", "min": 56, "max": 120, "step": 2, "unit": "px", "default": 78 },
+    { "type": "select", "id": "item_image_ratio", "label": "Cart item image ratio",
+      "options": [
+        { "value": "1 / 1", "label": "Square (1:1)" },
+        { "value": "4 / 5", "label": "Portrait (4:5)" },
+        { "value": "3 / 4", "label": "Portrait (3:4)" },
+        { "value": "2 / 3", "label": "Tall (2:3)" },
+        { "value": "4 / 3", "label": "Landscape (4:3)" }
+      ], "default": "4 / 5" },
+    { "type": "range", "id": "upsell_card_width", "label": "Upsell card image width", "min": 100, "max": 220, "step": 5, "unit": "px", "default": 130 },
+    { "type": "select", "id": "upsell_image_ratio", "label": "Upsell image ratio",
+      "options": [
+        { "value": "1 / 1", "label": "Square (1:1)" },
+        { "value": "4 / 5", "label": "Portrait (4:5)" },
+        { "value": "3 / 4", "label": "Portrait (3:4)" },
+        { "value": "2 / 3", "label": "Tall (2:3)" },
+        { "value": "4 / 3", "label": "Landscape (4:3)" }
+      ], "default": "4 / 5" },
+
+    { "type": "header", "content": "Build Your Wardrobe" },
+    { "type": "checkbox", "id": "wardrobe_show", "label": "Show section", "default": true },
+    { "type": "text", "id": "wardrobe_title", "label": "Title", "default": "Build Your Wardrobe" },
+    { "type": "range", "id": "wardrobe_threshold", "label": "Unlock threshold (total items)", "min": 1, "max": 6, "step": 1, "default": 3 },
+    { "type": "range", "id": "wardrobe_discount_percent", "label": "Discount percent", "min": 1, "max": 50, "step": 1, "unit": "%", "default": 20 },
+    { "type": "checkbox", "id": "wardrobe_show_discount_estimate", "label": "Show savings in totals", "default": true, "info": "Savings now read from the real cart discounts applied by Shopify." },
+    { "type": "text", "id": "wardrobe_building_message", "label": "Building message", "default": "Add {remaining} more {piece} and take {percent}% off", "info": "Tokens: {remaining} {piece} {percent}" },
+    { "type": "text", "id": "wardrobe_unlocked_label", "label": "Unlocked label (top-right)", "default": "{percent}% unlocked" },
+    { "type": "text", "id": "wardrobe_unlocked_message", "label": "Unlocked message", "default": "{percent}% off applied." },
+    { "type": "text", "id": "piece_singular", "label": "Piece word (singular)", "default": "Piece" },
+    { "type": "text", "id": "piece_plural", "label": "Piece word (plural)", "default": "Pieces" },
+
+    { "type": "header", "content": "Complete the Look (Upsells)" },
+    { "type": "checkbox", "id": "upsell_show", "label": "Show section", "default": true },
+    { "type": "text", "id": "upsell_title", "label": "Title", "default": "Complete the Look" },
+    { "type": "text", "id": "upsell_subtitle", "label": "Subtitle", "default": "Curated Pairings" },
+    { "type": "checkbox", "id": "upsell_hide_in_cart", "label": "Hide products already in cart", "default": true },
+    { "type": "product_list", "id": "upsell_products", "label": "Upsell products (global)", "limit": 12, "info": "Or add per-product blocks below for per-product text." },
+
+    { "type": "header", "content": "Checkout / Footer" },
+    { "type": "text", "id": "subtotal_label", "label": "Subtotal label", "default": "Subtotal" },
+    { "type": "text", "id": "shipping_label", "label": "Shipping label", "default": "Shipping" },
+    { "type": "text", "id": "discount_label", "label": "Discount row label (legacy, unused)", "default": "Wardrobe Discount ({percent}%)" },
+    { "type": "text", "id": "saved_label", "label": "Total saved row label", "default": "Total saved" },
+    { "type": "text", "id": "item_save_prefix", "label": "Line item saving prefix", "default": "You save" },
+    { "type": "text", "id": "total_label", "label": "Total label", "default": "Total" },
+    { "type": "text", "id": "checkout_text", "label": "Checkout button text", "default": "Secure Checkout" },
+    { "type": "color", "id": "checkout_hover_color", "label": "Checkout text colour on hover", "default": "#2f7d57" },
+    { "type": "checkbox", "id": "show_lock_icon", "label": "Show lock icon", "default": true },
+    { "type": "text", "id": "unlocked_badge", "label": "Checkout badge when unlocked", "default": "{percent}% OFF" },
+    { "type": "checkbox", "id": "show_payment", "label": "Show payment / installments line", "default": true },
+    { "type": "range", "id": "payment_installments", "label": "Number of installments", "min": 2, "max": 6, "step": 1, "default": 4 },
+    { "type": "text", "id": "payment_text", "label": "Payment text (default / Rest of World)", "default": "{installments} × {payment} payments with Afterpay", "info": "Tokens: {installments} {payment}" },
+    { "type": "checkbox", "id": "show_returns", "label": "Show returns line", "default": true },
+    { "type": "text", "id": "returns_text", "label": "Returns text (default / Rest of World)", "default": "44-day free returns & exchanges" },
+    { "type": "text", "id": "free_shipping_text", "label": "Free shipping text (default / Rest of World)", "default": "Free" },
+    { "type": "text", "id": "shipping_at_checkout_text", "label": "Shipping text when no rate is known", "default": "Calculated at checkout", "info": "Shown in any market with no threshold and no rate set below. Never claims free." },
+    { "type": "text", "id": "free_shipping_threshold", "label": "Free shipping threshold (default / Rest of World)", "info": "Cart total, after discounts, that unlocks free shipping. Numbers only, in that market's currency, e.g. 120. MUST match Settings > Shipping or the drawer will contradict checkout. Leave blank if the market has no free shipping." },
+    { "type": "text", "id": "shipping_rate", "label": "Shipping rate below threshold (default / Rest of World)", "info": "The cheapest rate the customer actually pays under the threshold. Numbers only, e.g. 16." },
+    { "type": "text", "id": "shipping_nudge_text", "label": "Free shipping nudge (default / Rest of World)", "default": "{amount} away from free delivery", "info": "Shown while the cart is under the threshold. Token: {amount}" },
+    { "type": "text", "id": "ship_unlocked_text", "label": "Free shipping unlocked (default / Rest of World)", "default": "Free delivery unlocked", "info": "Shown on the progress bar once the threshold is met." },
+    { "type": "range", "id": "money_decimals", "label": "Currency decimals", "min": 0, "max": 2, "step": 1, "default": 2, "info": "Use 0 for zero-decimal currencies (e.g. JPY)." },
+
+    { "type": "header", "content": "Market text — Australia (AU)" },
+    { "type": "text", "id": "au_free_shipping_text", "label": "Free shipping text" },
+    { "type": "text", "id": "au_returns_text", "label": "Returns text" },
+    { "type": "text", "id": "au_payment_text", "label": "Payment text" },
+    { "type": "text", "id": "au_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
+    { "type": "text", "id": "au_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
+    { "type": "text", "id": "au_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
+    { "type": "text", "id": "au_ship_unlocked_text", "label": "Free shipping unlocked" },
+    { "type": "checkbox", "id": "au_hide_payment", "label": "Hide the instalments line", "default": false },
+
+    { "type": "header", "content": "Market text — New Zealand (NZ)" },
+    { "type": "text", "id": "nz_free_shipping_text", "label": "Free shipping text" },
+    { "type": "text", "id": "nz_returns_text", "label": "Returns text" },
+    { "type": "text", "id": "nz_payment_text", "label": "Payment text" },
+    { "type": "text", "id": "nz_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
+    { "type": "text", "id": "nz_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
+    { "type": "text", "id": "nz_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
+    { "type": "text", "id": "nz_ship_unlocked_text", "label": "Free shipping unlocked" },
+    { "type": "checkbox", "id": "nz_hide_payment", "label": "Hide the instalments line", "default": false },
+
+    { "type": "header", "content": "Market text — United States (US)" },
+    { "type": "text", "id": "us_free_shipping_text", "label": "Free shipping text" },
+    { "type": "text", "id": "us_returns_text", "label": "Returns text" },
+    { "type": "text", "id": "us_payment_text", "label": "Payment text" },
+    { "type": "text", "id": "us_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
+    { "type": "text", "id": "us_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
+    { "type": "text", "id": "us_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
+    { "type": "text", "id": "us_ship_unlocked_text", "label": "Free shipping unlocked" },
+    { "type": "checkbox", "id": "us_hide_payment", "label": "Hide the instalments line", "default": false },
+
+    { "type": "header", "content": "Market text — United Kingdom (GB)" },
+    { "type": "text", "id": "gb_free_shipping_text", "label": "Free shipping text" },
+    { "type": "text", "id": "gb_returns_text", "label": "Returns text" },
+    { "type": "text", "id": "gb_payment_text", "label": "Payment text" },
+    { "type": "text", "id": "gb_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
+    { "type": "text", "id": "gb_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
+    { "type": "text", "id": "gb_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
+    { "type": "text", "id": "gb_ship_unlocked_text", "label": "Free shipping unlocked" },
+    { "type": "checkbox", "id": "gb_hide_payment", "label": "Hide the instalments line", "default": false },
+
+    { "type": "header", "content": "Market text — Canada (CA)" },
+    { "type": "text", "id": "ca_free_shipping_text", "label": "Free shipping text" },
+    { "type": "text", "id": "ca_returns_text", "label": "Returns text" },
+    { "type": "text", "id": "ca_payment_text", "label": "Payment text" },
+    { "type": "text", "id": "ca_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
+    { "type": "text", "id": "ca_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
+    { "type": "text", "id": "ca_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
+    { "type": "text", "id": "ca_ship_unlocked_text", "label": "Free shipping unlocked" },
+    { "type": "checkbox", "id": "ca_hide_payment", "label": "Hide the instalments line", "default": false },
+
+    { "type": "header", "content": "Market text — Singapore (SG)" },
+    { "type": "text", "id": "sg_free_shipping_text", "label": "Free shipping text" },
+    { "type": "text", "id": "sg_returns_text", "label": "Returns text" },
+    { "type": "text", "id": "sg_payment_text", "label": "Payment text" },
+    { "type": "text", "id": "sg_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
+    { "type": "text", "id": "sg_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
+    { "type": "text", "id": "sg_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
+    { "type": "text", "id": "sg_ship_unlocked_text", "label": "Free shipping unlocked" },
+    { "type": "checkbox", "id": "sg_hide_payment", "label": "Hide the instalments line", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "upsell_product",
+      "name": "Upsell product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "custom_title", "label": "Override title (optional)" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Guillo Cart Drawer" }
+  ]
+}
+{% endschema %}
+

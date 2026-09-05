@@ -24,3 +24,4 @@ class CopyToClipboardComponent extends Component {
 if (!customElements.get('copy-to-clipboard-component')) {
   customElements.define('copy-to-clipboard-component', CopyToClipboardComponent);
 }
+

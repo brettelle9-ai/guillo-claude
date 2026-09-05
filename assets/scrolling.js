@@ -420,3 +420,4 @@ class ScrollHint extends HTMLElement {
 if (!customElements.get('scroll-hint')) {
   customElements.define('scroll-hint', ScrollHint);
 }
+

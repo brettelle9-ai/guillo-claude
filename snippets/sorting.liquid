@@ -68,7 +68,12 @@
     </div>
   </div>
 
-  {% capture accordion_children %}
+  <accordion-custom
+    {% if filter_style == 'horizontal' %}
+      data-disable-animation-on-desktop="true"
+      data-close-with-escape="true"
+    {% endif %}
+  >
     <details
       ref="details"
       id="Sorting-{{ section_id }}"
@@ -81,7 +86,7 @@
         class="facets__summary"
         role="button"
         aria-expanded="false"
-        aria-controls="sorting-options-{{ section_id }}-{{ suffix }}"
+        aria-controls="sorting-options-{{ section_id }}"
         ref="summary"
       >
         <span
@@ -100,8 +105,8 @@
         </span>
       </summary>
       <floating-panel-component
-        id="sorting-options-{{ section_id }}-{{ suffix }}"
-        class="sorting-filter__options color-custom-popover"
+        id="sorting-options-{{ section_id }}"
+        class="sorting-filter__options color-{{ settings.popover_color_scheme }}"
         role="listbox"
         aria-labelledby="sort-label-{{ section_id }}"
         ref="listbox"
@@ -142,18 +147,7 @@
         </div>
       </floating-panel-component>
     </details>
-  {% endcapture %}
-  {%- liquid
-    assign is_horizontal = false
-    if filter_style == 'horizontal'
-      assign is_horizontal = true
-    endif
-  -%}
-  {% render 'accordion-custom-component',
-    children: accordion_children,
-    disable_animation_on_desktop: is_horizontal,
-    close_with_escape: is_horizontal
-  %}
+  </accordion-custom>
 </sorting-filter-component>
 
 {% stylesheet %}
@@ -355,3 +349,4 @@
     }
   }
 {% endstylesheet %}
+

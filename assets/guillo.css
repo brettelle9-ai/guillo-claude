@@ -1,0 +1,440 @@
+/* ------------------------------------------------------------------
+   Guillo design layer
+   Loaded after the Horizon stylesheets from layout/theme.liquid.
+   Tokens + shared component classes used by the guillo-* sections,
+   plus a small set of overrides that re-skin Horizon's own chrome
+   (header, announcement bar, buttons, inputs).
+------------------------------------------------------------------- */
+
+:root {
+  /* Palette */
+  --g-ink: #17181B;
+  --g-ink-2: #24252A;
+  --g-black: #101114;
+  --g-near-black: #0A0A0C;
+  --g-paper: #FFFFFF;
+  --g-off: #F2F2F4;
+  --g-grey: #F5F5F7;
+  --g-canvas: #E8E9EB;
+  --g-line: #DFE0E3;
+  --g-line-mid: #DADCE0;
+  --g-dark-line: #2E3034;
+  --g-muted: #6E7076;
+  --g-faint: #8D8F96;
+  --g-whisper: #9BA0A6;
+  --g-bronze: #A87C4F;
+  --g-dark-body: #A9ABB1;
+
+  /* Type */
+  --g-sans: 'Jost', system-ui, -apple-system, sans-serif;
+  --g-serif: 'EB Garamond', Georgia, serif;
+
+  /* Point Horizon's font variables at the brand faces */
+  --font-body--family: var(--g-sans);
+  --font-body--style: normal;
+  --font-body--weight: 300;
+  --font-subheading--family: var(--g-sans);
+  --font-subheading--style: normal;
+  --font-subheading--weight: 500;
+  --font-heading--family: var(--g-serif);
+  --font-heading--style: normal;
+  --font-heading--weight: 500;
+  --font-accent--family: var(--g-serif);
+  --font-accent--style: italic;
+  --font-accent--weight: 500;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--g-ink);
+  color: var(--g-off);
+}
+
+/* ---- Shared animation ---- */
+@keyframes g-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes g-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes g-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* ---- Shared component classes (used by guillo-* sections) ---- */
+
+.g-container {
+  max-width: 1400px;
+  margin-inline: auto;
+}
+.g-container--wide { max-width: 1500px; }
+
+.g-pad {
+  padding-inline: 40px;
+}
+@media screen and (max-width: 749px) {
+  .g-pad { padding-inline: 20px; }
+}
+
+.g-eyebrow {
+  font: 500 10px/1 var(--g-sans);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--g-faint);
+}
+.g-eyebrow--bronze { color: var(--g-bronze); }
+.g-eyebrow--light { color: #C8CACF; }
+
+.g-h {
+  font-family: var(--g-serif);
+  font-weight: 500;
+  letter-spacing: -0.004em;
+  line-height: 1.06;
+  margin: 0;
+  color: inherit;
+}
+
+.g-body {
+  font: 300 16px/1.7 var(--g-sans);
+  color: var(--g-muted);
+  margin: 0;
+}
+
+.g-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  padding: 0 38px;
+  font: 500 11px/1 var(--g-sans);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  border-radius: 0;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.g-btn--dark { background: var(--g-ink); color: var(--g-off); }
+.g-btn--dark:hover { background: #000; color: var(--g-off); }
+.g-btn--light { background: var(--g-off); color: var(--g-ink); }
+.g-btn--light:hover { background: #fff; color: var(--g-ink); }
+.g-btn--outline-light {
+  border: 1px solid rgba(240, 241, 244, 0.5);
+  color: var(--g-off);
+  background: transparent;
+}
+.g-btn--outline-light:hover {
+  border-color: var(--g-off);
+  background: rgba(240, 241, 244, 0.1);
+  color: var(--g-off);
+}
+
+.g-link {
+  display: inline-block;
+  font: 500 11px/1 var(--g-sans);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--g-ink);
+  border-bottom: 1px solid var(--g-ink);
+  padding-bottom: 4px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.g-link:hover { color: var(--g-bronze); border-color: var(--g-bronze); }
+.g-link--light {
+  color: var(--g-off);
+  border-color: rgba(240, 241, 244, 0.5);
+}
+.g-link--light:hover { color: #fff; border-color: var(--g-off); }
+
+.g-breadcrumb {
+  font: 500 11px/1 var(--g-sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--g-faint);
+}
+.g-breadcrumb a { color: inherit; text-decoration: none; }
+.g-breadcrumb a:hover { color: var(--g-ink); }
+.g-breadcrumb .g-breadcrumb__sep { opacity: 0.5; padding-inline: 4px; }
+
+/* Section header row: eyebrow + serif heading + trailing link */
+.g-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 44px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--g-line);
+}
+.g-section-head .g-eyebrow { margin-bottom: 16px; display: block; }
+.g-section-head h2 {
+  font: 500 clamp(32px, 3.4vw, 52px)/1.04 var(--g-serif);
+  letter-spacing: -0.004em;
+  margin: 0;
+}
+@media screen and (max-width: 749px) {
+  .g-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+}
+
+/* ---- Horizon chrome overrides ---- */
+
+/* Header: near-black gradient, light uppercase spaced nav (matches the
+   redesign header exactly: 11px/500, 0.2em tracking, 28px gaps) */
+#header-component,
+#header-component .header {
+  background: linear-gradient(180deg, #0A0A0C 0%, #17181B 52%, #26282C 100%);
+}
+#header-component .menu-list__link,
+#header-component .menu-list__link-title {
+  font-family: var(--g-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  /* The design's #8D8F96 is hard to read at 11px with this much tracking on
+     a near-black bar. Lifted for legibility; hover still goes to white. */
+  color: #D5D7DB;
+}
+#header-component .menu-list__link:hover,
+#header-component .menu-list__link-title:hover,
+#header-component .menu-list__link[aria-expanded='true'],
+#header-component .menu-list__link[aria-expanded='true'] .menu-list__link-title {
+  color: #FFFFFF;
+}
+#header-component .header-actions,
+#header-component .header-actions a,
+#header-component .header-actions button,
+#header-component .header-actions span {
+  font-family: var(--g-sans);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #D5D7DB;
+}
+#header-component .header-actions a:hover,
+#header-component .header-actions button:hover { color: #FFFFFF; }
+/* Mega menu and the mobile drawer sit on the same dark ground and were both
+   still on the design's #8D8F96, which is hard to read at this size. The
+   panel's own classes have to be named: a generic descendant rule did not
+   beat Horizon's. */
+#header-component .mega-menu a,
+#header-component .mega-menu .menu-list__link,
+#header-component menu-list a,
+#header-component .mega-menu__link,
+#header-component .mega-menu__content-list-item a,
+#header-component .menu-drawer__menu-item,
+.menu-drawer__menu-item,
+.mega-menu__link,
+.mega-menu__content-list-item a { color: #D5D7DB; }
+#header-component .mega-menu a:hover,
+#header-component .mega-menu__link:hover,
+.mega-menu__link:hover,
+.mega-menu__content-list-item a:hover,
+.menu-drawer__menu-item:hover { color: #FFFFFF; }
+/* The column heading in each panel leads, so it stays brighter still. */
+.mega-menu__column > .mega-menu__link { color: #FFFFFF; }
+
+/* Empty image slot, matching the design's placeholder frames */
+.g-slot {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #E6E7EA;
+  border: 1px dashed #B7B9BE;
+  text-align: center;
+  padding: 24px;
+}
+.g-slot__label {
+  font: 300 12px/1.6 var(--g-sans);
+  color: #8E9096;
+  max-width: 320px;
+}
+.g-slot__eyebrow {
+  font: 500 9px/1 var(--g-sans);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #94969C;
+}
+
+/* Square everything the settings can't reach */
+.button,
+button.button,
+input,
+select,
+textarea {
+  border-radius: 0;
+}
+
+/* Primary buttons pick up the Guillo button voice */
+.button:not(.button-unstyled) {
+  font-family: var(--g-sans);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 11px;
+  box-shadow: none;
+}
+
+/* ---- Product card ---- */
+.g-card {
+  background: var(--g-paper);
+  position: relative;
+}
+.g-card__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--g-canvas);
+}
+.g-card__img,
+.g-card__media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 16%;
+  display: block;
+}
+.g-card__img--hover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.g-card:hover .g-card__img--hover { opacity: 1; }
+.g-card__badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: var(--g-ink);
+  color: #fff;
+  font: 500 10px/1 var(--g-sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 8px 11px;
+}
+.g-card__quick {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  height: 52px;
+  background: var(--g-ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font: 500 11px/1 var(--g-sans);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Horizon's base CSS stretches svgs inside links to fill them */
+.g-card__quick svg {
+  width: 15px !important;
+  height: 15px !important;
+  flex: 0 0 15px;
+}
+.g-card:hover .g-card__quick {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (hover: none) {
+  .g-card__quick { display: none; }
+}
+.g-card__info { padding: 16px 16px 20px; }
+.g-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 10px;
+  font: 400 12px/1 var(--g-sans);
+  color: var(--g-ink);
+}
+.g-card__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+.g-card__title {
+  font: 400 12px/1.5 var(--g-sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--g-ink);
+  max-width: 80%;
+  text-decoration: none;
+}
+.g-card__title:hover { color: var(--g-bronze); }
+/* Style name under the group name, matching the product page's treatment */
+.g-card__style {
+  display: block;
+  margin-top: 3px;
+  font: 400 11px/1.3 var(--g-sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--g-bronze);
+  text-decoration: none;
+}
+.g-card__style:hover { color: var(--g-ink); }
+.g-card__price {
+  font: 400 12px/1.5 var(--g-sans);
+  white-space: nowrap;
+  color: var(--g-ink);
+}
+.g-card__dots {
+  display: flex;
+  gap: 8px;
+  padding-top: 14px;
+}
+.g-card__dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #C4C6CA;
+}
+.g-card__dot--active {
+  box-shadow: 0 0 0 1px var(--g-ink), 0 0 0 2px #fff inset;
+}
+
+/* Elevated variant used on the home best-sellers row */
+.g-card--elevated {
+  padding-bottom: 4px;
+  box-shadow: 0 2px 4px rgb(23 24 27 / 0.05), 0 14px 34px rgb(23 24 27 / 0.1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+.g-card--elevated:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 4px 8px rgb(23 24 27 / 0.06), 0 26px 54px rgb(23 24 27 / 0.16);
+}
+
+/* Blog article typography (Journal) */
+.blog-post h1,
+.blog-post h2,
+.blog-post h3,
+.section-content-wrapper h1 {
+  font-family: var(--g-serif);
+  font-weight: 500;
+}
+

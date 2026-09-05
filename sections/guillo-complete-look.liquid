@@ -1,0 +1,340 @@
+{% comment %}
+  "Complete the look" bundle picker: three toggleable product cards and a
+  dark summary panel. Totals and the set discount are computed client-side;
+  the button adds the selected products' first available variants to the
+  cart. Keep the discount percent aligned with the store's live automatic
+  discount so the promise at checkout is true.
+{% endcomment %}
+
+{%- assign look_blocks = section.blocks | where: 'type', 'item' -%}
+
+<section class="guillo-look g-pad" data-guillo-look data-discount="{{ section.settings.discount_percent }}" data-min-items="{{ section.settings.min_items }}">
+  <div class="g-container g-container--wide">
+    <div class="guillo-look__head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="g-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        <h2 class="guillo-look__heading">{{ section.settings.heading }}</h2>
+      </div>
+      <div class="guillo-look__totals">
+        <div class="guillo-look__count" data-count-label></div>
+        <div class="guillo-look__prices">
+          <span class="guillo-look__full" data-full></span>
+          <span class="guillo-look__total" data-total></span>
+        </div>
+      </div>
+    </div>
+    <div class="guillo-look__grid">
+      {%- for block in look_blocks -%}
+        {%- liquid
+          assign item = block.settings.product
+          assign item_variant = item.first_available_variant | default: item.variants.first
+        -%}
+        {%- if item != blank -%}
+          <label
+            class="guillo-look__item"
+            data-look-item
+            data-price="{{ item.price }}"
+            data-variant="{{ item_variant.id }}"
+            {{ block.shopify_attributes }}
+          >
+            <input type="checkbox" {% if block.settings.preselected %}checked{% endif %}>
+            <span class="guillo-look__media">
+              {%- if item.featured_media -%}
+                {{ item.featured_media | image_url: width: 800 | image_tag: class: 'guillo-look__img', sizes: '(min-width: 990px) 25vw, 50vw', alt: item.title }}
+              {%- endif -%}
+              <span class="guillo-look__check" aria-hidden="true"></span>
+            </span>
+            <span class="guillo-look__row">
+              <span>
+                <span class="guillo-look__name">{{ block.settings.title | default: item.title }}</span>
+                {%- if block.settings.colour != blank -%}
+                  <span class="guillo-look__colour">{{ block.settings.colour }}</span>
+                {%- endif -%}
+              </span>
+              <span class="guillo-look__price">{{ item.price | money }}</span>
+            </span>
+          </label>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <div class="guillo-look__panel">
+        <div class="guillo-look__panel-title">Your set</div>
+        <div class="guillo-look__line">
+          <span>Subtotal</span><span data-full></span>
+        </div>
+        <div class="guillo-look__line">
+          <span>Set discount</span><span data-saving></span>
+        </div>
+        <div class="guillo-look__line guillo-look__line--total">
+          <span>Total</span><span data-total></span>
+        </div>
+        <button type="button" class="guillo-look__cta" data-add-look></button>
+        <div class="guillo-look__note" data-note></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const root = document.querySelector('[data-guillo-look]');
+    if (!root) return;
+    const pct = Number(root.dataset.discount) || 0;
+    const minItems = Number(root.dataset.minItems) || 3;
+    const items = [...root.querySelectorAll('[data-look-item]')];
+    const money = (cents) =>
+      new Intl.NumberFormat(undefined, { style: 'currency', currency: {{ cart.currency.iso_code | json }} }).format(cents / 100);
+
+    function update() {
+      const chosen = items.filter((i) => i.querySelector('input').checked);
+      const full = chosen.reduce((n, i) => n + Number(i.dataset.price), 0);
+      const qualifies = chosen.length >= minItems;
+      const total = qualifies ? Math.round(full * (100 - pct) / 100) : full;
+      root.querySelectorAll('[data-full]').forEach((el) => (el.textContent = money(full)));
+      root.querySelectorAll('[data-total]').forEach((el) => (el.textContent = money(total)));
+      root.querySelector('[data-saving]').textContent = qualifies ? '−' + money(full - total) : money(0);
+      root.querySelector('[data-count-label]').textContent = chosen.length + ' of ' + items.length + ' selected';
+      root.querySelector('[data-add-look]').textContent = qualifies
+        ? 'Add all ' + chosen.length
+        : 'Add ' + chosen.length + ' to bag';
+      root.querySelector('[data-add-look]').disabled = chosen.length === 0;
+      root.querySelector('[data-note]').textContent = qualifies
+        ? pct + '% applied automatically. No code needed.'
+        : 'Select ' + (minItems - chosen.length) + ' more to unlock ' + pct + '%.';
+    }
+
+    items.forEach((i) => i.querySelector('input').addEventListener('change', update));
+    update();
+
+    root.querySelector('[data-add-look]').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      const chosen = items.filter((i) => i.querySelector('input').checked);
+      if (!chosen.length) return;
+      btn.disabled = true;
+      btn.textContent = 'Adding…';
+      try {
+        const res = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: chosen.map((i) => ({ id: Number(i.dataset.variant), quantity: 1 })) }),
+        });
+        if (!res.ok) throw new Error('add failed');
+        window.location.href = '/cart';
+      } catch {
+        btn.textContent = 'Could not add — try again';
+        btn.disabled = false;
+      }
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .guillo-look {
+    margin-top: 96px;
+    padding-block: 80px;
+    background: var(--g-off);
+    border-top: 1px solid var(--g-line-mid);
+  }
+  .guillo-look__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  .guillo-look__head .g-eyebrow {
+    display: block;
+    margin-bottom: 16px;
+  }
+  .guillo-look__heading {
+    font: 500 clamp(30px, 3vw, 44px)/1.06 var(--g-serif);
+    letter-spacing: -0.004em;
+    margin: 0;
+  }
+  .guillo-look__totals {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .guillo-look__count {
+    font: 300 13px/1 var(--g-sans);
+    color: var(--g-faint);
+    margin-bottom: 8px;
+  }
+  .guillo-look__prices {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+  .guillo-look__full {
+    font: 300 15px/1 var(--g-sans);
+    color: var(--g-faint);
+    text-decoration: line-through;
+  }
+  .guillo-look__total {
+    font: 400 26px/1 var(--g-sans);
+    color: var(--g-ink);
+  }
+  .guillo-look__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) 300px;
+    gap: 22px;
+    align-items: start;
+  }
+  .guillo-look__item {
+    /* Horizon's base styles make labels flex — force the stacked card layout */
+    display: block !important;
+    cursor: pointer;
+    background: var(--g-paper);
+    padding: 14px;
+  }
+  .guillo-look__media,
+  .guillo-look__row {
+    width: 100%;
+  }
+  .guillo-look__item input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .guillo-look__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--g-canvas);
+    margin-bottom: 14px;
+  }
+  .guillo-look__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 16%;
+    display: block;
+  }
+  .guillo-look__check {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 400 13px/1 var(--g-sans);
+    background: rgb(255 255 255 / 0.9);
+    border: 1px solid #BBBDC2;
+    color: transparent;
+  }
+  .guillo-look__check::before { content: '\2713'; }
+  .guillo-look__item:has(input:checked) .guillo-look__check {
+    background: var(--g-ink);
+    border-color: var(--g-ink);
+    color: var(--g-off);
+  }
+  .guillo-look__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .guillo-look__name {
+    display: block;
+    font: 400 14px/1.3 var(--g-sans);
+    color: var(--g-ink);
+    margin-bottom: 4px;
+  }
+  .guillo-look__colour {
+    display: block;
+    font: 300 11px/1 var(--g-sans);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--g-faint);
+  }
+  .guillo-look__price {
+    font: 400 14px/1.3 var(--g-sans);
+    color: var(--g-ink);
+    white-space: nowrap;
+  }
+  .guillo-look__panel {
+    background: var(--g-ink);
+    padding: 28px 26px;
+    color: var(--g-off);
+  }
+  .guillo-look__panel-title {
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--g-faint);
+    margin-bottom: 20px;
+  }
+  .guillo-look__line {
+    display: flex;
+    justify-content: space-between;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--g-dark-line);
+    font: 300 13px/1 var(--g-sans);
+    color: var(--g-dark-body);
+  }
+  .guillo-look__line--total {
+    border-bottom: 0;
+    padding: 16px 0 22px;
+    font: 400 17px/1 var(--g-sans);
+    color: #fff;
+  }
+  .guillo-look__cta {
+    width: 100%;
+    height: 52px;
+    background: var(--g-off);
+    color: var(--g-ink);
+    border: 0;
+    font: 500 11px/1 var(--g-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .guillo-look__cta:hover:not(:disabled) { background: #fff; }
+  .guillo-look__cta:disabled { opacity: 0.6; cursor: default; }
+  .guillo-look__note {
+    font: 300 12px/1.6 var(--g-sans);
+    color: var(--g-faint);
+    margin-top: 14px;
+  }
+  @media screen and (max-width: 989px) {
+    .guillo-look { margin-top: 56px; padding-block: 48px; }
+    .guillo-look__head { flex-direction: column; align-items: flex-start; gap: 18px; }
+    .guillo-look__grid { grid-template-columns: 1fr 1fr; }
+    .guillo-look__panel { grid-column: 1 / -1; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo complete the look",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Complete the look" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Three pieces, 15% off, one checkout." },
+    { "type": "range", "id": "discount_percent", "label": "Set discount percent", "min": 0, "max": 50, "step": 1, "default": 15, "info": "Must match the store's live automatic discount." },
+    { "type": "range", "id": "min_items", "label": "Pieces needed for the discount", "min": 2, "max": 4, "step": 1, "default": 3 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "title", "label": "Title override" },
+        { "type": "text", "id": "colour", "label": "Colour line" },
+        { "type": "checkbox", "id": "preselected", "label": "Preselected", "default": true }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    { "name": "Guillo complete the look", "category": "Guillo" }
+  ]
+}
+{% endschema %}
+

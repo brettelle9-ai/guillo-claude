@@ -1,0 +1,371 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "guillo-page-hero",
+      "blocks": {
+        "toc1": {
+          "type": "toc",
+          "settings": {
+            "label": "The three cuts",
+            "anchor": "fit-cuts"
+          }
+        },
+        "toc2": {
+          "type": "toc",
+          "settings": {
+            "label": "Side by side",
+            "anchor": "fit-compare"
+          }
+        },
+        "toc3": {
+          "type": "toc",
+          "settings": {
+            "label": "Measuring yourself",
+            "anchor": "fit-measure"
+          }
+        },
+        "toc4": {
+          "type": "toc",
+          "settings": {
+            "label": "Common questions",
+            "anchor": "fit-faq"
+          }
+        }
+      },
+      "block_order": [
+        "toc1",
+        "toc2",
+        "toc3",
+        "toc4"
+      ],
+      "settings": {
+        "title": "The Fit Guide",
+        "intro": "Fitted menswear is not about tight clothes. It is about clothes cut to follow the body, close through the chest and arms, tapered through the waist and leg. Here is exactly how each Guillo cut is drafted, so you order once."
+      }
+    },
+    "cuts": {
+      "type": "guillo-fit-cuts",
+      "blocks": {
+        "cut1": {
+          "type": "cut",
+          "settings": {
+            "fit": "Slim, tailored",
+            "fallback_asset": "guillo-brown-01.jpg",
+            "text": "The cut most men start with. Close to the body through the leg with room drafted into the seat and thigh, then a clean taper below the knee. It reads fitted because of the line, not because it grips.",
+            "rise": "Mid",
+            "thigh": "Room drafted",
+            "opening": "16.5 cm",
+            "who": "you train, or other slim chinos fail you at the quad.",
+            "product": "the-luxe-chino-stone"
+          }
+        },
+        "cut2": {
+          "type": "cut",
+          "settings": {
+            "fit": "Classic with a hint of slim",
+            "fallback_asset": "guillo-brown-03.jpg",
+            "text": "A touch more ease through the leg and a side fastening rather than a front zip, so the front stays clean under an untucked shirt. Still tapered, just less insistent about it.",
+            "rise": "Mid to high",
+            "thigh": "Generous",
+            "opening": "17 cm",
+            "who": "you want the tailored look with more room, or you wear shirts untucked.",
+            "product": "the-signore-chino-latte"
+          }
+        },
+        "cut3": {
+          "type": "cut",
+          "settings": {
+            "fit": "Classic, comfortable",
+            "fallback_asset": "guillo-bone-fountain.jpg",
+            "text": "Cotton pique in a classic body, cut for comfort rather than compression. Room across the chest and shoulders without hanging loose at the waist. This is not a muscle fit and it is not meant to be.",
+            "rise": "n/a",
+            "thigh": "n/a",
+            "opening": "n/a",
+            "who": "you want a polo you can wear all day in the heat.",
+            "product": "the-portofino-polo-blue"
+          }
+        },
+        "cut4": {
+          "type": "cut",
+          "settings": {
+            "fit": "Muscle, athletic",
+            "fallback_asset": "guillo-bone-pool.jpg",
+            "text": "Cut wider through the chest, shoulders and arms, then tapered at the waist. The closest fit in the range, and the one to pick if you fill out a shirt through the top half.",
+            "rise": "n/a",
+            "thigh": "n/a",
+            "opening": "n/a",
+            "who": "you carry size through the chest and arms.",
+            "product": "milano-pinstripe-shirt"
+          }
+        }
+      },
+      "block_order": [
+        "cut1",
+        "cut2",
+        "cut3",
+        "cut4"
+      ],
+      "settings": {
+        "anchor": "fit-cuts",
+        "heading": "The three cuts",
+        "text": "Each cut solves a different problem. Read the fit line first, then the measurements."
+      }
+    },
+    "compare": {
+      "type": "guillo-fit-compare",
+      "blocks": {
+        "r1": {
+          "type": "row",
+          "settings": {
+            "label": "Fit",
+            "a": "Slim, tailored",
+            "b": "Classic with a hint of slim",
+            "c": "Classic, comfortable"
+          }
+        },
+        "r2": {
+          "type": "row",
+          "settings": {
+            "label": "Cut for",
+            "a": "Trained legs, close line",
+            "b": "Everyday ease, clean front",
+            "c": "Chest room without cling"
+          }
+        },
+        "r3": {
+          "type": "row",
+          "settings": {
+            "label": "Rise",
+            "a": "Mid",
+            "b": "Mid to high",
+            "c": "n/a"
+          }
+        },
+        "r4": {
+          "type": "row",
+          "settings": {
+            "label": "Fastening",
+            "a": "Front zip and hook",
+            "b": "Side fastening",
+            "c": "Three button placket"
+          }
+        },
+        "r5": {
+          "type": "row",
+          "settings": {
+            "label": "Fabric",
+            "a": "Cotton and elastane twill",
+            "b": "Cotton and elastane twill",
+            "c": "Cotton pique"
+          }
+        },
+        "r6": {
+          "type": "row",
+          "settings": {
+            "label": "Sizes",
+            "a": "28 to 38",
+            "b": "28 to 38",
+            "c": "S to 2XL"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+      ],
+      "settings": {
+        "anchor": "fit-compare",
+        "heading": "Side by side",
+        "col_label": "Measure",
+        "col_a": "Luxe Chino",
+        "col_b": "Signore Chino",
+        "col_c": "Portofino Polo"
+      }
+    },
+    "measure": {
+      "type": "guillo-fit-measure",
+      "blocks": {
+        "step1": {
+          "type": "step",
+          "settings": {
+            "title": "Waist",
+            "text": "Measure where you actually wear your trousers, not at the navel. Keep one finger under the tape."
+          }
+        },
+        "step2": {
+          "type": "step",
+          "settings": {
+            "title": "Thigh",
+            "text": "Around the fullest part of one leg, standing. If this is where other chinos fail you, the Luxe is drafted with the room."
+          }
+        },
+        "step3": {
+          "type": "step",
+          "settings": {
+            "title": "Inseam",
+            "text": "Crotch seam to the top of the shoe. A single break is the intended finish. No stacking at the ankle."
+          }
+        },
+        "row28": {
+          "type": "row",
+          "settings": {
+            "size": "28",
+            "waist": "71 cm",
+            "thigh": "55 cm",
+            "inseam": "78 cm"
+          }
+        },
+        "row30": {
+          "type": "row",
+          "settings": {
+            "size": "30",
+            "waist": "76 cm",
+            "thigh": "57 cm",
+            "inseam": "79 cm"
+          }
+        },
+        "row32": {
+          "type": "row",
+          "settings": {
+            "size": "32",
+            "waist": "81 cm",
+            "thigh": "59 cm",
+            "inseam": "80 cm"
+          }
+        },
+        "row34": {
+          "type": "row",
+          "settings": {
+            "size": "34",
+            "waist": "86 cm",
+            "thigh": "61 cm",
+            "inseam": "81 cm"
+          }
+        },
+        "row36": {
+          "type": "row",
+          "settings": {
+            "size": "36",
+            "waist": "91 cm",
+            "thigh": "63 cm",
+            "inseam": "82 cm"
+          }
+        },
+        "row38": {
+          "type": "row",
+          "settings": {
+            "size": "38",
+            "waist": "97 cm",
+            "thigh": "65 cm",
+            "inseam": "82 cm"
+          }
+        }
+      },
+      "block_order": [
+        "step1",
+        "step2",
+        "step3",
+        "row28",
+        "row30",
+        "row32",
+        "row34",
+        "row36",
+        "row38"
+      ],
+      "settings": {
+        "anchor": "fit-measure",
+        "heading": "Measuring yourself",
+        "text": "Take a soft tape to the widest point and keep it level. Two minutes now beats a return in a fortnight.",
+        "chart_title": "Chino size chart",
+        "chart_note": "Measurements are of the garment, laid flat, in centimetres. Allow one to two centimetres of give in the stretch twill."
+      }
+    },
+    "faq": {
+      "type": "guillo-faq",
+      "blocks": {
+        "f1": {
+          "type": "faq",
+          "settings": {
+            "question": "I train legs. Do I size up?",
+            "answer": "<p>No. Both chino cuts are drafted with room through the seat and thigh, so sizing up only loosens the waist and drops the rise. Take your true waist and let the stretch do the rest.</p>"
+          }
+        },
+        "f2": {
+          "type": "faq",
+          "settings": {
+            "question": "What does slim actually mean here?",
+            "answer": "<p>Close to the body without restricting. The Luxe Chino sits against the leg through the thigh and tapers below the knee. It is not a skinny cut and it does not grip.</p>"
+          }
+        },
+        "f3": {
+          "type": "faq",
+          "settings": {
+            "question": "How is the Signore different?",
+            "answer": "<p>Classic with a hint of slim, and it fastens at the side. The clean front reads well under an untucked shirt, and there is a touch more ease through the leg.</p>"
+          }
+        },
+        "f4": {
+          "type": "faq",
+          "settings": {
+            "question": "Which polo is cut for a bigger chest?",
+            "answer": "<p>The Portofino is classic and comfortable rather than muscle fit. If you want the closer cut through the chest and arms, the Classico tee and the Milano shirt are the athletic patterns.</p>"
+          }
+        },
+        "f5": {
+          "type": "faq",
+          "settings": {
+            "question": "Will the stretch bag out?",
+            "answer": "<p>No. The elastane content is set for recovery, so the fabric returns to shape rather than holding the knee it was sitting in all afternoon.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "f1",
+        "f2",
+        "f3",
+        "f4",
+        "f5"
+      ],
+      "settings": {
+        "layout": "narrow",
+        "anchor": "fit-faq",
+        "eyebrow": "",
+        "heading": "Common questions",
+        "text": "",
+        "link_label": "",
+        "open_first": true
+      }
+    },
+    "cta": {
+      "type": "guillo-cta-banner",
+      "settings": {
+        "image_position": "center 24%",
+        "heading": "Now you know your cut.",
+        "text": "Free exchanges within 44 days, so the first order can be the one that teaches you the size.",
+        "cta_label": "Shop the chinos",
+        "cta_link": "shopify://collections/chinos"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "cuts",
+    "compare",
+    "measure",
+    "faq",
+    "cta"
+  ]
+}

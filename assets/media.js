@@ -246,3 +246,4 @@ class ProductModel extends DeferredMedia {
 if (!customElements.get('product-model')) {
   customElements.define('product-model', ProductModel);
 }
+

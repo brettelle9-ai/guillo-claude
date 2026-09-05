@@ -186,3 +186,4 @@ function reset(element) {
   element.removeAttribute('open');
   element.querySelector('summary')?.setAttribute('aria-expanded', 'false');
 }
+

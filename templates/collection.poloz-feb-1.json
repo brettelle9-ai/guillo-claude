@@ -1,0 +1,41 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "guillo-collection-banner",
+      "settings": {
+        "fallback_asset": "guillo-brown-01.jpg"
+      }
+    },
+    "grid": {
+      "type": "guillo-collection-grid",
+      "settings": {
+        "filter_chips": "Classic fit:fit-classic",
+        "show_quick_add": true,
+        "show_break": true,
+        "break_eyebrow": "Not sure of your size",
+        "break_heading": "Two minutes now beats a return in a fortnight.",
+        "break_text": "The fit guide compares every cut side by side, with the waist and thigh measurements laid out plainly.",
+        "break_link_label": "Open the fit guide",
+        "break_link": "shopify://pages/fit-guide",
+        "seo_title_1": "A polo cut for comfort, not compression",
+        "seo_text_1": "<p>Relaxed through the body without ever looking loose, and close enough through the chest to hold a line. This is not a muscle fit and it is not meant to be.</p>",
+        "seo_title_2": "English rib knit",
+        "seo_text_2": "<p>A textured rib in 100% cotton that gives the polo its body and keeps its shape wash after wash. The stretch comes from the knit itself rather than elastane, and the open collar sits flat all day.</p>"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "grid"
+  ]
+}
+

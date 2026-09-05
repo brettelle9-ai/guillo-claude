@@ -3,7 +3,6 @@
 
   @param {string} [text] - The text to be rendered.
   @param {object} [block_settings] - The block settings object, defaults to block.settings
-  @param {block} [block] - The block object, used for settings fallback and Shopify editor attributes.
 
   @example
   {% render 'jumbo-text', text: block.settings.text %}
@@ -42,11 +41,10 @@
   style="
     --font-family: var(--font-{{ block_settings.font | default: 'accent'}}--family);
     --font-weight: var(--font-{{ block_settings.font | default: 'accent'}}--weight);
-    {% if block_settings.text_color != blank %}
-      --color: {{ block_settings.text_color }};
-      --color-rgb: {{ block_settings.text_color.rgb }};
-    {% else %}
+    {% if block_settings.font == 'body' %}
       --color: var(--color-foreground);
+    {% else %}
+      --color: var(--color-foreground-heading);
     {% endif %}
     --text-align: {{ block_settings.alignment | default: 'left' }};
     {% if block_settings.alignment == "left" %}
@@ -176,3 +174,4 @@
     }
   }
 {% endstylesheet %}
+

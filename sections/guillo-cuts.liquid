@@ -1,0 +1,407 @@
+{% comment %}
+  "Three cuts" fit section: heading row with fit-guide link, then three
+  columns each with image, bronze tag, serif name + price, copy and a
+  "room through the leg" scale marker.
+{% endcomment %}
+
+<section class="guillo-cuts g-pad">
+  <div class="g-container">
+    <div class="guillo-cuts__head">
+      <div class="guillo-cuts__head-copy">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="g-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        <h2 class="guillo-cuts__heading">{{ section.settings.heading }}</h2>
+        {%- if section.settings.text != blank -%}
+          <p class="guillo-cuts__intro">{{ section.settings.text }}</p>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.link_label != blank -%}
+        <a href="{{ section.settings.link }}" class="g-link">{{ section.settings.link_label }}</a>
+      {%- endif -%}
+    </div>
+
+    <div class="guillo-cuts__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign cut_product = block.settings.product
+          assign cut_url = '#'
+          if cut_product != blank
+            assign cut_url = cut_product.url
+          endif
+          assign cut_price = block.settings.price
+          if cut_price == blank and cut_product != blank
+            assign cut_price = cut_product.price | money
+          endif
+          assign cut_name = block.settings.name
+          if cut_name == blank and cut_product != blank
+            assign cut_name = cut_product.title
+          endif
+          assign cut_image = block.settings.image
+          if cut_image == blank and cut_product != blank
+            assign cut_image = cut_product.featured_image
+          endif
+        -%}
+        <a href="{{ cut_url }}" class="guillo-cuts__cut" {{ block.shopify_attributes }}>
+          <span class="guillo-cuts__media">
+            {% render 'guillo-img',
+              image: cut_image,
+              fallback: block.settings.fallback_asset,
+              alt: cut_name,
+              class: 'guillo-cuts__img',
+              sizes: '(min-width: 750px) 33vw, 100vw',
+              position: block.settings.image_position
+            %}
+          </span>
+          <span class="guillo-cuts__tag">{{ block.settings.tag }}</span>
+          <span class="guillo-cuts__row">
+            <span class="guillo-cuts__name">{{ cut_name }}</span>
+            <span class="guillo-cuts__price">{{ cut_price }}</span>
+          </span>
+          <span class="guillo-cuts__copy">{{ block.settings.text }}</span>
+          <span class="guillo-cuts__scale-wrap">
+            <span class="guillo-cuts__scale-label">{{ block.settings.scale_label | default: 'Room through the leg' }}</span>
+            <span class="guillo-cuts__scale" data-active="{{ block.settings.fit_position }}">
+              <span class="guillo-cuts__scale-line"></span>
+              {%- assign stops = 'Close,Balanced,Easy' | split: ',' -%}
+              {%- for stop in stops -%}
+                {%- assign stop_key = stop | downcase -%}
+                <span class="guillo-cuts__stop{% if block.settings.fit_position == stop_key %} guillo-cuts__stop--on{% endif %}">
+                  <span class="guillo-cuts__dot"></span>
+                  <span class="guillo-cuts__stop-label">{{ stop }}</span>
+                </span>
+              {%- endfor -%}
+            </span>
+            {%- if block.settings.meta != blank -%}
+              <span class="guillo-cuts__meta">{{ block.settings.meta }}</span>
+            {%- endif -%}
+          </span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-cuts {
+    padding-block: 104px;
+    background: var(--g-off);
+  }
+  .guillo-cuts__head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 60px;
+    margin-bottom: 64px;
+    padding-bottom: 34px;
+    border-bottom: 1px solid var(--g-line-mid);
+  }
+  .guillo-cuts__head-copy { max-width: 760px; }
+  .guillo-cuts__head-copy .g-eyebrow {
+    display: block;
+    margin-bottom: 20px;
+  }
+  .guillo-cuts__heading {
+    font: 500 clamp(34px, 3.6vw, 56px)/1.03 var(--g-serif);
+    letter-spacing: -0.004em;
+    margin: 0 0 20px;
+  }
+  .guillo-cuts__intro {
+    font: 300 17px/1.7 var(--g-sans);
+    color: var(--g-muted);
+    margin: 0;
+    max-width: 620px;
+  }
+  .guillo-cuts__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+  .guillo-cuts__cut {
+    display: block;
+    text-decoration: none;
+    color: var(--g-ink);
+  }
+  .guillo-cuts__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--g-canvas);
+    margin-bottom: 28px;
+  }
+  .guillo-cuts__img,
+  .guillo-cuts__media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .guillo-cuts__tag {
+    display: block;
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--g-bronze);
+    margin-bottom: 16px;
+  }
+  .guillo-cuts__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 16px;
+  }
+  .guillo-cuts__name { font: 500 27px/1.15 var(--g-serif); }
+  .guillo-cuts__price { font: 400 16px/1 var(--g-sans); white-space: nowrap; }
+  .guillo-cuts__copy {
+    display: block;
+    font: 300 15px/1.75 var(--g-sans);
+    color: var(--g-muted);
+    margin: 0 0 32px;
+    max-width: 400px;
+  }
+  .guillo-cuts__scale-wrap {
+    display: block;
+    padding-top: 28px;
+    border-top: 1px solid var(--g-line-mid);
+  }
+  .guillo-cuts__scale-label {
+    display: block;
+    font: 500 9px/1 var(--g-sans);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--g-faint);
+    margin-bottom: 22px;
+  }
+  .guillo-cuts__scale {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .guillo-cuts__scale-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 5px;
+    height: 1px;
+    background: #D2D4D9;
+  }
+  .guillo-cuts__stop {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+  .guillo-cuts__stop:first-child { align-items: flex-start; }
+  .guillo-cuts__stop:last-child { align-items: flex-end; }
+  .guillo-cuts__dot {
+    width: 5px;
+    height: 5px;
+    margin: 3px;
+    border-radius: 50%;
+    background: var(--g-off);
+    box-shadow: 0 0 0 1px #C4C6CA, 0 0 0 4px var(--g-off);
+  }
+  .guillo-cuts__stop--on .guillo-cuts__dot {
+    width: 11px;
+    height: 11px;
+    margin: 0;
+    background: var(--g-ink);
+    box-shadow: 0 0 0 4px var(--g-off);
+  }
+  .guillo-cuts__stop-label {
+    font: 300 10px/1 var(--g-sans);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--g-whisper);
+  }
+  .guillo-cuts__stop--on .guillo-cuts__stop-label {
+    font-weight: 500;
+    color: var(--g-ink);
+  }
+  .guillo-cuts__meta {
+    display: block;
+    font: 300 13px/1 var(--g-sans);
+    color: var(--g-faint);
+    margin-top: 24px;
+  }
+  @media screen and (max-width: 989px) {
+    .guillo-cuts { padding-block: 64px; }
+    .guillo-cuts__head {
+      grid-template-columns: 1fr;
+      gap: 22px;
+      margin-bottom: 40px;
+    }
+    .guillo-cuts__grid { grid-template-columns: 1fr; gap: 52px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo three cuts",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The fit"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Three cuts. Pick the one built for your legs."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Mass-market chinos are drafted to an average that does not exist. Ours are drafted three ways, so the room sits where you need it."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "Read the fit guide"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "cut",
+      "name": "Cut",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override"
+        },
+        {
+          "type": "text",
+          "id": "image_position",
+          "label": "Image focal point",
+          "default": "center 24%"
+        },
+        {
+          "type": "text",
+          "id": "fallback_asset",
+          "label": "Fallback asset filename"
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Fit tag",
+          "default": "Slim, tailored"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name override",
+          "info": "Leave blank to use the linked product's title."
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price override",
+          "info": "Leave blank to show the product's live price."
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Copy",
+          "default": "Sits close through the leg with room drafted into the seat and thigh, then tapers cleanly below the knee."
+        },
+        {
+          "type": "select",
+          "id": "fit_position",
+          "label": "Room through the leg",
+          "options": [
+            {
+              "value": "close",
+              "label": "Close"
+            },
+            {
+              "value": "balanced",
+              "label": "Balanced"
+            },
+            {
+              "value": "easy",
+              "label": "Easy"
+            }
+          ],
+          "default": "close"
+        },
+        {
+          "type": "text",
+          "id": "meta",
+          "label": "Meta line",
+          "default": "Sizes 28 to 38"
+        },
+        {
+          "type": "text",
+          "id": "scale_label",
+          "label": "Scale label",
+          "info": "Defaults to “Room through the leg”. Set something else for a garment that has none."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Guillo three cuts",
+      "category": "Guillo",
+      "blocks": [
+        {
+          "type": "cut",
+          "settings": {
+            "tag": "Slim, tailored",
+            "name": "The Luxe Chino",
+            "price": "$118",
+            "fit_position": "close",
+            "meta": "Sizes 28 to 38",
+            "fallback_asset": "guillo-brown-01.jpg",
+            "text": "Sits close through the leg with room drafted into the seat and thigh, then tapers cleanly below the knee."
+          }
+        },
+        {
+          "type": "cut",
+          "settings": {
+            "tag": "Classic, hint of slim",
+            "name": "The Signore Chino",
+            "price": "$124",
+            "fit_position": "balanced",
+            "meta": "Sizes 28 to 38",
+            "fallback_asset": "guillo-brown-03.jpg",
+            "text": "A touch more ease through the leg, with a side fastening that keeps the front clean under an untucked shirt."
+          }
+        },
+        {
+          "type": "cut",
+          "settings": {
+            "tag": "Classic, comfortable",
+            "name": "The Portofino Polo",
+            "price": "$92",
+            "fit_position": "easy",
+            "meta": "Sizes S to XXL",
+            "fallback_asset": "guillo-bone-fountain.jpg",
+            "text": "Cotton pique cut for comfort rather than compression. Room across the chest without hanging off the waist."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,57 @@
+{% doc %}
+  Renders a responsive image from an image_picker setting, falling back to a
+  bundled theme asset (the imported design photography) and finally to a
+  Shopify placeholder, so guillo-* sections look right before merchandising.
+
+  @param {object} image - image_picker value (may be blank)
+  @param {string} fallback - asset filename to use when no image is picked
+  @param {string} alt - alt text
+  @param {string} class - class attribute for the img
+  @param {string} sizes - sizes attribute
+  @param {string} loading - 'lazy' (default) or 'eager'
+  @param {string} position - object-position value, e.g. 'center 20%'
+  @param {string} placeholder - caption shown in the empty slot when no image exists
+{% enddoc %}
+{%- liquid
+  assign img_class = class | default: ''
+  assign img_loading = loading | default: 'lazy'
+  assign img_sizes = sizes | default: '100vw'
+  capture pos_style
+    if position != blank
+      echo 'object-position:' | append: position
+    endif
+  endcapture
+-%}
+{%- if image != blank -%}
+  {{
+    image
+    | image_url: width: 2400
+    | image_tag:
+      class: img_class,
+      alt: alt,
+      widths: '400, 600, 800, 1000, 1200, 1600, 2000, 2400',
+      sizes: img_sizes,
+      loading: img_loading,
+      style: pos_style
+  }}
+{%- elsif fallback != blank -%}
+  <img
+    src="{{ fallback | asset_url }}"
+    alt="{{ alt | escape }}"
+    class="{{ img_class }}"
+    loading="{{ img_loading }}"
+    width="1600"
+    height="2000"
+    {% if pos_style != blank %}
+      style="{{ pos_style }}"
+    {% endif %}
+  >
+{%- else -%}
+  <span class="g-slot">
+    <span class="g-slot__eyebrow">Image slot</span>
+    {%- if placeholder != blank -%}
+      <span class="g-slot__label">{{ placeholder }}</span>
+    {%- endif -%}
+  </span>
+{%- endif -%}
+

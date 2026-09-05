@@ -1,0 +1,190 @@
+{% comment %}
+  "Measuring yourself": numbered measuring steps on the left, size chart
+  table on the right. Steps and chart rows are blocks.
+{% endcomment %}
+
+<section class="guillo-fmeasure g-pad" id="{{ section.settings.anchor | default: 'fit-measure' }}">
+  <div class="g-container guillo-fmeasure__grid">
+    <div>
+      <h2 class="guillo-fmeasure__heading">{{ section.settings.heading }}</h2>
+      {%- if section.settings.text != blank -%}
+        <p class="guillo-fmeasure__intro">{{ section.settings.text }}</p>
+      {%- endif -%}
+      <div class="guillo-fmeasure__steps">
+        {%- assign step_blocks = section.blocks | where: 'type', 'step' -%}
+        {%- for block in step_blocks -%}
+          <div class="guillo-fmeasure__step" {{ block.shopify_attributes }}>
+            <span class="guillo-fmeasure__num">{{ forloop.index | prepend: '0' }}</span>
+            <div>
+              <div class="guillo-fmeasure__step-title">{{ block.settings.title }}</div>
+              <p class="guillo-fmeasure__step-text">{{ block.settings.text }}</p>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+    <div>
+      <div class="guillo-fmeasure__chart-label">{{ section.settings.chart_title }}</div>
+      <div class="guillo-fmeasure__chart">
+        <div class="guillo-fmeasure__chart-head">
+          <div>Size</div>
+          <div>Waist</div>
+          <div>Thigh</div>
+          <div>Inseam</div>
+        </div>
+        {%- assign row_blocks = section.blocks | where: 'type', 'row' -%}
+        {%- for block in row_blocks -%}
+          <div class="guillo-fmeasure__chart-row" {{ block.shopify_attributes }}>
+            <div class="guillo-fmeasure__chart-size">{{ block.settings.size }}</div>
+            <div>{{ block.settings.waist }}</div>
+            <div>{{ block.settings.thigh }}</div>
+            <div>{{ block.settings.inseam }}</div>
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- if section.settings.chart_note != blank -%}
+        <p class="guillo-fmeasure__note">{{ section.settings.chart_note }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-fmeasure {
+    padding-block: 80px;
+    background: var(--g-off);
+  }
+  .guillo-fmeasure__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .guillo-fmeasure__heading {
+    font: 500 clamp(30px, 3vw, 46px)/1.06 var(--g-serif);
+    letter-spacing: -0.004em;
+    margin: 0 0 18px;
+  }
+  .guillo-fmeasure__intro {
+    font: 300 16px/1.7 var(--g-sans);
+    color: var(--g-muted);
+    margin: 0 0 34px;
+  }
+  .guillo-fmeasure__steps { border-top: 1px solid #CCCED3; }
+  .guillo-fmeasure__step {
+    display: flex;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid #CCCED3;
+  }
+  .guillo-fmeasure__num {
+    font: 300 13px/1 var(--g-sans);
+    color: var(--g-faint);
+    padding-top: 4px;
+  }
+  .guillo-fmeasure__step-title {
+    font: 400 16px/1.4 var(--g-sans);
+    margin-bottom: 6px;
+  }
+  .guillo-fmeasure__step-text {
+    font: 300 14px/1.7 var(--g-sans);
+    color: var(--g-muted);
+    margin: 0;
+  }
+  .guillo-fmeasure__chart-label {
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--g-faint);
+    margin-bottom: 20px;
+  }
+  .guillo-fmeasure__chart {
+    border: 1px solid #CCCED3;
+    background: var(--g-paper);
+  }
+  .guillo-fmeasure__chart-head,
+  .guillo-fmeasure__chart-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .guillo-fmeasure__chart-head {
+    background: var(--g-ink);
+    color: var(--g-off);
+  }
+  .guillo-fmeasure__chart-head > div {
+    padding: 14px 16px;
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .guillo-fmeasure__chart-row:nth-child(odd) { background: #F6F6F8; }
+  .guillo-fmeasure__chart-row > div {
+    padding: 14px 16px;
+    font: 300 13px/1 var(--g-sans);
+    color: #45474C;
+  }
+  .guillo-fmeasure__chart-row .guillo-fmeasure__chart-size {
+    font-weight: 400;
+    color: var(--g-ink);
+  }
+  .guillo-fmeasure__note {
+    font: 300 13px/1.7 var(--g-sans);
+    color: var(--g-faint);
+    margin: 16px 0 0;
+  }
+  @media screen and (max-width: 989px) {
+    .guillo-fmeasure { padding-block: 48px; }
+    .guillo-fmeasure__grid { grid-template-columns: 1fr; gap: 44px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo measuring guide",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Anchor id", "default": "fit-measure" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Measuring yourself" },
+    { "type": "textarea", "id": "text", "label": "Intro", "default": "Take a soft tape to the widest point and keep it level. Two minutes now beats a return in a fortnight." },
+    { "type": "text", "id": "chart_title", "label": "Chart title", "default": "Chino size chart" },
+    { "type": "textarea", "id": "chart_note", "label": "Chart note", "default": "Measurements are of the garment, laid flat, in centimetres. Allow one to two centimetres of give in the stretch twill." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Measuring step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Waist" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Measure where you actually wear your trousers, not at the navel. Keep one finger under the tape." }
+      ]
+    },
+    {
+      "type": "row",
+      "name": "Size chart row",
+      "settings": [
+        { "type": "text", "id": "size", "label": "Size", "default": "32" },
+        { "type": "text", "id": "waist", "label": "Waist", "default": "81 cm" },
+        { "type": "text", "id": "thigh", "label": "Thigh", "default": "59 cm" },
+        { "type": "text", "id": "inseam", "label": "Inseam", "default": "80 cm" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guillo measuring guide",
+      "category": "Guillo",
+      "blocks": [
+        { "type": "step", "settings": { "title": "Waist", "text": "Measure where you actually wear your trousers, not at the navel. Keep one finger under the tape." } },
+        { "type": "step", "settings": { "title": "Thigh", "text": "Around the fullest part of one leg, standing. If this is where other chinos fail you, the Luxe is drafted with the room." } },
+        { "type": "step", "settings": { "title": "Inseam", "text": "Crotch seam to the top of the shoe. A single break is the intended finish. No stacking at the ankle." } },
+        { "type": "row", "settings": { "size": "28", "waist": "71 cm", "thigh": "55 cm", "inseam": "78 cm" } },
+        { "type": "row", "settings": { "size": "30", "waist": "76 cm", "thigh": "57 cm", "inseam": "79 cm" } },
+        { "type": "row", "settings": { "size": "32", "waist": "81 cm", "thigh": "59 cm", "inseam": "80 cm" } },
+        { "type": "row", "settings": { "size": "34", "waist": "86 cm", "thigh": "61 cm", "inseam": "81 cm" } },
+        { "type": "row", "settings": { "size": "36", "waist": "91 cm", "thigh": "63 cm", "inseam": "82 cm" } },
+        { "type": "row", "settings": { "size": "38", "waist": "97 cm", "thigh": "65 cm", "inseam": "82 cm" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

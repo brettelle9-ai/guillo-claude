@@ -1,0 +1,170 @@
+{% comment %}
+  Trust strip: three icon cards (shipping / returns / duties) and a press
+  bar with the 7NEWS logo and pull quote.
+{% endcomment %}
+
+<section class="guillo-trust">
+  <div class="g-container g-container--wide g-pad">
+    <div class="guillo-trust__cards">
+      {%- assign card_blocks = section.blocks | where: 'type', 'card' -%}
+      {%- for block in card_blocks -%}
+        <div class="guillo-trust__card" {{ block.shopify_attributes }}>
+          <span class="guillo-trust__icon guillo-trust__icon--{{ block.settings.icon }}" aria-hidden="true">
+            {%- case block.settings.icon -%}
+              {%- when 'truck' -%}
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M2 7h11v10H2z"/><path d="M13 10h5l3 3v4h-8z"/><circle cx="6" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg>
+              {%- when 'refresh' -%}
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 12a9 9 0 11-3.2-6.9"/><path d="M21 3v5h-5"/></svg>
+              {%- else -%}
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 3l8 3v6c0 5-3.4 8.1-8 9-4.6-.9-8-4-8-9V6l8-3z"/><path d="M8.6 12.2l2.3 2.3 4.5-4.6"/></svg>
+            {%- endcase -%}
+          </span>
+          <div class="guillo-trust__title">{{ block.settings.title }}</div>
+          <p class="guillo-trust__text">{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+  {%- if section.settings.show_press -%}
+    <div class="guillo-trust__press">
+      <div class="g-container g-container--wide guillo-trust__press-inner g-pad">
+        <div class="guillo-trust__press-brand">
+          <span class="guillo-trust__press-eyebrow">Featured in</span>
+          {%- if section.settings.press_logo != blank -%}
+            {{ section.settings.press_logo | image_url: width: 300 | image_tag: class: 'guillo-trust__press-logo', alt: section.settings.press_logo_alt }}
+          {%- else -%}
+            <img src="{{ 'guillo-7news.png' | asset_url }}" alt="{{ section.settings.press_logo_alt }}" class="guillo-trust__press-logo" loading="lazy" width="1017" height="756">
+          {%- endif -%}
+        </div>
+        <span class="guillo-trust__press-divider" aria-hidden="true"></span>
+        <p class="guillo-trust__press-quote">&ldquo;{{ section.settings.press_quote }}&rdquo;</p>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+  .guillo-trust {
+    border-top: 1px solid var(--g-line);
+    border-bottom: 1px solid var(--g-line);
+    background: var(--g-paper);
+  }
+  .guillo-trust__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--g-canvas);
+  }
+  .guillo-trust__card {
+    background: var(--g-paper);
+    padding: 38px 30px 40px;
+  }
+  .guillo-trust__icon {
+    display: block;
+    color: var(--g-ink);
+    margin-bottom: 22px;
+  }
+  .guillo-trust__title {
+    font: 500 11px/1.4 var(--g-sans);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--g-ink);
+    margin-bottom: 12px;
+  }
+  .guillo-trust__text {
+    font: 300 13px/1.7 var(--g-sans);
+    color: #7A7D84;
+    margin: 0;
+  }
+  .guillo-trust__press {
+    border-top: 1px solid var(--g-canvas);
+    background: var(--g-paper);
+  }
+  .guillo-trust__press-inner {
+    padding-block: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 44px;
+    flex-wrap: wrap;
+  }
+  .guillo-trust__press-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .guillo-trust__press-eyebrow {
+    font: 500 9px/1 var(--g-sans);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--g-whisper);
+  }
+  .guillo-trust__press-logo {
+    height: 52px;
+    width: auto;
+    display: block;
+  }
+  .guillo-trust__press-divider {
+    width: 1px;
+    height: 56px;
+    background: var(--g-canvas);
+  }
+  .guillo-trust__press-quote {
+    font: 400 clamp(17px, 1.5vw, 23px)/1.5 var(--g-serif);
+    color: var(--g-ink);
+    margin: 0;
+    max-width: 660px;
+  }
+  @media screen and (max-width: 749px) {
+    .guillo-trust__cards { grid-template-columns: 1fr; }
+    .guillo-trust__press-divider { display: none; }
+    .guillo-trust__press-quote { text-align: center; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo trust strip",
+  "settings": [
+    { "type": "checkbox", "id": "show_press", "label": "Show press bar", "default": true },
+    { "type": "image_picker", "id": "press_logo", "label": "Press logo" },
+    { "type": "text", "id": "press_logo_alt", "label": "Press logo alt text", "default": "7NEWS" },
+    { "type": "textarea", "id": "press_quote", "label": "Press quote", "default": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer" }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Trust card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Truck" },
+            { "value": "refresh", "label": "Returns" },
+            { "value": "shield", "label": "Shield" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Fast, tracked shipping" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Dispatched from Brisbane before 4pm, tracked door to door on every order." }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Guillo trust strip",
+      "category": "Guillo",
+      "blocks": [
+        { "type": "card", "settings": { "icon": "truck", "title": "Fast, tracked shipping", "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order." } },
+        { "type": "card", "settings": { "icon": "refresh", "title": "Easy 44 day returns", "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day." } },
+        { "type": "card", "settings": { "icon": "shield", "title": "Duties and taxes covered", "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

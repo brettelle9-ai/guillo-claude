@@ -1,0 +1,110 @@
+{% comment %}
+  Collection banner: washed-out background image, breadcrumb, serif title,
+  description and piece count.
+{% endcomment %}
+
+<section class="guillo-cbanner g-pad">
+  {%- liquid
+    assign banner_image = section.settings.image
+    if banner_image == blank and collection.image
+      assign banner_image = collection.image
+    endif
+  -%}
+  {%- if banner_image != blank -%}
+    {{ banner_image | image_url: width: 2200 | image_tag: class: 'guillo-cbanner__img', alt: '', loading: 'eager', sizes: '100vw' }}
+  {%- elsif section.settings.fallback_asset != blank -%}
+    <img src="{{ section.settings.fallback_asset | asset_url }}" alt="" class="guillo-cbanner__img" loading="eager" width="1600" height="2000">
+  {%- endif -%}
+  <div class="guillo-cbanner__wash"></div>
+  <div class="g-container guillo-cbanner__inner">
+    <nav class="g-breadcrumb guillo-cbanner__crumb" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="g-breadcrumb__sep">/</span>
+      {{ collection.title }}
+    </nav>
+    <div class="guillo-cbanner__row">
+      <div>
+        <h1 class="guillo-cbanner__title">{{ collection.title }}</h1>
+        {%- if collection.description != blank -%}
+          <div class="guillo-cbanner__desc">{{ collection.description }}</div>
+        {%- endif -%}
+      </div>
+      <div class="guillo-cbanner__count">{{ collection.products_count }} pieces</div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-cbanner {
+    position: relative;
+    padding-block: 56px 34px;
+    background: var(--g-off);
+    border-bottom: 1px solid var(--g-line-mid);
+    overflow: hidden;
+  }
+  .guillo-cbanner__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 3%;
+    opacity: 0.4;
+    filter: saturate(0.5) contrast(0.9);
+  }
+  .guillo-cbanner__wash {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(240 241 244 / 0.96) 0%, rgb(240 241 244 / 0.86) 55%, rgb(240 241 244 / 0.7) 100%);
+  }
+  .guillo-cbanner__inner { position: relative; }
+  .guillo-cbanner__crumb { display: block; margin-bottom: 32px; }
+  .guillo-cbanner__row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 60px;
+  }
+  .guillo-cbanner__title {
+    /* Was 500 up to 68px, which dominated the page above the products. */
+    font: 400 clamp(30px, 2.8vw, 42px)/1.08 var(--g-serif);
+    letter-spacing: -0.004em;
+    margin: 0 0 14px;
+  }
+  .guillo-cbanner__desc {
+    font: 300 16px/1.7 var(--g-sans);
+    color: var(--g-muted);
+    max-width: 560px;
+  }
+  .guillo-cbanner__desc p { margin: 0; }
+  .guillo-cbanner__count {
+    font: 500 12px/1 var(--g-sans);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--g-faint);
+    white-space: nowrap;
+    padding-bottom: 6px;
+  }
+  @media screen and (max-width: 749px) {
+    .guillo-cbanner__row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo collection banner",
+  "enabled_on": { "templates": ["collection"] },
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Background image override" },
+    { "type": "text", "id": "fallback_asset", "label": "Fallback asset filename", "default": "guillo-brown-01.jpg" }
+  ],
+  "presets": [
+    { "name": "Guillo collection banner", "category": "Guillo" }
+  ]
+}
+{% endschema %}
+

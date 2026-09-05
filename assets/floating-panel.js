@@ -61,3 +61,4 @@ export class FloatingPanelComponent extends Component {
 if (!customElements.get('floating-panel-component')) {
   customElements.define('floating-panel-component', FloatingPanelComponent);
 }
+

@@ -1,0 +1,113 @@
+{% comment %}
+  "Side by side" comparison table: dark header row from settings, zebra
+  rows from blocks (label + three values).
+{% endcomment %}
+
+<section class="guillo-fcompare g-pad" id="{{ section.settings.anchor | default: 'fit-compare' }}">
+  <div class="g-container">
+    <h2 class="guillo-fcompare__heading">{{ section.settings.heading }}</h2>
+    <div class="guillo-fcompare__table">
+      <div class="guillo-fcompare__head">
+        <div>{{ section.settings.col_label }}</div>
+        <div>{{ section.settings.col_a }}</div>
+        <div>{{ section.settings.col_b }}</div>
+        <div>{{ section.settings.col_c }}</div>
+      </div>
+      {%- for block in section.blocks -%}
+        <div class="guillo-fcompare__row" {{ block.shopify_attributes }}>
+          <div class="guillo-fcompare__label">{{ block.settings.label }}</div>
+          <div>{{ block.settings.a }}</div>
+          <div>{{ block.settings.b }}</div>
+          <div>{{ block.settings.c }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-fcompare {
+    padding-block: 80px;
+    background: var(--g-paper);
+  }
+  .guillo-fcompare__heading {
+    font: 500 clamp(30px, 3vw, 46px)/1.06 var(--g-serif);
+    letter-spacing: -0.004em;
+    margin: 0 0 40px;
+  }
+  .guillo-fcompare__table {
+    border: 1px solid var(--g-line);
+    overflow-x: auto;
+  }
+  .guillo-fcompare__head,
+  .guillo-fcompare__row {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr 1fr;
+    min-width: 640px;
+  }
+  .guillo-fcompare__head {
+    background: var(--g-ink);
+    color: var(--g-off);
+  }
+  .guillo-fcompare__head > div {
+    padding: 18px 22px;
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .guillo-fcompare__row:nth-child(odd) { background: #F6F6F8; }
+  .guillo-fcompare__row > div {
+    padding: 17px 22px;
+    font: 300 14px/1.4 var(--g-sans);
+    color: #45474C;
+  }
+  .guillo-fcompare__row .guillo-fcompare__label {
+    font: 400 13px/1.4 var(--g-sans);
+    letter-spacing: 0.06em;
+    color: var(--g-ink);
+  }
+  @media screen and (max-width: 749px) {
+    .guillo-fcompare { padding-block: 48px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo fit comparison",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Anchor id", "default": "fit-compare" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Side by side" },
+    { "type": "text", "id": "col_label", "label": "First column header", "default": "Measure" },
+    { "type": "text", "id": "col_a", "label": "Column A header", "default": "Luxe Chino" },
+    { "type": "text", "id": "col_b", "label": "Column B header", "default": "Signore Chino" },
+    { "type": "text", "id": "col_c", "label": "Column C header", "default": "Portofino Polo" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Fit" },
+        { "type": "text", "id": "a", "label": "Column A", "default": "Slim, tailored" },
+        { "type": "text", "id": "b", "label": "Column B", "default": "Classic with a hint of slim" },
+        { "type": "text", "id": "c", "label": "Column C", "default": "Classic, comfortable" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guillo fit comparison",
+      "category": "Guillo",
+      "blocks": [
+        { "type": "row", "settings": { "label": "Fit", "a": "Slim, tailored", "b": "Classic with a hint of slim", "c": "Classic, comfortable" } },
+        { "type": "row", "settings": { "label": "Cut for", "a": "Trained legs, close line", "b": "Everyday ease, clean front", "c": "Chest room without cling" } },
+        { "type": "row", "settings": { "label": "Rise", "a": "Mid", "b": "Mid to high", "c": "n/a" } },
+        { "type": "row", "settings": { "label": "Fastening", "a": "Front zip and hook", "b": "Side fastening", "c": "Three button placket" } },
+        { "type": "row", "settings": { "label": "Fabric", "a": "Cotton and elastane twill", "b": "Cotton and elastane twill", "c": "Cotton pique" } },
+        { "type": "row", "settings": { "label": "Sizes", "a": "28 to 38", "b": "28 to 38", "c": "S to 2XL" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,459 @@
+{% comment %}
+  Main collection grid: sticky toolbar with tag-filter chips and a native
+  sort dropdown, a hairline 4-up product grid, an optional editorial break
+  after the first row, and a two-column SEO text block at the bottom.
+{% endcomment %}
+
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign per_page = 24
+-%}
+
+<div class="guillo-cgrid">
+  <div class="guillo-cgrid__toolbar">
+    <div class="g-container guillo-cgrid__toolbar-inner g-pad">
+      {%- liquid
+        # A collection can carry its own filter set: the first Filter set block
+        # naming this collection wins, otherwise the section's default chips.
+        assign chip_source = section.settings.filter_chips
+        for fs in section.blocks
+          if fs.type == 'filter_set' and fs.settings.collection != blank and fs.settings.collection.handle == collection.handle and fs.settings.chips != blank
+            assign chip_source = fs.settings.chips
+            break
+          endif
+        endfor
+        assign chips = chip_source | split: ','
+      -%}
+      {%- for chip in chips -%}
+        {%- liquid
+          assign parts = chip | split: ':'
+          assign chip_label = parts[0] | strip
+          assign chip_tag = parts[1] | strip | handleize
+          assign chip_active = false
+          if current_tags contains chip_tag
+            assign chip_active = true
+          endif
+        -%}
+        {%- if chip_label != blank and chip_tag != blank -%}
+          {%- if chip_tag == 'newest' -%}
+            {%- comment -%} Not a tag: newest first, for a "New" chip. {%- endcomment -%}
+            <a class="guillo-cgrid__chip{% if sort_by == 'created-descending' %} guillo-cgrid__chip--on{% endif %}"
+               href="{{ collection.url }}?sort_by=created-descending">{{ chip_label }}</a>
+          {%- elsif chip_active -%}
+            <a class="guillo-cgrid__chip guillo-cgrid__chip--on" href="{{ collection.url }}?sort_by={{ sort_by }}">{{ chip_label }}</a>
+          {%- else -%}
+            <a class="guillo-cgrid__chip" href="{{ collection.url }}/{{ chip_tag }}?sort_by={{ sort_by }}">{{ chip_label }}</a>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      <details class="guillo-cgrid__sort">
+        <summary>
+          <span class="guillo-cgrid__sort-label">Sort</span>
+          <span class="guillo-cgrid__sort-value">
+            {%- for option in collection.sort_options -%}
+              {%- if option.value == sort_by -%}{{ option.name }}{%- endif -%}
+            {%- endfor -%}
+          </span>
+        </summary>
+        <div class="guillo-cgrid__sort-menu">
+          {%- for option in collection.sort_options -%}
+            <a
+              href="{{ collection.url }}{% if current_tags %}/{{ current_tags | join: '+' }}{% endif %}?sort_by={{ option.value }}"
+              {% if option.value == sort_by %}
+                aria-current="true"
+              {% endif %}
+            >
+              {{- option.name -}}
+            </a>
+          {%- endfor -%}
+        </div>
+      </details>
+    </div>
+  </div>
+
+  {%- paginate collection.products by per_page -%}
+    <div class="guillo-cgrid__products">
+      <div class="guillo-cgrid__grid" style="--cgrid-cols: {{ section.settings.desktop_columns | default: 4 }}">
+        {%- for product in collection.products limit: 4 -%}
+          {% render 'guillo-product-card', product: product, show_quick: section.settings.show_quick_add %}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.show_break and collection.products.size > 4 and paginate.current_page == 1 -%}
+        <div class="guillo-cgrid__break">
+          <div class="guillo-cgrid__break-panel">
+            <span class="guillo-cgrid__break-eyebrow">{{ section.settings.break_eyebrow }}</span>
+            <h3 class="guillo-cgrid__break-heading">{{ section.settings.break_heading }}</h3>
+            <p class="guillo-cgrid__break-text">{{ section.settings.break_text }}</p>
+            {%- if section.settings.break_link_label != blank -%}
+              <a href="{{ section.settings.break_link }}" class="g-link g-link--light">{{ section.settings.break_link_label }}</a>
+            {%- endif -%}
+          </div>
+          <div class="guillo-cgrid__break-media">
+            {% render 'guillo-img',
+              image: section.settings.break_image,
+              fallback: 'guillo-brown-03.jpg',
+              alt: section.settings.break_heading,
+              class: 'guillo-cgrid__break-img',
+              sizes: '(min-width: 750px) 50vw, 100vw',
+              position: 'center 30%'
+            %}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if collection.products.size > 4 -%}
+        <div class="guillo-cgrid__grid">
+          {%- for product in collection.products offset: 4 -%}
+            {% render 'guillo-product-card', product: product, show_quick: section.settings.show_quick_add %}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="guillo-cgrid__pagination" aria-label="Pagination">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="g-link">Previous</a>
+          {%- endif -%}
+          <span class="guillo-cgrid__page-note">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="g-link">Next</a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    </div>
+  {%- endpaginate -%}
+
+  {%- if section.settings.seo_title_1 != blank or section.settings.seo_title_2 != blank -%}
+    <div class="guillo-cgrid__seo g-pad">
+      <div class="g-container guillo-cgrid__seo-grid">
+        <div>
+          <h2 class="guillo-cgrid__seo-title">{{ section.settings.seo_title_1 }}</h2>
+          <div class="guillo-cgrid__seo-text">{{ section.settings.seo_text_1 }}</div>
+        </div>
+        <div>
+          <h2 class="guillo-cgrid__seo-title">{{ section.settings.seo_title_2 }}</h2>
+          <div class="guillo-cgrid__seo-text">{{ section.settings.seo_text_2 }}</div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .guillo-cgrid { background: var(--g-paper); }
+  .guillo-cgrid__toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    background: rgb(255 255 255 / 0.95);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--g-line);
+  }
+  .guillo-cgrid__toolbar-inner {
+    height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .guillo-cgrid__chip {
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 16px;
+    font: 500 11px/1 var(--g-sans);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: var(--g-paper);
+    color: var(--g-muted);
+    border: 1px solid #CFD1D5;
+  }
+  .guillo-cgrid__chip:hover { border-color: var(--g-ink); color: var(--g-ink); }
+  .guillo-cgrid__chip--on {
+    background: var(--g-ink);
+    color: var(--g-off);
+    border-color: var(--g-ink);
+  }
+  .guillo-cgrid__sort {
+    margin-left: auto;
+    position: relative;
+  }
+  .guillo-cgrid__sort summary {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .guillo-cgrid__sort summary::-webkit-details-marker { display: none; }
+  .guillo-cgrid__sort-label {
+    font: 500 11px/1 var(--g-sans);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--g-faint);
+  }
+  .guillo-cgrid__sort-value {
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 16px;
+    border: 1px solid #CFD1D5;
+    font: 500 11px/1 var(--g-sans);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--g-ink);
+  }
+  .guillo-cgrid__sort[open] .guillo-cgrid__sort-value,
+  .guillo-cgrid__sort summary:hover .guillo-cgrid__sort-value { border-color: var(--g-ink); }
+  .guillo-cgrid__sort-menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    min-width: 220px;
+    background: var(--g-paper);
+    border: 1px solid var(--g-line);
+    box-shadow: 0 14px 34px rgb(23 24 27 / 0.12);
+    display: flex;
+    flex-direction: column;
+    z-index: 7;
+  }
+  .guillo-cgrid__sort-menu a {
+    padding: 12px 16px;
+    font: 300 13px/1 var(--g-sans);
+    color: var(--g-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--g-line);
+  }
+  .guillo-cgrid__sort-menu a:last-child { border-bottom: 0; }
+  .guillo-cgrid__sort-menu a:hover,
+  .guillo-cgrid__sort-menu a[aria-current='true'] { background: var(--g-off); }
+  .guillo-cgrid__products { padding: 2px 0 96px; }
+  .guillo-cgrid__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cgrid-cols, 4), 1fr);
+    gap: 2px;
+  }
+  .guillo-cgrid__break {
+    position: relative;
+    margin: 56px 0;
+    min-height: 380px;
+    background: var(--g-ink);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+  .guillo-cgrid__break-panel {
+    padding: 66px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .guillo-cgrid__break-eyebrow {
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--g-faint);
+    margin-bottom: 18px;
+  }
+  .guillo-cgrid__break-heading {
+    font: 500 clamp(26px, 2.4vw, 40px)/1.1 var(--g-serif);
+    color: #fff;
+    margin: 0 0 16px;
+    max-width: 420px;
+  }
+  .guillo-cgrid__break-text {
+    font: 300 15px/1.7 var(--g-sans);
+    color: #999BA1;
+    margin: 0 0 28px;
+    max-width: 400px;
+  }
+  .guillo-cgrid__break-media { position: relative; }
+  .guillo-cgrid__break-img,
+  .guillo-cgrid__break-media svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .guillo-cgrid__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding-top: 56px;
+  }
+  .guillo-cgrid__page-note {
+    font: 300 12px/1 var(--g-sans);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--g-faint);
+  }
+  .guillo-cgrid__seo { padding-bottom: 96px; }
+  .guillo-cgrid__seo-grid {
+    padding-top: 56px;
+    border-top: 1px solid var(--g-line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+  }
+  .guillo-cgrid__seo-title {
+    font: 500 24px/1.3 var(--g-serif);
+    margin: 0 0 18px;
+  }
+  .guillo-cgrid__seo-text {
+    font: 300 15px/1.75 var(--g-sans);
+    color: var(--g-muted);
+  }
+  .guillo-cgrid__seo-text p { margin: 0 0 16px; }
+  @media screen and (max-width: 989px) {
+    .guillo-cgrid__grid { grid-template-columns: repeat(2, 1fr); }
+    .guillo-cgrid__break { grid-template-columns: 1fr; }
+    .guillo-cgrid__break-media { min-height: 60vw; }
+    .guillo-cgrid__break-panel { padding: 44px 24px; }
+    .guillo-cgrid__seo-grid { grid-template-columns: 1fr; gap: 40px; }
+    .guillo-cgrid__toolbar-inner { overflow-x: auto; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo collection grid",
+  "enabled_on": {
+    "templates": [
+      "collection"
+    ]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "desktop_columns",
+      "label": "Products per row (desktop)",
+      "default": "4",
+      "options": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "filter_chips",
+      "label": "Filter chips",
+      "info": "Comma separated Label:tag pairs, e.g. Slim fit:slim-fit, Stretch:stretch",
+      "default": "Slim fit:slim-fit, Stretch:stretch, Under $120:under-120"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show quick add on hover",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Editorial break"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_break",
+      "label": "Show editorial break after first row",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "break_eyebrow",
+      "label": "Eyebrow",
+      "default": "Not sure of your size"
+    },
+    {
+      "type": "textarea",
+      "id": "break_heading",
+      "label": "Heading",
+      "default": "Two minutes now beats a return in a fortnight."
+    },
+    {
+      "type": "textarea",
+      "id": "break_text",
+      "label": "Text",
+      "default": "The fit guide compares every cut side by side, with the waist and thigh measurements laid out plainly."
+    },
+    {
+      "type": "text",
+      "id": "break_link_label",
+      "label": "Link label",
+      "default": "Open the fit guide"
+    },
+    {
+      "type": "url",
+      "id": "break_link",
+      "label": "Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "break_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "SEO text"
+    },
+    {
+      "type": "text",
+      "id": "seo_title_1",
+      "label": "Column 1 title",
+      "default": "Chinos built for real legs"
+    },
+    {
+      "type": "richtext",
+      "id": "seo_text_1",
+      "label": "Column 1 text",
+      "default": "<p>Stiff cotton pretending to stretch is why most men own one pair of chinos they tolerate. Our twill is blended with elastane, so it flexes when you sit, drive and walk, then returns to shape instead of bagging at the knee.</p><p>Space through the seat and thigh means no pulling across the quad. The taper from knee to ankle means no stacking over the shoe. Wear them to work, to dinner, or straight to the airport.</p>"
+    },
+    {
+      "type": "text",
+      "id": "seo_title_2",
+      "label": "Column 2 title",
+      "default": "Choosing between the cuts"
+    },
+    {
+      "type": "richtext",
+      "id": "seo_text_2",
+      "label": "Column 2 text",
+      "default": "<p>The Luxe Chino is slim and tailored, sitting close without restricting. The Signore is classic with a hint of slim, and its side fastening keeps the front clean under an untucked shirt.</p><p>If you train, start with your usual waist. Both cuts are drafted with room through the thigh, so sizing up is rarely the answer.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guillo collection grid",
+      "category": "Guillo"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "filter_set",
+      "name": "Filter set",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "chips",
+          "label": "Filter chips",
+          "info": "Label:tag pairs, comma separated. Use the handled tag, e.g. Slim fit:fit-slim. The tag “newest” sorts by newest instead of filtering."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

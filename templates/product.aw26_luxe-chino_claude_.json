@@ -1,0 +1,349 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "guillo-product",
+      "blocks": {
+        "feat1": {
+          "type": "feature",
+          "settings": {
+            "label": "Comfort stretch",
+            "icon": "stretch"
+          }
+        },
+        "feat2": {
+          "type": "feature",
+          "settings": {
+            "label": "Breathable",
+            "icon": "breathable"
+          }
+        },
+        "feat3": {
+          "type": "feature",
+          "settings": {
+            "label": "Quick dry",
+            "icon": "quick_dry"
+          }
+        },
+        "feat4": {
+          "type": "feature",
+          "settings": {
+            "label": "Tapered leg",
+            "icon": "taper"
+          }
+        },
+        "tab1": {
+          "type": "tab",
+          "settings": {
+            "title": "Fit & Care",
+            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+          }
+        },
+        "tab2": {
+          "type": "tab",
+          "settings": {
+            "title": "Details",
+            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+          }
+        },
+        "tab3": {
+          "type": "tab",
+          "settings": {
+            "title": "Shipping",
+            "content": "<p>Dispatched from Brisbane the same afternoon on orders placed before 4pm. Australia and New Zealand 2 to 4 days, Singapore and Hong Kong 4 to 6, the United Kingdom 5 to 8, Europe 6 to 9.</p><p>You do not pay duties or taxes. Every international order ships DDP, so all duties and import taxes are calculated and paid at checkout.</p><p>Free shipping over $150 in Australia.</p>"
+          }
+        },
+        "tab4": {
+          "type": "tab",
+          "settings": {
+            "title": "Exchanges & Returns",
+            "content": "<p>Free exchanges and returns within 44 days. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p>"
+          }
+        },
+        "sizeguide": {
+          "type": "guillo_find_your_size",
+          "settings": {
+            "button_text": "Guillo Find Your Size",
+            "show_icon": true,
+            "eyebrow": "Size Guide",
+            "heading": "Guillo Find Your Size",
+            "subheading": "Use your body measurements to choose the right Guillo fit.",
+            "logo_image": "shopify://shop_images/Black_and_Brown_Stylish_and_Edgy_Black_Friday_Fashion_Sale_Instagram_Post_31.png",
+            "logo_url": "",
+            "show_fit_profile": true,
+            "fit_profile_heading": "Fit Profile",
+            "fit_profile_left": "Relaxed",
+            "fit_profile_center": "Tailored Stretch Fit",
+            "fit_profile_right": "Skinny",
+            "fit_profile_position": 50,
+            "fit_profile_note": "A modern, tailored fit with ease of movement.",
+            "show_fit_image": true,
+            "measure_heading": "How To Measure",
+            "measurement_image": "shopify://shop_images/SmartSize_SIMPLE_SALE_6.png",
+            "measurement_image_url": "",
+            "fit_callouts": "True-to-size waist|18\nRoom through thigh|40\nTapered leg|66\nClean ankle break|90",
+            "chart_heading": "Size Chart",
+            "show_unit_toggle": true,
+            "default_unit": "cm",
+            "measurements_cm": "Size|Waist|Inside Leg\n28\"|71.0|73.0\n30\"|76.0|76.0\n32\"|81.0|78.0\n34\"|86.0|78.0\n36\"|91.5|78.0",
+            "measurements_in": "Size|Waist|Inside Leg\n28\"|28.0|28.7\n30\"|29.9|29.9\n32\"|31.9|30.7\n34\"|33.9|30.7\n36\"|36.0|30.7",
+            "show_fit_notes": true,
+            "fit_notes_heading": "Fit Notes",
+            "note1_title": "Between sizes?",
+            "note1_text": "Choose the larger size for more comfort.",
+            "note2_title": "Prefer a sharper fit?",
+            "note2_text": "Choose your usual waist size.",
+            "note3_title": "Bigger thighs?",
+            "note3_text": "Size up for more room through the upper leg.",
+            "show_sit": true,
+            "sit_heading": "How They Sit",
+            "sit1_title": "Short Legs",
+            "sit1_text": "Sits a touch lower with a slight break for shorter heights.",
+            "sit2_title": "Regular Legs",
+            "sit2_text": "Designed to sit cleanly at the ankle for a tailored look.",
+            "sit3_title": "Long Legs",
+            "sit3_text": "More break over the shoe for taller builds.",
+            "conversion_heading": "International Size Conversion",
+            "conversion_table": "Guillo Size|EU|UK|US|Australia|Singapore\\nXS|44|34|34|34|XS\\nS|46|36|36|36|S\\nM|48|38|38|38|M\\nL|50|40|40|40|L\\nXL|52|42|42|42|XL\\nXXL|54|44|44|44|XXL",
+            "show_reco": true,
+            "reco_title": "Too short or too tight?",
+            "reco_text": "If these feel snug or short, our roomier cut offers a longer, more relaxed fit.",
+            "reco_link_label": "Discover the alternative",
+            "reco_link_url": "",
+            "help_title": "Still unsure?",
+            "help_text": "<p>Need help? Message us and we'll recommend your best size.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feat1",
+        "feat2",
+        "feat3",
+        "feat4",
+        "tab1",
+        "tab2",
+        "tab3",
+        "tab4",
+        "sizeguide"
+      ],
+      "settings": {
+        "short_description": "Slim and tailored, with room drafted through the seat and thigh. The chino that holds its shape from the office to the airport.",
+        "fit_guide_link": "shopify://pages/fit-guide",
+        "size_guide_page": "shopify://pages/fit-guide",
+        "trust_line": "Same-day dispatch · 44-day returns and exchanges",
+        "open_first_tab": false,
+        "show_pair": true,
+        "show_video_tile": true,
+        "video": "shopify://files/videos/copy_0B0889A7-52A1-4972-A97D-A97AF11BEF08 2.MOV",
+        "video_position": "center center",
+        "video_ratio": "1 / 1",
+        "video_fit": "cover",
+        "video_poster_asset": "",
+        "video_caption": "Watch the fit in motion"
+      }
+    },
+    "wear": {
+      "type": "guillo-wear-with",
+      "settings": {
+        "products": [
+          "the-classico-raglan-tee-off-white",
+          "milano-pinstripe-shirt",
+          "the-portofino-polo-black",
+          "guillo-rapallo-short-sleeve-shirt",
+          "siracusa-short-sleeve-slim-fit-shirt",
+          "guillo-fitted-vulcano-short-sleeve-shirt",
+          "the-capri-chino-short-stone",
+          "amalfi-short-sleeve-shirt"
+        ],
+        "heading": "Wear it with",
+        "wardrobe_note": "Build your wardrobe — three pieces or more, 20% off automatically.",
+        "wardrobe_link": "",
+        "collection": "",
+        "products_to_show": 8
+      }
+    },
+    "trust": {
+      "type": "guillo-trust",
+      "blocks": {
+        "card1": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Fast, tracked shipping",
+            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order."
+          }
+        },
+        "card2": {
+          "type": "card",
+          "settings": {
+            "icon": "refresh",
+            "title": "Easy 44 day returns",
+            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
+          }
+        },
+        "card3": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Duties and taxes covered",
+            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship."
+          }
+        }
+      },
+      "block_order": [
+        "card1",
+        "card2",
+        "card3"
+      ],
+      "settings": {
+        "show_press": true,
+        "press_logo_alt": "7NEWS",
+        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
+      }
+    },
+    "anatomy": {
+      "type": "guillo-anatomy",
+      "blocks": {
+        "cl1": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Slim, tailored",
+            "text": "Slim and tapered through the leg with a clean silhouette from waist to ankle, and room drafted into the seat and thigh.",
+            "spec": "Engineered for movement"
+          }
+        },
+        "cl2": {
+          "type": "callout_left",
+          "settings": {
+            "title": "True to waist sizing",
+            "text": "Take your true waist. If you are between sizes, go a size up.",
+            "spec": "Sizes 28 to 40"
+          }
+        },
+        "cr1": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Stretch twill",
+            "text": "Cotton blended with elastane. It moves when you do and recovers on the hanger.",
+            "spec": "97% cotton · 3% elastane"
+          }
+        },
+        "cr2": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Wrinkle resistant",
+            "text": "Lightweight enough for warm weather, structured enough for evening. Out of the case ready to wear.",
+            "spec": "No ironing required"
+          }
+        }
+      },
+      "block_order": [
+        "cl1",
+        "cl2",
+        "cr1",
+        "cr2"
+      ],
+      "settings": {
+        "heading": "The Luxe Chino, cut for how you are built.",
+        "image": "shopify://shop_images/IMG-5287.png",
+        "image_alt": "The Luxe Chino in Chocolate, leg and taper",
+        "image_position": "center 74%"
+      }
+    },
+    "reviews": {
+      "type": "guillo-pdp-reviews",
+      "settings": {
+        "heading": "Worn, washed, reported back.",
+        "write_link": "",
+        "all_link": "",
+        "fit_marker": 50,
+        "fit_note": "",
+        "reviews_to_show": 60,
+        "show_fit_meter": false,
+        "reviews_visible": 3
+      }
+    },
+    "faq": {
+      "type": "guillo-faq",
+      "blocks": {
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "How do they fit?",
+            "answer": "<p>Slim tapered through the leg with a clean silhouette from waist to ankle. Engineered for movement without losing shape. If between sizes, go a size up.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "What is the fabric?",
+            "answer": "<p>A proprietary stretch twill with a wrinkle resistant finish. Lightweight enough for warm weather, structured enough for evening. No ironing required.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "Are they comfortable for all day wear?",
+            "answer": "<p>That's the point. The stretch twill moves with your body whether you're boarding a flight, sitting through dinner, or walking cobblestone streets. No sagging. No stiffness. No thought required.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "What should I pair them with?",
+            "answer": "<p>A polo and loafers for a long lunch. A slim fit shirt for the office. A tee and clean sneakers on the weekend. The Luxe Chino is the piece everything else in your wardrobe is built around.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>Complimentary returns &amp; exchanges within 44 days for AU/NZ orders. International orders: 44-day returns and exchanges, return shipping paid by the customer. All returns via our self-service portal, no emails, no waiting.</p><p><strong>How do I start a return?</strong> Head to our <a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\" target=\"_blank\" title=\"https://guilloclothing.com/apps/redo/returns-portal/login\">returns portal</a> to get started — it's free and takes just a few minutes.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "question": "When will they arrive?",
+            "answer": "<p>All orders dispatched within 24 hours. Standard delivery to Australia in 2 to 8 business days. Express in 1 to 4. International shipping available to Singapore, UK, US and Europe.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6"
+      ],
+      "settings": {
+        "layout": "split",
+        "anchor": "",
+        "eyebrow": "Questions",
+        "heading": "Before you order.",
+        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
+        "link_label": "Ask a question",
+        "link": "",
+        "open_first": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "wear",
+    "trust",
+    "anatomy",
+    "reviews",
+    "faq"
+  ]
+}
+

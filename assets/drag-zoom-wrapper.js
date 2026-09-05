@@ -1,5 +1,5 @@
-import { DialogCloseEvent } from '@theme/dialog';
-import { clamp, preventDefault, isMobileBreakpoint } from '@theme/utilities';
+import { DialogCloseEvent } from './dialog.js';
+import { clamp, preventDefault, isMobileBreakpoint } from './utilities.js';
 import { Component } from '@theme/component';
 
 const MIN_ZOOM = 1;
@@ -508,3 +508,4 @@ if (!customElements.get('drag-zoom-wrapper')) {
  * @typedef {HTMLElement} ZoomDialogElement
  * @property {Function} close - Method to close the zoom dialog
  */
+

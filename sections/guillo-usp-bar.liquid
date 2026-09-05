@@ -1,0 +1,79 @@
+{% comment %}
+  Dark four-column value-proposition strip shown under the hero.
+{% endcomment %}
+
+<section class="guillo-usp">
+  {%- for block in section.blocks -%}
+    <div class="guillo-usp__cell" {{ block.shopify_attributes }}>
+      <div class="guillo-usp__title">{{ block.settings.title }}</div>
+      <p class="guillo-usp__text">{{ block.settings.text }}</p>
+    </div>
+  {%- endfor -%}
+</section>
+
+{% stylesheet %}
+  .guillo-usp {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: var(--g-paper);
+  }
+  .guillo-usp__cell {
+    padding: 36px 34px;
+    border-right: 1px solid var(--g-line);
+  }
+  .guillo-usp__cell:last-child { border-right: 0; }
+  .guillo-usp__title {
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--g-ink);
+    margin-bottom: 10px;
+  }
+  .guillo-usp__text {
+    font: 300 13px/1.6 var(--g-sans);
+    color: var(--g-muted);
+    margin: 0;
+  }
+  @media screen and (max-width: 989px) {
+    .guillo-usp { grid-template-columns: repeat(2, 1fr); }
+    .guillo-usp__cell {
+      border-bottom: 1px solid var(--g-line);
+    }
+    .guillo-usp__cell:nth-child(2n) { border-right: 0; }
+  }
+  @media screen and (max-width: 599px) {
+    .guillo-usp { grid-template-columns: 1fr; }
+    .guillo-usp__cell { border-right: 0; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo USP bar",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "Value point",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Holds its shape" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Cotton and elastane twill with a wrinkle-resistant finish. No ironing." }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Guillo USP bar",
+      "category": "Guillo",
+      "blocks": [
+        { "type": "usp", "settings": { "title": "Holds its shape", "text": "Cotton and elastane twill with a wrinkle-resistant finish. No ironing." } },
+        { "type": "usp", "settings": { "title": "Dispatched today", "text": "Order before 4pm and it leaves Brisbane the same afternoon." } },
+        { "type": "usp", "settings": { "title": "44 days to decide", "text": "Free returns and exchanges. If the fit is not right, send it back." } },
+        { "type": "usp", "settings": { "title": "Duties included", "text": "Every price covers duties and taxes. Nothing owed on arrival." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

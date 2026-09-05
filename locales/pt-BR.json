@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "blocks": {
     "load_video": "Carregar vídeo: {{ description }}",
@@ -65,27 +74,18 @@
     "nested_product": "{{ product_title }} para {{ parent_title }}",
     "remove": "Remover",
     "view_pricing_info": "Ver informações sobre preços",
+    "open_hotspot": "Abrir hotspot",
     "slideshow": "Apresentação de slides",
-    "header_navigation_label": "Principal",
-    "home_logo_alt": "{{ store_name }} - Início",
-    "active_filters": "Filtros ativos:",
-    "product_details": "Detalhes do produto",
-    "show_product_details": "Exibir detalhes do produto {{ product_name }}",
-    "featured_product": "Produto em destaque",
-    "search_suggestions_available": "Pesquisar sugestões disponíveis para \"{{ query }}\"",
-    "price_filter_low": "Preço baixo",
-    "price_filter_high": "Preço alto",
-    "view_disclosure_information_for_product": "Ver informações de divulgação de {{ product_title }}",
-    "show_submenu": "Mostrar submenu de {{ title }}"
+    "header_navigation_label": "Principal"
   },
   "actions": {
     "add_to_cart": "Adicionar ao carrinho",
     "clear_all": "Limpar tudo",
     "remove": "Remover",
-    "view_in_your_space": "Ver no seu espaço",
+    "view_in_your_space": "Ver em seu espaço",
     "show_filters": "Filtrar",
     "clear": "Limpar",
-    "continue_shopping": "Continuar comprando",
+    "continue_shopping": "Voltar à loja",
     "log_in_html": "Já tem conta? <a href=\"{{ link }}\">Faça login</a> para finalizar a compra mais rápido.",
     "see_items": {
       "one": "Ver {{ count }} item",
@@ -100,7 +100,7 @@
     "show_more": "Exibir mais",
     "close": "Fechar",
     "more": "Mais",
-    "reset": "Reinicializar",
+    "reset": "Restaurar",
     "zoom": "Zoom",
     "close_dialog": "Fechar caixa de diálogo",
     "back": "Voltar",
@@ -116,11 +116,8 @@
     "sign_up": "Criar conta",
     "open_image_in_full_screen": "Abrir imagem em tela cheia",
     "sort": "Classificar",
-    "show_all_options": "Exibir todas as opções",
-    "open": "Abrir",
-    "back_to": "Voltar para {{ title }}",
-    "zoom_media": "Mídia de zoom {{ index }}",
-    "back_to_main_menu": "Voltar ao menu principal"
+    "show_all_options": "Mostrar todas as opções",
+    "open": "Abrir"
   },
   "content": {
     "reviews": "avaliações",
@@ -220,7 +217,7 @@
     "taxes_included_shipping_at_checkout_with_policy_without_discounts_html": "Tributos incluídos. Frete calculado no checkout.",
     "taxes_included_shipping_at_checkout_without_policy_without_discounts": "Tributos incluídos. Frete calculado no checkout.",
     "wrong_password": "Senha incorreta",
-    "view_more_details": "Ver mais detalhes",
+    "view_more_details": "Ver mais informações",
     "page_placeholder_title": "Título da página",
     "page_placeholder_content": "Selecione uma página para exibir o conteúdo.",
     "placeholder_image": "Imagem do marcador de posição",
@@ -252,7 +249,7 @@
     "product_custom_property_character_count": "{{ used_chars }}/{{ max_chars }} caracteres usados",
     "terms_and_policies": "Termos e políticas",
     "pagination": {
-      "nav_label": "Paginação",
+      "nav_label": "Navegação por paginação",
       "previous": "Anterior",
       "next": "Próxima",
       "page": "Página {{ page }}"
@@ -280,9 +277,7 @@
       "one": "Foi adicionado 1 item ao carrinho",
       "other": "{{ count }} itens adicionados ao carrinho",
       "many": "{{ count }} itens adicionados ao carrinho"
-    },
-    "quick_order_list": "Lista de pedidos rápidos",
-    "product_disclosures": "Informações de divulgação do produto"
+    }
   },
   "gift_cards": {
     "issued": {
@@ -328,7 +323,7 @@
     }
   },
   "fields": {
-    "separator": "até"
+    "separator": "para"
   },
   "blogs": {
     "article": {
@@ -349,6 +344,51 @@
       "post": "Publicar comentário",
       "success_moderated": "O comentário foi publicado, aguardando moderação",
       "success": "Comentário publicado"
+    }
+  },
+  "pagefly": {
+    "products": {
+      "product": {
+        "regular_price": "Regular price",
+        "sold_out": "Sold out",
+        "unavailable": "Unavailable",
+        "on_sale": "Sale",
+        "quantity": "Quantity",
+        "add_to_cart": "Add to cart",
+        "back_to_collection": "Back to {{ title }}",
+        "view_details": "View details"
+      }
+    },
+    "article": {
+      "tags": "Tags:",
+      "all_topics": "All topics",
+      "by_author": "by {{ author }}",
+      "posted_in": "Posted in",
+      "read_more": "Read more",
+      "back_to_blog": "Back to {{ title }}"
+    },
+    "comments": {
+      "title": "Leave a comment",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "post": "Post comment",
+      "moderated": "Please note, comments must be approved before they are published",
+      "success_moderated": "Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.",
+      "success": "Your comment was posted successfully! Thank you!",
+      "comments_with_count": {
+        "one": "{{ count }} comment",
+        "other": "{{ count }} comments"
+      }
+    },
+    "password_page": {
+      "login_form_message": "Enter store using password:",
+      "login_form_password_label": "Password",
+      "login_form_password_placeholder": "Your password",
+      "login_form_submit": "Enter",
+      "signup_form_email_label": "Email",
+      "signup_form_success": "We will send you an email right before we open!",
+      "password_link": "Enter using password"
     }
   }
 }

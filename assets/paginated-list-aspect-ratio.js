@@ -169,3 +169,4 @@ export class PaginatedListAspectRatioHelper {
     gallery.setAttribute('data-aspect-ratio-applied', 'true');
   }
 }
+

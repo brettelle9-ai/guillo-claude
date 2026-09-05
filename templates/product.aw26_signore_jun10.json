@@ -1,0 +1,348 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "guillo-product",
+      "blocks": {
+        "feat1": {
+          "type": "feature",
+          "settings": {
+            "label": "Comfort stretch",
+            "icon": "stretch"
+          }
+        },
+        "feat2": {
+          "type": "feature",
+          "settings": {
+            "label": "Breathable",
+            "icon": "breathable"
+          }
+        },
+        "feat3": {
+          "type": "feature",
+          "settings": {
+            "label": "Side fastening",
+            "icon": "dot"
+          }
+        },
+        "feat4": {
+          "type": "feature",
+          "settings": {
+            "label": "Classic fit",
+            "icon": "slim_fit"
+          }
+        },
+        "tab1": {
+          "type": "tab",
+          "settings": {
+            "title": "Fit & Care",
+            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+          }
+        },
+        "tab2": {
+          "type": "tab",
+          "settings": {
+            "title": "Details",
+            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+          }
+        },
+        "tab3": {
+          "type": "tab",
+          "settings": {
+            "title": "Shipping",
+            "content": "<p>Dispatched from Brisbane the same afternoon on orders placed before 4pm. Australia and New Zealand 2 to 4 days, Singapore and Hong Kong 4 to 6, the United Kingdom 5 to 8, Europe 6 to 9.</p><p>You do not pay duties or taxes. Every international order ships DDP, so all duties and import taxes are calculated and paid at checkout.</p><p>Free shipping over $150 in Australia.</p>"
+          }
+        },
+        "tab4": {
+          "type": "tab",
+          "settings": {
+            "title": "Exchanges & Returns",
+            "content": "<p>Free exchanges and returns within 44 days. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p>"
+          }
+        },
+        "sizeguide": {
+          "type": "guillo_find_your_size",
+          "settings": {
+            "button_text": "Guillo Find Your Size",
+            "show_icon": true,
+            "eyebrow": "Size & Fit Guide",
+            "heading": "The Signore Chino",
+            "subheading": "A classic fit with a hint of slim. Use your waist and hip to find your size.",
+            "logo_image": "shopify://shop_images/Black_and_Brown_Stylish_and_Edgy_Black_Friday_Fashion_Sale_Instagram_Post_31.png",
+            "logo_url": "",
+            "show_fit_profile": true,
+            "fit_profile_heading": "Fit Profile",
+            "fit_profile_left": "Relaxed",
+            "fit_profile_center": "Classic",
+            "fit_profile_right": "Slim",
+            "fit_profile_position": 65,
+            "fit_profile_note": "A clean classic fit with a hint of slim, tailored through the leg without ever feeling tight.",
+            "show_fit_image": true,
+            "measure_heading": "How To Measure",
+            "measurement_image": "shopify://shop_images/8FA476AD-9EA6-486B-81FA-689957502534.png",
+            "measurement_image_url": "",
+            "fit_callouts": "Sits at the natural waist|10\nClassic through seat & thigh|40\nStraight, clean leg line|66\nClean break at the ankle|92",
+            "chart_heading": "Size Chart",
+            "show_unit_toggle": true,
+            "default_unit": "cm",
+            "measurements_cm": "Size|Waist|Hip|Inseam\n28\"|71|100|76.2\n30\"|76|104|76.2\n32\"|81|108|76.2\n34\"|86|112|76.2\n36\"|91.5|116|76.2",
+            "measurements_in": "Size|Waist|Hip|Inseam\n28\"|28|39.4|30\n30\"|30|40.9|30\n32\"|32|42.5|30\n34\"|34|44.1|30\n36\"|36|45.7|30",
+            "show_fit_notes": true,
+            "fit_notes_heading": "Fit Notes",
+            "note1_title": "Between sizes?",
+            "note1_text": "Stay true for the intended classic fit, or size down for a slimmer leg.",
+            "note2_title": "Prefer a sharper look?",
+            "note2_text": "Take your usual waist for the intended clean, regular leg.",
+            "note3_title": "Athletic thighs?",
+            "note3_text": "The regular seat and thigh give room through the upper leg without bagginess.",
+            "show_sit": true,
+            "sit_heading": "How They Sit",
+            "sit1_title": "Short Legs",
+            "sit1_text": "Sits cleanly on the shoe with minimal break for shorter heights.",
+            "sit2_title": "Regular Legs",
+            "sit2_text": "A single clean break at the ankle — the intended Signore silhouette.",
+            "sit3_title": "Long Legs",
+            "sit3_text": "A touch more length and break over the shoe for taller builds.",
+            "conversion_heading": "International Size Conversion",
+            "conversion_table": "Waist (Guillo)|EU|UK|US|Australia\n28\"|44|28|28|28\n30\"|46|30|30|30\n32\"|48|32|32|32\n34\"|50|34|34|34\n36\"|52|36|36|36",
+            "show_reco": true,
+            "reco_title": "Prefer a more tapered fit?",
+            "reco_text": "The Luxe Chino offers a stretch, tapered-leg cut.",
+            "reco_link_label": "Discover the Luxe Chino",
+            "reco_link_url": "shopify://products/the-luxe-chino-stone",
+            "help_title": "Still unsure?",
+            "help_text": "<p>Order your usual waist — easy 44-day returns & exchanges if the fit isn't right.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feat1",
+        "feat2",
+        "feat3",
+        "feat4",
+        "tab1",
+        "tab2",
+        "tab3",
+        "tab4",
+        "sizeguide"
+      ],
+      "settings": {
+        "short_description": "Classic with a hint of slim. A straight leg from a natural waist, with a side fastening that keeps the front clean under an untucked shirt.",
+        "fit_guide_link": "shopify://pages/fit-guide",
+        "size_guide_page": "shopify://pages/fit-guide",
+        "trust_line": "Same-day dispatch · 44-day returns and exchanges",
+        "open_first_tab": false,
+        "show_pair": true,
+        "show_video_tile": true,
+        "video": "shopify://files/videos/Generated with Kive.ai - High-energy reel showcasing the tailored brown pants with quick_ confident camera work. Editing exactly 4 distinct shots in 8 seconds. Hard cut between every shot — each shot is a separate take from a different an.mp4",
+        "video_position": "center center",
+        "video_ratio": "9 / 16",
+        "video_fit": "cover",
+        "video_poster_asset": "",
+        "video_caption": "Watch the fit in motion"
+      }
+    },
+    "wear": {
+      "type": "guillo-wear-with",
+      "settings": {
+        "products": [
+          "the-portofino-polo-red",
+          "milano-pinstripe-shirt",
+          "the-classico-raglan-tee-off-white",
+          "firenze-chevron-shirt",
+          "siracusa-short-sleeve-slim-fit-shirt",
+          "guillo-fitted-siracusa-long-sleeve-shirt",
+          "guillo-fitted-vulcano-short-sleeve-shirt"
+        ],
+        "heading": "Wear it with",
+        "wardrobe_note": "Build your wardrobe — three pieces or more, 20% off automatically.",
+        "wardrobe_link": "",
+        "collection": "",
+        "products_to_show": 8
+      }
+    },
+    "trust": {
+      "type": "guillo-trust",
+      "blocks": {
+        "card1": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Fast, tracked shipping",
+            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order."
+          }
+        },
+        "card2": {
+          "type": "card",
+          "settings": {
+            "icon": "refresh",
+            "title": "Easy 44 day returns",
+            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
+          }
+        },
+        "card3": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Duties and taxes covered",
+            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship."
+          }
+        }
+      },
+      "block_order": [
+        "card1",
+        "card2",
+        "card3"
+      ],
+      "settings": {
+        "show_press": true,
+        "press_logo_alt": "7NEWS",
+        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
+      }
+    },
+    "anatomy": {
+      "type": "guillo-anatomy",
+      "blocks": {
+        "cl1": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Classic, hint of slim",
+            "text": "Sits at the natural waist with a straight leg line and a single clean break at the ankle.",
+            "spec": "True to size"
+          }
+        },
+        "cl2": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Side fastening",
+            "text": "No front zip, so the front stays clean under an untucked shirt.",
+            "spec": "Sizes 28 to 40"
+          }
+        },
+        "cr1": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Structured twill",
+            "text": "Sharp enough for the office, easy enough for the weekend.",
+            "spec": "Comfortable stretch"
+          }
+        },
+        "cr2": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Holds its line",
+            "text": "The structure keeps its shape through long days while the stretch keeps it comfortable.",
+            "spec": "Wrinkle resistant finish"
+          }
+        }
+      },
+      "block_order": [
+        "cl1",
+        "cl2",
+        "cr1",
+        "cr2"
+      ],
+      "settings": {
+        "heading": "The Signore, the dressier line in the wardrobe.",
+        "image": "shopify://shop_images/0S0A3047.jpg",
+        "image_alt": "The Luxe Chino in Chocolate, leg and taper",
+        "image_position": "center 74%"
+      }
+    },
+    "reviews": {
+      "type": "guillo-pdp-reviews",
+      "settings": {
+        "heading": "Worn, washed, reported back.",
+        "write_link": "",
+        "all_link": "",
+        "fit_marker": 50,
+        "fit_note": "",
+        "reviews_to_show": 60,
+        "show_fit_meter": false,
+        "reviews_visible": 3
+      }
+    },
+    "faq": {
+      "type": "guillo-faq",
+      "blocks": {
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "How do they fit?",
+            "answer": "<p>A clean classic fit with a hint of slim. The Signore sits at the natural waist with a straight leg line and a single clean break at the ankle. True to size.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "What is the fabric?",
+            "answer": "<p>A structured twill with comfortable stretch. Sharp enough for the office, easy enough for the weekend.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "Are they comfortable for all day wear?",
+            "answer": "<p>Yes. The structure keeps its line through long days while the stretch keeps it comfortable.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "What should I pair them with?",
+            "answer": "<p>A knitted polo and loafers for dinner. A crisp shirt for the office. The Signore is the dressier line in the Guillo wardrobe.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>Complimentary returns &amp; exchanges within 44 days for AU/NZ orders. International orders: 44-day returns and exchanges, return shipping paid by the customer. All returns via our self-service portal, no emails, no waiting.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "question": "When will they arrive?",
+            "answer": "<p>All orders dispatched within 24 hours. Standard delivery to Australia in 2 to 8 business days. Express in 1 to 4. International shipping available to Singapore, UK, US and Europe.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6"
+      ],
+      "settings": {
+        "layout": "split",
+        "anchor": "",
+        "eyebrow": "Questions",
+        "heading": "Before you order.",
+        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
+        "link_label": "Ask a question",
+        "link": "",
+        "open_first": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "wear",
+    "trust",
+    "anatomy",
+    "reviews",
+    "faq"
+  ]
+}
+

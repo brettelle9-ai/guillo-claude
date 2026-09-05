@@ -1,0 +1,170 @@
+{% comment %}
+  FAQ accordion. Split layout (side heading + list) or narrow centered
+  list, so it serves both the product page and the fit guide.
+{% endcomment %}
+
+<section class="guillo-faq g-pad" id="{{ section.settings.anchor | default: section.id }}">
+  <div class="g-container g-container--wide guillo-faq__layout guillo-faq__layout--{{ section.settings.layout }}">
+    <div class="guillo-faq__side">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="g-eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h2 class="guillo-faq__heading">{{ section.settings.heading }}</h2>
+      {%- if section.settings.text != blank -%}
+        <p class="guillo-faq__text">{{ section.settings.text }}</p>
+      {%- endif -%}
+      {%- if section.settings.link_label != blank -%}
+        <a href="{{ section.settings.link }}" class="g-link">{{ section.settings.link_label }}</a>
+      {%- endif -%}
+    </div>
+    <div class="guillo-faq__list">
+      {%- for block in section.blocks -%}
+        <details class="guillo-faq__item" {{ block.shopify_attributes }} {% if forloop.first and section.settings.open_first %}open{% endif %}>
+          <summary>
+            <span>{{ block.settings.question }}</span>
+            <span class="guillo-faq__mark" aria-hidden="true"></span>
+          </summary>
+          <div class="guillo-faq__answer">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-faq {
+    padding-block: 88px;
+    border-top: 1px solid var(--g-line);
+    background: var(--g-paper);
+  }
+  .guillo-faq__layout--split {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 72px;
+    align-items: start;
+  }
+  .guillo-faq__layout--narrow {
+    max-width: 900px;
+    display: block;
+  }
+  .guillo-faq__layout--narrow .guillo-faq__side { margin-bottom: 40px; }
+  .guillo-faq__side .g-eyebrow {
+    display: block;
+    margin-bottom: 16px;
+  }
+  .guillo-faq__heading {
+    font: 500 clamp(26px, 2.4vw, 36px)/1.08 var(--g-serif);
+    letter-spacing: -0.004em;
+    margin: 0 0 22px;
+  }
+  .guillo-faq__text {
+    font: 300 14px/1.8 var(--g-sans);
+    color: var(--g-muted);
+    margin: 0 0 22px;
+  }
+  .guillo-faq__list { border-top: 1px solid var(--g-line); }
+  .guillo-faq__item { border-bottom: 1px solid var(--g-line); }
+  .guillo-faq__item summary {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px 0;
+    cursor: pointer;
+    list-style: none;
+    font: 400 17px/1.4 var(--g-serif);
+    color: #31343A;
+  }
+  .guillo-faq__item summary::-webkit-details-marker { display: none; }
+  .guillo-faq__item[open] summary { color: var(--g-ink); }
+  .guillo-faq__mark {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+  }
+  .guillo-faq__mark::before,
+  .guillo-faq__mark::after {
+    content: '';
+    position: absolute;
+    background: var(--g-faint);
+  }
+  .guillo-faq__mark::before {
+    left: 0;
+    right: 0;
+    top: 5.5px;
+    height: 1px;
+  }
+  .guillo-faq__mark::after {
+    top: 0;
+    bottom: 0;
+    left: 5.5px;
+    width: 1px;
+    transition: transform 0.2s ease;
+  }
+  .guillo-faq__item[open] .guillo-faq__mark::after { transform: scaleY(0); }
+  .guillo-faq__answer {
+    font: 300 15px/1.85 var(--g-sans);
+    color: #464A50;
+    padding: 0 60px 28px 0;
+    max-width: 720px;
+    animation: g-fade 0.24s both;
+  }
+  .guillo-faq__answer p { margin: 0 0 12px; }
+  @media screen and (max-width: 989px) {
+    .guillo-faq { padding-block: 56px; }
+    .guillo-faq__layout--split { grid-template-columns: 1fr; gap: 34px; }
+    .guillo-faq__answer { padding-right: 0; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo FAQ",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "split", "label": "Side heading" },
+        { "value": "narrow", "label": "Narrow" }
+      ],
+      "default": "split"
+    },
+    { "type": "text", "id": "anchor", "label": "Anchor id", "info": "Used for on-page links, e.g. fit-faq" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Questions" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Before you order." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time." },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Ask a question" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "checkbox", "id": "open_first", "label": "Open first question", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "How do I know which waist to take?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Measure your true waist where the trousers sit, not where a belt sits, and take that number. The stretch twill gives one to two centimetres in the first week, so there is no need to size up for the thigh.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guillo FAQ",
+      "category": "Guillo",
+      "blocks": [
+        { "type": "faq", "settings": { "question": "How do I know which waist to take?", "answer": "<p>Measure your true waist where the trousers sit, not where a belt sits, and take that number. The stretch twill gives one to two centimetres in the first week, so there is no need to size up for the thigh. Ninety one percent of buyers order their true waist and keep it.</p>" } },
+        { "type": "faq", "settings": { "question": "Will they pull across the thigh if I train?", "answer": "<p>No. The seat and thigh are drafted wider than a standard slim chino, then tapered from the knee down, so the room sits where you need it and the line stays clean below it.</p>" } },
+        { "type": "faq", "settings": { "question": "Do they need ironing?", "answer": "<p>No. The twill is finished to resist wrinkles and recovers on the hanger. Machine wash cold, hang to dry, wear.</p>" } },
+        { "type": "faq", "settings": { "question": "What is the inseam, and can they be hemmed?", "answer": "<p>Unfinished inseam is 86cm on every size, which suits 175cm to 192cm with one break at the shoe. Any tailor can shorten them, and hemming does not affect your returns window.</p>" } },
+        { "type": "faq", "settings": { "question": "When will they arrive?", "answer": "<p>Order before 4pm and it leaves Brisbane the same afternoon. Two to three business days to metro Australia, three to six regional. Express and international are available at checkout.</p>" } },
+        { "type": "faq", "settings": { "question": "What if the fit is wrong?", "answer": "<p>Free returns and exchanges within 44 days in the satchel it arrived in. Exchanges for a different size or colour ship the day we scan your return.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

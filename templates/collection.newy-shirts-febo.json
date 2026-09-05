@@ -1,0 +1,42 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "guillo-collection-banner",
+      "settings": {
+        "fallback_asset": "guillo-brown-01.jpg"
+      }
+    },
+    "grid": {
+      "type": "guillo-collection-grid",
+      "settings": {
+        "filter_chips": "Slim fit:fit-slim, Muscle fit:fit-muscle, Short sleeve:short-sleeve, Grandad collar:garment-shirt",
+        "show_quick_add": true,
+        "show_break": true,
+        "break_eyebrow": "Not sure of your size",
+        "break_heading": "Two minutes now beats a return in a fortnight.",
+        "break_text": "The fit guide compares every cut side by side, with the waist and thigh measurements laid out plainly.",
+        "break_link_label": "Open the fit guide",
+        "break_link": "shopify://pages/fit-guide",
+        "break_image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_33_AM.png",
+        "seo_title_1": "Shirts cut for the top half",
+        "seo_text_1": "<p>Most shirts are drafted straight, so a chest and a pair of shoulders either strain the buttons or swim in the body. Ours are cut wider through the chest, shoulders and arms, then taken in at the waist.</p><p>Lightweight, breathable and stretchy enough to move in, with a wrinkle resistant finish that survives a case.</p>",
+        "seo_title_2": "Signature, long sleeve or grandad collar",
+        "seo_text_2": "<p>The same body in three collars. Signature is the short sleeve everyday shirt, long sleeve covers cooler evenings and the office, and the grandad collar loses the collar stand for a softer, more relaxed look.</p><p>If you are between sizes, size up. The stretch adapts either way.</p>"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "grid"
+  ]
+}
+

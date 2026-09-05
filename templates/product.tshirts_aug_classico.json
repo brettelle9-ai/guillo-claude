@@ -1,0 +1,346 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "guillo-product",
+      "blocks": {
+        "feat1": {
+          "type": "feature",
+          "settings": {
+            "label": "Comfort stretch",
+            "icon": "stretch"
+          }
+        },
+        "feat2": {
+          "type": "feature",
+          "settings": {
+            "label": "Supima cotton",
+            "icon": "shield"
+          }
+        },
+        "feat3": {
+          "type": "feature",
+          "settings": {
+            "label": "Athletic fit",
+            "icon": "slim_fit"
+          }
+        },
+        "feat4": {
+          "type": "feature",
+          "settings": {
+            "label": "Crease resistant",
+            "icon": "no_iron"
+          }
+        },
+        "tab1": {
+          "type": "tab",
+          "settings": {
+            "title": "Fit & Care",
+            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+          }
+        },
+        "tab2": {
+          "type": "tab",
+          "settings": {
+            "title": "Details",
+            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+          }
+        },
+        "tab3": {
+          "type": "tab",
+          "settings": {
+            "title": "Shipping",
+            "content": "<p>Dispatched from Brisbane the same afternoon on orders placed before 4pm. Australia and New Zealand 2 to 4 days, Singapore and Hong Kong 4 to 6, the United Kingdom 5 to 8, Europe 6 to 9.</p><p>You do not pay duties or taxes. Every international order ships DDP, so all duties and import taxes are calculated and paid at checkout.</p><p>Free shipping over $150 in Australia.</p>"
+          }
+        },
+        "tab4": {
+          "type": "tab",
+          "settings": {
+            "title": "Exchanges & Returns",
+            "content": "<p>Free exchanges and returns within 44 days. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p>"
+          }
+        },
+        "sizeguide": {
+          "type": "guillo_find_your_size",
+          "settings": {
+            "button_text": "",
+            "show_icon": true,
+            "eyebrow": "Size Guide",
+            "heading": "Find Your Size",
+            "subheading": "Use your body measurements to choose the right Guillo fit.",
+            "logo_image": "shopify://shop_images/Black_and_Brown_Stylish_and_Edgy_Black_Friday_Fashion_Sale_Instagram_Post_31.png",
+            "logo_url": "",
+            "show_fit_profile": true,
+            "fit_profile_heading": "Fit Profile",
+            "fit_profile_left": "Slim",
+            "fit_profile_center": "Regular",
+            "fit_profile_right": "Relaxed",
+            "fit_profile_position": 15,
+            "fit_profile_note": "The perfect middle ground — slim enough to look sharp, with enough stretch to move freely.",
+            "show_fit_image": true,
+            "measure_heading": "How To Measure",
+            "measurement_image": "shopify://shop_images/classico-raglan-off-white-dark-hanger_031d9a64-85bb-4082-a5b5-9050d8bff4a5.png",
+            "measurement_image_url": "",
+            "fit_callouts": "True-to-size chest|18\nFitted through shoulders and arms|40\nTapered through the body|66\nClean shirt hem|90",
+            "chart_heading": "Size Chart",
+            "show_unit_toggle": true,
+            "default_unit": "cm",
+            "measurements_cm": "Size|Chest\nS|97 - 102\nM|102 - 107\nL|107 - 112\nXL|112 - 117\n2XL|117 - 122",
+            "measurements_in": "Size|Chest\nS|38 - 40\nM|40 - 42\nL|42 - 44\nXL|44 - 46\n2XL|46 - 48",
+            "show_fit_notes": true,
+            "fit_notes_heading": "Fit Notes",
+            "note1_title": "Between sizes?",
+            "note1_text": "Size up for a more relaxed feel. The slim cut means the larger size still looks clean and intentional rather than loose.",
+            "note2_title": "Prefer a sharper fit?",
+            "note2_text": "True to size gives a close fit. The Supima cotton has enough give to stay comfortable without stretching out.",
+            "note3_title": "Slim or muscular build?",
+            "note3_text": "The raglan construction accommodates broader shoulders naturally without pulling at the seam. True-to-size works for most athletic builds.",
+            "show_sit": false,
+            "sit_heading": "How They Sit",
+            "sit1_title": "Short Legs",
+            "sit1_text": "Sits a touch lower with a slight break for shorter heights.",
+            "sit2_title": "Regular Legs",
+            "sit2_text": "Designed to sit cleanly at the ankle for a tailored look.",
+            "sit3_title": "Long Legs",
+            "sit3_text": "More break over the shoe for taller builds.",
+            "conversion_heading": "",
+            "conversion_table": "",
+            "show_reco": false,
+            "reco_title": "Prefer long sleeves?",
+            "reco_text": "Exactly the same fit but long sleeve.",
+            "reco_link_label": "View Long Sleeve Styles",
+            "reco_link_url": "shopify://products/vulcano-short-sleeve-slim-fit-shirt-copy",
+            "help_title": "Still unsure?",
+            "help_text": "Need help? Message us and we'll recommend your best size"
+          }
+        }
+      },
+      "block_order": [
+        "feat1",
+        "feat2",
+        "feat3",
+        "feat4",
+        "tab1",
+        "tab2",
+        "tab3",
+        "tab4",
+        "sizeguide"
+      ],
+      "settings": {
+        "short_description": "Supima cotton with a raglan sleeve, cut close through the chest and shoulders. Soft against the skin and slow to pill.",
+        "fit_guide_link": "shopify://pages/fit-guide",
+        "size_guide_page": "shopify://pages/fit-guide",
+        "trust_line": "Same-day dispatch · 44-day returns and exchanges",
+        "open_first_tab": false,
+        "show_pair": true,
+        "show_video_tile": false,
+        "video_position": "center center",
+        "video_ratio": "1 / 1",
+        "video_fit": "cover",
+        "video_poster_asset": "",
+        "video_caption": "Watch the fit in motion"
+      }
+    },
+    "wear": {
+      "type": "guillo-wear-with",
+      "settings": {
+        "products": [
+          "the-luxe-chino-stone",
+          "the-luxe-chino-black",
+          "the-capri-chino-short-reef",
+          "the-capri-chino-short-stone",
+          "the-signore-chino-latte",
+          "the-signore-chino-mocha"
+        ],
+        "heading": "Wear it with",
+        "wardrobe_note": "Build your wardrobe — three pieces or more, 20% off automatically.",
+        "wardrobe_link": "",
+        "collection": "",
+        "products_to_show": 8
+      }
+    },
+    "trust": {
+      "type": "guillo-trust",
+      "blocks": {
+        "card1": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Fast, tracked shipping",
+            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order."
+          }
+        },
+        "card2": {
+          "type": "card",
+          "settings": {
+            "icon": "refresh",
+            "title": "Easy 44 day returns",
+            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
+          }
+        },
+        "card3": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Duties and taxes covered",
+            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship."
+          }
+        }
+      },
+      "block_order": [
+        "card1",
+        "card2",
+        "card3"
+      ],
+      "settings": {
+        "show_press": true,
+        "press_logo_alt": "7NEWS",
+        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
+      }
+    },
+    "anatomy": {
+      "type": "guillo-anatomy",
+      "blocks": {
+        "cl1": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Supima cotton",
+            "text": "A long staple cotton that stays soft and resists pilling, so it looks new far longer than a standard tee.",
+            "spec": "Soft against the skin"
+          }
+        },
+        "cl2": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Muscle fit",
+            "text": "Cut close through the chest and shoulders with a raglan sleeve, so the shoulder line moves with you.",
+            "spec": "Raglan sleeve"
+          }
+        },
+        "cr1": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Sizing",
+            "text": "True to size for a close fit. Size up for a more relaxed feel.",
+            "spec": "Sizes S to XXL"
+          }
+        },
+        "cr2": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Keeps its shape",
+            "text": "Enough give to stay comfortable without stretching out. No twisting seams, no sagging collar.",
+            "spec": "Holds the collar"
+          }
+        }
+      },
+      "block_order": [
+        "cl1",
+        "cl2",
+        "cr1",
+        "cr2"
+      ],
+      "settings": {
+        "heading": "The Classico, in Supima cotton.",
+        "image": "shopify://shop_images/classico-raglan-off-white-dark-hanger_8af3a866-38c5-4284-8b69-cbfdeecec748.png",
+        "image_alt": "The Luxe Chino in Chocolate, leg and taper",
+        "image_position": "center 14%"
+      }
+    },
+    "reviews": {
+      "type": "guillo-pdp-reviews",
+      "settings": {
+        "heading": "Worn, washed, reported back.",
+        "write_link": "",
+        "all_link": "",
+        "fit_marker": 50,
+        "fit_note": "",
+        "reviews_to_show": 60,
+        "show_fit_meter": false,
+        "reviews_visible": 3
+      }
+    },
+    "faq": {
+      "type": "guillo-faq",
+      "blocks": {
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "How does it fit?",
+            "answer": "<p>A muscle fit, cut close through the chest and shoulders with a raglan sleeve. True to size gives a close fit. Size up for a more relaxed feel.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "What is the fabric?",
+            "answer": "<p>Supima cotton, a long staple cotton that stays soft and resists pilling. Enough give to stay comfortable without stretching out.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "Is it comfortable for all day wear?",
+            "answer": "<p>Yes. Soft against the skin with a cut that moves with you. No twisting seams, no sagging collar.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "What should I pair it with?",
+            "answer": "<p>Chinos and clean sneakers through the week. Tailored shorts in summer. It layers under a shirt or jacket without adding bulk.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>Complimentary returns &amp; exchanges within 44 days for AU/NZ orders. International orders: 44-day returns and exchanges, return shipping paid by the customer. All returns via our self-service portal, no emails, no waiting.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "question": "When will it arrive?",
+            "answer": "<p>All orders dispatched within 24 hours. Standard delivery to Australia in 2 to 8 business days. Express in 1 to 4. International shipping available to Singapore, UK, US and Europe.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6"
+      ],
+      "settings": {
+        "layout": "split",
+        "anchor": "",
+        "eyebrow": "Questions",
+        "heading": "Before you order.",
+        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
+        "link_label": "Ask a question",
+        "link": "",
+        "open_first": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "wear",
+    "trust",
+    "anatomy",
+    "reviews",
+    "faq"
+  ]
+}
+

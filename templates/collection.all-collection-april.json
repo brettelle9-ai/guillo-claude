@@ -1,0 +1,42 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "guillo-collection-banner",
+      "settings": {
+        "fallback_asset": "guillo-brown-01.jpg"
+      }
+    },
+    "grid": {
+      "type": "guillo-collection-grid",
+      "settings": {
+        "filter_chips": "Shirts:garment-shirt, Pants:pants, Polos:garment-polo, Tees:garment-tee",
+        "show_quick_add": true,
+        "show_break": true,
+        "break_eyebrow": "Not sure of your size",
+        "break_heading": "Two minutes now beats a return in a fortnight.",
+        "break_text": "The fit guide compares every cut side by side, with the waist and thigh measurements laid out plainly.",
+        "break_link_label": "Open the fit guide",
+        "break_link": "shopify://pages/fit-guide",
+        "break_image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_19_AM.png",
+        "seo_title_1": "The whole range",
+        "seo_text_1": "<p>Every piece Guillo makes, in one place. Cut for men who carry size through the chest, shoulders and thighs, in fabrics that move and recover.</p>",
+        "seo_title_2": "Where to start",
+        "seo_text_2": "<p>Most men start with a chino and a shirt. The fit guide compares every cut side by side, with the waist and thigh measurements laid out, so you can size once and be right.</p>"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "grid"
+  ]
+}
+

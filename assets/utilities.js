@@ -1,11 +1,9 @@
 /**
- * Schedules a callback during idle periods, or falls back to setTimeout.
- * @type {(callback: IdleRequestCallback, options?: IdleRequestOptions) => number}
+ * Request an idle callback or fallback to setTimeout
+ * @returns {function} The requestIdleCallback function
  */
 export const requestIdleCallback =
-  typeof window.requestIdleCallback === 'function'
-    ? (cb, opts) => window.requestIdleCallback(cb, opts)
-    : (cb) => window.setTimeout(cb, 0);
+  typeof window.requestIdleCallback == 'function' ? window.requestIdleCallback : setTimeout;
 
 /**
  * Returns a promise that resolves after yielding to the main thread.
@@ -38,30 +36,6 @@ export function isLowPowerDevice() {
  */
 export function supportsViewTransitions() {
   return typeof document.startViewTransition === 'function';
-}
-
-/**
- * Detect in-app WebViews known to mishandle cross-document view transitions.
- *
- * Reports of in-app browsers WebViews failing to paint during cross-document (MPA) View
- * Transitions that can freeze or white-screen the storefront on navigation.
- * June 2026 testing.  The common factor is the Android System WebView (Chromium WebView),
- * whose UA carries the `; wv)` token inside the platform parenthetical.
- * Remove check if ever resolved.
- *
- * Note: the IIFE in view-transitions.js has an inline copy of this logic (it
- * runs before modules load) — keep the two in sync.
- * @param {string} [userAgent=navigator.userAgent] - User-agent string to test.
- *   Defaults to the live `navigator.userAgent`; pass an explicit value to keep
- *   the function pure and testable without overriding the browser UA.
- * @returns {boolean} True if running inside an unsupported in-app WebView.
- */
-export function shouldDisableCrossDocumentViewTransitions(userAgent = navigator.userAgent) {
-  const ua = userAgent || '';
-  const androidWebView = /\bAndroid\b/i.test(ua) && /;\s?wv\)/i.test(ua);
-  const knownInAppBrowser =
-    /\b(FBAN|FBAV|FB_IAB|FBIOS|Instagram|musical_ly|Bytedance|BytedanceWebview|trill|TikTok)(?:\b|_)/i.test(ua);
-  return androidWebView || knownInAppBrowser;
 }
 
 /**
@@ -117,13 +91,9 @@ const viewTransitionTypes = {
  */
 export function startViewTransition(callback, types) {
   // Check if the API is supported and transitions are desired
-  if (
-    !supportsViewTransitions() ||
-    isLowPowerDevice() ||
-    prefersReducedMotion() ||
-    shouldDisableCrossDocumentViewTransitions()
-  ) {
-    return Promise.resolve(callback());
+  if (!supportsViewTransitions() || isLowPowerDevice() || prefersReducedMotion()) {
+    callback();
+    return Promise.resolve();
   }
 
   // eslint-disable-next-line no-async-promise-executor
@@ -289,11 +259,10 @@ export function onDocumentLoaded(callback) {
  * Check if the DOM is ready and call the callback when it is.
  * This fires when the DOM is fully parsed but before all resources are loaded.
  * @param {() => void} callback The function to call when the DOM is ready.
- * @param {AddEventListenerOptions} [options] The options to pass to `document.addEventListener`.
  */
-export function onDocumentReady(callback, options) {
+export function onDocumentReady(callback) {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', callback, options);
+    document.addEventListener('DOMContentLoaded', callback);
   } else {
     callback();
   }
@@ -333,57 +302,6 @@ export function onAnimationEnd(elements, callback, options = { subtree: true }) 
   }, /** @type {Promise<Animation>[]} */ ([]));
 
   return Promise.allSettled(animationPromises).then(callback);
-}
-
-/** @type {Set<Element>} */
-const scrollLockOwners = new Set();
-
-/** @type {MutationObserver | undefined} */
-let scrollLockObserver;
-
-function pruneDisconnectedScrollLockOwners() {
-  for (const owner of scrollLockOwners) {
-    if (!owner.isConnected) {
-      scrollLockOwners.delete(owner);
-    }
-  }
-}
-
-function syncScrollLock() {
-  pruneDisconnectedScrollLockOwners();
-
-  if (scrollLockOwners.size > 0) {
-    document.documentElement.setAttribute('scroll-lock', '');
-
-    if (!scrollLockObserver) {
-      scrollLockObserver = new MutationObserver(syncScrollLock);
-      scrollLockObserver.observe(document.documentElement, { childList: true, subtree: true });
-    }
-
-    return;
-  }
-
-  document.documentElement.removeAttribute('scroll-lock');
-  scrollLockObserver?.disconnect();
-  scrollLockObserver = undefined;
-}
-
-/**
- * Locks root scrolling for an owning element.
- * @param {Element} owner - The element that owns the scroll lock.
- */
-export function lockScroll(owner) {
-  scrollLockOwners.add(owner);
-  syncScrollLock();
-}
-
-/**
- * Unlocks root scrolling for an owning element.
- * @param {Element} owner - The element that owns the scroll lock.
- */
-export function unlockScroll(owner) {
-  scrollLockOwners.delete(owner);
-  syncScrollLock();
 }
 
 /**
@@ -808,14 +726,14 @@ export function calculateHeaderGroupHeight(
   if (!headerGroup) return 0;
 
   let totalHeight = 0;
-  for (const element of headerGroup.children) {
-    if (element instanceof HTMLElement) totalHeight += element.offsetHeight;
+  const children = headerGroup.children;
+  for (let i = 0; i < children.length; i++) {
+    const element = children[i];
+    if (element === header || !(element instanceof HTMLElement)) continue;
+    totalHeight += element.offsetHeight;
   }
 
-  // A transparent header is absolutely positioned, so the loop above counts its section
-  // wrapper as 0px. When a section follows it in the group, header.liquid pushes that
-  // section down by the header's height using a margin, which offsetHeight also
-  // excludes — so the header's height has to be added back manually.
+  // If the header is transparent and has a sibling section, add the height of the header to the total height
   if (header instanceof HTMLElement && header.hasAttribute('transparent') && header.parentElement?.nextElementSibling) {
     return totalHeight + header.offsetHeight;
   }
@@ -830,13 +748,13 @@ export function calculateHeaderGroupHeight(
 function updateTransparentHeaderOffset() {
   const header = document.querySelector('#header-component');
   const headerGroup = document.querySelector('#header-group');
-  const headerSection = headerGroup?.querySelector('.header-section');
-  if (!headerSection || !header?.hasAttribute('transparent')) {
+  const hasHeaderSection = headerGroup?.querySelector('.header-section');
+  if (!hasHeaderSection || !header?.hasAttribute('transparent')) {
     document.body.style.setProperty('--transparent-header-offset-boolean', '0');
     return;
   }
 
-  const hasImmediateSection = headerSection.nextElementSibling?.classList.contains('shopify-section');
+  const hasImmediateSection = hasHeaderSection.nextElementSibling?.classList.contains('shopify-section');
 
   const shouldApplyOffset = !hasImmediateSection ? '1' : '0';
   document.body.style.setProperty('--transparent-header-offset-boolean', shouldApplyOffset);
@@ -879,3 +797,4 @@ if (typeof Theme !== 'undefined') {
     scheduler: scheduler,
   };
 }
+

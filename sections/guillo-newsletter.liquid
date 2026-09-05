@@ -1,0 +1,112 @@
+{% comment %}
+  Dark centered newsletter band ("The list") with a working customer
+  email signup form.
+{% endcomment %}
+
+<section class="guillo-newsletter g-pad">
+  <div class="guillo-newsletter__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="g-eyebrow guillo-newsletter__eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h2 class="guillo-newsletter__heading">{{ section.settings.heading }}</h2>
+    {%- if section.settings.text != blank -%}
+      <p class="guillo-newsletter__text">{{ section.settings.text }}</p>
+    {%- endif -%}
+    {% form 'customer', class: 'guillo-newsletter__form' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      {%- if form.posted_successfully? -%}
+        <p class="guillo-newsletter__success">Thanks. You are on the list.</p>
+      {%- else -%}
+        <div class="guillo-newsletter__row">
+          <input
+            type="email"
+            name="contact[email]"
+            class="guillo-newsletter__input"
+            placeholder="Email address"
+            required
+            autocomplete="email"
+            aria-label="Email address"
+          >
+          <button type="submit" class="g-btn g-btn--light">{{ section.settings.button_label | default: 'Join' }}</button>
+        </div>
+        {%- if form.errors -%}
+          <p class="guillo-newsletter__error">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+        {%- endif -%}
+      {%- endif -%}
+    {% endform %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-newsletter {
+    padding-block: 82px;
+    background: var(--g-ink);
+    color: var(--g-off);
+  }
+  .guillo-newsletter__inner {
+    max-width: 900px;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .guillo-newsletter__eyebrow {
+    display: block;
+    letter-spacing: 0.3em;
+    margin-bottom: 22px;
+  }
+  .guillo-newsletter__heading {
+    font: 500 clamp(28px, 3vw, 44px)/1.1 var(--g-serif);
+    color: #fff;
+    margin: 0 0 16px;
+  }
+  .guillo-newsletter__text {
+    font: 300 15px/1.7 var(--g-sans);
+    color: #999BA1;
+    margin: 0 0 34px;
+  }
+  .guillo-newsletter__row {
+    display: flex;
+    gap: 10px;
+    max-width: 520px;
+    margin-inline: auto;
+  }
+  input.guillo-newsletter__input {
+    flex: 1;
+    height: 56px;
+    padding: 0 18px;
+    background: transparent !important;
+    border: 1px solid #2B2D31;
+    box-shadow: none !important;
+    color: var(--g-off);
+    font: 300 14px/1 var(--g-sans);
+    outline: none;
+    border-radius: 0;
+  }
+  input.guillo-newsletter__input:focus { border-color: var(--g-faint); }
+  input.guillo-newsletter__input::placeholder { color: var(--g-faint); }
+  .guillo-newsletter__success,
+  .guillo-newsletter__error {
+    font: 300 14px/1.5 var(--g-sans);
+    color: #999BA1;
+    margin: 12px 0 0;
+  }
+  @media screen and (max-width: 599px) {
+    .guillo-newsletter { padding-block: 56px; }
+    .guillo-newsletter__row { flex-direction: column; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo newsletter",
+    "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The list" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "First look at the drop, before it goes public." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Restocks, new colourways and the occasional fit note. Nothing else." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Join" }
+  ],
+  "presets": [
+    { "name": "Guillo newsletter", "category": "Guillo" }
+  ]
+}
+{% endschema %}
+

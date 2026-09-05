@@ -33,3 +33,4 @@ class QRCodeImage extends Component {
 if (!customElements.get('qr-code-image')) {
   customElements.define('qr-code-image', QRCodeImage);
 }
+

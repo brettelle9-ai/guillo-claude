@@ -1,0 +1,112 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "aside",
+  "name": "Overlay",
+  "sections": {
+    "guillo_cart_drawer": {
+      "type": "guillo-cart-drawer",
+      "settings": {
+        "cart_title": "Your Bag",
+        "empty_cart_text": "Your bag is empty.",
+        "open_on_add": true,
+        "loader_logo": "shopify://shop_images/Black_and_Brown_Stylish_and_Edgy_Black_Friday_Fashion_Sale_Instagram_Post_31.png",
+        "drawer_bg": "#FFFFFF",
+        "text_color": "#17181B",
+        "muted_color": "#9BA0A6",
+        "border_color": "#DFE0E3",
+        "button_bg": "#17181B",
+        "button_text": "#F2F2F4",
+        "accent_color": "#A87C4F",
+        "drawer_width": 440,
+        "base_font_size": 13,
+        "heading_font_size": 22,
+        "item_image_width": 110,
+        "item_image_ratio": "1 / 1",
+        "upsell_card_width": 130,
+        "upsell_image_ratio": "1 / 1",
+        "wardrobe_show": true,
+        "wardrobe_title": "Build Your Wardrobe",
+        "wardrobe_threshold": 3,
+        "wardrobe_discount_percent": 20,
+        "wardrobe_show_discount_estimate": true,
+        "wardrobe_building_message": "Add {remaining} more {piece} and take {percent}% off",
+        "wardrobe_unlocked_label": "{percent}% unlocked",
+        "wardrobe_unlocked_message": "{percent}% off applied.",
+        "piece_singular": "Piece",
+        "piece_plural": "Pieces",
+        "upsell_show": true,
+        "upsell_title": "Complete the Look",
+        "upsell_subtitle": "Curated Pairings",
+        "upsell_hide_in_cart": true,
+        "upsell_products": [
+          "the-luxe-chino-grey",
+          "milano-pinstripe-shirt",
+          "the-signore-chino-latte",
+          "the-portofino-polo-red"
+        ],
+        "subtotal_label": "Subtotal",
+        "shipping_label": "Shipping",
+        "discount_label": "Total saved",
+        "total_label": "Total",
+        "checkout_text": "Secure Checkout",
+        "checkout_hover_color": "#20ecac",
+        "show_lock_icon": true,
+        "unlocked_badge": "{percent}% OFF",
+        "show_payment": false,
+        "payment_installments": 4,
+        "payment_text": "{installments} × {payment} payments with Afterpay",
+        "show_returns": false,
+        "returns_text": "",
+        "free_shipping_text": "Free",
+        "money_decimals": 2,
+        "au_free_shipping_text": "",
+        "au_returns_text": "",
+        "au_payment_text": "",
+        "nz_free_shipping_text": "",
+        "nz_returns_text": "",
+        "nz_payment_text": "",
+        "us_free_shipping_text": "",
+        "us_returns_text": "",
+        "us_payment_text": "",
+        "gb_free_shipping_text": "",
+        "gb_returns_text": "44-day returns and exchanges",
+        "gb_payment_text": "",
+        "ca_free_shipping_text": "",
+        "ca_returns_text": "",
+        "ca_payment_text": "",
+        "shipping_at_checkout_text": "Calculated at checkout",
+        "shipping_nudge_text": "{amount} away from free delivery",
+        "au_free_shipping_threshold": "100",
+        "au_shipping_rate": "9.95",
+        "nz_free_shipping_threshold": "160",
+        "nz_shipping_rate": "12",
+        "us_free_shipping_threshold": "",
+        "us_shipping_rate": "20",
+        "gb_free_shipping_threshold": "65",
+        "gb_shipping_rate": "16",
+        "sg_free_shipping_threshold": "250",
+        "sg_shipping_rate": "15",
+        "gb_shipping_nudge_text": "{amount} away from free UK delivery",
+        "gb_hide_payment": true,
+        "quiet_add": false,
+        "sg_returns_text": "44-day returns and exchanges",
+        "ship_unlocked_text": "Free delivery unlocked",
+        "gb_ship_unlocked_text": "Free UK delivery unlocked",
+        "au_ship_unlocked_text": "Free delivery unlocked",
+        "sg_ship_unlocked_text": "Free Singapore delivery unlocked"
+      }
+    }
+  },
+  "order": [
+    "guillo_cart_drawer"
+  ]
+}
+

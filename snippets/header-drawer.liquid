@@ -11,8 +11,6 @@
   {% render 'header-drawer', linklist: section.settings.menu, class: 'header-drawer--mobile' %}
 {%- enddoc -%}
 
-{% render 'summary-icon-styles' %}
-
 {% liquid
   assign block_settings = block.settings
   assign max_featured_items = 4
@@ -36,10 +34,6 @@
   assign eager_loading = false
   if section.index == blank
     assign eager_loading = true
-  endif
-
-  if block_settings.background_color != blank or block_settings.text_color != blank
-    render 'contrast-override', background_color: block_settings.background_color, text_color: block_settings.text_color, section_id: block.id
   endif
 %}
 
@@ -69,26 +63,24 @@
         {{- 'icon-menu.svg' | inline_asset_content -}}
       </span>
       <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-        {{- 'icon-close-menu.svg' | inline_asset_content -}}
+        {{- 'icon-close.svg' | inline_asset_content -}}
       </span>
     </summary>
     <div
       ref="menuDrawer"
       class="
         menu-drawer
-        {% if block_settings.background_color != blank or block_settings.text_color != blank %}
-          color-custom-{{ block.id }}
-        {% endif %}
+        color-{{ block_settings.color_scheme }}
       "
     >
       <button
-        class="button close-button menu-drawer__close-button focus-inset"
+        class="button close-button menu-drawer__close-button"
         type="button"
         aria-label="{{ 'actions.close' | t }}"
         on:click="/close"
       >
         <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-          {{- 'icon-close-menu.svg' | inline_asset_content -}}
+          {{- 'icon-close.svg' | inline_asset_content -}}
         </span>
       </button>
       <nav
@@ -120,19 +112,19 @@
                     Accordion for links with children, in menus with fewer than 3 levels of links
                   {%- endcomment -%}
                   {% liquid
-                    assign should_open_first = false
+                    assign accordion_state = ''
                     if first_accordion_open == false and block_settings.drawer_accordion_expand_first
                       assign first_accordion_open = true
-                      assign should_open_first = true
+                      assign accordion_state = 'open-by-default-on-mobile'
                     endif
                   %}
-                  {% capture accordion_children %}
+                  <accordion-custom {{ accordion_state }}>
                     <details
                       id="Details-menu-drawer-{{ link.handle }}"
                     >
                       <summary
                         id="HeaderDrawer-{{ link.handle }}"
-                        class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element"
+                        class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
                       >
                         <span class="menu-drawer__menu-item-text wrap-text">{{ link.title | escape }}</span>
                         <span class="svg-wrapper icon-plus">
@@ -163,7 +155,7 @@
                             <a
                               id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
                               href="{{ childlink.url }}"
-                              class="menu-drawer__menu-item menu-drawer__menu-item--child{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
+                              class="menu-drawer__menu-item menu-drawer__menu-item--child focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
                               {% if childlink.current %}
                                 aria-current="page"
                               {% endif %}
@@ -181,11 +173,7 @@
                         {%- endfor -%}
                       </ul>
                     </details>
-                  {% endcapture %}
-                  {% render 'accordion-custom-component',
-                    children: accordion_children,
-                    open_by_default_on_mobile: should_open_first
-                  %}
+                  </accordion-custom>
                 {% elsif block_settings.drawer_accordion == false and link.links != blank %}
                   {%- comment -%}
                     Flat menus for links with children, in menus with fewer than 3 levels of links
@@ -193,7 +181,7 @@
                   <a
                     id="HeaderDrawer-{{ link.handle }}"
                     href="{{ link.url }}"
-                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element"
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
                     {% if link.current %}
                       aria-current="page"
                     {% endif %}
@@ -223,7 +211,7 @@
                       >
                         <a
                           href="{{ childlink.url }}"
-                          class="menu-drawer__menu-item menu-drawer__menu-item--child menu-drawer__animated-element{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
+                          class="menu-drawer__menu-item menu-drawer__menu-item--child menu-drawer__animated-element focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
                           {% if childlink.current %}
                             aria-current="page"
                           {% endif %}
@@ -247,7 +235,7 @@
                   <a
                     id="HeaderDrawer-{{ link.handle }}"
                     href="{{ link.url }}"
-                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element"
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
                     {% if link.current %}
                       aria-current="page"
                     {% endif %}
@@ -278,7 +266,7 @@
                   >
                     <summary
                       id="HeaderDrawer-{{ link.handle }}"
-                      class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element{% if link.child_active %} menu-drawer__menu-item--active{% endif %}"
+                      class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if link.child_active %} menu-drawer__menu-item--active{% endif %}"
                       on:click="header-drawer/open/submenu"
                     >
                       <span class="menu-drawer__menu-item-text wrap-text">{{ link.title | escape }}</span>
@@ -293,33 +281,26 @@
                       style="--menu-drawer-animation-index: {{ animation_index }};"
                     >
                       <div class="menu-drawer__inner-submenu">
-                        <div class="menu-drawer__nav-buttons menu-drawer__nav-buttons--with-title">
+                        <div class="menu-drawer__nav-buttons">
                           <button
                             class="button menu-drawer__back-button focus-inset"
+                            aria-expanded="true"
                             on:click="header-drawer/back"
-                            aria-label="{{ 'actions.back_to_main_menu' | t }}"
+                            aria-label="{{ 'actions.back' | t }}"
                           >
                             <span class="svg-wrapper icon-caret icon-caret--backward">
                               {{- 'icon-caret.svg' | inline_asset_content -}}
                             </span>
-                          </button>
-                          <a
-                            href="{{ link.url }}"
-                            class="menu-drawer__title focus-inset"
-                            {% if link.current %}
-                              aria-current="page"
-                            {% endif %}
-                          >
                             <span class="menu-drawer__menu-item-text wrap-text">{{ link.title | escape }}</span>
-                          </a>
+                          </button>
                           <button
-                            class="button button-unstyled close-button menu-drawer__close-button focus-inset"
+                            class="button button-unstyled close-button menu-drawer__close-button"
                             type="button"
                             aria-label="{{ 'actions.close' | t }}"
                             on:click="header-drawer/close"
                           >
                             <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-                              {{- 'icon-close-menu.svg' | inline_asset_content -}}
+                              {{- 'icon-close.svg' | inline_asset_content -}}
                             </span>
                           </button>
                         </div>
@@ -358,7 +339,7 @@
                                 <a
                                   id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
                                   href="{{ childlink.url }}"
-                                  class="menu-drawer__menu-item menu-drawer__menu-item--parent{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
+                                  class="menu-drawer__menu-item menu-drawer__menu-item--parent focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
                                   {% if childlink.current %}
                                     aria-current="page"
                                   {% endif %}
@@ -376,23 +357,23 @@
                                 </a>
                               {%- else -%}
                                 {% liquid
-                                  assign should_open_first_nested = false
+                                  assign accordion_state = ''
                                   if first_accordion_open == false and block_settings.drawer_accordion and block_settings.drawer_accordion_expand_first
                                     assign first_accordion_open = true
-                                    assign should_open_first_nested = true
+                                    assign accordion_state = 'open-by-default-on-mobile'
                                   endif
                                 %}
                                 {% if block_settings.drawer_accordion %}
                                   {%- comment -%}
                                     Accordion for links with children, in menus with 3 levels of links
                                   {%- endcomment -%}
-                                  {% capture accordion_children_nested %}
+                                  <accordion-custom {{ accordion_state }}>
                                     <details
                                       id="Details-menu-drawer-{{ link.handle }}-{{ childlink.handle }}"
                                     >
                                       <summary
                                         id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
-                                        class="menu-drawer__menu-item menu-drawer__menu-item--parent"
+                                        class="menu-drawer__menu-item menu-drawer__menu-item--parent focus-inset"
                                       >
                                         <span class="menu-drawer__menu-item-text wrap-text">
                                           {{- childlink.title | escape -}}
@@ -425,7 +406,7 @@
                                             <a
                                               id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
                                               href="{{ grandchildlink.url }}"
-                                              class="menu-drawer__menu-item menu-drawer__menu-item--child{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"
+                                              class="menu-drawer__menu-item menu-drawer__menu-item--child focus-inset{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"
                                               {% if grandchildlink.current %}
                                                 aria-current="page"
                                               {% endif %}
@@ -445,11 +426,7 @@
                                         {%- endfor -%}
                                       </ul>
                                     </details>
-                                  {% endcapture %}
-                                  {% render 'accordion-custom-component',
-                                    children: accordion_children_nested,
-                                    open_by_default_on_mobile: should_open_first_nested
-                                  %}
+                                  </accordion-custom>
                                 {% else %}
                                   {%- comment -%}
                                     Flat menus for links with children, in menus with 3 levels of links
@@ -457,7 +434,7 @@
                                   <a
                                     id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
                                     href="{{ childlink.url }}"
-                                    class="menu-drawer__menu-item menu-drawer__menu-item--parent{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
+                                    class="menu-drawer__menu-item menu-drawer__menu-item--parent focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
                                     {% if childlink.current %}
                                       aria-current="page"
                                     {% endif %}
@@ -490,7 +467,7 @@
                                         <a
                                           id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
                                           href="{{ grandchildlink.url }}"
-                                          class="menu-drawer__menu-item menu-drawer__menu-item--child{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"
+                                          class="menu-drawer__menu-item menu-drawer__menu-item--child focus-inset{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"
                                           {% if grandchildlink.current %}
                                             aria-current="page"
                                           {% endif %}
@@ -556,8 +533,7 @@
                                         resource: product,
                                         resource_type: 'product',
                                         image_aspect_ratio: ratio,
-                                        image_sizes: 'auto, 400px',
-                                        product_view_context: 'dialog'
+                                        image_sizes: 'auto, 400px'
                                       %}
                                     </li>
                                   {%- endfor -%}
@@ -576,7 +552,7 @@
                   <a
                     id="HeaderDrawer-{{ link.handle }}"
                     href="{{ link.url }}"
-                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element"
+                    class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
                     {% if link.current %}
                       aria-current="page"
                     {% endif %}
@@ -606,7 +582,7 @@
         %}
         {% if data_header_drawer_type == 'mobile-drawer' and show_country or show_language %}
           {% liquid
-            assign background_brightness = block_settings.background_color | color_brightness
+            assign background_brightness = block.settings.color_scheme.settings.background | color_brightness
             if background_brightness < 64
               assign flag_shadow_size = 4
             else
@@ -618,7 +594,7 @@
             assign form_style = localization_font | append: color_shadow
           %}
           {% if show_language and show_country == false %}
-            <div class="menu-drawer__localization color-custom-popover">
+            <div class="menu-drawer__localization color-{{ settings.popover_color_scheme }}">
               {% render 'localization-form',
                 show_country: show_country,
                 show_language: show_language,
@@ -636,14 +612,14 @@
               >
                 <summary
                   id="HeaderDrawer-localization"
-                  class="drawer-localization__button h3 focus-inset"
+                  class="drawer-localization__button h3 link focus-inset"
                   aria-expanded="false"
                   on:click="header-drawer/open/submenu"
                   style="{{ form_style }}"
                 >
                   <div class="drawer-localization__button--label h6">
                     {%- if show_country -%}
-                      <div class="mobile-localization mobile-localization--country">
+                      <div class="mobile-localization mobile-localization--country link">
                         {%- if section.settings.country_selector_style == true -%}
                           <span
                             class="icon-flag"
@@ -665,7 +641,7 @@
                     {%- endif -%}
 
                     {%- if show_language -%}
-                      <div class="mobile-localization mobile-localization--country">
+                      <div class="mobile-localization mobile-localization--country link">
                         <span>
                           {{ localization.language.iso_code | upcase }}
                         </span>
@@ -678,32 +654,31 @@
                 </summary>
 
                 <div
-                  class="menu-drawer__submenu has-submenu color-custom-drawer"
+                  class="menu-drawer__submenu has-submenu color-{{ settings.drawer_color_scheme }}"
+                  style=""
                 >
                   <div
-                    class="menu-drawer__nav-buttons menu-drawer__nav-buttons--with-title"
+                    class="menu-drawer__nav-buttons"
                     ref="navButtons"
                   >
                     <button
-                      class="button menu-drawer__back-button focus-inset"
+                      class="button menu-drawer__back-button link focus-inset"
+                      aria-expanded="true"
                       on:click="header-drawer/back"
-                      aria-label="{{ 'actions.back_to_main_menu' | t }}"
                     >
                       <span class="svg-wrapper icon-caret icon-caret--backward">
                         {{- 'icon-caret.svg' | inline_asset_content -}}
                       </span>
+                      {{ 'content.localization_region_and_language' | t }}
                     </button>
-                    <span class="menu-drawer__title">
-                      {{- 'content.localization_region_and_language' | t -}}
-                    </span>
                     <button
-                      class="button close-button menu-drawer__close-button focus-inset"
+                      class="button close-button menu-drawer__close-button"
                       type="button"
                       aria-label="{{ 'actions.close' | t }}"
                       on:click="header-drawer/close"
                     >
                       <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-                        {{- 'icon-close-menu.svg' | inline_asset_content -}}
+                        {{- 'icon-close.svg' | inline_asset_content -}}
                       </span>
                     </button>
                   </div>
@@ -766,8 +741,7 @@
                       resource: product,
                       resource_type: 'product',
                       image_aspect_ratio: ratio,
-                      image_sizes: 'auto, 400px',
-                      product_view_context: 'dialog'
+                      image_sizes: 'auto, 400px'
                     %}
                   </li>
                 {%- endfor -%}
@@ -785,14 +759,6 @@
 </header-drawer>
 
 {% stylesheet %}
-  .icon-caret--forward svg {
-    transform: rotate(-90deg);
-  }
-
-  .icon-caret--backward svg {
-    transform: rotate(90deg);
-  }
-
   .header__icon--menu {
     position: initial;
   }
@@ -888,6 +854,7 @@
     overflow: auto;
     display: flex;
     border-right: var(--style-border-drawer);
+    box-shadow: var(--shadow-drawer);
     flex-direction: column;
 
     @media screen and (min-width: 750px) {
@@ -907,7 +874,7 @@
     width: 100vw;
     height: 100dvh;
     backdrop-filter: brightness(0.75);
-    z-index: var(--layer-overlay);
+    z-index: var(--layer-heightened);
     opacity: 0;
     transition: opacity var(--drawer-animation-speed) ease;
 
@@ -959,23 +926,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  /* Submenu header with a centered, clickable title flanked by the back and
-     close controls. */
-  .menu-drawer__nav-buttons--with-title {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-  }
-
-  .menu-drawer__title {
-    justify-self: center;
-    min-width: 0;
-    padding: var(--padding-md) var(--padding-sm);
-    color: var(--color-foreground);
-    text-align: center;
-    text-decoration: none;
-    line-height: 1.2;
   }
 
   .menu-drawer__menu {
@@ -1224,31 +1174,6 @@
     box-shadow: none;
   }
 
-  /* Match the menu links' focus style: a rectangular outline in the current color.
-     These buttons sit flush against the drawer edges, so inset the outline to keep
-     it from being clipped. */
-  .menu-drawer__close-button.menu-drawer__close-button,
-  .menu-drawer__back-button.menu-drawer__back-button {
-    border-radius: 0;
-    outline-offset: calc(var(--padding-2xs) * -1);
-  }
-
-  /* Safari < 16.4 draws the close focus ring via a pseudo-element; keep it
-     rectangular there too. */
-  .menu-drawer__close-button:focus-visible::after {
-    border-radius: 0;
-  }
-
-  .menu-drawer__nav-buttons--with-title .menu-drawer__back-button {
-    width: fit-content;
-    padding: var(--padding-lg);
-    justify-self: start;
-  }
-
-  .menu-drawer__nav-buttons--with-title .menu-drawer__close-button {
-    justify-self: end;
-  }
-
   .menu-drawer__menu-item-text {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1308,6 +1233,7 @@
     padding: 0;
     margin-block: auto var(--padding-sm);
     margin-inline-start: var(--padding-xl);
+    background-color: rgb(var(--color-foreground) 0.03);
   }
 
   .menu-drawer__account {
@@ -1473,10 +1399,10 @@
 
   .drawer-localization .language-selector .svg-wrapper.icon-caret {
     transform: translateY(-50%) rotate(0deg);
-    right: 20px;
   }
 
   .drawer-localization .language-selector .svg-wrapper.icon-caret svg {
     transform: none;
   }
 {% endstylesheet %}
+

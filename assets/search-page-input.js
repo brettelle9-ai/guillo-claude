@@ -47,3 +47,4 @@ class SearchPageInputComponent extends Component {
 if (!customElements.get('search-page-input-component')) {
   customElements.define('search-page-input-component', SearchPageInputComponent);
 }
+

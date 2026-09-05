@@ -1,0 +1,2544 @@
+{% comment %}
+  Guillo main product section: breadcrumb, two-column media grid on the
+  left, sticky purchase panel on the right (title/price, rating, colour
+  siblings, size buttons, add to bag, feature icons, accordions), and a
+  sticky add-to-bag bar that appears on scroll.
+
+  Colour "swatches" are sibling products read from the
+  product.metafields.custom.colour_group product-list metafield when
+  present; otherwise the product's own colour option is shown as buttons.
+{% endcomment %}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+
+  # ---- reviews rolled up across the product family ----
+  # Judge.me stores its payload per product, so a colourway with one review
+  # showed one review. Roll up over the Guillo Product Group instead.
+  # Shirts are the exception: the store splits them into three groups (short
+  # sleeve, long sleeve, grandad collar) for the swatches, but they are one
+  # shirt in different collars and Judge.me reviews them as one, so their
+  # reviews come from the whole Shirts collection.
+  assign gr_products = blank
+  assign gr_legacy = blank
+  if product.tags contains 'garment:shirt' and collections.shirts != blank
+    assign gr_products = collections.shirts.products
+  endif
+  if product.tags contains 'garment:chino' and collections.chinos != blank
+    # Every chino together, Luxe and Signore, but not the chino shorts -
+    # those are garment:short and sit in their own collection.
+    assign gr_products = collections.chinos.products
+    # Three retired Luxe products (Sand, and the two Tailored Fit colours)
+    # still hold reviews, and Liquid cannot read draft products at all, so
+    # they are kept as a shop metafield and merged back in here. If Judge.me
+    # grouping is ever switched back on, per-product counts become group
+    # totals and this whole roll-up needs revisiting.
+    assign gr_legacy = shop.metafields.custom.legacy_chino_reviews.value
+  endif
+  if gr_products == blank
+    assign gr_group = product.metafields.custom.product_group.value
+    if gr_group != blank
+      assign gr_products = gr_group.products.value
+    endif
+  endif
+  if gr_products == blank
+    assign gr_products = product.metafields.custom.colour_group.value
+  endif
+
+  assign gr_reviews = '' | split: ''
+  assign gr_count = 0
+  assign gr_weighted = 0
+
+  if gr_products != blank and gr_products.size > 0
+    for gr_p in gr_products
+      assign gr_d = gr_p.metafields.judgeme.review_widget_data.value
+      if gr_d != blank and gr_d.reviews != blank
+        assign gr_reviews = gr_reviews | concat: gr_d.reviews
+      endif
+      assign gr_c = gr_p.metafields.reviews.rating_count.value | default: 0
+      assign gr_a = gr_p.metafields.reviews.rating.value.rating | default: 0
+      if gr_c > 0
+        assign gr_count = gr_count | plus: gr_c
+        assign gr_part = gr_a | times: gr_c
+        assign gr_weighted = gr_weighted | plus: gr_part
+      endif
+    endfor
+  else
+    assign gr_d = product.metafields.judgeme.review_widget_data.value
+    if gr_d != blank and gr_d.reviews != blank
+      assign gr_reviews = gr_reviews | concat: gr_d.reviews
+    endif
+    assign gr_count = product.metafields.reviews.rating_count.value | default: 0
+    assign gr_a = product.metafields.reviews.rating.value.rating | default: 0
+    assign gr_weighted = gr_a | times: gr_count
+  endif
+
+  if gr_legacy != blank and gr_legacy.size > 0
+    assign gr_reviews = gr_reviews | concat: gr_legacy
+    for gr_l in gr_legacy
+      assign gr_count = gr_count | plus: 1
+      assign gr_weighted = gr_weighted | plus: gr_l.rating
+    endfor
+  endif
+
+  assign gr_rating = 0
+  if gr_count > 0
+    assign gr_weighted_f = gr_weighted | times: 1.0
+    assign gr_rating = gr_weighted_f | divided_by: gr_count | round: 2
+  endif
+  assign gr_reviews = gr_reviews | sort: 'created_at' | reverse
+
+  assign rating = gr_rating
+  assign rating_count = gr_count
+  assign colour_group = product.metafields.custom.colour_group.value
+  assign fys_block = section.blocks | where: 'type', 'guillo_find_your_size' | first
+
+  # Guillo Product Group metaobject (custom.product_group) is the store's own
+  # grouping system: it carries the group title, each sibling's display name,
+  # its swatch image and swatch colour. Use it for the heading and the style
+  # selector, falling back to the colour_group product list where a product
+  # has not been grouped.
+  assign short_desc = product.metafields.custom.short_description
+  if short_desc == blank
+    assign short_desc = section.settings.short_description
+  endif
+  if short_desc == blank
+    assign short_desc = product.description | strip_html | truncatewords: 32
+  endif
+
+  assign group = product.metafields.custom.product_group.value
+  assign group_title = product.title
+  assign style_name = ''
+  if group != blank
+    assign group_products = group.products.value
+    assign group_names = group.display_names.value
+    assign group_images = group.custom_images.value
+    # Metaobject file_reference LISTS cannot be index-accessed - group_images[i]
+    # comes back blank and the swatch quietly falls through to the product's
+    # featured image, which is why these stopped matching the live store (the
+    # Sage chino's featured image is a scene plate, not a garment shot). The
+    # live theme builds a '|||' string of URLs and indexes that; same here.
+    capture group_img_str
+      for gimg in group_images
+        echo gimg | image_url: width: 400
+        unless forloop.last
+          echo '|||'
+        endunless
+      endfor
+    endcapture
+    assign group_img_urls = group_img_str | split: '|||'
+    assign group_swatches = group.swatch_colours.value
+    if group.group_title != blank
+      assign group_title = group.group_title
+    endif
+    for gp in group_products
+      if gp.id == product.id
+        assign style_name = group_names[forloop.index0]
+      endif
+    endfor
+  endif
+
+  assign size_option = null
+  assign colour_option = null
+  for option in product.options_with_values
+    assign opt_name = option.name | downcase
+    if opt_name == 'size' or opt_name == 'waist'
+      assign size_option = option
+    elsif opt_name == 'color' or opt_name == 'colour'
+      assign colour_option = option
+    endif
+  endfor
+-%}
+
+<section class="guillo-pdp" data-guillo-pdp>
+  <div class="guillo-pdp__crumb-wrap g-pad">
+    {%- liquid
+      # Home / category, not Home / product name, and always the garment
+      # category rather than whichever collection someone happened to arrive
+      # from - a polo reads Polo Shirts whether you came via Best Sellers,
+      # New In or a direct link. Driven by the store's own garment:* tags so
+      # it matches the nav.
+      assign crumb = blank
+      unless false
+        if product.tags contains 'garment:polo'
+          assign crumb = collections.polos
+        elsif product.tags contains 'garment:shirt'
+          assign crumb = collections.shirts
+        elsif product.tags contains 'garment:chino'
+          assign crumb = collections.chinos
+        elsif product.tags contains 'garment:short'
+          assign crumb = collections.shorts
+        elsif product.tags contains 'garment:tee'
+          assign crumb = collections['t-shirts']
+        elsif product.tags contains 'garment:accessory'
+          assign crumb = collections['accessories-1']
+        elsif product.tags contains 'Jeans'
+          assign crumb = collections.jeans
+        elsif product.tags contains 'garment:pant'
+          assign crumb = collections.pants
+        endif
+      endunless
+      if crumb == blank or crumb.products_count == 0
+        assign crumb = product.collections.first
+      endif
+    -%}
+    <nav class="g-breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a>
+      {%- if crumb != blank -%}
+        <span class="g-breadcrumb__sep">/</span>
+        <a href="{{ crumb.url }}">{{ crumb.title }}</a>
+      {%- endif -%}
+    </nav>
+  </div>
+
+  <div class="guillo-pdp__layout">
+    <div class="guillo-pdp__gallery-wrap">
+    <div class="guillo-pdp__gallery" data-gallery>
+      {%- for media in product.media -%}
+        <div class="guillo-pdp__frame">
+          {%- liquid
+            assign media_loading = 'lazy'
+            if forloop.first
+              assign media_loading = 'eager'
+            endif
+          -%}
+          {%- if media.media_type == 'image' -%}
+            {{
+              media
+              | image_url: width: 1400
+              | image_tag: class: 'guillo-pdp__media', widths: '500, 700, 900, 1200, 1400', sizes: '(min-width: 990px) 33vw, 50vw', alt: media.alt, loading: media_loading
+            }}
+            {%- if media.alt contains '#note:' -%}
+              <span class="guillo-pdp__note">{{ media.alt | split: '#note:' | last }}</span>
+            {%- endif -%}
+          {%- else -%}
+            {{ media | media_tag: class: 'guillo-pdp__media' }}
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        <div class="guillo-pdp__frame">{{ 'product-apparel-1' | placeholder_svg_tag: 'guillo-pdp__media' }}</div>
+        <div class="guillo-pdp__frame">{{ 'product-apparel-2' | placeholder_svg_tag: 'guillo-pdp__media' }}</div>
+      {%- endfor -%}
+    </div>
+      {%- assign frame_count = product.media.size | default: 2 -%}
+      {%- if frame_count > 1 -%}
+        <div class="guillo-pdp__progress" data-gallery-progress aria-hidden="true">
+          <span
+            class="guillo-pdp__progress-fill"
+            data-gallery-progress-fill
+            style="width: {{ 100.0 | divided_by: frame_count }}%"
+          ></span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="guillo-pdp__panel">
+      <div class="guillo-pdp__titlerow">
+        <h1 class="guillo-pdp__title">
+          {{ group_title }}
+          {%- if style_name != blank -%}
+            <span class="guillo-pdp__style">{{ style_name }}</span>
+          {%- endif -%}
+        </h1>
+        <span class="guillo-pdp__price" data-price>{{ current_variant.price | money_with_currency }}</span>
+      </div>
+
+      {%- if rating != blank and rating_count != blank and rating_count > 0 -%}
+        <div class="guillo-pdp__rating">
+          <span class="guillo-pdp__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="guillo-pdp__rating-note">{{ rating }} from {{ rating_count }} reviews</span>
+        </div>
+      {%- endif -%}
+
+      {%- if short_desc != blank -%}
+        {%- comment -%}
+          Clamped to two lines with a Read more toggle. The clamp is applied
+          by script only once it is measured as actually overflowing, so a
+          short description never gets a pointless toggle, and with no JS the
+          full text simply shows.
+        {%- endcomment -%}
+        <div class="guillo-pdp__desc-wrap" data-desc>
+          <p class="guillo-pdp__desc" data-desc-text>
+            {{ short_desc }}
+            {%- if section.settings.fit_guide_link != blank %}
+              <a href="{{ section.settings.fit_guide_link }}">Learn more.</a>
+            {%- endif -%}
+          </p>
+          <button type="button" class="guillo-pdp__desc-more" data-desc-toggle hidden>Read more</button>
+        </div>
+      {%- endif -%}
+      <div class="guillo-pdp__rule"></div>
+
+      {%- comment -%}
+        Style / colour selector. Prefers the store's product group (real
+        display names, swatch images and hex swatches); falls back to the
+        colour_group sibling list where a product is not in a group.
+      {%- endcomment -%}
+      {%- if group != blank and group_products.size > 1 -%}
+        <div class="guillo-pdp__field">
+          <div class="guillo-pdp__field-label">
+            {{ section.settings.style_label | default: 'Style' }}:
+            <span>{{ style_name | default: product.title }}</span>
+          </div>
+          <div class="guillo-pdp__colours">
+            {%- for gp in group_products -%}
+              {%- liquid
+                assign gp_name = group_names[forloop.index0] | default: gp.title
+                assign gp_img_url = group_img_urls[forloop.index0]
+                assign gp_image = blank
+                if gp_img_url == blank
+                  assign gp_image = gp.featured_image
+                endif
+                assign gp_swatch = group_swatches[forloop.index0]
+                # A colourway with nothing in stock is not a dead end, it is
+                # not out yet: mark it coming soon and take it out of the
+                # picker rather than sending anyone to a sold-out page.
+                assign gp_coming = false
+                unless gp.available
+                  assign gp_coming = true
+                endunless
+              -%}
+              {%- capture gp_inner -%}
+                <span class="guillo-pdp__colour-frame"{% if gp_swatch != blank %} style="background: {{ gp_swatch }}"{% endif %}>
+                  {%- if gp_img_url != blank -%}
+                    <img src="{{ gp_img_url }}" alt="{{ gp_name | escape }}" class="guillo-pdp__colour-img" loading="lazy" width="200" height="250">
+                  {%- elsif gp_image != blank -%}
+                    {{ gp_image | image_url: width: 200 | image_tag: class: 'guillo-pdp__colour-img', alt: gp_name, loading: 'lazy' }}
+                  {%- endif -%}
+                </span>
+                <span class="guillo-pdp__colour-name">{{ gp_name }}</span>
+                {%- if gp_coming -%}
+                  <span class="guillo-pdp__colour-soon">Coming soon</span>
+                {%- endif -%}
+              {%- endcapture -%}
+              {%- if gp_coming -%}
+                {%- comment -%} Not a link: there is nothing to buy there yet. {%- endcomment -%}
+                <span
+                  class="guillo-pdp__colour guillo-pdp__colour--soon{% if gp.id == product.id %} guillo-pdp__colour--on{% endif %}"
+                  title="{{ gp_name | escape }} — coming soon"
+                  aria-disabled="true"
+                >{{ gp_inner }}</span>
+              {%- else -%}
+                <a
+                  href="{{ gp.url }}"
+                  class="guillo-pdp__colour{% if gp.id == product.id %} guillo-pdp__colour--on{% endif %}"
+                  title="{{ gp_name | escape }}"
+                >{{ gp_inner }}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- elsif colour_group != blank and colour_group.count > 1 -%}
+        <div class="guillo-pdp__field">
+          <div class="guillo-pdp__field-label">
+            Colour:
+            <span>{{ product.metafields.custom.colour_name | default: current_variant.title }}</span>
+          </div>
+          <div class="guillo-pdp__colours">
+            {%- for sibling in colour_group -%}
+              <a
+                href="{{ sibling.url }}"
+                class="guillo-pdp__colour{% if sibling.id == product.id %} guillo-pdp__colour--on{% endif %}"
+              >
+                <span class="guillo-pdp__colour-frame">
+                  {%- if sibling.featured_image -%}
+                    {{ sibling.featured_image | image_url: width: 200 | image_tag: class: 'guillo-pdp__colour-img', alt: sibling.title }}
+                  {%- endif -%}
+                </span>
+                {%- liquid
+                  assign sibling_colour = sibling.metafields.custom.colour_name
+                  if sibling_colour == blank
+                    assign sibling_colour = sibling.title | split: ' - ' | last | split: ' in ' | last
+                  endif
+                -%}
+                <span class="guillo-pdp__colour-name">{{ sibling_colour }}</span>
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {% form 'product', product, id: 'GuilloProductForm', novalidate: 'novalidate' %}
+        <input type="hidden" name="id" data-variant-id value="{{ current_variant.id }}">
+        <input type="hidden" name="quantity" data-quantity value="1">
+
+        {%- comment -%}
+          A product with no real options still has one called "Title" holding
+          "Default Title". Rendering it gave the belt a size picker reading
+          Default Title and a button stuck on "Select a size".
+        {%- endcomment -%}
+        {%- for option in product.options_with_values -%}
+          {%- if product.has_only_default_variant -%}{%- continue -%}{%- endif -%}
+          {%- liquid
+            assign opt_name = option.name | downcase
+            assign is_colour = false
+            if opt_name == 'color' or opt_name == 'colour'
+              assign is_colour = true
+            endif
+          -%}
+          {%- comment -%}
+            When colours are sibling products (colour_group metafield) a colour
+            option on the product itself is only skipped if it has one value —
+            otherwise it still needs picking to resolve the variant.
+          {%- endcomment -%}
+          {%- if is_colour and colour_group != blank and colour_group.count > 1 and option.values.size == 1 -%}
+            {%- continue -%}
+          {%- endif -%}
+          <div class="guillo-pdp__field" data-option-index="{{ forloop.index0 }}">
+            <div class="guillo-pdp__field-head">
+              <span class="guillo-pdp__field-label">
+                {{ option.name }}:
+                <span data-option-value-label>Select</span>
+              </span>
+              {%- liquid
+                assign is_size_option = false
+                if opt_name == 'size' or opt_name == 'waist'
+                  assign is_size_option = true
+                endif
+              -%}
+              {%- if is_size_option -%}
+                {%- if fys_block -%}
+                  <button type="button" class="guillo-pdp__size-guide" data-open-size-guide>Size guide</button>
+                {%- elsif section.settings.size_guide_page != blank -%}
+                  <a class="guillo-pdp__size-guide" href="{{ section.settings.size_guide_page }}">Size guide</a>
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+        {%- liquid
+          assign preorder_ships_by = product.metafields.custom.preorder_ships_by.value
+          assign has_preorder = false
+          if product.metafields.theme.preorder.value
+            assign has_preorder = true
+          endif
+          for variant in product.variants
+            if variant.metafields.custom.preorder.value and variant.available
+              assign has_preorder = true
+            endif
+          endfor
+        -%}
+            {%- assign size_cols = option.values.size | at_most: 8 | at_least: 4 -%}
+            <div class="guillo-pdp__sizes" style="grid-template-columns: repeat({{ size_cols }}, 1fr)">
+              {%- for value in option.values -%}
+                {%- liquid
+                  assign value_available = false
+                  assign value_preorder = false
+                  assign value_variant_id = ''
+                  for variant in product.variants
+                    if variant.options[forloop.parentloop.parentloop.index0] == value
+                      if value_variant_id == ''
+                        assign value_variant_id = variant.id
+                      endif
+                      if variant.available
+                        assign value_available = true
+                        assign value_variant_id = variant.id
+                        if variant.metafields.custom.preorder.value or product.metafields.theme.preorder.value
+                          assign value_preorder = true
+                        endif
+                      endif
+                    endif
+                  endfor
+                  # Store size values carry inconsistent inch marks (28", 30'');
+                  # display them as the clean numbers the design shows.
+                  assign value_label = value | remove: '"' | remove: "''" | strip
+                -%}
+                {%- if value_available -%}
+                  <label class="guillo-pdp__size{% if value_preorder %} guillo-pdp__size--pre{% endif %}"{% if value_preorder and preorder_ships_by != blank %} tabindex="0"{% endif %}>
+                    <input
+                      type="radio"
+                      name="options[{{ option.name | escape }}]"
+                      value="{{ value | escape }}"
+                      data-label="{{ value_label | escape }}"
+                      {% if value_preorder %}data-preorder="true"{% endif %}
+                    >
+                    <span>
+                      {{ value_label }}
+                      {%- if value_preorder -%}
+                        <em class="guillo-pdp__size-tag guillo-pdp__size-tag--pre">Pre-order</em>
+                      {%- endif -%}
+                    </span>
+                    {%- if value_preorder and preorder_ships_by != blank -%}
+                      <span class="guillo-pdp__size-tip" role="tooltip">
+                        Ships by {{ preorder_ships_by }}. Your size is held for you.
+                      </span>
+                    {%- endif -%}
+                  </label>
+                {%- else -%}
+                  {%- comment -%}
+                    Sold out sizes are a button rather than a disabled radio:
+                    they cannot be chosen as a variant, but they are clickable
+                    and open the back-in-stock form, as they do on live.
+                  {%- endcomment -%}
+                  <button
+                    type="button"
+                    class="guillo-pdp__size guillo-pdp__size--gone"
+                    data-notify-open
+                    data-notify-size="{{ value_label | escape }}"
+                    data-notify-variant="{{ value_variant_id }}"
+                  >
+                    <span>
+                      {{ value_label }}
+                      <em class="guillo-pdp__size-tag">Notify me</em>
+                    </span>
+                  </button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+        <div
+          class="guillo-pdp__notify"
+          data-notify-panel
+          hidden
+          data-product-title="{{ product.title | escape }}"
+          data-product-url="{{ shop.url }}{{ product.url }}"
+          data-product-image="{{ product.featured_image | image_url: width: 400 }}"
+          data-product-price="{{ product.price | money }}"
+        >
+          <button type="button" class="guillo-pdp__notify-back" data-notify-close>&larr; Back to sizes</button>
+          <p class="guillo-pdp__notify-title">
+            Notify me when size <span data-notify-size-label></span> is back in stock
+          </p>
+          <p class="guillo-pdp__notify-sub">
+            Enter your contact info below and we&rsquo;ll let you know the moment it&rsquo;s available.
+          </p>
+          <div class="guillo-pdp__notify-tabs" role="tablist">
+            <button type="button" class="guillo-pdp__notify-tab is-active" data-notify-tab="email">Email</button>
+            <button type="button" class="guillo-pdp__notify-tab" data-notify-tab="sms">SMS</button>
+          </div>
+          <div class="guillo-pdp__notify-form">
+            <input type="email" class="guillo-pdp__notify-input" placeholder="Email address" autocomplete="email" data-notify-email>
+            <input type="tel" class="guillo-pdp__notify-input" placeholder="Phone number" autocomplete="tel" data-notify-phone hidden>
+            <button type="button" class="guillo-pdp__notify-submit" data-notify-submit>Notify me</button>
+          </div>
+          <p class="guillo-pdp__notify-msg" data-notify-msg role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="guillo-pdp__size-hint" data-size-hint>
+          {%- if product.has_only_default_variant -%}
+            Free exchanges within 44 days.
+          {%- else -%}
+            Select a size. Free exchanges within 44 days.
+          {%- endif -%}
+        </div>
+
+        <button type="submit" class="guillo-pdp__atc" data-atc{% unless product.has_only_default_variant %} disabled{% endunless %}>
+          <span data-atc-label>{% if product.has_only_default_variant %}Add to bag{% else %}Select a size{% endif %}</span>
+        </button>
+
+        {%- comment -%}
+          The live theme's pair builder, rendered as-is: it derives the family
+          from the garment:* tags, offers the other colourways as image cards,
+          takes a size for each and adds both. It renders nothing on products
+          with no pair discount, so the section setting is only an override to
+          hide it.
+        {%- endcomment -%}
+        {%- if section.settings.show_pair -%}
+          {% render 'guillo-pair-builder', product: product %}
+        {%- endif -%}
+
+        {%- if section.settings.trust_line != blank -%}
+          <div class="guillo-pdp__trust">{{ section.settings.trust_line }}</div>
+        {%- endif -%}
+      {% endform %}
+
+      {%- if section.settings.show_video_tile -%}
+        {%- comment -%}
+          Poster + centre play button. The poster falls back to the product's
+          own second image so each product shows itself, never another
+          product's photo. The button reveals and plays the video when one is
+          set; with no video it is not rendered, so there is no dead control.
+        {%- endcomment -%}
+        {%- liquid
+          comment
+            Poster priority: an explicitly chosen image, then the video's own
+            first frame (so the tile previews the actual video, not a product
+            photo), then the product's own imagery when there is no video.
+          endcomment
+          assign poster_image = section.settings.video_poster
+          if poster_image == blank and section.settings.video != blank
+            assign poster_image = section.settings.video.preview_image
+          endif
+          if poster_image == blank and section.settings.video_poster_asset == blank
+            assign poster_image = product.media[1].preview_image | default: product.featured_image
+          endif
+        -%}
+        {%- comment -%}
+          The focal point rides on the tile as a custom property: video_tag
+          builds its own <video> and poster, so there is nothing to hang a
+          style attribute on, and one variable covers both.
+        {%- endcomment -%}
+        <div
+          class="guillo-pdp__video"
+          style="
+            --video-pos: {{ section.settings.video_position | default: 'center center' }};
+            --video-ratio: {{ section.settings.video_ratio | default: '1 / 1' }};
+            --video-fit: {{ section.settings.video_fit | default: 'cover' }};
+          "
+          {% if section.settings.video != blank %}data-video-tile{% endif %}
+        >
+          <div class="guillo-pdp__video-frame">
+            {%- if section.settings.video != blank -%}
+              {%- comment -%}
+                No native controls: the browser's control bar is not wanted, so
+                the video is driven entirely by the centre play icon and a
+                click-to-pause on the video itself. video_tag supplies the
+                video's own first frame as the poster.
+              {%- endcomment -%}
+              {{
+                section.settings.video
+                | video_tag: controls: false, muted: true, preload: 'metadata', image_size: '900x', class: 'guillo-pdp__video-media'
+              }}
+              <button
+                type="button"
+                class="guillo-pdp__video-play"
+                data-video-play
+                aria-label="{{ section.settings.video_caption | default: 'Play video' | escape }}"
+              >
+                <span aria-hidden="true"></span>
+              </button>
+            {%- else -%}
+              {% render 'guillo-img',
+                image: poster_image,
+                fallback: section.settings.video_poster_asset,
+                alt: section.settings.video_caption,
+                class: 'guillo-pdp__video-media',
+                sizes: '440px',
+                position: 'center 34%'
+              %}
+              <span class="guillo-pdp__video-play" aria-hidden="true">
+                <span></span>
+              </span>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- assign icon_blocks = section.blocks | where: 'type', 'feature' -%}
+      {%- if icon_blocks.size > 0 -%}
+        <div class="guillo-pdp__features">
+          {%- for block in icon_blocks -%}
+            <div class="guillo-pdp__feature" {{ block.shopify_attributes }}>
+              <span class="guillo-pdp__feature-icon" aria-hidden="true">
+                {%- case block.settings.icon -%}
+                  {%- when 'stretch' -%}
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 12h20"/><path d="M6 8l-4 4 4 4"/><path d="M18 8l4 4-4 4"/></svg>
+                  {%- when 'slim_fit' -%}
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M9 3l3 2.2L15 3l4.2 2.5-1.7 3.6-1.6-.8v12.2H8.1V8.3l-1.6.8L4.8 5.5z"/><path d="M12 5.2v15.3"/></svg>
+                  {%- when 'breathable' -%}
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M3 8h9a2.5 2.5 0 1 0-2.5-2.5"/><path d="M3 12h13a2.5 2.5 0 1 1-2.5 2.5"/><path d="M3 16h7a2 2 0 1 1-2 2"/></svg>
+                  {%- when 'quick_dry' -%}
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3.5c2.6 2.7 4 4.9 4 7a4.5 4.5 0 0 1-9 0c0-2.1 1.4-4.3 4-7l.5-.5z"/><path d="M2 7h5M2 11h3M2 15h4"/></svg>
+                  {%- when 'no_iron' -%}
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="6" width="18" height="12"/><path d="M3 20l18-16"/></svg>
+                  {%- when 'taper' -%}
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 3h12l-3 18H9L6 3z"/><path d="M8.5 12h7"/></svg>
+                  {%- when 'clock' -%}
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
+                  {%- when 'shield' -%}
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 3l8 3v6c0 5-3.4 8.1-8 9-4.6-.9-8-4-8-9V6l8-3z"/><path d="M8.6 12.2l2.3 2.3 4.5-4.6"/></svg>
+                  {%- when 'truck' -%}
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 7h11v10H2z"/><path d="M13 10h5l3 3v4h-8z"/><circle cx="6" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg>
+                  {%- when 'refresh' -%}
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M21 12a9 9 0 11-3.2-6.9"/><path d="M21 3v5h-5"/></svg>
+                  {%- else -%}
+                    <span class="guillo-pdp__feature-dot"></span>
+                {%- endcase -%}
+              </span>
+              <span>{{ block.settings.label }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if fys_block -%}
+        <div class="guillo-pdp__sizeguide" {{ fys_block.shopify_attributes }}>
+          {% render 'guillo-find-your-size',
+            settings: fys_block.settings,
+            unique: fys_block.id,
+            product: product
+          %}
+        </div>
+      {%- endif -%}
+
+      {%- assign tab_blocks = section.blocks | where: 'type', 'tab' -%}
+      {%- if tab_blocks.size > 0 -%}
+        <div class="guillo-pdp__tabs" data-tabs>
+          <div class="guillo-pdp__tabbar" role="tablist">
+            {%- for block in tab_blocks -%}
+              <button
+                type="button"
+                class="guillo-pdp__tab-btn"
+                data-tab-btn="{{ forloop.index0 }}"
+                aria-expanded="false"
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.title }}
+                <span class="guillo-pdp__tab-mark" aria-hidden="true">+</span>
+              </button>
+            {%- endfor -%}
+          </div>
+          {%- for block in tab_blocks -%}
+            <div class="guillo-pdp__tab-panel" data-tab-panel="{{ forloop.index0 }}" hidden>
+              {{ block.settings.content }}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="guillo-pdp__sticky" data-sticky-atc hidden>
+    <div class="g-container g-container--wide guillo-pdp__sticky-inner">
+      {%- if product.featured_media -%}
+        {{ product.featured_media | image_url: width: 108 | image_tag: class: 'guillo-pdp__sticky-thumb', alt: '' }}
+      {%- endif -%}
+      <div class="guillo-pdp__sticky-copy">
+        <div class="guillo-pdp__sticky-title">{{ product.title }}</div>
+        <div class="guillo-pdp__sticky-price" data-price>{{ current_variant.price | money }}</div>
+      </div>
+      <button type="submit" form="GuilloProductForm" class="guillo-pdp__atc guillo-pdp__atc--sticky" data-atc{% unless product.has_only_default_variant %} disabled{% endunless %}>
+        <span data-atc-label>{% if product.has_only_default_variant %}Add to bag{% else %}Select a size{% endif %}</span>
+      </button>
+    </div>
+  </div>
+
+  <script type="application/json" data-variant-data>
+    [
+      {%- for variant in product.variants -%}
+        {
+          "id": {{ variant.id }},
+          "available": {{ variant.available }},
+          "price": {{ variant.price | money | json }},
+          "options": {{ variant.options | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  </script>
+</section>
+
+<script>
+  (() => {
+    const root = document.querySelector('[data-guillo-pdp]');
+    if (!root) return;
+    const variants = JSON.parse(root.querySelector('[data-variant-data]').textContent);
+    const form = root.querySelector('#GuilloProductForm');
+    const idInput = form.querySelector('[data-variant-id]');
+    // Every size can be sold out (the Portofino Polo is, today), in which case
+    // the option wrapper holds notify buttons and no radio at all.
+    const optionNames = [...form.querySelectorAll('[data-option-index]')]
+      .map((el) => el.querySelector('input[type="radio"]'))
+      .filter(Boolean)
+      .map((el) => el.name);
+    const atcButtons = root.querySelectorAll('[data-atc]');
+    const labels = root.querySelectorAll('[data-atc-label]');
+    const prices = root.querySelectorAll('[data-price]');
+    const hint = root.querySelector('[data-size-hint]');
+
+    function selectedOptions() {
+      const wraps = [...form.querySelectorAll('[data-option-index]')];
+      return wraps.map((wrap) => {
+        const checked = wrap.querySelector('input:checked');
+        return {
+          index: Number(wrap.dataset.optionIndex),
+          value: checked ? checked.value : null,
+          display: checked ? checked.dataset.label || checked.value : null,
+          input: checked,
+          labelEl: wrap.querySelector('[data-option-value-label]'),
+        };
+      });
+    }
+
+    function update() {
+      const sel = selectedOptions();
+      sel.forEach((s) => {
+        if (s.labelEl) s.labelEl.textContent = s.display || 'Select';
+      });
+      const allChosen = sel.every((s) => s.value !== null);
+      if (!allChosen) {
+        atcButtons.forEach((b) => (b.disabled = true));
+        labels.forEach((l) => (l.textContent = 'Select a size'));
+        return;
+      }
+      const match = variants.find((v) =>
+        sel.every((s) => v.options[s.index] === s.value)
+      );
+      const chosen = sel.map((s) => s.input).filter(Boolean);
+      const isPreorder = chosen.some((i) => i.dataset.preorder === 'true');
+      if (match && match.available) {
+        idInput.value = match.id;
+        atcButtons.forEach((b) => (b.disabled = false));
+        labels.forEach((l) => (l.textContent = isPreorder ? 'Pre-order' : 'Add to bag'));
+        prices.forEach((p) => (p.textContent = match.price));
+        if (hint) {
+          hint.textContent = isPreorder ? 'Pre-order' : 'In stock, dispatched today';
+        }
+      } else {
+        atcButtons.forEach((b) => (b.disabled = true));
+        labels.forEach((l) => (l.textContent = match ? 'Sold out' : 'Unavailable'));
+        if (hint) hint.textContent = 'This combination is not available.';
+      }
+    }
+
+    form.addEventListener('change', (e) => {
+      if (e.target.matches('input[type="radio"]')) update();
+    });
+
+
+    if (form.querySelectorAll('[data-option-index]').length === 0) {
+      atcButtons.forEach((b) => (b.disabled = false));
+      labels.forEach((l) => (l.textContent = 'Add to bag'));
+    } else if (form.querySelectorAll('[data-option-index] input[type="radio"]').length === 0) {
+      // Nothing left to pick: say so rather than asking for a size.
+      // Nothing to buy, but there is something to do: the button opens the
+      // back-in-stock form rather than sitting there dead.
+      atcButtons.forEach((b) => {
+        b.disabled = false;
+        b.dataset.notifyAll = 'true';
+      });
+      labels.forEach((l) => (l.textContent = 'Notify me'));
+      if (hint) hint.textContent = 'Coming soon. Choose a size to hear when it lands.';
+    }
+
+    // ---- Back in stock, the same Klaviyo client-API calls the live theme's
+    // size drawer makes: the Notify Me Request metric, a back-in-stock
+    // subscription on the variant, and the list subscription. ----
+    const notifyPanel = root.querySelector('[data-notify-panel]');
+    if (notifyPanel) {
+      const KLAVIYO_COMPANY = 'YgJzQa';
+      const KLAVIYO_LIST = 'TARW9Y';
+      const sizeGrids = root.querySelectorAll('.guillo-pdp__sizes');
+      const sizeLabel = notifyPanel.querySelector('[data-notify-size-label]');
+      const emailInput = notifyPanel.querySelector('[data-notify-email]');
+      const phoneInput = notifyPanel.querySelector('[data-notify-phone]');
+      const submit = notifyPanel.querySelector('[data-notify-submit]');
+      const msg = notifyPanel.querySelector('[data-notify-msg]');
+      const tabs = notifyPanel.querySelectorAll('[data-notify-tab]');
+      let channel = 'email';
+      let variantId = '';
+
+      const setMsg = (text, ok) => {
+        msg.textContent = text;
+        msg.className = 'guillo-pdp__notify-msg ' + (ok ? 'is-ok' : 'is-err');
+      };
+      const setChannel = (ch) => {
+        channel = ch;
+        tabs.forEach((t) => t.classList.toggle('is-active', t.dataset.notifyTab === ch));
+        emailInput.hidden = ch !== 'email';
+        phoneInput.hidden = ch !== 'sms';
+        setMsg('', true);
+        (ch === 'email' ? emailInput : phoneInput).focus();
+      };
+      tabs.forEach((t) => t.addEventListener('click', () => setChannel(t.dataset.notifyTab)));
+
+      // The add-to-bag button stands in for the size buttons when every size
+      // is gone: it opens the form on the first size, and Back to sizes
+      // switches to another.
+      root.querySelectorAll('[data-atc]').forEach((b) => {
+        b.addEventListener('click', (e) => {
+          if (b.dataset.notifyAll !== 'true') return;
+          e.preventDefault();
+          const first = root.querySelector('[data-notify-open]');
+          if (first) first.click();
+        });
+      });
+
+      root.querySelectorAll('[data-notify-open]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          variantId = btn.dataset.notifyVariant || '';
+          sizeLabel.textContent = btn.dataset.notifySize || '';
+          emailInput.value = '';
+          phoneInput.value = '';
+          notifyPanel.hidden = false;
+          sizeGrids.forEach((g) => (g.hidden = true));
+          setChannel('email');
+          notifyPanel.scrollIntoView({ block: 'nearest' });
+        });
+      });
+
+      const closeBtn = notifyPanel.querySelector('[data-notify-close]');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          notifyPanel.hidden = true;
+          sizeGrids.forEach((g) => (g.hidden = false));
+        });
+      }
+
+      submit.addEventListener('click', () => {
+        const profile = {};
+        if (channel === 'email') {
+          const email = (emailInput.value || '').trim();
+          const at = email.indexOf('@');
+          const dot = email.lastIndexOf('.');
+          if (at < 1 || dot < at + 2 || dot >= email.length - 1) {
+            setMsg('Please enter a valid email address.', false);
+            return;
+          }
+          profile.email = email;
+        } else {
+          let phone = (phoneInput.value || '').replace(/[^0-9+]/g, '');
+          if (phone.charAt(0) !== '+') {
+            if (phone.charAt(0) === '0') phone = '+61' + phone.slice(1);
+            else if (phone.slice(0, 2) === '61') phone = '+' + phone;
+          }
+          if (!/^\+[0-9]{8,15}$/.test(phone)) {
+            setMsg('Please enter a valid mobile number.', false);
+            return;
+          }
+          profile.phone_number = phone;
+        }
+
+        const headers = { 'Content-Type': 'application/json', revision: '2024-10-15' };
+        const d = notifyPanel.dataset;
+        const size = sizeLabel.textContent.trim();
+        submit.disabled = true;
+        const restore = submit.textContent;
+        submit.textContent = 'Sending…';
+
+        fetch('https://a.klaviyo.com/client/events/?company_id=' + KLAVIYO_COMPANY, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ data: { type: 'event', attributes: {
+            properties: {
+              Product: d.productTitle || '', Size: size, 'Variant ID': variantId,
+              'Product URL': d.productUrl || '', 'Product Image': d.productImage || '',
+              Price: d.productPrice || '', Channel: channel
+            },
+            metric: { data: { type: 'metric', attributes: { name: 'Notify Me Request' } } },
+            profile: { data: { type: 'profile', attributes: profile } }
+          } } })
+        }).catch(() => {});
+
+        if (variantId) {
+          fetch('https://a.klaviyo.com/client/back-in-stock-subscriptions/?company_id=' + KLAVIYO_COMPANY, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ data: { type: 'back-in-stock-subscription', attributes: {
+              profile: { data: { type: 'profile', attributes: profile } },
+              channels: [channel === 'email' ? 'EMAIL' : 'SMS']
+            }, relationships: { variant: { data: {
+              type: 'catalog-variant', id: '$shopify:::$default:::' + variantId
+            } } } } })
+          }).catch(() => {});
+        }
+
+        fetch('https://a.klaviyo.com/client/subscriptions/?company_id=' + KLAVIYO_COMPANY, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ data: { type: 'subscription', attributes: {
+            custom_source: 'Back in stock - product page',
+            profile: { data: { type: 'profile', attributes: Object.assign({}, profile, { properties: {
+              'Requested product': d.productTitle || '', 'Requested size': size,
+              'Requested product URL': d.productUrl || '', 'Requested price': d.productPrice || ''
+            } }) } }
+          }, relationships: { list: { data: { type: 'list', id: KLAVIYO_LIST } } } } })
+        })
+          .then((r) => {
+            if (r.ok || r.status === 202) {
+              setMsg(channel === 'email'
+                ? 'Thanks — we’ll email you when it’s back in stock.'
+                : 'Thanks — we’ll text you when it’s back in stock.', true);
+              emailInput.value = '';
+              phoneInput.value = '';
+            } else {
+              setMsg('Sorry, something went wrong. Please try again.', false);
+            }
+          })
+          .catch(() => setMsg('Sorry, something went wrong. Please try again.', false))
+          .then(() => {
+            submit.disabled = false;
+            submit.textContent = restore;
+          });
+      });
+    }
+
+    // Two lines, then Read more - but only where it actually overflows.
+    const descWrap = root.querySelector('[data-desc]');
+    if (descWrap) {
+      const descText = descWrap.querySelector('[data-desc-text]');
+      const descToggle = descWrap.querySelector('[data-desc-toggle]');
+      const measure = () => {
+        descWrap.classList.remove('is-clamped');
+        const line = parseFloat(getComputedStyle(descText).lineHeight) || 24;
+        const overflows = descText.scrollHeight > line * 2 + 1;
+        descWrap.classList.toggle('is-clamped', overflows);
+        descToggle.hidden = !overflows;
+        descToggle.textContent = 'Read more';
+      };
+      descToggle.addEventListener('click', () => {
+        const clamped = descWrap.classList.toggle('is-clamped');
+        descToggle.textContent = clamped ? 'Read more' : 'Read less';
+      });
+      measure();
+      window.addEventListener('resize', measure);
+    }
+
+    // "Size guide" opens the ported Find Your Size modal.
+    const guideOpener = root.querySelector('[data-open-size-guide]');
+    if (guideOpener) {
+      guideOpener.addEventListener('click', () => {
+        const trigger = root.querySelector('.guillo-pdp__sizeguide [data-gfys-open]');
+        if (trigger) trigger.click();
+      });
+    }
+
+    const tabs = root.querySelector('[data-tabs]');
+    if (tabs) {
+      const btns = [...tabs.querySelectorAll('[data-tab-btn]')];
+      const panels = [...tabs.querySelectorAll('[data-tab-panel]')];
+      const setOpen = (index) => {
+        btns.forEach((b) => {
+          const on = b.dataset.tabBtn === String(index);
+          b.classList.toggle('is-open', on);
+          b.setAttribute('aria-expanded', on);
+          b.querySelector('.guillo-pdp__tab-mark').textContent = on ? '−' : '+';
+        });
+        panels.forEach((p) => (p.hidden = p.dataset.tabPanel !== String(index)));
+      };
+      btns.forEach((b) =>
+        b.addEventListener('click', () => {
+          setOpen(b.classList.contains('is-open') ? null : b.dataset.tabBtn);
+        })
+      );
+      {% if section.settings.open_first_tab %}setOpen(0);{% endif %}
+    }
+
+    // Mobile gallery: track the snapped frame and light the matching dash.
+    const gallery = root.querySelector('[data-gallery]');
+    const progress = root.querySelector('[data-gallery-progress-fill]');
+    if (gallery && progress) {
+      const frames = gallery.querySelectorAll('.guillo-pdp__frame');
+      const count = frames.length || 1;
+      const setProgress = (index) => {
+        progress.style.transform = 'translateX(' + index * 100 + '%)';
+      };
+      let ticking = false;
+      const slideTo = (i, smooth) => {
+        const w = gallery.clientWidth || 1;
+        const idx = Math.max(0, Math.min(count - 1, i));
+        const target = idx * w;
+        const prev = gallery.style.scrollBehavior;
+        gallery.style.scrollBehavior = smooth ? 'smooth' : 'auto';
+        gallery.scrollLeft = target;
+        gallery.style.scrollBehavior = prev;
+        setProgress(idx);
+        if (smooth) {
+          setTimeout(() => {
+            if (Math.abs(gallery.scrollLeft - target) > 4) {
+              gallery.style.scrollBehavior = 'auto';
+              gallery.scrollLeft = target;
+              gallery.style.scrollBehavior = prev;
+            }
+          }, 300);
+        }
+      };
+
+      // Drag / swipe. Native overflow scrolling was not reliably picking up
+      // the gesture on device, so the pointer drag is handled here. Move and
+      // release are tracked on the window: pointer capture on the element
+      // fires a pointerleave that would end the drag halfway through.
+      let dragging = false;
+      let startX = 0;
+      let startScroll = 0;
+
+      const onMove = (e) => {
+        if (!dragging) return;
+        gallery.scrollLeft = startScroll - (e.clientX - startX);
+      };
+
+      const endDrag = (e) => {
+        if (!dragging) return;
+        dragging = false;
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', endDrag);
+        window.removeEventListener('pointercancel', endDrag);
+        gallery.classList.remove('is-dragging');
+        const w = gallery.clientWidth || 1;
+        const from = Math.round(startScroll / w);
+        const delta = gallery.scrollLeft - startScroll;
+        // a decisive flick moves one slide; anything smaller returns
+        const step = Math.abs(delta) > w * 0.15 ? (delta > 0 ? 1 : -1) : 0;
+        // position while snapping is still off, or mandatory snap yanks it
+        // back to the nearest point before the new slide is applied
+        slideTo(from + step, false);
+        gallery.style.scrollSnapType = '';
+      };
+
+      gallery.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        dragging = true;
+        startX = e.clientX;
+        startScroll = gallery.scrollLeft;
+        gallery.classList.add('is-dragging');
+        gallery.style.scrollSnapType = 'none';
+        gallery.style.scrollBehavior = 'auto';
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', endDrag);
+        window.addEventListener('pointercancel', endDrag);
+      });
+
+      gallery.addEventListener(
+        'scroll',
+        () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            ticking = false;
+            const width = gallery.clientWidth;
+            if (!width) return;
+            setProgress(Math.round(gallery.scrollLeft / width));
+          });
+        },
+        { passive: true }
+      );
+    }
+
+    // Video tile: centre icon plays, clicking the video pauses. No native
+    // controls, so the icon reappears whenever playback stops.
+    const videoTile = root.querySelector('[data-video-tile]');
+    if (videoTile) {
+      const playBtn = videoTile.querySelector('[data-video-play]');
+      const media = videoTile.querySelector('video');
+      if (playBtn && media) {
+        media.removeAttribute('controls');
+        const showIcon = (show) => {
+          playBtn.hidden = !show;
+        };
+        playBtn.addEventListener('click', () => {
+          media.play().catch(() => showIcon(true));
+        });
+        media.addEventListener('click', () => {
+          if (media.paused) media.play().catch(() => {});
+          else media.pause();
+        });
+        media.addEventListener('play', () => showIcon(false));
+        media.addEventListener('pause', () => showIcon(true));
+        media.addEventListener('ended', () => showIcon(true));
+      }
+    }
+
+    const sticky = root.querySelector('[data-sticky-atc]');
+    if (sticky) {
+      let shown = false;
+      window.addEventListener(
+        'scroll',
+        () => {
+          const on = window.scrollY > 640;
+          if (on !== shown) {
+            shown = on;
+            sticky.hidden = !on;
+          }
+        },
+        { passive: true }
+      );
+    }
+  })();
+</script>
+
+{% stylesheet %}
+  .guillo-pdp { background: var(--g-paper); }
+  .guillo-pdp__crumb-wrap {
+    padding-block: 22px 0;
+    max-width: 1500px;
+    margin-inline: auto;
+  }
+  .guillo-pdp__layout {
+    display: grid;
+    grid-template-columns: 1fr 440px;
+    gap: 52px;
+    padding: 30px 40px 0 0;
+    align-items: start;
+  }
+  .guillo-pdp__gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .guillo-pdp__frame {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--g-canvas);
+  }
+  .guillo-pdp__media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 16%;
+    display: block;
+  }
+  .guillo-pdp__note {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    background: rgb(255 255 255 / 0.9);
+    color: var(--g-ink);
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 7px 10px;
+  }
+  .guillo-pdp__panel {
+    position: sticky;
+    top: 110px;
+    padding-block: 56px;
+  }
+  .guillo-pdp__titlerow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 14px;
+  }
+  .guillo-pdp__title {
+    font: 400 24px/1.2 var(--g-serif);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .guillo-pdp__style {
+    display: block;
+    margin-top: 7px;
+    font: 300 13px/1.2 var(--g-sans);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--g-bronze);
+  }
+  .guillo-pdp__price {
+    font: 400 17px/1 var(--g-sans);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .guillo-pdp__rating {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .guillo-pdp__stars {
+    font: 400 12px/1 var(--g-sans);
+    letter-spacing: 0.3em;
+    color: var(--g-ink);
+  }
+  .guillo-pdp__rating-note {
+    font: 300 12px/1 var(--g-sans);
+    color: var(--g-muted);
+  }
+  .guillo-pdp__desc-wrap { margin-bottom: 12px; }
+  .guillo-pdp__desc {
+    font: 300 14px/1.7 var(--g-sans);
+    color: #464A50;
+    margin: 0;
+  }
+  /* Horizon sets p { display: flow-root }, which beats a plain class here and
+     silently kills the clamp - the box height has to win on specificity. */
+  .guillo-pdp .guillo-pdp__desc-wrap.is-clamped .guillo-pdp__desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .guillo-pdp__desc-more {
+    background: none;
+    border: 0;
+    padding: 0;
+    margin-top: 6px;
+    cursor: pointer;
+    font: 400 12px/1 var(--g-sans);
+    color: var(--g-ink);
+    border-bottom: 1px solid var(--g-ink);
+  }
+  .guillo-pdp__desc-more[hidden] { display: none; }
+  .guillo-pdp__desc-more:hover { color: var(--g-bronze); border-bottom-color: var(--g-bronze); }
+  .guillo-pdp__desc a {
+    color: var(--g-ink);
+    border-bottom: 1px solid var(--g-ink);
+    text-decoration: none;
+  }
+  .guillo-pdp__rule {
+    margin-bottom: 26px;
+    border-bottom: 1px solid var(--g-line);
+    padding-bottom: 2px;
+  }
+  .guillo-pdp__field { margin-bottom: 26px; }
+  .guillo-pdp__field-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .guillo-pdp__field-label {
+    display: block;
+    font: 400 13px/1 var(--g-sans);
+    color: var(--g-ink);
+    margin-bottom: 14px;
+  }
+  .guillo-pdp__field-label span { color: var(--g-muted); }
+  .guillo-pdp__size-guide {
+    font: 500 11px/1 var(--g-sans);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--g-ink);
+    border-bottom: 1px solid var(--g-ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .guillo-pdp__colours {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .guillo-pdp__colours::-webkit-scrollbar { display: none; }
+  .guillo-pdp__colour { flex: 0 0 auto; }
+  .guillo-pdp__colour { text-decoration: none; }
+  .guillo-pdp__colour--soon {
+    cursor: default;
+    pointer-events: none;
+  }
+  .guillo-pdp__colour--soon .guillo-pdp__colour-frame { opacity: 0.45; }
+  .guillo-pdp__colour--soon .guillo-pdp__colour-name { color: var(--g-whisper); }
+  .guillo-pdp__colour-soon {
+    display: block;
+    margin-top: 2px;
+    font: 500 8px/1 var(--g-sans);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--g-bronze);
+  }
+  .guillo-pdp__colour-frame {
+    position: relative;
+    display: block;
+    width: 72px;
+    height: 90px;
+    overflow: hidden;
+    background: var(--g-canvas);
+    outline: 1px solid var(--g-line);
+  }
+  .guillo-pdp__colour--on .guillo-pdp__colour-frame {
+    outline-color: var(--g-ink);
+    outline-offset: 3px;
+  }
+  .guillo-pdp__colour-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 70%;
+  }
+  .guillo-pdp__colour-name {
+    display: block;
+    font: 400 11px/1 var(--g-sans);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-top: 12px;
+    color: var(--g-faint);
+    text-align: center;
+  }
+  .guillo-pdp__colour--on .guillo-pdp__colour-name { color: var(--g-ink); }
+  .guillo-pdp__sizes {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+  }
+  .guillo-pdp__size {
+    /* Horizon's base label styles are flex; make the cell fill its grid track */
+    display: flex;
+    width: 100%;
+  }
+  .guillo-pdp__size input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .guillo-pdp__size span {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    font: 400 12px/1 var(--g-sans);
+    letter-spacing: 0.06em;
+    background: var(--g-paper);
+    color: var(--g-ink);
+    border: 1px solid #CFD1D5;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+  .guillo-pdp__size span {
+    flex-direction: column;
+    gap: 3px;
+  }
+  .guillo-pdp__size-tag {
+    font: 500 7px/1 var(--g-sans);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-style: normal;
+    color: var(--g-whisper);
+  }
+  .guillo-pdp__size-tag--pre { color: var(--g-bronze); }
+  .guillo-pdp__size input:checked + span .guillo-pdp__size-tag { color: inherit; }
+  /* The pre-order sizes explain themselves on hover and on keyboard focus,
+     so there is no separate info icon to find. */
+  .guillo-pdp__size--pre { position: relative; }
+  .guillo-pdp__size-tip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    width: max-content;
+    max-width: 220px;
+    padding: 9px 11px;
+    background: var(--g-ink);
+    color: var(--g-off);
+    font: 300 11px/1.45 var(--g-sans);
+    text-align: left;
+    letter-spacing: 0;
+    text-transform: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+  }
+  .guillo-pdp__size-tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -4px;
+    border: 4px solid transparent;
+    border-top-color: var(--g-ink);
+  }
+  .guillo-pdp__size--pre:hover .guillo-pdp__size-tip,
+  .guillo-pdp__size--pre:focus-within .guillo-pdp__size-tip,
+  .guillo-pdp__size--pre:focus .guillo-pdp__size-tip {
+    opacity: 1;
+    visibility: visible;
+  }
+  .guillo-pdp__info-bubble {
+    position: absolute;
+    bottom: calc(100% + 9px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    width: max-content;
+    max-width: 230px;
+    padding: 10px 12px;
+    background: var(--g-ink);
+    color: var(--g-off);
+    font: 300 11px/1.5 var(--g-sans);
+    text-align: left;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+  }
+  .guillo-pdp__info-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -4px;
+    border: 4px solid transparent;
+    border-top-color: var(--g-ink);
+  }
+  .guillo-pdp__info:hover .guillo-pdp__info-bubble,
+  .guillo-pdp__info:focus-within .guillo-pdp__info-bubble,
+  .guillo-pdp__info-dot[aria-expanded='true'] + .guillo-pdp__info-bubble {
+    opacity: 1;
+    visibility: visible;
+  }
+  .guillo-pdp__size span:hover { border-color: var(--g-ink); }
+  .guillo-pdp__size input:checked + span {
+    background: var(--g-ink);
+    color: var(--g-off);
+    border-color: var(--g-ink);
+  }
+  /* Sold out reads as available-to-ask, not struck through: the size is
+     still a live control that opens the back-in-stock form. */
+  button.guillo-pdp__size {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .guillo-pdp__size--gone span {
+    color: #8E9096;
+    border-style: dashed;
+    border-color: #CFD1D5;
+    background: transparent;
+  }
+  .guillo-pdp__size--gone:hover span {
+    border-color: var(--g-ink);
+    color: var(--g-ink);
+  }
+  .guillo-pdp__notify {
+    margin-top: 14px;
+    padding: 22px;
+    background: var(--g-off);
+    border: 1px solid var(--g-line);
+  }
+  .guillo-pdp__notify-back {
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0 0 16px;
+    cursor: pointer;
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--g-whisper);
+  }
+  .guillo-pdp__notify-back:hover { color: var(--g-ink); }
+  .guillo-pdp__notify-title {
+    font: 500 16px/1.4 var(--g-serif);
+    color: var(--g-ink);
+    margin: 0 0 6px;
+  }
+  .guillo-pdp__notify-sub {
+    font: 300 13px/1.6 var(--g-sans);
+    color: var(--g-muted);
+    margin: 0 0 18px;
+  }
+  .guillo-pdp__notify-tabs {
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid var(--g-line);
+    margin-bottom: 16px;
+  }
+  .guillo-pdp__notify-tab {
+    position: relative;
+    background: none;
+    border: 0;
+    padding: 0 0 10px;
+    cursor: pointer;
+    font: 400 13px/1 var(--g-sans);
+    color: var(--g-whisper);
+  }
+  .guillo-pdp__notify-tab.is-active { color: var(--g-ink); }
+  .guillo-pdp__notify-tab.is-active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--g-ink);
+  }
+  .guillo-pdp__notify-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .guillo-pdp__notify-input {
+    height: 50px;
+    padding: 0 16px;
+    border: 1px solid #CFD1D5;
+    background: var(--g-paper);
+    font: 300 14px/1 var(--g-sans);
+    color: var(--g-ink);
+  }
+  .guillo-pdp__notify-input:focus {
+    outline: none;
+    border-color: var(--g-ink);
+  }
+  .guillo-pdp__notify-submit {
+    height: 50px;
+    border: 0;
+    cursor: pointer;
+    background: var(--g-ink);
+    color: var(--g-off);
+    font: 500 11px/1 var(--g-sans);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .guillo-pdp__notify-submit[disabled] { opacity: 0.5; cursor: default; }
+  .guillo-pdp__notify-msg {
+    font: 300 13px/1.5 var(--g-sans);
+    margin: 12px 0 0;
+    min-height: 1em;
+  }
+  .guillo-pdp__notify-msg.is-ok { color: #2F7D5F; }
+  .guillo-pdp__notify-msg.is-err { color: #B3402F; }
+  .guillo-pdp__size-hint {
+    font: 300 11px/1.6 var(--g-sans);
+    color: var(--g-faint);
+    margin: 11px 0 24px;
+  }
+  .guillo-pdp__atc {
+    width: 100%;
+    height: 56px;
+    background: var(--g-ink);
+    color: var(--g-off);
+    border: 0;
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .guillo-pdp__atc:hover:not(:disabled) { background: var(--g-ink-2); }
+  .guillo-pdp__atc:disabled {
+    cursor: default;
+    opacity: 0.85;
+  }
+  .guillo-pdp__video {
+    position: relative;
+    margin-bottom: 30px;
+  }
+  .guillo-pdp__video-frame {
+    position: relative;
+    aspect-ratio: var(--video-ratio, 1 / 1);
+    overflow: hidden;
+    background: var(--g-canvas);
+  }
+  /* Focal point for the tile: the poster, the video and the still all crop
+     to the same point. */
+  .guillo-pdp__video-media,
+  .guillo-pdp__video-frame video,
+  .guillo-pdp__video-frame img,
+  .guillo-pdp__video-player video {
+    object-position: var(--video-pos, center center);
+    object-fit: var(--video-fit, cover);
+  }
+  .guillo-pdp__video-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .guillo-pdp__video-player video { width: 100%; height: 100%; object-fit: cover; }
+  .guillo-pdp__video-frame video.guillo-pdp__video-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+  }
+  .guillo-pdp__video-play[hidden] { display: none; }
+  .guillo-pdp__video-play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 62px;
+    height: 62px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .guillo-pdp__video-play:hover {
+    background: #fff;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+  .guillo-pdp__video-play span {
+    width: 0;
+    height: 0;
+    margin-left: 4px;
+    border-left: 12px solid var(--g-ink);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+  }
+  /* The ported pair builder brings its own 22px top margin, which left the
+     button floating. Tightened here rather than in the snippet, so that file
+     stays a straight copy of the live one. */
+  .guillo-pdp .gpb { margin-top: 10px; }
+  .guillo-pdp__trust {
+    text-align: center;
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--g-muted);
+    padding: 16px 0 30px;
+  }
+  .guillo-pdp__features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 16px;
+    padding-bottom: 30px;
+  }
+  .guillo-pdp__feature {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font: 500 10px/1.35 var(--g-sans);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--g-ink);
+  }
+  .guillo-pdp__feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 19px;
+    height: 19px;
+    color: var(--g-ink);
+    flex-shrink: 0;
+  }
+  .guillo-pdp__feature-dot {
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--g-ink);
+    transform: rotate(45deg);
+  }
+  button.guillo-pdp__size-guide {
+    background: none;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid var(--g-ink);
+    cursor: pointer;
+  }
+  /* The guide ships its own inline trigger; the Size row link opens it instead. */
+  .guillo-pdp__sizeguide .gfys-trigger { display: none !important; }
+
+  .guillo-pdp__tabbar {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--g-line);
+  }
+  .guillo-pdp__tab-btn {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    padding: 0 0 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    font: 400 13px/1 var(--g-sans);
+    color: var(--g-whisper);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .guillo-pdp__tab-btn:hover { color: var(--g-ink); }
+  .guillo-pdp__tab-btn.is-open {
+    color: var(--g-ink);
+    border-color: var(--g-ink);
+  }
+  .guillo-pdp__tab-mark {
+    font: 300 15px/1 var(--g-sans);
+    color: #A0A3A9;
+  }
+  .guillo-pdp__tab-btn.is-open .guillo-pdp__tab-mark { color: var(--g-ink); }
+  .guillo-pdp__tab-panel {
+    padding-top: 26px;
+    font: 300 14px/1.8 var(--g-sans);
+    color: #464A50;
+    animation: g-fade 0.24s both;
+  }
+  .guillo-pdp__tab-panel p { margin: 0 0 15px; }
+  .guillo-pdp__sticky {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    background: rgb(255 255 255 / 0.97);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--g-line-mid);
+    animation: g-slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .guillo-pdp__sticky-inner {
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+  .guillo-pdp__sticky-thumb {
+    width: 54px;
+    height: 66px;
+    object-fit: cover;
+    object-position: center 16%;
+    background: var(--g-canvas);
+  }
+  .guillo-pdp__sticky-copy { flex: 1; }
+  .guillo-pdp__sticky-title { font: 400 14px/1.3 var(--g-sans); }
+  .guillo-pdp__sticky-price {
+    font: 300 12px/1 var(--g-sans);
+    color: var(--g-faint);
+    margin-top: 4px;
+  }
+  .guillo-pdp__atc--sticky {
+    width: auto;
+    height: 48px;
+    padding: 0 40px;
+  }
+  .guillo-pdp__gallery-wrap { display: contents; }
+  .guillo-pdp__progress { display: none; }
+
+  @media screen and (max-width: 989px) {
+    /* Mobile follows the design's phone layout: title, rating and price sit
+       above a full-bleed swipe gallery, then the rest of the buy panel. The
+       panel becomes `display: contents` so its children can be reordered
+       around the gallery without duplicating the heading in the markup. */
+    .guillo-pdp__layout {
+      display: flex;
+      flex-direction: column;
+      /* Reset the desktop grid's `align-items: start`, which would otherwise
+         shrink every column-flex child to its content width. */
+      align-items: stretch;
+      gap: 0;
+      padding: 0;
+    }
+    .guillo-pdp__crumb-wrap { padding-block: 14px 0; }
+
+    .guillo-pdp__gallery-wrap {
+      display: block;
+      position: relative;
+      order: 3;
+    }
+    .guillo-pdp__panel {
+      display: contents;
+      position: static;
+      padding: 0;
+    }
+    .guillo-pdp__panel > * {
+      order: 4;
+      padding-inline: 20px;
+    }
+    .guillo-pdp__titlerow {
+      order: 1;
+      padding: 20px 20px 11px;
+      margin-bottom: 0;
+      align-items: center;
+    }
+    .guillo-pdp__title { font-size: 17px; }
+    .guillo-pdp__price { font-size: 13px; }
+    .guillo-pdp__rating {
+      order: 2;
+      padding: 0 20px 22px;
+      margin-bottom: 0;
+    }
+    .guillo-pdp__desc { padding-top: 22px; }
+
+    /* One image per screen, swipeable */
+    .guillo-pdp__gallery {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      /* vertical page scroll stays native; horizontal is handled in JS */
+      touch-action: pan-y;
+      cursor: grab;
+      -ms-overflow-style: none;
+      overscroll-behavior-x: contain;
+    }
+    .guillo-pdp__gallery::-webkit-scrollbar { display: none; }
+    .guillo-pdp__frame {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+    }
+    .guillo-pdp__gallery.is-dragging { cursor: grabbing; }
+    .guillo-pdp__gallery img {
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .guillo-pdp__progress {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: rgb(23 24 27 / 0.12);
+      overflow: hidden;
+    }
+    .guillo-pdp__progress-fill {
+      display: block;
+      height: 100%;
+      background: var(--g-ink);
+      transform: translateX(0);
+      transition: transform 0.25s ease;
+    }
+
+    .guillo-pdp__sticky-inner { padding: 10px 16px; }
+    .guillo-pdp__sizes { grid-template-columns: repeat(3, 1fr) !important; }
+    .guillo-pdp__size span { height: 52px; }
+    .guillo-pdp__colour-frame { width: 80px; height: 100px; }
+    /* More colourways than fit the screen scroll rather than clip */
+    .guillo-pdp__colours {
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .guillo-pdp__colours::-webkit-scrollbar { display: none; }
+    .guillo-pdp__colour { flex: 0 0 auto; }
+    /* Centred on a phone as a block rather than per cell: the columns
+       shrink to their content and the pair is centred, so the icons stay
+       aligned down each column instead of stepping in and out. */
+    .guillo-pdp__features {
+      padding-inline: 20px;
+      grid-template-columns: repeat(2, minmax(0, max-content));
+      justify-content: center;
+      column-gap: 34px;
+    }
+    /* Centres both rows of tabs, including the one that wraps. */
+    .guillo-pdp__tabbar { justify-content: center; }
+    .guillo-pdp__video {
+      margin-inline: 20px;
+      padding-inline: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo product",
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  },
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "short_description",
+      "label": "Short description",
+      "info": "Leave blank to use the product’s own description."
+    },
+    {
+      "type": "url",
+      "id": "fit_guide_link",
+      "label": "Fit guide link"
+    },
+    {
+      "type": "url",
+      "id": "size_guide_page",
+      "label": "Size guide link"
+    },
+    {
+      "type": "text",
+      "id": "trust_line",
+      "label": "Trust line",
+      "default": "Same-day dispatch · Free returns for 44 days"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first_tab",
+      "label": "Open first accordion by default",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Second pair upsell"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pair",
+      "label": "Show the second-item builder",
+      "default": false,
+      "info": "Renders nothing on products with no pair discount."
+    },
+    {
+      "type": "header",
+      "content": "Fit video tile"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video_tile",
+      "label": "Show fit video tile",
+      "default": false
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "text",
+      "id": "video_position",
+      "label": "Video focal point",
+      "default": "center center",
+      "info": "Two values only, e.g. “center 20%” — first left→right, second top→bottom. A third value is invalid and is ignored."
+    },
+    {
+      "type": "select",
+      "id": "video_ratio",
+      "label": "Video shape",
+      "default": "1 / 1",
+      "info": "A portrait video in a square tile loses the top and bottom. Give it a taller shape to keep the whole figure.",
+      "options": [
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait 4:5"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Portrait 3:4"
+        },
+        {
+          "value": "9 / 16",
+          "label": "Tall 9:16"
+        },
+        {
+          "value": "16 / 9",
+          "label": "Wide 16:9"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "video_fit",
+      "label": "Video crop",
+      "default": "cover",
+      "info": "“Fill the tile” crops to the focal point. “Show the whole frame” never crops.",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Fill the tile"
+        },
+        {
+          "value": "contain",
+          "label": "Show the whole frame"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster",
+      "label": "Poster image"
+    },
+    {
+      "type": "text",
+      "id": "video_poster_asset",
+      "label": "Poster fallback asset"
+    },
+    {
+      "type": "text",
+      "id": "video_caption",
+      "label": "Caption",
+      "default": "Watch the fit in motion"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "guillo_find_your_size",
+      "name": "Guillo Find Your Size",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Trigger"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Guillo Find Your Size"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icon",
+          "label": "Show ruler icon",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Modal Header"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow label",
+          "default": "Size Guide"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Guillo Find Your Size"
+        },
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Use your body measurements to choose the right Guillo fit."
+        },
+        {
+          "type": "header",
+          "content": "Logo Loader",
+          "info": "Slow pulse while the popup opens. Upload your Guillo logo or paste a URL."
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Loader logo image"
+        },
+        {
+          "type": "text",
+          "id": "logo_url",
+          "label": "or logo image URL"
+        },
+        {
+          "type": "header",
+          "content": "Fit Profile (scale)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_fit_profile",
+          "label": "Show fit profile",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "fit_profile_heading",
+          "label": "Heading",
+          "default": "Fit Profile"
+        },
+        {
+          "type": "text",
+          "id": "fit_profile_left",
+          "label": "Left label",
+          "default": "Relaxed"
+        },
+        {
+          "type": "text",
+          "id": "fit_profile_center",
+          "label": "Centre label (this product)",
+          "default": "Tailored Stretch Fit"
+        },
+        {
+          "type": "text",
+          "id": "fit_profile_right",
+          "label": "Right label",
+          "default": "Skinny"
+        },
+        {
+          "type": "range",
+          "id": "fit_profile_position",
+          "label": "Dot position",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "textarea",
+          "id": "fit_profile_note",
+          "label": "Note",
+          "default": "A modern, tailored fit with ease of movement."
+        },
+        {
+          "type": "header",
+          "content": "How It Fits (image + callouts)",
+          "info": "Upload your product image. Callouts: one per line as  Label|verticalPercent  (0=top, 100=bottom)."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_fit_image",
+          "label": "Show fit image",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "measure_heading",
+          "label": "Heading",
+          "default": "How It Fits"
+        },
+        {
+          "type": "image_picker",
+          "id": "measurement_image",
+          "label": "Fit image"
+        },
+        {
+          "type": "text",
+          "id": "measurement_image_url",
+          "label": "or fit image URL"
+        },
+        {
+          "type": "textarea",
+          "id": "fit_callouts",
+          "label": "Callout labels",
+          "default": "True-to-size waist|18\nRoom through thigh|40\nTapered leg|66\nClean ankle break|90"
+        },
+        {
+          "type": "header",
+          "content": "Size Chart",
+          "info": "One row per line, columns separated by | , first line = header. TOPS e.g. Size|Chest|Shoulder|Length|Sleeve  ·  BOTTOMS e.g. Size|Waist|Inside Leg"
+        },
+        {
+          "type": "text",
+          "id": "chart_heading",
+          "label": "Heading",
+          "default": "Size Chart"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_unit_toggle",
+          "label": "Show CM / IN toggle",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "default_unit",
+          "label": "Default unit",
+          "options": [
+            {
+              "value": "cm",
+              "label": "CM"
+            },
+            {
+              "value": "in",
+              "label": "IN"
+            }
+          ],
+          "default": "cm"
+        },
+        {
+          "type": "textarea",
+          "id": "measurements_cm",
+          "label": "Measurements - CM",
+          "default": "Size|Chest|Shoulder|Length|Sleeve\nXS|92|42|70|62\nS|96|44|72|63\nM|100|46|74|64\nL|106|48|76|65\nXL|112|50|78|66\nXXL|118|52|80|67"
+        },
+        {
+          "type": "textarea",
+          "id": "measurements_in",
+          "label": "Measurements - IN",
+          "default": "Size|Chest|Shoulder|Length|Sleeve\nXS|36.2|16.5|27.6|24.4\nS|37.8|17.3|28.3|24.8\nM|39.4|18.1|29.1|25.2\nL|41.7|18.9|29.9|25.6\nXL|44.1|19.7|30.7|26.0\nXXL|46.5|20.5|31.5|26.4"
+        },
+        {
+          "type": "header",
+          "content": "Fit Notes"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_fit_notes",
+          "label": "Show fit notes",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "fit_notes_heading",
+          "label": "Heading",
+          "default": "Fit Notes"
+        },
+        {
+          "type": "text",
+          "id": "note1_title",
+          "label": "Note 1 - title",
+          "default": "Between sizes?"
+        },
+        {
+          "type": "textarea",
+          "id": "note1_text",
+          "label": "Note 1 - text",
+          "default": "Choose the larger size for more comfort."
+        },
+        {
+          "type": "text",
+          "id": "note2_title",
+          "label": "Note 2 - title",
+          "default": "Prefer a sharper fit?"
+        },
+        {
+          "type": "textarea",
+          "id": "note2_text",
+          "label": "Note 2 - text",
+          "default": "Choose your usual waist size."
+        },
+        {
+          "type": "text",
+          "id": "note3_title",
+          "label": "Note 3 - title",
+          "default": "Bigger thighs?"
+        },
+        {
+          "type": "textarea",
+          "id": "note3_text",
+          "label": "Note 3 - text",
+          "default": "Size up for more room through the upper leg."
+        },
+        {
+          "type": "header",
+          "content": "How They Sit (short / regular / long)",
+          "info": "Best for trousers, chinos and jeans. Upload a small image for each."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sit",
+          "label": "Show 'how they sit'",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "sit_heading",
+          "label": "Heading",
+          "default": "How They Sit"
+        },
+        {
+          "type": "image_picker",
+          "id": "sit1_image",
+          "label": "Short - image"
+        },
+        {
+          "type": "text",
+          "id": "sit1_title",
+          "label": "Short - title",
+          "default": "Short Legs"
+        },
+        {
+          "type": "textarea",
+          "id": "sit1_text",
+          "label": "Short - text",
+          "default": "Sits a touch lower with a slight break for shorter heights."
+        },
+        {
+          "type": "image_picker",
+          "id": "sit2_image",
+          "label": "Regular - image"
+        },
+        {
+          "type": "text",
+          "id": "sit2_title",
+          "label": "Regular - title",
+          "default": "Regular Legs"
+        },
+        {
+          "type": "textarea",
+          "id": "sit2_text",
+          "label": "Regular - text",
+          "default": "Designed to sit cleanly at the ankle for a tailored look."
+        },
+        {
+          "type": "image_picker",
+          "id": "sit3_image",
+          "label": "Long - image"
+        },
+        {
+          "type": "text",
+          "id": "sit3_title",
+          "label": "Long - title",
+          "default": "Long Legs"
+        },
+        {
+          "type": "textarea",
+          "id": "sit3_text",
+          "label": "Long - text",
+          "default": "More break over the shoe for taller builds."
+        },
+        {
+          "type": "header",
+          "content": "International Size Conversion"
+        },
+        {
+          "type": "text",
+          "id": "conversion_heading",
+          "label": "Heading",
+          "default": "International Size Conversion"
+        },
+        {
+          "type": "textarea",
+          "id": "conversion_table",
+          "label": "Conversion table",
+          "default": "Guillo Size|EU|UK|US|Australia|Singapore\nXS|44|34|34|34|XS\nS|46|36|36|36|S\nM|48|38|38|38|M\nL|50|40|40|40|L\nXL|52|42|42|42|XL\nXXL|54|44|44|44|XXL"
+        },
+        {
+          "type": "header",
+          "content": "Recommended Alternative",
+          "info": "Cross-sell a different style when this one runs short or tight."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_reco",
+          "label": "Show recommendation",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "reco_title",
+          "label": "Title",
+          "default": "Too short or too tight?"
+        },
+        {
+          "type": "textarea",
+          "id": "reco_text",
+          "label": "Text",
+          "default": "If these feel snug or short, our roomier cut offers a longer, more relaxed fit."
+        },
+        {
+          "type": "text",
+          "id": "reco_link_label",
+          "label": "Link label",
+          "default": "Discover the alternative"
+        },
+        {
+          "type": "url",
+          "id": "reco_link_url",
+          "label": "Recommended product link"
+        },
+        {
+          "type": "header",
+          "content": "Help Bar"
+        },
+        {
+          "type": "text",
+          "id": "help_title",
+          "label": "Title",
+          "default": "Still unsure?"
+        },
+        {
+          "type": "textarea",
+          "id": "help_text",
+          "label": "Text",
+          "default": "Order your usual size. Easy 44-day returns if the fit isn't right."
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Feature point",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Comfort stretch"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "stretch",
+              "label": "Stretch arrows"
+            },
+            {
+              "value": "slim_fit",
+              "label": "Slim fit"
+            },
+            {
+              "value": "quick_dry",
+              "label": "Quick dry"
+            },
+            {
+              "value": "breathable",
+              "label": "Breathable"
+            },
+            {
+              "value": "no_iron",
+              "label": "No ironing"
+            },
+            {
+              "value": "taper",
+              "label": "Tapered leg"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "refresh",
+              "label": "Returns"
+            },
+            {
+              "value": "dot",
+              "label": "Diamond dot"
+            }
+          ],
+          "default": "stretch"
+        }
+      ]
+    },
+    {
+      "type": "tab",
+      "name": "Accordion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Fit & Care"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guillo product",
+      "category": "Guillo",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "label": "Comfort stretch"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "label": "No ironing"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "label": "Tapered leg"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "label": "Dispatched today"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Fit & Care",
+            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Details",
+            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Shipping",
+            "content": "<p>Dispatched from Brisbane the same afternoon on orders placed before 4pm. Australia and New Zealand 2 to 4 days, Singapore and Hong Kong 4 to 6, the United Kingdom 5 to 8, Europe 6 to 9.</p><p>You do not pay duties or taxes. Every international order ships DDP, so all duties and import taxes are calculated and paid at checkout.</p><p>Free shipping over $150 in Australia.</p>"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Exchanges & Returns",
+            "content": "<p>Free exchanges and returns within 44 days. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

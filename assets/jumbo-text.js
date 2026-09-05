@@ -1,6 +1,5 @@
 import { ResizeNotifier, prefersReducedMotion, yieldToMainThread } from '@theme/utilities';
 import { Component } from '@theme/component';
-import { getScrollContainer, getScrollTop } from '@theme/scroll-container';
 
 /**
  * A custom element that automatically sizes text to fit its container width.
@@ -90,15 +89,9 @@ class JumboText extends Component {
       return;
     }
 
-    // The second pass refines the font size based on actual rendered width.
     // The -0.15 was chosen by trial and error. It doesn't influence large font sizes much, but helps smaller ones fit better.
-    // Use Math.min to ensure we never increase beyond the first pass — font rendering is not
-    // perfectly proportional (scaling by 2x doesn't always produce exactly 2x wider text due
-    // to pixel rounding), so the second pass can overshoot.
-    const secondPassFontSize = Math.min(
-      Math.floor(((firstPassFontSize * containerWidth) / secondPassWidestChildWidth) * 100) / 100 - 0.15,
-      firstPassFontSize
-    );
+    const secondPassFontSize =
+      Math.floor(((firstPassFontSize * containerWidth) / secondPassWidestChildWidth) * 100) / 100 - 0.15;
 
     if (secondPassFontSize !== firstPassFontSize) {
       this.style.fontSize = this.#clampFontSize(secondPassFontSize);
@@ -180,8 +173,8 @@ class JumboText extends Component {
     // Check if jumbo text is close to the bottom of the page. If it is, then use `cap text` instead of `cap alphabetic`.
     // This reserves space for descender characters so they don't overflow and cause extra space at the bottom of the page.
     const rect = this.getBoundingClientRect();
-    const bottom = rect.bottom + getScrollTop();
-    const distanceFromBottom = getScrollContainer().scrollHeight - bottom;
+    const bottom = rect.bottom + window.scrollY;
+    const distanceFromBottom = document.documentElement.offsetHeight - bottom;
     this.dataset.capText = (distanceFromBottom <= 100).toString();
   };
 
@@ -198,3 +191,4 @@ class JumboText extends Component {
 if (!customElements.get('jumbo-text')) {
   customElements.define('jumbo-text', JumboText);
 }
+

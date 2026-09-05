@@ -1,0 +1,709 @@
+/* ==========================================================================
+   GUILLO — Custom Cart Drawer
+   Premium, editorial, black & white. All colours/sizes come from CSS vars
+   set by the section schema (see sections/cart-drawer.liquid).
+   ========================================================================== */
+
+/* ----- Overlay ----------------------------------------------------------- */
+.gcart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 9998;
+  pointer-events: none;
+}
+.gcart-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ----- Drawer shell ------------------------------------------------------ */
+.gcart-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: var(--gcart-width, 440px);
+  max-width: 92vw;
+  background: var(--gcart-bg, #fff);
+  color: var(--gcart-text, #111);
+  font-size: var(--gcart-base-size, 13px);
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 9999;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.08);
+  -webkit-font-smoothing: antialiased;
+}
+.gcart-drawer.is-open {
+  transform: translateX(0);
+}
+
+/* Headings inherit the theme's serif/heading face for a luxury feel */
+.gcart-heading,
+.gcart-title {
+  font-family: var(--g-serif);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Small uppercase "eyebrow" label used throughout */
+.gcart-eyebrow {
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ----- Header ------------------------------------------------------------ */
+.gcart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--gcart-border, var(--g-line));
+  flex: 0 0 auto;
+}
+.gcart-title {
+  font-size: var(--gcart-heading-size, 22px);
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.gcart-count {
+  font-size: 0.55em;
+  color: var(--gcart-muted, var(--g-whisper));
+  letter-spacing: 0.05em;
+}
+.gcart-close {
+  background: none;
+  border: 0;
+  color: var(--gcart-text, #111);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 0;
+  transition: opacity 0.2s ease;
+}
+.gcart-close:hover { opacity: 0.55; }
+
+/* ----- Scrollable body --------------------------------------------------- */
+.gcart-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ----- Line items -------------------------------------------------------- */
+.gcart-item {
+  display: grid;
+  grid-template-columns: var(--gcart-item-img-w, 78px) 1fr auto;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--gcart-border, var(--g-line));
+}
+.gcart-item__media {
+  width: var(--gcart-item-img-w, 78px);
+  aspect-ratio: var(--gcart-item-img-ratio, 4 / 5);
+  background: var(--g-off);
+  overflow: hidden;
+}
+.gcart-item__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.gcart-item__info { min-width: 0; }
+.gcart-item__title {
+  font-size: 0.92em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 4px;
+}
+.gcart-item__title a { color: inherit; text-decoration: none; }
+.gcart-item__variant {
+  font-size: 0.82em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gcart-muted, var(--g-whisper));
+  margin: 0 0 14px;
+}
+
+/* Quantity selector */
+.gcart-qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--gcart-border, #CFD1D5);
+}
+.gcart-qty__btn {
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--gcart-text, #111);
+  font-size: 15px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gcart-qty__btn:disabled { opacity: 0.3; cursor: default; }
+.gcart-qty__value {
+  min-width: 30px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+/* Right column: price + remove */
+.gcart-item__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  text-align: right;
+}
+.gcart-item__price { font-size: 0.95em; }
+.gcart-item__price s { color: var(--gcart-muted, var(--g-whisper)); margin-right: 6px; }
+.gcart-remove {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.74em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gcart-muted, var(--g-whisper));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.gcart-remove:hover { color: var(--gcart-text, #111); }
+
+/* Empty state */
+.gcart-empty {
+  padding: 60px 24px;
+  text-align: center;
+  color: var(--gcart-muted, var(--g-whisper));
+}
+
+/* ----- Build Your Wardrobe ---------------------------------------------- */
+.gcart-wardrobe {
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--gcart-border, var(--g-line));
+}
+.gcart-wardrobe__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gcart-wardrobe__unlocked {
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gcart-accent, #111);
+}
+.gcart-wardrobe__msg {
+  margin: 4px 0 18px;
+  font-style: italic;
+  color: var(--gcart-muted, var(--g-muted));
+  font-size: 0.92em;
+}
+/* Cart-specific pair nudges read as an offer, not a footnote */
+.gcart-wardrobe__msg.is-nudge {
+  font-style: normal;
+  color: var(--gcart-text, #111);
+  font-size: 1em;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Progress bar */
+.gcart-progress { position: relative; }
+.gcart-progress__track {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  right: 6px;
+  height: 1px;
+  background: var(--gcart-border, #CFD1D5);
+}
+.gcart-progress__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background: var(--gcart-accent, #111);
+  transition: width 0.45s ease;
+}
+.gcart-progress__nodes {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+.gcart-progress__node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.gcart-progress__node:first-child { align-items: flex-start; }
+.gcart-progress__node:last-child { align-items: flex-end; }
+.gcart-progress__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--gcart-bg, #fff);
+  border: 1.5px solid var(--gcart-border, #CFD1D5);
+  box-sizing: border-box;
+}
+.gcart-progress__node.is-complete .gcart-progress__dot {
+  background: var(--gcart-accent, #111);
+  border-color: var(--gcart-accent, #111);
+}
+.gcart-progress__label {
+  font-size: 0.7em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gcart-muted, var(--g-whisper));
+  white-space: nowrap;
+}
+.gcart-progress__node.is-complete .gcart-progress__label { color: var(--gcart-text, #111); }
+
+/* ----- Complete the Look (upsells) -------------------------------------- */
+.gcart-upsell { padding: 24px 0 24px 24px; }
+.gcart-upsell__head { padding-right: 24px; }
+.gcart-heading { font-size: var(--gcart-heading-size, 22px); margin: 0; }
+.gcart-upsell__sub {
+  color: var(--gcart-muted, var(--g-whisper));
+  margin: 4px 0 18px;
+}
+.gcart-upsell__scroll {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 6px;
+  padding-right: 24px;
+  scrollbar-width: none;
+}
+.gcart-upsell__scroll::-webkit-scrollbar { display: none; }
+.gcart-upsell__empty { color: var(--gcart-muted, var(--g-whisper)); padding-right: 24px; }
+
+.gcart-card {
+  flex: 0 0 auto;
+  width: var(--gcart-card-w, 130px);
+  scroll-snap-align: start;
+}
+.gcart-card[hidden] { display: none; }
+.gcart-card__media {
+  position: relative;
+  display: block;
+  width: var(--gcart-card-w, 130px);
+  aspect-ratio: var(--gcart-card-ratio, 4 / 5);
+  background: var(--g-ink);
+  overflow: hidden;
+}
+.gcart-card__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gcart-card__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--g-muted);
+  font-size: 0.7em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.gcart-card__add {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border: 0;
+  cursor: pointer;
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.gcart-card__add:hover { background: #111; color: #fff; }
+.gcart-card__add.is-loading { opacity: 0.5; pointer-events: none; }
+.gcart-card__title {
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 12px 0 4px;
+}
+.gcart-card__price { font-size: 0.82em; margin: 0; }
+.gcart-card__price--sale { color: var(--gcart-accent, #111); }
+.gcart-card__price--was { color: var(--gcart-muted, var(--g-whisper)); margin-left: 6px; }
+
+/* Size / variant selector on upsell cards */
+.gcart-card__size {
+  margin-top: 8px;
+  width: 100%;
+  padding: 6px 22px 6px 8px;
+  font-size: 0.74em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gcart-text, #111);
+  background: var(--gcart-bg, #fff);
+  border: 1px solid var(--gcart-border, #CFD1D5);
+  border-radius: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Minimal chevron */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23111' fill='none' stroke-width='1.3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+.gcart-card__size:focus { outline: 1px solid var(--gcart-accent, #111); outline-offset: 1px; }
+/* iOS Safari auto-zooms the whole page when a focused control has text under
+   16px, which leaves the fixed drawer clipped off-screen. Keep touch-device
+   form controls at 16px so the zoom never triggers. */
+@media (pointer: coarse) {
+  .gcart-card__size { font-size: 16px; letter-spacing: 0.02em; padding: 8px 24px 8px 10px; }
+}
+
+/* Pre-order line-item note */
+/* Pre-order line note. Grey small print was too quiet for "this ships weeks
+   from now"; a tinted box was too loud. Navy micro-type with a small dot, in
+   the same uppercase eyebrow language the rest of the drawer already uses. */
+.gcart-item__preorder {
+  margin: 5px 0 0;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: var(--g-ink);
+}
+.gcart-item__preorder::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--g-ink);
+  vertical-align: 1px;
+}
+/* Ships-by date behind an info mark so the line stays two words. Shown on
+   hover for mouse and on focus so a tap or the keyboard reaches it too. */
+.gcart-item__preinfo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  padding: 0;
+  border: 0;
+  background: none;
+  appearance: none;
+  color: inherit;
+  opacity: 0.75;
+  cursor: help;
+  vertical-align: 0;
+  transition: opacity 0.15s ease;
+}
+.gcart-item__preinfo:hover,
+.gcart-item__preinfo:focus { opacity: 1; }
+.gcart-item__preinfo svg { display: block; }
+.gcart-item__preinfo::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  padding: 5px 9px;
+  border-radius: 3px;
+  background: var(--g-ink);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: .02em;
+  text-transform: none;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease;
+}
+/* :focus not :focus-visible - a tap on mobile sets focus but never
+   focus-visible, so the date would be unreachable on phones. */
+.gcart-item__preinfo:hover::after,
+.gcart-item__preinfo:focus::after { opacity: 1; }
+.gcart-item__preinfo:focus { outline: none; }
+.gcart-item__preinfo:focus-visible { outline: 1px solid var(--g-ink); outline-offset: 2px; }
+
+/* ===== Quiet add confirmation (drawer does not auto-open) ================ */
+.gcart-toast {
+  position: fixed;
+  top: calc(var(--gheader-h, 74px) + 12px);
+  left: 50%;
+  transform: translate(-50%, -10px);
+  z-index: 10050;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 32px);
+  background: var(--g-ink);
+  color: #fff;
+  padding: 13px 18px;
+  font-family: var(--g-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.gcart-toast.is-in { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.gcart-toast svg { flex: 0 0 auto; }
+.gcart-toast a { color: #fff; text-decoration: underline; text-underline-offset: 3px; margin-left: 2px; white-space: nowrap; }
+
+@keyframes gcartBump {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.3); }
+  70% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+.gcart-bump { animation: gcartBump 0.5s ease; }
+
+.gcart-fly {
+  position: fixed;
+  z-index: 10060;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: transform 0.55s cubic-bezier(0.3, 0.7, 0.4, 1), opacity 0.55s ease;
+}
+.gcart-fly img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.gcart-btn-rel { position: relative; }
+.gcart-btn-added {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: inherit;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gcart-bump { animation: none; }
+  .gcart-fly { display: none; }
+  .gcart-toast { transition: opacity 0.25s ease; transform: translate(-50%, 0); }
+}
+
+/* ----- Footer (totals + checkout) --------------------------------------- */
+.gcart-footer {
+  flex: 0 0 auto;
+  padding: 20px 24px 22px;
+  border-top: 1px solid var(--gcart-border, var(--g-line));
+  background: var(--gcart-bg, #fff);
+}
+.gcart-totals { margin-bottom: 16px; }
+.gcart-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+}
+.gcart-row[hidden] { display: none; }
+.gcart-row--total {
+  border-top: 1px solid var(--gcart-border, var(--g-line));
+  margin-top: 6px;
+  padding-top: 12px;
+}
+.gcart-row__total-label { font-size: 0.85em; }
+.gcart-row__value { font-size: 0.95em; }
+.gcart-row--subtotal .gcart-row__value.is-struck {
+  text-decoration: line-through;
+  color: var(--gcart-muted, var(--g-whisper));
+}
+.gcart-row__value--free { letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; font-size: 0.82em; }
+.gcart-row__value--minus { color: var(--gcart-accent, #111); }
+.gcart-row--total .gcart-row__value { font-size: 1.05em; font-weight: 700; }
+
+/* Checkout button */
+.gcart-checkout {
+  width: 100%;
+  background: var(--gcart-btn-bg, #000);
+  color: var(--gcart-btn-text, #fff);
+  border: 0;
+  padding: 17px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 0.82em;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+.gcart-checkout:hover { color: var(--gcart-checkout-hover, #2F7D5F); }
+.gcart-checkout:hover .gcart-checkout__lock { opacity: 1; }
+.gcart-checkout:disabled,
+.gcart-checkout.is-disabled { opacity: 0.4; cursor: default; pointer-events: none; }
+.gcart-checkout__lock { flex: 0 0 auto; opacity: 0.85; }
+.gcart-checkout__badge {
+  background: rgba(255, 255, 255, 0.18);
+  padding: 3px 8px;
+  font-size: 0.85em;
+  letter-spacing: 0.08em;
+}
+
+/* Payment + returns */
+.gcart-payment {
+  text-align: center;
+  font-size: 0.84em;
+  color: var(--gcart-text, #111);
+  margin: 14px 0 0;
+}
+.gcart-payment b { font-weight: 700; }
+.gcart-returns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.82em;
+  color: var(--gcart-muted, var(--g-whisper));
+  margin: 12px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--gcart-border, var(--g-line));
+}
+
+/* ----- Loading state ----------------------------------------------------- */
+.gcart-drawer.is-loading .gcart-body { opacity: 0.5; pointer-events: none; }
+
+/* Luxury logo loader (shown on cold open + add-to-cart) */
+.gcart-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: var(--gcart-bg, #fff);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+.gcart-drawer.is-booting .gcart-loader { opacity: 1; visibility: visible; }
+.gcart-loader__logo {
+  width: 120px;
+  height: auto;
+  opacity: 0.9;
+  animation: gcart-pulse 1.7s ease-in-out infinite;
+}
+.gcart-loader__word {
+  font-family: var(--g-serif);
+  font-size: 26px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--gcart-text, #111);
+  padding-left: 0.36em;
+  animation: gcart-pulse 1.7s ease-in-out infinite;
+}
+.gcart-loader__line {
+  position: relative;
+  width: 64px;
+  height: 1px;
+  background: var(--gcart-border, var(--g-line));
+  overflow: hidden;
+}
+.gcart-loader__line::after {
+  content: '';
+  position: absolute;
+  left: -40%;
+  top: 0;
+  width: 40%;
+  height: 100%;
+  background: var(--gcart-accent, #111);
+  animation: gcart-slide 1.3s ease-in-out infinite;
+}
+@keyframes gcart-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+@keyframes gcart-slide { 0% { left: -40%; } 100% { left: 100%; } }
+
+/* Lock page scroll when drawer open */
+body.gcart-open { overflow: hidden; }
+
+/* ----- Mobile ------------------------------------------------------------ */
+/* ----- Keep floating widgets off the open drawer ------------------------
+   The drawer sits at z-index 9999. Shopify Inbox renders <shopify-chat> at
+   2147483000 and the theme's own drawers/popdowns sit at 18000-30000, so all
+   of them paint over the cart. Raising the drawer above the theme's layers and
+   hiding the chat launcher while the drawer is open keeps the totals readable.
+   The cookie banner (2000000) is deliberately left above the drawer so consent
+   is never blocked. */
+.gcart-overlay { z-index: 1499998; }
+.gcart-drawer  { z-index: 1499999; }
+body.gcart-open shopify-chat { display: none !important; }
+
+@media (max-width: 600px) {
+  /* Leave a sliver of the dimmed page showing on the left so the drawer reads
+     as a panel over the store, not a new full-screen page. A full-width
+     takeover on mobile makes people feel they have navigated away. */
+  .gcart-drawer { width: 92%; max-width: 92%; }
+  .gcart-header { padding: 18px 18px 14px; }
+  .gcart-item { padding: 18px; gap: 12px; }
+  .gcart-wardrobe,
+  .gcart-footer { padding-left: 18px; padding-right: 18px; }
+  .gcart-upsell { padding-left: 18px; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .gcart-drawer,
+  .gcart-overlay,
+  .gcart-progress__fill { transition: none; }
+  .gcart-loader__logo,
+  .gcart-loader__word,
+  .gcart-loader__line::after { animation: none; }
+}
+
+/* ----- Duties reassurance under the subtotal --------------------------- */
+.gcart-duties {
+  margin: -4px 0 10px; font-size: 10.5px; letter-spacing: .04em;
+  color: var(--gcart-muted, var(--g-whisper));
+}
+
+/* ----- Matching pieces inside Build Your Wardrobe ---------------------- */
+.gcart-wardrobe .gcart-upsell { margin-top: 16px; padding: 0; }
+.gcart-wardrobe .gcart-upsell__scroll { margin-top: 0; }
+

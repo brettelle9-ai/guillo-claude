@@ -1,0 +1,318 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "guillo-product",
+      "blocks": {
+        "tab1": {
+          "type": "tab",
+          "settings": {
+            "title": "Fit & Care",
+            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+          }
+        },
+        "tab2": {
+          "type": "tab",
+          "settings": {
+            "title": "Details",
+            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+          }
+        },
+        "tab3": {
+          "type": "tab",
+          "settings": {
+            "title": "Shipping",
+            "content": "<p>Dispatched from Brisbane the same afternoon on orders placed before 4pm. Australia and New Zealand 2 to 4 days, Singapore and Hong Kong 4 to 6, the United Kingdom 5 to 8, Europe 6 to 9.</p><p>You do not pay duties or taxes. Every international order ships DDP, so all duties and import taxes are calculated and paid at checkout.</p><p>Free shipping over $150 in Australia.</p>"
+          }
+        },
+        "tab4": {
+          "type": "tab",
+          "settings": {
+            "title": "Exchanges & Returns",
+            "content": "<p>Free exchanges and returns within 44 days. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p>"
+          }
+        },
+        "sizeguide": {
+          "type": "guillo_find_your_size",
+          "settings": {
+            "button_text": "Guillo Find Your Size",
+            "show_icon": true,
+            "eyebrow": "Size Guide",
+            "heading": "Guillo Find Your Size",
+            "subheading": "Use your body measurements to choose the right Guillo fit.",
+            "logo_image": "shopify://shop_images/Black_and_Brown_Stylish_and_Edgy_Black_Friday_Fashion_Sale_Instagram_Post_31.png",
+            "logo_url": "",
+            "show_fit_profile": true,
+            "fit_profile_heading": "Fit Profile",
+            "fit_profile_left": "Relaxed",
+            "fit_profile_center": "Tailored Stretch Fit",
+            "fit_profile_right": "Skinny",
+            "fit_profile_position": 50,
+            "fit_profile_note": "A clean tapered denim cut with comfortable stretch.",
+            "show_fit_image": true,
+            "measure_heading": "How To Measure",
+            "measurement_image": "shopify://shop_images/SmartSize_SIMPLE_SALE_6.png",
+            "measurement_image_url": "",
+            "fit_callouts": "True-to-size waist|18\nComfortable mid rise|40\nTapered leg|66\nClean ankle|90",
+            "chart_heading": "Size Chart",
+            "show_unit_toggle": true,
+            "default_unit": "cm",
+            "measurements_cm": "Size|Waist|Inside Leg\n28\"|71.0|73.0\n30\"|76.0|76.0\n32\"|81.0|78.0\n34\"|86.0|78.0\n36\"|91.5|78.0",
+            "measurements_in": "Size|Waist|Inside Leg\n28\"|28.0|28.7\n30\"|29.9|29.9\n32\"|31.9|30.7\n34\"|33.9|30.7\n36\"|36.0|30.7",
+            "show_fit_notes": true,
+            "fit_notes_heading": "Fit Notes",
+            "note1_title": "Between sizes?",
+            "note1_text": "Choose the larger size for more comfort.",
+            "note2_title": "Prefer a sharper fit?",
+            "note2_text": "Choose your usual waist size.",
+            "note3_title": "Bigger thighs?",
+            "note3_text": "Size up for more room through the upper leg.",
+            "show_sit": true,
+            "sit_heading": "How They Sit",
+            "sit1_title": "Short Legs",
+            "sit1_text": "Sits a touch lower with a slight break for shorter heights.",
+            "sit2_title": "Regular Legs",
+            "sit2_text": "Designed to sit cleanly at the ankle for a tailored look.",
+            "sit3_title": "Long Legs",
+            "sit3_text": "More break over the shoe for taller builds.",
+            "conversion_heading": "International Size Conversion",
+            "conversion_table": "Guillo Size|EU|UK|US|Australia|Singapore\\nXS|44|34|34|34|XS\\nS|46|36|36|36|S\\nM|48|38|38|38|M\\nL|50|40|40|40|L\\nXL|52|42|42|42|XL\\nXXL|54|44|44|44|XXL",
+            "show_reco": true,
+            "reco_title": "Prefer a chino?",
+            "reco_text": "The Luxe Chino has the same tapered line in a stretch twill.",
+            "reco_link_label": "Discover the alternative",
+            "reco_link_url": "",
+            "help_title": "Still unsure?",
+            "help_text": "<p>Need help? Message us and we'll recommend your best size.</p>"
+          }
+        },
+        "feat1": {
+          "type": "feature",
+          "settings": {
+            "label": "Comfort stretch",
+            "icon": "stretch"
+          }
+        },
+        "feat2": {
+          "type": "feature",
+          "settings": {
+            "label": "Breathable",
+            "icon": "breathable"
+          }
+        },
+        "feat3": {
+          "type": "feature",
+          "settings": {
+            "label": "Quick dry",
+            "icon": "quick_dry"
+          }
+        },
+        "feat4": {
+          "type": "feature",
+          "settings": {
+            "label": "Tapered leg",
+            "icon": "taper"
+          }
+        }
+      },
+      "block_order": [
+        "feat1",
+        "feat2",
+        "feat3",
+        "feat4",
+        "tab1",
+        "tab2",
+        "tab3",
+        "tab4",
+        "sizeguide"
+      ],
+      "settings": {
+        "fit_guide_link": "shopify://pages/fit-guide",
+        "size_guide_page": "shopify://pages/fit-guide",
+        "trust_line": "Same-day dispatch · 44-day returns and exchanges",
+        "show_pair": true,
+        "show_video_tile": true,
+        "video_caption": "Watch the fit in motion",
+        "short_description": "A clean tapered cut on a comfortable mid rise. Stretch denim that moves with you and recovers its shape."
+      }
+    },
+    "trust": {
+      "type": "guillo-trust",
+      "blocks": {
+        "card1": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Fast, tracked shipping",
+            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order."
+          }
+        },
+        "card2": {
+          "type": "card",
+          "settings": {
+            "icon": "refresh",
+            "title": "Easy 44 day returns",
+            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
+          }
+        },
+        "card3": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Duties and taxes covered",
+            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship."
+          }
+        }
+      },
+      "block_order": [
+        "card1",
+        "card2",
+        "card3"
+      ],
+      "settings": {
+        "show_press": true,
+        "press_logo_alt": "7NEWS",
+        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
+      }
+    },
+    "anatomy": {
+      "type": "guillo-anatomy",
+      "blocks": {
+        "cl1": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Clean tapered cut",
+            "text": "A comfortable mid rise with a taper that holds its line.",
+            "spec": "Mid rise"
+          }
+        },
+        "cl2": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Sizing",
+            "text": "Take your usual waist size.",
+            "spec": "Sizes 28 to 36"
+          }
+        },
+        "cr1": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Stretch denim",
+            "text": "Moves with you and recovers its shape. No bagging at the knees.",
+            "spec": "Comfortable stretch"
+          }
+        },
+        "cr2": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Wear it either way",
+            "text": "A tee and sneakers on the weekend, a shirt and loafers after dark.",
+            "spec": "Structure kept"
+          }
+        }
+      },
+      "block_order": [
+        "cl1",
+        "cl2",
+        "cr1",
+        "cr2"
+      ],
+      "settings": {
+        "heading": "The Torino, denim without the stiffness.",
+        "image_position": "center 74%"
+      }
+    },
+    "reviews": {
+      "type": "guillo-pdp-reviews",
+      "settings": {
+        "heading": "Worn, washed, reported back.",
+        "fit_marker": 50
+      }
+    },
+    "faq": {
+      "type": "guillo-faq",
+      "blocks": {
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "How do they fit?",
+            "answer": "<p>A clean tapered cut with a comfortable mid rise. Take your usual waist size.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "What is the fabric?",
+            "answer": "<p>A stretch denim that moves with you and recovers its shape. No bagging at the knees.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "Are they comfortable for all day wear?",
+            "answer": "<p>Yes. The stretch takes the stiffness out of denim without losing the structure.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "What should I pair them with?",
+            "answer": "<p>A tee and sneakers on the weekend. A shirt and loafers after dark. The Torino works wherever the day goes.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>Complimentary returns &amp; exchanges within 44 days for AU/NZ orders. International orders: 44-day returns and exchanges, return shipping paid by the customer. All returns via our self-service portal, no emails, no waiting.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "question": "When will they arrive?",
+            "answer": "<p>All orders dispatched within 24 hours. Standard delivery to Australia in 2 to 8 business days. Express in 1 to 4. International shipping available to Singapore, UK, US and Europe.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6"
+      ],
+      "settings": {
+        "layout": "split",
+        "eyebrow": "Questions",
+        "heading": "Before you order.",
+        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time."
+      }
+    },
+    "wear": {
+      "type": "guillo-wear-with",
+      "settings": {
+        "heading": "Wear it with",
+        "products_to_show": 8
+      }
+    }
+  },
+  "order": [
+    "main",
+    "wear",
+    "trust",
+    "anatomy",
+    "reviews",
+    "faq"
+  ]
+}
+

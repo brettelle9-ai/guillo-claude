@@ -1,0 +1,103 @@
+{% comment %}
+  Brand story split: eyebrow, large statement, supporting copy and link on
+  the left; full-bleed image on the right.
+{% endcomment %}
+
+<section class="guillo-story{% if section.settings.flip %} guillo-story--flip{% endif %}">
+  <div class="guillo-story__panel">
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="g-eyebrow guillo-story__eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <p class="guillo-story__statement">{{ section.settings.statement }}</p>
+    {%- if section.settings.text != blank -%}
+      <p class="guillo-story__text">{{ section.settings.text }}</p>
+    {%- endif -%}
+    {%- if section.settings.link_label != blank -%}
+      <a href="{{ section.settings.link }}" class="g-link">{{ section.settings.link_label }}</a>
+    {%- endif -%}
+  </div>
+  <div class="guillo-story__media">
+    {% render 'guillo-img',
+      image: section.settings.image,
+      fallback: 'guillo-brown-04.jpg',
+      alt: section.settings.image_alt,
+      class: 'guillo-story__img',
+      sizes: '(min-width: 750px) 45vw, 100vw',
+      position: section.settings.image_position
+    %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-story {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    background: var(--g-paper);
+  }
+  .guillo-story--flip .guillo-story__panel { order: 2; }
+  .guillo-story__panel {
+    padding: 110px 88px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .guillo-story__eyebrow {
+    letter-spacing: 0.3em;
+    margin-bottom: 24px;
+  }
+  .guillo-story__statement {
+    font: 400 29px/1.5 var(--g-sans);
+    letter-spacing: -0.005em;
+    color: var(--g-ink);
+    margin: 0 0 30px;
+    max-width: 560px;
+  }
+  .guillo-story__text {
+    font: 300 16px/1.75 var(--g-sans);
+    color: var(--g-muted);
+    margin: 0 0 34px;
+    max-width: 520px;
+  }
+  .guillo-story__media {
+    position: relative;
+    min-height: 660px;
+    background: var(--g-canvas);
+  }
+  .guillo-story__img,
+  .guillo-story__media svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media screen and (max-width: 989px) {
+    .guillo-story { grid-template-columns: 1fr; }
+    .guillo-story--flip .guillo-story__panel { order: 0; }
+    .guillo-story__panel { padding: 56px 24px; }
+    .guillo-story__media { min-height: 80vw; }
+    .guillo-story__statement { font-size: 23px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo story split",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Brisbane, 2024" },
+    { "type": "textarea", "id": "statement", "label": "Statement", "default": "We started Guillo because everything on the rack was either too baggy, too stiff, or cut for someone else." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Designed for movement, escapes and life beyond routine. Brought to life in Brisbane, made in small runs, and worn hard before it ever reaches the site." },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Our story" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Man seated wearing a navy blazer and brown Signore Chino" },
+    { "type": "text", "id": "image_position", "label": "Image focal point", "default": "center 22%" },
+    { "type": "checkbox", "id": "flip", "label": "Text on the right", "default": false }
+  ],
+  "presets": [
+    { "name": "Guillo story split", "category": "Guillo" }
+  ]
+}
+{% endschema %}
+

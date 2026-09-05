@@ -12,33 +12,123 @@
   "name": "t:names.header",
   "sections": {
     "header_announcements_9jGBFp": {
-      "type": "header-announcements",
+      "type": "guillo-announcement",
       "blocks": {
-        "announcement_BxgCk9": {
-          "type": "_announcement",
+        "msg1": {
+          "type": "message",
           "settings": {
-            "text": "Welcome to our store",
-            "link": "",
-            "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
-            "weight": "",
-            "letter_spacing": "normal",
-            "case": "none"
-          },
-          "blocks": {}
+            "text": "Free 44-day returns and exchanges across Australia and New Zealand",
+            "text_mobile": "Free 44-day returns AU & NZ",
+            "accent": false,
+            "only_countries": "",
+            "not_countries": "GB,SG"
+          }
+        },
+        "msg2": {
+          "type": "message",
+          "settings": {
+            "text": "Build your wardrobe. Three pieces or more, 20% off.",
+            "text_mobile": "Three pieces or more, 20% off",
+            "accent": true,
+            "only_countries": "",
+            "not_countries": "GB,SG"
+          }
+        },
+        "msg3": {
+          "type": "message",
+          "settings": {
+            "text": "Free express shipping over $200",
+            "text_mobile": "Free express shipping over $200",
+            "accent": false,
+            "only_countries": "",
+            "not_countries": "GB,SG"
+          }
+        },
+        "msg4": {
+          "type": "message",
+          "settings": {
+            "text": "Same-day dispatch before 4pm AEST",
+            "text_mobile": "Same-day dispatch before 4pm AEST",
+            "accent": false,
+            "only_countries": "",
+            "not_countries": "GB,SG"
+          }
+        },
+        "msg5": {
+          "type": "message",
+          "settings": {
+            "text": "Free UK delivery on orders over £65",
+            "text_mobile": "Free UK delivery over £65",
+            "accent": false,
+            "only_countries": "GB",
+            "not_countries": ""
+          }
+        },
+        "msg6": {
+          "type": "message",
+          "settings": {
+            "text": "All prices include customs duties and taxes",
+            "text_mobile": "Duties and taxes included",
+            "accent": true,
+            "only_countries": "GB",
+            "not_countries": ""
+          }
+        },
+        "msg7": {
+          "type": "message",
+          "settings": {
+            "text": "44-day returns and exchanges",
+            "text_mobile": "44-day returns and exchanges",
+            "accent": false,
+            "only_countries": "GB",
+            "not_countries": ""
+          }
+        },
+        "msg8": {
+          "type": "message",
+          "settings": {
+            "text": "Free Singapore delivery on orders over $250",
+            "text_mobile": "Free delivery over $250",
+            "accent": false,
+            "only_countries": "SG",
+            "not_countries": ""
+          }
+        },
+        "msg9": {
+          "type": "message",
+          "settings": {
+            "text": "Same-day dispatch before 1pm SGT",
+            "text_mobile": "Same-day dispatch before 1pm SGT",
+            "accent": false,
+            "only_countries": "SG",
+            "not_countries": ""
+          }
+        },
+        "msg10": {
+          "type": "message",
+          "settings": {
+            "text": "All prices include customs duties and taxes",
+            "text_mobile": "Duties and taxes included",
+            "accent": true,
+            "only_countries": "SG",
+            "not_countries": ""
+          }
         }
       },
       "block_order": [
-        "announcement_BxgCk9"
+        "msg1",
+        "msg2",
+        "msg3",
+        "msg4",
+        "msg5",
+        "msg6",
+        "msg7",
+        "msg8",
+        "msg9",
+        "msg10"
       ],
-      "name": "t:names.announcement_bar",
       "settings": {
-        "speed": 5,
-        "section_width": "page-width",
-        "divider_width": 1,
-        "padding-block-start": 15,
-        "padding-block-end": 15,
-        "divider_color": "{{ settings.color_palette.color3 }}"
+        "rotate_seconds": 6
       }
     },
     "header_section": {
@@ -50,7 +140,9 @@
           "settings": {
             "hide_logo_on_home_page": false,
             "padding-block-start": 0,
-            "padding-block-end": 0
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -58,7 +150,8 @@
           "type": "_header-menu",
           "static": true,
           "settings": {
-            "menu": "main-menu",
+            "menu": "guillo-redesign-main",
+            "color_scheme": "scheme-4",
             "type_font_primary_size": "0.875rem",
             "menu_font_style": "inverse",
             "type_font_primary_link": "body",
@@ -68,6 +161,7 @@
             "featured_collections_aspect_ratio": "16 / 9",
             "image_border_radius": 0,
             "navigation_bar": false,
+            "color_scheme_navigation_bar": "",
             "drawer_accordion": false,
             "drawer_accordion_expand_first": false,
             "drawer_dividers": false
@@ -82,9 +176,9 @@
         "show_search": true,
         "search_position": "right",
         "search_row": "top",
-        "show_country": true,
+        "show_country": false,
         "country_selector_style": false,
-        "show_language": true,
+        "show_language": false,
         "localization_font": "heading",
         "localization_font_size": "0.875rem",
         "localization_position": "right",
@@ -95,9 +189,18 @@
         "divider_width": 0,
         "divider_size": "page-width",
         "border_width": 0,
+        "color_scheme_top": "scheme-4",
+        "color_scheme_bottom": "scheme-4",
+        "color_scheme_transparent": "scheme-6",
         "enable_transparent_header_home": false,
+        "home_color_scheme": "inverse",
         "enable_transparent_header_product": false,
-        "enable_transparent_header_collection": false
+        "product_color_scheme": "default",
+        "enable_transparent_header_collection": false,
+        "collection_color_scheme": "default",
+        "actions_display_style": "text",
+        "actions_text_case": "uppercase",
+        "actions_font_size": "0.75rem"
       }
     }
   },
@@ -106,3 +209,4 @@
     "header_section"
   ]
 }
+

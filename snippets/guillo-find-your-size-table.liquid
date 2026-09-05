@@ -1,0 +1,52 @@
+{%- comment -%}
+  ============================================================================
+  GUILLO – FIND YOUR SIZE · table renderer
+  ----------------------------------------------------------------------------
+  Turns a plain text box into a clean, responsive, horizontally-scrollable
+  table. One row per line, cells separated by "|". First line = header row.
+
+  Params:
+    data : the multiline text (e.g. settings.measurements_cm)
+    unit : optional string ('cm' / 'in' / '') appended after numeric header
+           cells purely for display. Pass '' to skip.
+
+  Example input:
+    Size|Chest|Shoulder|Length|Sleeve
+    XS|92|42|70|62
+  ============================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign rows = data | strip | replace: '\n', '<br />' | newline_to_br | split: '<br />'
+  assign header_row = rows | first
+  assign header_cells = header_row | strip | split: '|'
+-%}
+
+{%- if data != blank and rows.size > 0 -%}
+  <div class="gfys-table-wrap">
+    <div class="gfys-scroll">
+      <table class="gfys-table">
+        <thead>
+          <tr>
+            {%- for cell in header_cells -%}
+              <th>{{ cell | strip | escape }}</th>
+            {%- endfor -%}
+          </tr>
+        </thead>
+        <tbody>
+          {%- for row in rows offset: 1 -%}
+            {%- assign cells = row | strip | split: '|' -%}
+            {%- if cells.size > 0 -%}
+              <tr>
+                {%- for cell in cells -%}
+                  <td>{{ cell | strip | escape }}</td>
+                {%- endfor -%}
+              </tr>
+            {%- endif -%}
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{%- endif -%}
+

@@ -1,0 +1,41 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "guillo-collection-banner",
+      "settings": {
+        "fallback_asset": "guillo-brown-01.jpg"
+      }
+    },
+    "grid": {
+      "type": "guillo-collection-grid",
+      "settings": {
+        "filter_chips": "Slim fit:slim-fit, Stretch:stretch, Under $120:under-120",
+        "show_quick_add": true,
+        "show_break": true,
+        "break_eyebrow": "Not sure of your size",
+        "break_heading": "Two minutes now beats a return in a fortnight.",
+        "break_text": "The fit guide compares every cut side by side, with the waist and thigh measurements laid out plainly.",
+        "break_link_label": "Open the fit guide",
+        "break_link": "shopify://pages/fit-guide",
+        "seo_title_1": "Leather made to travel",
+        "seo_text_1": "<p>Belts and leather goods built to be packed, carried and used, with dimensions listed on each product so you can check them against your carry-on.</p>",
+        "seo_title_2": "Looking after it",
+        "seo_text_2": "<p>Spot clean with a damp cloth and air dry. Keep it out of prolonged direct sunlight and the leather will darken slowly rather than dry out.</p>"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "grid"
+  ]
+}
+

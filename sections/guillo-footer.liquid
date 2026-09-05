@@ -1,0 +1,167 @@
+{% comment %}
+  Near-black Guillo footer: logo + brand line, three menu columns,
+  copyright row with payment chips.
+{% endcomment %}
+
+<footer class="guillo-footer g-pad">
+  <div class="g-container">
+    <div class="guillo-footer__grid">
+      <div class="guillo-footer__brand">
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 400 | image_tag: class: 'guillo-footer__logo', alt: shop.name }}
+        {%- else -%}
+          <img src="{{ 'guillo-logo-white.png' | asset_url }}" alt="{{ shop.name }}" class="guillo-footer__logo" loading="lazy" width="720" height="120">
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <p class="guillo-footer__tagline">{{ section.settings.text }}</p>
+        {%- endif -%}
+      </div>
+      {%- for block in section.blocks -%}
+        <div class="guillo-footer__col" {{ block.shopify_attributes }}>
+          <div class="guillo-footer__col-title">{{ block.settings.title | default: block.settings.menu.title }}</div>
+          <div class="guillo-footer__links">
+            {%- for link in block.settings.menu.links -%}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="guillo-footer__bottom">
+      <span class="guillo-footer__copyright">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright_note }}</span>
+      {%- if section.settings.payment_labels != blank -%}
+        <div class="guillo-footer__payments">
+          {%- assign labels = section.settings.payment_labels | split: ',' -%}
+          {%- for label in labels -%}
+            <span class="guillo-footer__payment-chip">{{ label | strip }}</span>
+          {%- endfor -%}
+        </div>
+      {%- elsif section.settings.show_payment_icons -%}
+        <div class="guillo-footer__payments">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'guillo-footer__payment-icon' }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% stylesheet %}
+  .guillo-footer {
+    background: var(--g-black);
+    color: var(--g-faint);
+    padding-block: 70px 34px;
+  }
+  .guillo-footer__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 56px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid #202226;
+  }
+  .guillo-footer__logo {
+    height: 26px;
+    width: auto;
+    margin-bottom: 26px;
+    display: block;
+  }
+  .guillo-footer__tagline {
+    font: 300 14px/1.75 var(--g-sans);
+    color: var(--g-faint);
+    margin: 0;
+    max-width: 300px;
+  }
+  .guillo-footer__col-title {
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--g-off);
+    margin-bottom: 20px;
+  }
+  .guillo-footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .guillo-footer__links a {
+    font: 300 14px/1 var(--g-sans);
+    color: var(--g-faint);
+    text-decoration: none;
+  }
+  .guillo-footer__links a:hover { color: var(--g-off); }
+  .guillo-footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding-top: 26px;
+    flex-wrap: wrap;
+  }
+  .guillo-footer__copyright {
+    font: 300 12px/1 var(--g-sans);
+    color: #4C4E54;
+  }
+  .guillo-footer__payments {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .guillo-footer__payment-icon {
+    height: 24px;
+    width: auto;
+    opacity: 0.55;
+  }
+  .guillo-footer__payment-chip {
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #4C4E54;
+    border: 1px solid #202226;
+    padding: 8px 11px;
+  }
+  @media screen and (max-width: 989px) {
+    .guillo-footer__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .guillo-footer__brand { grid-column: 1 / -1; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo footer",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo (light)" },
+    { "type": "textarea", "id": "text", "label": "Brand line", "default": "Designed for movement, escapes and life beyond routine. Brought to life in Brisbane." },
+    { "type": "text", "id": "copyright_note", "label": "Copyright note", "default": "Brisbane, Australia." },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment icons", "default": true },
+    { "type": "text", "id": "payment_labels", "label": "Payment text chips", "info": "Comma-separated labels rendered as bordered chips instead of icons.", "default": "Afterpay, Visa, Mastercard, Apple Pay, Paypal" }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu column",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Guillo footer",
+      "category": "Guillo",
+      "blocks": [
+        { "type": "menu", "settings": { "title": "Shop" } },
+        { "type": "menu", "settings": { "title": "Help" } },
+        { "type": "menu", "settings": { "title": "Guillo" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

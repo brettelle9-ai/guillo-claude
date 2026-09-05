@@ -18,3 +18,4 @@ class VolumePricingComponent extends Component {
 if (!customElements.get('volume-pricing')) {
   customElements.define('volume-pricing', VolumePricingComponent);
 }
+

@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "blocks": {
     "load_video": "Ladda video: {{ description }}",
@@ -64,24 +73,15 @@
     "nested_product": "{{ product_title }} för {{ parent_title }}",
     "remove": "Ta bort",
     "view_pricing_info": "Visa prissättningsinformation",
+    "open_hotspot": "Öppna hotspot",
     "slideshow": "Bildspel",
-    "header_navigation_label": "Primär",
-    "home_logo_alt": "{{ store_name }} – Startsida",
-    "active_filters": "Aktiva filter:",
-    "product_details": "Produktdetaljer",
-    "show_product_details": "Visa produktdetaljer för {{ product_name }}",
-    "show_submenu": "Visa undermeny för {{ title }}",
-    "featured_product": "Utvald produkt",
-    "search_suggestions_available": "Sökförslag tillgängliga för \"{{ query }}\"",
-    "price_filter_low": "Lågt pris",
-    "price_filter_high": "Högt pris",
-    "view_disclosure_information_for_product": "Visa produktupplysningar för {{ product_title }}"
+    "header_navigation_label": "Primär"
   },
   "actions": {
     "add_to_cart": "Lägg till i varukorgen",
     "clear_all": "Rensa alla",
     "remove": "Ta bort",
-    "view_in_your_space": "Visa i din miljö",
+    "view_in_your_space": "Visa i ditt utrymme",
     "show_filters": "Filter",
     "clear": "Rensa",
     "continue_shopping": "Fortsätt handla",
@@ -115,10 +115,7 @@
     "sign_up": "Registrera dig",
     "sort": "Sortera",
     "show_all_options": "Visa alla alternativ",
-    "open": "Öppna",
-    "back_to": "Tillbaka till {{ title }}",
-    "back_to_main_menu": "Tillbaka till huvudmenyn",
-    "zoom_media": "Zooma media {{ index }}"
+    "open": "Öppna"
   },
   "content": {
     "reviews": "recensioner",
@@ -132,7 +129,7 @@
     "quantity": "Kvantitet",
     "product_total": "Produkter totalt",
     "cart_estimated_total": "Beräknad totalsumma",
-    "seller_note": "Särskilda anvisningar",
+    "seller_note": "Särskilda instruktioner",
     "cart_subtotal": "Delsumma",
     "discounts": "Rabatter",
     "discount": "Rabatt",
@@ -216,7 +213,7 @@
     "taxes_at_checkout_shipping_at_checkout_without_policy_without_discounts": "Skatt och frakt beräknas i kassan.",
     "taxes_included_shipping_at_checkout_with_policy_without_discounts_html": "Skatter ingår. Frakt beräknas i kassan.",
     "taxes_included_shipping_at_checkout_without_policy_without_discounts": "Skatter ingår. Frakt beräknas i kassan.",
-    "view_more_details": "Visa mer information",
+    "view_more_details": "Visa fler uppgifter",
     "page_placeholder_title": "Sidrubrik",
     "page_placeholder_content": "Välj en sida om du vill visa dess innehåll.",
     "placeholder_image": "Platshållarbild",
@@ -247,7 +244,7 @@
     "product_custom_property_character_count": "{{ used_chars }}/{{ max_chars }} tecken har använts",
     "terms_and_policies": "Villkor och policyer",
     "pagination": {
-      "nav_label": "Paginering",
+      "nav_label": "Navigering av paginering",
       "previous": "Föregående",
       "next": "Nästa",
       "page": "Sidan {{ page }}"
@@ -274,9 +271,7 @@
       "one": "1 artikel har lagts till i varukorgen",
       "other": "{{ count }} artiklar har lagts till i varukorgen"
     },
-    "item_count_cutoff": "Fler än {{ count }} artiklar",
-    "quick_order_list": "Snabborderlista",
-    "product_disclosures": "Produktupplysningar"
+    "item_count_cutoff": "Fler än {{ count }} artiklar"
   },
   "gift_cards": {
     "issued": {
@@ -342,6 +337,51 @@
       "in_cart": "i varukorg",
       "default_title": "Standardtitel",
       "sticky_add_to_cart": "Fält för att lägga till snabbt i varukorgen"
+    }
+  },
+  "pagefly": {
+    "products": {
+      "product": {
+        "regular_price": "Regular price",
+        "sold_out": "Sold out",
+        "unavailable": "Unavailable",
+        "on_sale": "Sale",
+        "quantity": "Quantity",
+        "add_to_cart": "Add to cart",
+        "back_to_collection": "Back to {{ title }}",
+        "view_details": "View details"
+      }
+    },
+    "article": {
+      "tags": "Tags:",
+      "all_topics": "All topics",
+      "by_author": "by {{ author }}",
+      "posted_in": "Posted in",
+      "read_more": "Read more",
+      "back_to_blog": "Back to {{ title }}"
+    },
+    "comments": {
+      "title": "Leave a comment",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "post": "Post comment",
+      "moderated": "Please note, comments must be approved before they are published",
+      "success_moderated": "Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.",
+      "success": "Your comment was posted successfully! Thank you!",
+      "comments_with_count": {
+        "one": "{{ count }} comment",
+        "other": "{{ count }} comments"
+      }
+    },
+    "password_page": {
+      "login_form_message": "Enter store using password:",
+      "login_form_password_label": "Password",
+      "login_form_password_placeholder": "Your password",
+      "login_form_submit": "Enter",
+      "signup_form_email_label": "Email",
+      "signup_form_success": "We will send you an email right before we open!",
+      "password_link": "Enter using password"
     }
   }
 }

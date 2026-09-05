@@ -120,4 +120,13 @@
   {{ controls }}
 </slideshow-component>
 
-{% render 'slideshow-styles' %}
+{% stylesheet %}
+  slideshow-slides {
+    align-items: var(--slideshow-align-items, normal);
+  }
+
+  .slideshow--stretch-content slideshow-slides > * {
+    height: auto;
+  }
+{% endstylesheet %}
+

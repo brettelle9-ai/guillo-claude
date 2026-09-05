@@ -1661,3 +1661,4 @@ export function QRCode(el, vOption) {
     this.makeCode(this._htOption.text);
   }
 }
+

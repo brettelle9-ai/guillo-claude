@@ -1,0 +1,117 @@
+{% comment %}
+  Page hero for guides (e.g. the Fit Guide): breadcrumb, serif title, intro
+  paragraph, and an indexed list of on-page anchor links.
+{% endcomment %}
+
+<section class="guillo-phero g-pad">
+  <div class="g-container">
+    <nav class="g-breadcrumb guillo-phero__crumb" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="g-breadcrumb__sep">/</span>
+      {{ section.settings.title | default: page.title }}
+    </nav>
+    <div class="guillo-phero__grid">
+      <div>
+        <h1 class="guillo-phero__title">{{ section.settings.title | default: page.title }}</h1>
+        {%- if section.settings.intro != blank -%}
+          <p class="guillo-phero__intro">{{ section.settings.intro }}</p>
+        {%- endif -%}
+      </div>
+      {%- if section.blocks.size > 0 -%}
+        <div class="guillo-phero__toc">
+          {%- for block in section.blocks -%}
+            <a href="#{{ block.settings.anchor }}" {{ block.shopify_attributes }}>
+              <span>{{ block.settings.label }}</span>
+              <span class="guillo-phero__toc-num">{{ forloop.index | prepend: '0' }}</span>
+            </a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-phero {
+    padding-block: 64px 60px;
+    background: var(--g-off);
+    border-bottom: 1px solid var(--g-line-mid);
+  }
+  .guillo-phero__crumb {
+    display: block;
+    margin-bottom: 34px;
+  }
+  .guillo-phero__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 70px;
+    align-items: end;
+  }
+  .guillo-phero__title {
+    font: 500 clamp(44px, 5vw, 78px)/1 var(--g-serif);
+    letter-spacing: -0.008em;
+    margin: 0 0 22px;
+  }
+  .guillo-phero__intro {
+    font: 300 18px/1.7 var(--g-sans);
+    color: var(--g-muted);
+    margin: 0;
+    max-width: 600px;
+  }
+  .guillo-phero__toc {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #CCCED3;
+  }
+  .guillo-phero__toc a {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #CCCED3;
+    font: 500 12px/1 var(--g-sans);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--g-ink);
+    text-decoration: none;
+  }
+  .guillo-phero__toc a:hover { color: var(--g-bronze); }
+  .guillo-phero__toc-num { color: var(--g-faint); }
+  @media screen and (max-width: 989px) {
+    .guillo-phero { padding-block: 44px; }
+    .guillo-phero__grid { grid-template-columns: 1fr; gap: 34px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo page hero",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title override" },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "Fitted menswear is not about tight clothes. It is about clothes cut to follow the body, close through the chest and arms, tapered through the waist and leg. Here is exactly how each Guillo cut is drafted, so you order once." }
+  ],
+  "blocks": [
+    {
+      "type": "toc",
+      "name": "Contents link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "The three cuts" },
+        { "type": "text", "id": "anchor", "label": "Anchor id", "default": "fit-cuts" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Guillo page hero",
+      "category": "Guillo",
+      "blocks": [
+        { "type": "toc", "settings": { "label": "The three cuts", "anchor": "fit-cuts" } },
+        { "type": "toc", "settings": { "label": "Side by side", "anchor": "fit-compare" } },
+        { "type": "toc", "settings": { "label": "Measuring yourself", "anchor": "fit-measure" } },
+        { "type": "toc", "settings": { "label": "Common questions", "anchor": "fit-faq" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

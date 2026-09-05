@@ -1,0 +1,124 @@
+{% doc %}
+  Guillo product card: 3/4 image with hover crossfade to the second media,
+  badge, star rating (Judge.me review metafields when present), uppercase
+  title, price, and colour swatch dots read from the product's colour option.
+
+  @param {object} product - product to render
+  @param {boolean} show_quick - show the hover "Add to bag" quick action
+  @param {string} sizes - sizes attribute for the image
+{% enddoc %}
+{%- liquid
+  assign card_sizes = sizes | default: '(min-width: 750px) 25vw, 50vw'
+  assign second_image = null
+  if product.media.size > 1
+    assign second_image = product.media[1]
+  endif
+
+  assign badge = product.metafields.custom.badge.value
+  if badge == blank
+    for tag in product.tags
+      if tag contains 'badge:'
+        assign badge = tag | remove: 'badge:' | strip
+      endif
+    endfor
+  endif
+
+  assign rating = product.metafields.reviews.rating.value.rating
+  assign rating_count = product.metafields.reviews.rating_count.value
+
+  assign colour_option = null
+  for option in product.options_with_values
+    assign opt_name = option.name | downcase
+    if opt_name == 'color' or opt_name == 'colour'
+      assign colour_option = option
+    endif
+  endfor
+-%}
+<div class="g-card">
+  <a href="{{ product.url }}" class="g-card__media" tabindex="-1" aria-hidden="true">
+    {%- if product.featured_media -%}
+      {{
+        product.featured_media
+        | image_url: width: 1200
+        | image_tag: class: 'g-card__img', widths: '300, 450, 600, 900, 1200', sizes: card_sizes, alt: product.featured_media.alt
+      }}
+    {%- else -%}
+      {{ 'product-apparel-1' | placeholder_svg_tag: 'g-card__img' }}
+    {%- endif -%}
+    {%- if second_image -%}
+      {{
+        second_image
+        | image_url: width: 1200
+        | image_tag: class: 'g-card__img g-card__img--hover', widths: '300, 450, 600, 900, 1200', sizes: card_sizes, alt: '', loading: 'lazy'
+      }}
+    {%- endif -%}
+    {%- if badge != blank -%}
+      <span class="g-card__badge">{{ badge }}</span>
+    {%- elsif product.available == false -%}
+      <span class="g-card__badge">Sold out</span>
+    {%- endif -%}
+    {%- if show_quick -%}
+      <span class="g-card__quick">
+        Add to bag
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 016 0v2"/>
+        </svg>
+      </span>
+    {%- endif -%}
+  </a>
+  <div class="g-card__info">
+    {%- if rating != blank and rating_count != blank and rating_count > 0 -%}
+      <div class="g-card__rating" aria-label="{{ rating }} out of 5 stars">
+        <span aria-hidden="true">&#9733;</span>
+        <span>{{ rating }}</span>
+      </div>
+    {%- endif -%}
+    {%- liquid
+      # The card carried the raw Shopify title, so a shirt read "The Amalfi"
+      # here and "Signature Shirt / Amalfi" on its own page. Take the group's
+      # name and this product's style name, the same source the PDP uses.
+      assign card_group = product.metafields.custom.product_group.value
+      assign card_title = product.title
+      assign card_style = ''
+      if card_group != blank and card_group.group_title != blank
+        assign card_title = card_group.group_title
+        assign card_names = card_group.display_names.value
+        assign card_i = 0
+        for card_p in card_group.products.value
+          if card_p.id == product.id
+            assign card_i = forloop.index0
+            break
+          endif
+        endfor
+        assign card_style = card_names[card_i]
+      endif
+    -%}
+    <div class="g-card__row">
+      <a class="g-card__title" href="{{ product.url }}">{{ card_title }}</a>
+      <span class="g-card__price">
+        {%- if product.price_varies -%}
+          From {{ product.price_min | money }}
+        {%- else -%}
+          {{ product.price | money }}
+        {%- endif -%}
+      </span>
+    </div>
+    {%- if card_style != blank -%}
+      <a class="g-card__style" href="{{ product.url }}">{{ card_style }}</a>
+    {%- endif -%}
+    {%- if colour_option and colour_option.values.size > 0 -%}
+      <div class="g-card__dots">
+        {%- for value in colour_option.values limit: 5 -%}
+          {%- if value.swatch.color -%}
+            <span
+              class="g-card__dot{% if forloop.first %} g-card__dot--active{% endif %}"
+              style="background: rgb({{ value.swatch.color.rgb }})"
+              title="{{ value }}"
+            ></span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+

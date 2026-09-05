@@ -1,0 +1,216 @@
+{% comment %}
+  Customer quote strip, led by the store's own Judge.me rating.
+
+  Reviews come from the shop-level judgeme.reviews_grid metafield, store
+  reviews first (those are about Guillo rather than one product), falling
+  back to featured reviews and finally to the hand-typed blocks. Highest
+  rated first, and duplicates dropped: Judge.me's own data repeats some.
+{% endcomment %}
+
+{%- liquid
+  assign grid = shop.metafields.judgeme.reviews_grid.value
+  assign store_rating = grid.average_rating
+  assign store_count = grid.number_of_reviews
+
+  assign pool = blank
+  if grid.store_reviews.reviews != blank and grid.store_reviews.reviews.size > 0
+    assign pool = grid.store_reviews.reviews
+  elsif grid.featured_reviews.reviews != blank
+    assign pool = grid.featured_reviews.reviews
+  endif
+
+  assign to_show = section.settings.quotes_to_show | default: 3
+-%}
+
+<section class="guillo-quotes g-pad">
+  <div class="g-container">
+    {%- if store_count != blank and store_count > 0 -%}
+      <div class="guillo-quotes__lead">
+        <span class="guillo-quotes__lead-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="guillo-quotes__lead-score">{{ store_rating }}</span>
+        <span class="guillo-quotes__lead-count">from {{ store_count }} reviews</span>
+      </div>
+    {%- endif -%}
+
+    <div class="guillo-quotes__grid">
+      {%- if pool != blank and pool.size > 0 -%}
+        {%- liquid
+          # Best first, then drop repeats: the same review appears more than
+          # once in Judge.me's data.
+          assign ordered = '' | split: ''
+          for star in (1..5) reversed
+            assign bucket = pool | where: 'rating', star
+            assign ordered = ordered | concat: bucket
+          endfor
+          if ordered.size == 0
+            assign ordered = pool
+          endif
+          assign seen = ''
+          assign shown = 0
+        -%}
+        {%- for r in ordered -%}
+          {%- if shown >= to_show -%}{%- break -%}{%- endif -%}
+          {%- assign body = r.body_html | default: r.body | strip_html | strip -%}
+          {%- capture key -%},{{ body | truncate: 40, '' | handleize }},{%- endcapture -%}
+          {%- unless body == blank or seen contains key -%}
+            {%- assign seen = seen | append: key -%}
+            {%- assign shown = shown | plus: 1 -%}
+            <div class="guillo-quotes__cell">
+              <div class="guillo-quotes__stars" aria-label="{{ r.rating }} star review">
+                {%- for i in (1..5) -%}{%- if i <= r.rating -%}&#9733;{%- else -%}&#9734;{%- endif -%}{%- endfor -%}
+              </div>
+              {%- if r.title != blank -%}
+                <div class="guillo-quotes__title">{{ r.title }}</div>
+              {%- endif -%}
+              <p class="guillo-quotes__quote">{{ body }}</p>
+              <div class="guillo-quotes__who">
+                {{ r.reviewer_name }}{% if r.verified_buyer %} &middot; Verified purchase{% endif %}
+              </div>
+            </div>
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          <div class="guillo-quotes__cell" {{ block.shopify_attributes }}>
+            <div class="guillo-quotes__stars" aria-label="5 star review">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="guillo-quotes__quote">{{ block.settings.quote }}</p>
+            <div class="guillo-quotes__who">{{ block.settings.who }}</div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-quotes__lead {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 12px;
+    padding-bottom: 42px;
+  }
+  .guillo-quotes__lead-stars {
+    font: 400 13px/1 var(--g-sans);
+    letter-spacing: 0.3em;
+    color: var(--g-ink);
+  }
+  .guillo-quotes__lead-score { font: 500 30px/1 var(--g-serif); color: var(--g-ink); }
+  .guillo-quotes__lead-count {
+    font: 300 12px/1 var(--g-sans);
+    letter-spacing: 0.06em;
+    color: var(--g-whisper);
+  }
+  .guillo-quotes__title {
+    font: 500 14px/1.4 var(--g-serif);
+    color: var(--g-ink);
+    margin-bottom: 8px;
+  }
+  .guillo-quotes {
+    padding-block: 92px;
+    background: var(--g-paper);
+    border-top: 1px solid var(--g-line);
+  }
+  .guillo-quotes__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--g-line);
+  }
+  .guillo-quotes__cell {
+    background: var(--g-paper);
+    padding: 6px 54px 10px;
+  }
+  .guillo-quotes__cell:first-child { padding-left: 0; }
+  .guillo-quotes__cell:last-child { padding-right: 0; }
+  .guillo-quotes__stars {
+    font: 400 12px/1 var(--g-sans);
+    letter-spacing: 0.3em;
+    color: var(--g-ink);
+    margin-bottom: 26px;
+  }
+  .guillo-quotes__quote {
+    font: 300 15px/1.8 var(--g-sans);
+    color: #5C6067;
+    margin: 0 0 28px;
+  }
+  .guillo-quotes__who {
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--g-faint);
+  }
+  @media screen and (max-width: 989px) {
+    .guillo-quotes { padding-block: 56px; }
+    .guillo-quotes__grid { grid-template-columns: 1fr; }
+    .guillo-quotes__cell { padding: 32px 0; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo quote strip",
+  "settings": [
+    {
+      "type": "range",
+      "id": "quotes_to_show",
+      "label": "Reviews to show",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "quote",
+      "name": "Quote",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "Office to dinner in the same pair and I forgot I had them on. First chinos in years that do not pull across the thigh."
+        },
+        {
+          "type": "text",
+          "id": "who",
+          "label": "Attribution",
+          "default": "Daniel M, Sydney"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Guillo quote strip",
+      "category": "Guillo",
+      "blocks": [
+        {
+          "type": "quote",
+          "settings": {
+            "quote": "Office to dinner in the same pair and I forgot I had them on. First chinos in years that do not pull across the thigh.",
+            "who": "Daniel M, Sydney"
+          }
+        },
+        {
+          "type": "quote",
+          "settings": {
+            "quote": "Two pairs, ten days in Europe. No creasing out of the case, no iron, still sharp on the flight home.",
+            "who": "Tom R, Melbourne"
+          }
+        },
+        {
+          "type": "quote",
+          "settings": {
+            "quote": "I squat and normally have to size up. Took my true waist as advised. Right first time.",
+            "who": "Alex P, Brisbane"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
