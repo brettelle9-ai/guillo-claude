@@ -1,10 +1,10 @@
 {{ 'guillo-atelier.css' | asset_url | stylesheet_tag }}
 <guillo-atelier class="ga">
   <section class="ga-gallery" aria-labelledby="ga-selection-{{ section.id }}">
-    <header class="ga-heading ga-reveal"><div><p class="ga-kicker">The Guillo wardrobe</p><h2 id="ga-selection-{{ section.id }}">Signature pieces</h2></div><a class="ga-link" href="{{ section.settings.collection.url }}">Explore the collection <span aria-hidden="true">↗</span></a></header>
+    <header class="ga-heading ga-reveal"><div><h2 id="ga-selection-{{ section.id }}">The collections</h2></div></header>
     <div class="ga-gallery__grid">
       {%- for block in section.blocks -%}
-        {% render 'guillo-gallery-card', block: block %}
+        {% render 'guillo-category-card', block: block %}
       {%- endfor -%}
     </div>
 
@@ -62,17 +62,57 @@
 {
   "name": "Guillo editorial wardrobe",
   "settings": [
-    {"type":"collection","id":"collection","label":"Full collection"},
-    {"type":"product","id":"signature_product","label":"Signore feature product"},
-    {"type":"text","id":"signature_colour","label":"Feature colour","default":"Latte"}
+    {
+      "type": "product",
+      "id": "signature_product",
+      "label": "Signore feature product"
+    },
+    {
+      "type": "text",
+      "id": "signature_colour",
+      "label": "Feature colour",
+      "default": "Latte"
+    }
   ],
-  "max_blocks":4,
-  "blocks":[{"type":"piece","name":"Signature piece","settings":[
-    {"type":"product","id":"product","label":"Product"},
-    {"type":"text","id":"note","label":"Small heading"},
-    {"type":"text","id":"colour","label":"Colour or style"},
-    {"type":"text","id":"description","label":"Caption"}
-  ]}],
-  "presets":[{"name":"Guillo editorial wardrobe","category":"Guillo"}]
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Collection image",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Category name"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product image source"
+        },
+        {
+          "type": "text",
+          "id": "fallback_asset",
+          "label": "Fallback image asset"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guillo editorial wardrobe",
+      "category": "Guillo"
+    }
+  ]
 }
 {% endschema %}

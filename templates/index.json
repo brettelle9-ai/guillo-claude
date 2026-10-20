@@ -41,52 +41,51 @@
     "wardrobe": {
       "type": "guillo-atelier",
       "settings": {
-        "collection": "best-sellers",
         "signature_product": "the-signore-chino-latte"
       },
       "blocks": {
-        "luxe": {
-          "type": "piece",
+        "shirts": {
+          "type": "category",
           "settings": {
-            "product": "the-luxe-chino-stone",
-            "note": "The everyday foundation",
-            "colour": "Stone",
-            "description": "Slim leg. Stretch fabric."
-          }
-        },
-        "shirt": {
-          "type": "piece",
-          "settings": {
+            "collection": "shirts",
+            "heading": "Shirts",
             "product": "milano-pinstripe-shirt",
-            "note": "The shirt with character",
-            "colour": "Milano / pinstripe",
-            "description": "Fitted through the chest and arms."
+            "fallback_asset": ""
           }
         },
-        "signore": {
-          "type": "piece",
+        "chinos": {
+          "type": "category",
           "settings": {
-            "product": "the-signore-chino-midnight",
-            "note": "A considered detail",
-            "colour": "Midnight",
-            "description": "Side-tab waist. A classic fit."
+            "collection": "chinos",
+            "heading": "Chinos",
+            "product": "the-luxe-chino-stone",
+            "fallback_asset": ""
           }
         },
-        "polo": {
-          "type": "piece",
+        "polos": {
+          "type": "category",
           "settings": {
+            "collection": "polos",
+            "heading": "Polos",
             "product": "the-portofino-polo-black",
-            "note": "After hours, effortless",
-            "colour": "Black",
-            "description": "Knit texture. An open collar."
+            "fallback_asset": ""
+          }
+        },
+        "tees": {
+          "type": "category",
+          "settings": {
+            "collection": "t-shirts",
+            "heading": "Tees",
+            "product": "",
+            "fallback_asset": "guillo-off-duty.jpg"
           }
         }
       },
       "block_order": [
-        "luxe",
-        "shirt",
-        "signore",
-        "polo"
+        "shirts",
+        "chinos",
+        "polos",
+        "tees"
       ]
     }
   },
