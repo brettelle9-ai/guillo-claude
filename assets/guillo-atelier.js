@@ -7,22 +7,12 @@ if (!customElements.get('guillo-atelier')) {
       this.reveals = [...this.querySelectorAll('.ga-reveal')];
       // One passive scroll listener and a single animation frame update visible layers.
       // No wheel interception: the page retains normal native scrolling.
-      this.journey = this.querySelector('.ga-journey');
-      this.track = this.querySelector('.ga-journey__track');
-      this.pin = this.querySelector('.ga-journey__pin');
       this.drift = [...this.querySelectorAll('.ga-drift')];
       const clamp = value => Math.min(1, Math.max(0, value));
       const renderScroll = () => {
         this.frame = 0;
         if (this.motion.matches) return;
         const viewport = innerHeight;
-        const rect = this.journey.getBoundingClientRect();
-        const stickyTop = parseFloat(getComputedStyle(this.pin).top) || 80;
-        const travel = Math.max(1, rect.height - this.pin.offsetHeight);
-        const progress = clamp((stickyTop - rect.top) / travel);
-        const distance = Math.max(0, this.track.scrollWidth - this.journey.clientWidth);
-        this.journey.style.setProperty('--ga-track-x', `${(-distance * progress).toFixed(1)}px`);
-        this.journey.style.setProperty('--ga-progress', progress.toFixed(4));
         this.drift.forEach(el => {
           const box = el.getBoundingClientRect();
           if (box.bottom > -80 && box.top < viewport + 80) {

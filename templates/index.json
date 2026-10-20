@@ -51,7 +51,7 @@
             "product": "the-luxe-chino-stone",
             "note": "The everyday foundation",
             "colour": "Stone",
-            "description": "A close fit and a clean line. The starting point for a considered wardrobe."
+            "description": "Slim leg. Stretch fabric."
           }
         },
         "shirt": {
@@ -60,7 +60,7 @@
             "product": "milano-pinstripe-shirt",
             "note": "The shirt with character",
             "colour": "Milano / pinstripe",
-            "description": "A finer stripe. A fitted silhouette. An open collar changes the mood."
+            "description": "Fitted through the chest and arms."
           }
         },
         "signore": {
@@ -69,7 +69,7 @@
             "product": "the-signore-chino-midnight",
             "note": "A considered detail",
             "colour": "Midnight",
-            "description": "A clean front and a little more ease. An alternative to the everyday chino."
+            "description": "Side-tab waist. A classic fit."
           }
         },
         "polo": {
@@ -78,7 +78,7 @@
             "product": "the-portofino-polo-black",
             "note": "After hours, effortless",
             "colour": "Black",
-            "description": "Texture, an open neckline and a darker point of view."
+            "description": "Knit texture. An open collar."
           }
         }
       },

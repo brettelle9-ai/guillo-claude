@@ -1,41 +1,10 @@
 {{ 'guillo-atelier.css' | asset_url | stylesheet_tag }}
 <guillo-atelier class="ga">
-  {%- liquid
-    assign category_shirt = section.blocks[1].settings.product
-    assign category_chino = section.blocks[0].settings.product
-    assign category_polo = section.blocks[3].settings.product
-  -%}
-  <section class="ga-journey" aria-label="Explore the collections">
-    <div class="ga-journey__pin">
-      <header class="ga-journey__head"><h2>Explore Guillo</h2><span>Shirts / Chinos / Polos / Tees</span></header>
-      <nav class="ga-journey__window" aria-label="Guillo collections">
-        <div class="ga-journey__track">
-          <a class="ga-journey__card" href="{{ routes.collections_url }}/shirts">
-            {{ category_shirt.featured_image | image_url: width: 1000 | image_tag: widths: '360, 600, 1000', sizes: '(min-width: 990px) 35vw, 72vw', loading: 'lazy', alt: 'Explore Guillo fitted shirts' }}
-            <span>Shirts <span aria-hidden="true">↗</span></span>
-          </a>
-          <a class="ga-journey__card" href="{{ routes.collections_url }}/chinos">
-            {{ category_chino.featured_image | image_url: width: 1000 | image_tag: widths: '360, 600, 1000', sizes: '(min-width: 990px) 35vw, 72vw', loading: 'lazy', alt: 'Explore Guillo chinos' }}
-            <span>Chinos <span aria-hidden="true">↗</span></span>
-          </a>
-          <a class="ga-journey__card" href="{{ routes.collections_url }}/polos">
-            {{ category_polo.featured_image | image_url: width: 1000 | image_tag: widths: '360, 600, 1000', sizes: '(min-width: 990px) 35vw, 72vw', loading: 'lazy', alt: 'Explore Guillo polos' }}
-            <span>Polos <span aria-hidden="true">↗</span></span>
-          </a>
-          <a class="ga-journey__card" href="{{ routes.collections_url }}/t-shirts">
-            <img src="{{ 'guillo-off-duty.jpg' | asset_url }}" alt="Explore Guillo fitted tees" width="900" height="1600" loading="lazy">
-            <span>Tees <span aria-hidden="true">↗</span></span>
-          </a>
-        </div>
-      </nav>
-      <div class="ga-journey__footer"><span>Follow your own line.</span><div class="ga-journey__progress" aria-hidden="true"><i></i></div><span>01 — 04</span></div>
-    </div>
-  </section>
   <section class="ga-gallery" aria-labelledby="ga-selection-{{ section.id }}">
-    <header class="ga-heading ga-reveal"><div><h2 id="ga-selection-{{ section.id }}">Signature pieces</h2></div><a class="ga-link" href="{{ section.settings.collection.url }}">Explore the collection <span aria-hidden="true">↗</span></a></header>
+    <header class="ga-heading ga-reveal"><div><p class="ga-kicker">The Guillo wardrobe</p><h2 id="ga-selection-{{ section.id }}">Signature pieces</h2></div><a class="ga-link" href="{{ section.settings.collection.url }}">Explore the collection <span aria-hidden="true">↗</span></a></header>
     <div class="ga-gallery__grid">
       {%- for block in section.blocks -%}
-        {% render 'guillo-gallery-card', block: block, index: forloop.index %}
+        {% render 'guillo-gallery-card', block: block %}
       {%- endfor -%}
     </div>
 
@@ -61,7 +30,7 @@
       </div>
       <div class="ga-view-controls" hidden><span>Explore the piece</span><div>
         {%- for img in signature.images limit: 3 -%}
-          <button type="button" data-view-button="{{ forloop.index0 }}" aria-label="Signore view {{ forloop.index }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">0{{ forloop.index }}</button>
+          <button type="button" data-view-button="{{ forloop.index0 }}" aria-label="Signore view {{ forloop.index }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">{{ img | image_url: width: 120 | image_tag: loading: 'lazy', alt: '', width: 52, height: 64 }}</button>
         {%- endfor -%}
       </div></div>
     </div>
@@ -78,13 +47,13 @@
       <p class="ga-kicker">Life, on your terms</p>
       <h2 id="ga-day-{{ section.id }}">No fixed<br>itinerary.</h2>
       <p>Pale blue. White trousers. One bag.<br>Leave the rest behind.</p>
-      <div class="ga-day__detail"><img src="{{ 'guillo-villa-step.jpg' | asset_url }}" alt="Guillo pale blue tee and white trousers worn on the villa steps" width="900" height="1600" loading="lazy"><p>01 / Pale blue &amp; chalk<br><span>A lighter way to dress.</span></p></div>
+      <div class="ga-day__detail"><img src="{{ 'guillo-villa-step.jpg' | asset_url }}" alt="Guillo pale blue tee and white trousers worn on the villa steps" width="900" height="1600" loading="lazy"><p>Pale blue &amp; white<br><span>A lighter way to dress.</span></p></div>
       <div class="ga-day__links"><a class="ga-link" href="{{ routes.collections_url }}/t-shirts">Explore the tees ↗</a><a class="ga-link" href="{{ routes.collections_url }}/pants">Find your trousers ↗</a></div>
     </div>
   </section>
   <section class="ga-fit ga-reveal" aria-labelledby="ga-fit-{{ section.id }}">
     <p class="ga-kicker">The Guillo difference</p><h2 id="ga-fit-{{ section.id }}">A fit that<br>feels different.</h2>
-    <div class="ga-fit__notes"><p><span>01 / Shape</span>Cut to follow the body.</p><p><span>02 / Balance</span>Room where you need it.</p><p><span>03 / Character</span>Details that make the piece.</p></div>
+    <div class="ga-fit__notes"><p><span>Shape</span>Cut to follow the body.</p><p><span>Balance</span>Room where you need it.</p><p><span>Character</span>Details that make the piece.</p></div>
     <a class="ga-link" href="/pages/fit-guide">Find your Guillo fit <span aria-hidden="true">↗</span></a>
   </section>
 </guillo-atelier>
