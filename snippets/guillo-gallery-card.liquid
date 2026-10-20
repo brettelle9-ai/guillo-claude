@@ -7,7 +7,7 @@
 {%- if p != blank -%}
 <article class="ga-card ga-reveal" {{ block.shopify_attributes }}>
   <div class="ga-card__top"><span>0{{ index }}</span><span>{{ block.settings.note | escape }}</span></div>
-  <a class="ga-card__image" href="{{ p.url }}" aria-label="Explore {{ title | escape }}">
+  <a class="ga-card__image ga-drift" href="{{ p.url }}" aria-label="Explore {{ title | escape }}">
     {{ p.featured_image | image_url: width: 1100 | image_tag: widths: '360, 540, 750, 1100', sizes: '(min-width: 990px) 34vw, 78vw', loading: 'lazy', class: 'ga-card__front' }}
     {%- if alternate != blank -%}
       {{ alternate | image_url: width: 1100 | image_tag: widths: '360, 540, 750, 1100', sizes: '(min-width: 990px) 34vw, 78vw', loading: 'lazy', class: 'ga-card__back', alt: '' }}

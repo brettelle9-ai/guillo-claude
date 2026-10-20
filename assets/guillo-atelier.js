@@ -5,16 +5,56 @@ if (!customElements.get('guillo-atelier')) {
       const signal = this.cleanup.signal;
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
       this.reveals = [...this.querySelectorAll('.ga-reveal')];
-      if (!this.motion.matches && 'IntersectionObserver' in window) {
-        this.revealObserver = new IntersectionObserver(entries => {
-          entries.forEach(({isIntersecting, target}) => {
-            if (isIntersecting) { target.classList.add('is-visible'); target.classList.remove('is-awaiting'); this.revealObserver.unobserve(target); }
-          });
-        }, {threshold: 0.06});
-        this.reveals.forEach(el => {
-          if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('is-awaiting'); this.revealObserver.observe(el); }
+      // One passive scroll listener and a single animation frame update visible layers.
+      // No wheel interception: the page retains normal native scrolling.
+      this.journey = this.querySelector('.ga-journey');
+      this.track = this.querySelector('.ga-journey__track');
+      this.pin = this.querySelector('.ga-journey__pin');
+      this.drift = [...this.querySelectorAll('.ga-drift')];
+      const clamp = value => Math.min(1, Math.max(0, value));
+      const renderScroll = () => {
+        this.frame = 0;
+        if (this.motion.matches) return;
+        const viewport = innerHeight;
+        const rect = this.journey.getBoundingClientRect();
+        const stickyTop = parseFloat(getComputedStyle(this.pin).top) || 80;
+        const travel = Math.max(1, rect.height - this.pin.offsetHeight);
+        const progress = clamp((stickyTop - rect.top) / travel);
+        const distance = Math.max(0, this.track.scrollWidth - this.journey.clientWidth);
+        this.journey.style.setProperty('--ga-track-x', `${(-distance * progress).toFixed(1)}px`);
+        this.journey.style.setProperty('--ga-progress', progress.toFixed(4));
+        this.drift.forEach(el => {
+          const box = el.getBoundingClientRect();
+          if (box.bottom > -80 && box.top < viewport + 80) {
+            const position = clamp((viewport - box.top) / (viewport + box.height));
+            el.style.setProperty('--ga-image-y', `${(18 - position * 36).toFixed(2)}px`);
+          }
         });
-      }
+        this.reveals.forEach(el => {
+          // Also reveal elements passed by a fast scroll or back navigation.
+          if (el.getBoundingClientRect().top < viewport * .96) {
+            el.classList.remove('is-awaiting'); el.classList.add('is-visible');
+          }
+        });
+      };
+      const schedule = () => {
+        if (!this.frame) this.frame = requestAnimationFrame(renderScroll);
+      };
+      const setMotion = () => {
+        this.classList.toggle('has-scroll-motion', !this.motion.matches);
+        if (this.motion.matches) {
+          this.reveals.forEach(el => el.classList.remove('is-awaiting'));
+        } else {
+          this.reveals.forEach(el => {
+            if (!el.classList.contains('is-visible') && el.getBoundingClientRect().top > innerHeight) el.classList.add('is-awaiting');
+          });
+        }
+        schedule();
+      };
+      window.addEventListener('scroll', schedule, {passive:true, signal});
+      window.addEventListener('resize', schedule, {passive:true, signal});
+      this.motion.addEventListener('change', setMotion, {signal});
+      setMotion();
       this.querySelectorAll('.ga-view-controls').forEach(el => el.hidden = false);
       this.addEventListener('click', event => {
         const button = event.target.closest('[data-view-button]');
@@ -57,7 +97,7 @@ if (!customElements.get('guillo-atelier')) {
       }
     }
     disconnectedCallback() {
-      this.cleanup?.abort(); this.revealObserver?.disconnect(); this.filmObserver?.disconnect(); this.video?.pause();
+      this.cleanup?.abort(); cancelAnimationFrame(this.frame); this.filmObserver?.disconnect(); this.video?.pause();
     }
   });
 }
