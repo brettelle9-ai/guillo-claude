@@ -1,11 +1,11 @@
 {%- liquid
   assign primary_film = section.settings.primary_video_url
   if primary_film == blank
-    assign primary_film = ''
+    assign primary_film = 'guillo-campaign-primary.mp4' | asset_url
   endif
   assign secondary_film = section.settings.secondary_video_url
   if secondary_film == blank
-    assign secondary_film = ''
+    assign secondary_film = 'guillo-campaign-secondary.mp4' | asset_url
   endif
 -%}
 {{ 'guillo-campaign.css' | asset_url | stylesheet_tag }}
