@@ -1,0 +1,88 @@
+{%- liquid
+  assign primary_film = section.settings.primary_video_url
+  if primary_film == blank
+    assign primary_film = ''
+  endif
+  assign secondary_film = section.settings.secondary_video_url
+  if secondary_film == blank
+    assign secondary_film = ''
+  endif
+-%}
+{{ 'guillo-campaign.css' | asset_url | stylesheet_tag }}
+<style>
+  @font-face {
+    font-family: 'Guillo Campaign';
+    src: url({{ 'guillo-campaign-roman.woff' | asset_url }}) format('woff');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Guillo Campaign';
+    src: url({{ 'guillo-campaign-italic.woff' | asset_url }}) format('woff');
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+  }
+</style>
+<guillo-campaign class="g-campaign" data-motion-enabled="{{ section.settings.enable_video }}">
+  <div class="g-campaign__copy">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="g-campaign__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    <h1 class="g-campaign__heading">
+      {{- section.settings.heading | escape -}}
+      {%- if section.settings.heading_accent != blank -%}
+        <em>{{ section.settings.heading_accent | escape }}</em>
+      {%- endif -%}
+    </h1>
+    {%- if section.settings.description != blank -%}
+      <p class="g-campaign__description">{{ section.settings.description | escape }}</p>
+    {%- endif -%}
+    <div class="g-campaign__actions">
+      {%- if section.settings.primary_label != blank and section.settings.primary_link != blank -%}
+        <a href="{{ section.settings.primary_link }}">{{ section.settings.primary_label | escape }}</a>
+      {%- endif -%}
+      {%- if section.settings.secondary_label != blank and section.settings.secondary_link != blank -%}
+        <a href="{{ section.settings.secondary_link }}">{{ section.settings.secondary_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="g-campaign__media g-campaign__media--primary">
+    <img src="{{ 'guillo-campaign-primary.jpg' | asset_url }}" alt="Guillo fitted white shirt styled with chinos at a villa" width="720" height="1280" loading="eager" fetchpriority="high">
+    {%- if section.settings.enable_video and primary_film != blank -%}
+      <video data-film="primary" data-src="{{ primary_film | escape }}" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
+    {%- endif -%}
+  </div>
+  <div class="g-campaign__media g-campaign__media--secondary" aria-hidden="true">
+    <img src="{{ 'guillo-campaign-secondary.jpg' | asset_url }}" alt="" width="720" height="1280" loading="eager">
+    {%- if section.settings.enable_video and secondary_film != blank -%}
+      <video data-film="secondary" data-src="{{ secondary_film | escape }}" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
+    {%- endif -%}
+  </div>
+  <button class="g-campaign__motion" type="button" aria-label="Pause background films" hidden>
+    <svg class="g-campaign__pause" width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M3 2h2.5v10H3zm5.5 0H11v10H8.5z"/></svg>
+    <svg class="g-campaign__play" width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="m4 2 8 5-8 5z"/></svg>
+  </button>
+</guillo-campaign>
+<script src="{{ 'guillo-campaign.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Guillo campaign",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Category", "default": "Mediterranean menswear" },
+    { "type": "text", "id": "heading", "label": "Headline", "default": "A certain" },
+    { "type": "text", "id": "heading_accent", "label": "Headline italic line", "default": "presence." },
+    { "type": "textarea", "id": "description", "label": "Product description", "default": "Fitted shirts, tailored chinos and polos with a Mediterranean influence." },
+    { "type": "text", "id": "primary_label", "label": "First link label", "default": "Shop shirts" },
+    { "type": "url", "id": "primary_link", "label": "First link" },
+    { "type": "text", "id": "secondary_label", "label": "Second link label", "default": "Shop chinos" },
+    { "type": "url", "id": "secondary_link", "label": "Second link" },
+    { "type": "checkbox", "id": "enable_video", "label": "Play campaign films", "default": true },
+    { "type": "url", "id": "primary_video_url", "label": "Primary MP4 URL", "info": "Optional. Paste the MP4 link from Shopify Content → Files." },
+    { "type": "url", "id": "secondary_video_url", "label": "Second MP4 URL", "info": "Optional. Paste the second MP4 link. This film appears on wide desktop screens." }
+  ],
+  "presets": [{ "name": "Guillo campaign", "category": "Guillo" }]
+}
+{% endschema %}
