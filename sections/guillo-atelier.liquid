@@ -12,27 +12,38 @@
   {%- assign signature = section.settings.signature_product -%}
   {%- if signature != blank -%}
   <section class="ga-signature" aria-labelledby="ga-signore-{{ section.id }}">
-    <div class="ga-signature__word" aria-hidden="true">SIGNORE</div>
-    <div class="ga-signature__copy ga-reveal">
-      <p class="ga-kicker">In focus / The Signore</p>
-      <h2 id="ga-signore-{{ section.id }}">The Signore.<br>A cleaner line.</h2>
-      <p>A clean front. A little more ease through the leg. The Signore brings character to the everyday trouser.</p>
-      <a class="ga-link" href="{{ signature.url }}">Discover the Signore <span aria-hidden="true">↗</span></a>
-      <span class="ga-signature__price">{{ signature.price | money }} <span>/ {{ section.settings.signature_colour | escape }}</span></span>
-    </div>
-    <div class="ga-signature__visual ga-reveal">
-      <div class="ga-signature__photos ga-drift">
-        {%- for img in signature.images limit: 3 -%}
-          <div class="ga-signature__frame{% if forloop.first %} is-current{% endif %}" data-view="{{ forloop.index0 }}">
-            {{ img | image_url: width: 1200 | image_tag: widths: '480, 750, 1000, 1200', sizes: '(min-width: 990px) 45vw, 100vw', loading: 'lazy', alt: img.alt }}
+    <div class="ga-signature__stage">
+      <div class="ga-signature__word" aria-hidden="true">SIGNORE</div>
+      <div class="ga-signature__copy">
+        <p class="ga-kicker">The Guillo cut</p>
+        <h2 id="ga-signore-{{ section.id }}">The Signore.</h2>
+        <div class="ga-signature__chapters">
+          <div class="ga-signature__chapter is-current" data-chapter="0">
+            <h3>The classic cut.</h3><p>A little more room through the leg, with a tailored silhouette.</p>
           </div>
-        {%- endfor -%}
+          <div class="ga-signature__chapter" data-chapter="1">
+            <h3>Side-tab adjustment.</h3><p>Adjust the waist at the sides. Keep the front clean.</p>
+          </div>
+          <div class="ga-signature__chapter" data-chapter="2">
+            <h3>The full silhouette.</h3><p>Pair with a fitted shirt or an open-collar polo.</p>
+          </div>
+        </div>
+        <div class="ga-signature__shopping"><a class="ga-link" href="{{ signature.url }}">Shop the Signore <span aria-hidden="true">↗</span></a><span class="ga-signature__price">{{ signature.price | money }} <span>/ {{ section.settings.signature_colour | escape }}</span></span></div>
+        <p class="ga-signature__guide">Scroll through the details <span aria-hidden="true">↓</span></p>
       </div>
-      <div class="ga-view-controls" hidden><span>Explore the piece</span><div>
-        {%- for img in signature.images limit: 3 -%}
-          <button type="button" data-view-button="{{ forloop.index0 }}" aria-label="Signore view {{ forloop.index }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">{{ img | image_url: width: 120 | image_tag: loading: 'lazy', alt: '', width: 52, height: 64 }}</button>
-        {%- endfor -%}
-      </div></div>
+      <div class="ga-signature__visual">
+        <div class="ga-signature__photos">
+          {%- for img in signature.images limit: 3 -%}
+            <div class="ga-signature__frame{% if forloop.first %} is-current{% endif %}" data-view="{{ forloop.index0 }}">
+              {{ img | image_url: width: 1200 | image_tag: widths: '480, 750, 1000, 1200', sizes: '(min-width: 990px) 45vw, 100vw', loading: 'lazy', alt: img.alt }}
+            </div>
+          {%- endfor -%}
+        </div>
+        <div class="ga-view-controls" hidden><span>Explore the cut</span><div>
+          {%- for img in signature.images limit: 3 -%}
+            <button type="button" data-view-button="{{ forloop.index0 }}" aria-label="Signore view {{ forloop.index }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">{{ img | image_url: width: 120 | image_tag: loading: 'lazy', alt: '', width: 52, height: 64 }}</button>
+          {%- endfor -%}
+        </div></div>
     </div>
   </section>
   {%- endif -%}
@@ -44,7 +55,7 @@
       <span class="ga-day__stamp">The off-duty edit / Guillo</span>
     </div>
     <div class="ga-day__copy ga-reveal">
-      <p class="ga-kicker">Life, on your terms</p>
+      <p class="ga-kicker">The off-duty edit</p>
       <h2 id="ga-day-{{ section.id }}">No fixed<br>itinerary.</h2>
       <p>Pale blue. White trousers. One bag.<br>Leave the rest behind.</p>
       <div class="ga-day__detail"><img src="{{ 'guillo-villa-step.jpg' | asset_url }}" alt="Guillo pale blue tee and white trousers worn on the villa steps" width="900" height="1600" loading="lazy"><p>Pale blue &amp; white<br><span>A lighter way to dress.</span></p></div>
@@ -52,8 +63,8 @@
     </div>
   </section>
   <section class="ga-fit ga-reveal" aria-labelledby="ga-fit-{{ section.id }}">
-    <p class="ga-kicker">The Guillo difference</p><h2 id="ga-fit-{{ section.id }}">A fit that<br>feels different.</h2>
-    <div class="ga-fit__notes"><p><span>Shape</span>Cut to follow the body.</p><p><span>Balance</span>Room where you need it.</p><p><span>Character</span>Details that make the piece.</p></div>
+    <p class="ga-kicker">The Guillo difference</p><h2 id="ga-fit-{{ section.id }}">Fitted shirts.<br>Considered trousers.</h2>
+    <div class="ga-fit__notes"><p><span>Shirts</span>Fitted through chest and arms.</p><p><span>Luxe</span>Slim through the leg.</p><p><span>Signore</span>Classic fit. Side-tab waist.</p></div>
     <a class="ga-link" href="/pages/fit-guide">Find your Guillo fit <span aria-hidden="true">↗</span></a>
   </section>
 </guillo-atelier>

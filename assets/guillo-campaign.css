@@ -144,3 +144,8 @@
   .g-campaign__media video { display: none; }
   .g-campaign__motion { display: none; }
 }
+
+@media(prefers-reduced-motion:no-preference){
+  .g-campaign.has-exit-motion .g-campaign__copy{transform:translateY(calc(var(--campaign-exit,0)*-85px));opacity:calc(1 - var(--campaign-exit,0)*.85);will-change:transform,opacity}
+  .g-campaign.has-exit-motion .g-campaign__media img,.g-campaign.has-exit-motion .g-campaign__media video{transform:scale(calc(1 + var(--campaign-exit,0)*.12));will-change:transform}
+}

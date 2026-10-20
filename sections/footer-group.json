@@ -14,10 +14,10 @@
     "newsletter": {
       "type": "guillo-newsletter",
       "settings": {
-        "eyebrow": "A welcome from Guillo",
-        "heading": "First look at the drop, before it goes public.",
-        "text": "Restocks, new colourways and the occasional fit note. Join and we will send $35 towards a first order over $180.",
-        "button_label": "Join"
+        "eyebrow": "Guillo updates",
+        "heading": "New collections. First access.",
+        "text": "New releases, restocks and notes on fit. Join for $35 towards your first order over $180.",
+        "button_label": "Join the list"
       }
     },
     "footer": {
@@ -52,7 +52,7 @@
       ],
       "settings": {
         "logo": "shopify://shop_images/guillo-wordmark-white.png",
-        "text": "Designed for movement, escapes and life beyond routine. Brought to life in Brisbane.",
+        "text": "Mediterranean menswear. Fitted shirts, chinos and polos.",
         "copyright_note": "Brisbane, Australia.",
         "show_payment_icons": true,
         "payment_labels": "Afterpay, Visa, Mastercard, Apple Pay, Paypal"
