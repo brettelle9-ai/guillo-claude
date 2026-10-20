@@ -191,22 +191,57 @@ body {
 
 /* ---- Horizon chrome overrides ---- */
 
-/* Header: near-black gradient, light uppercase spaced nav (matches the
-   redesign header exactly: 11px/500, 0.2em tracking, 28px gaps) */
+/* Campaign masthead. Horizon still owns the menu, drawer and sticky state. */
 #header-component,
 #header-component .header {
-  background: linear-gradient(180deg, #0A0A0C 0%, #17181B 52%, #26282C 100%);
+  background: #111b20;
+}
+#header-component[transparent]:not([data-sticky-state='active']) {
+  background: transparent;
+}
+#header-component .header__underlay-closed,
+#header-component .header__underlay-open {
+  background: #111b20;
+}
+#header-component .header__row {
+  --page-margin: clamp(24px, 3.5vw, 64px);
+}
+#header-component .header__columns {
+  min-height: 86px;
+  align-items: center;
+}
+#header-component .header-logo__image {
+  width: clamp(160px, 16vw, 228px);
+  height: auto;
+  max-height: 36px;
+}
+#header-component .header-logo__image-container {
+  line-height: 0;
+}
+#header-component .header-actions__action {
+  color: #fff;
+}
+#header-component .header-actions__action:focus-visible,
+#header-component .header-logo:focus-visible,
+#header-component .menu-list__link:focus-visible {
+  outline: 1px solid #fff;
+  outline-offset: 5px;
+}
+@media screen and (max-width: 749px) {
+  #header-component .header__columns { min-height: 68px; }
+  #header-component .header__row { --page-margin: 16px; }
+  #header-component .header-logo__image { width: min(146px, 36vw); max-height: 25px; }
 }
 #header-component .menu-list__link,
 #header-component .menu-list__link-title {
   font-family: var(--g-sans);
   font-weight: 500;
   font-size: 11px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   /* The design's #8D8F96 is hard to read at 11px with this much tracking on
      a near-black bar. Lifted for legibility; hover still goes to white. */
-  color: #D5D7DB;
+  color: #FFFFFF;
 }
 #header-component .menu-list__link:hover,
 #header-component .menu-list__link-title:hover,

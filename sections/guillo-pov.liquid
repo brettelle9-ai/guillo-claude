@@ -36,12 +36,13 @@
 
 {% stylesheet %}
   .guillo-pov {
-    padding-block: 104px;
+    padding-block: 88px;
     background: var(--g-paper);
-    border-block: 1px solid var(--g-line);
   }
   .guillo-pov__inner {
     max-width: 760px;
+    margin-inline: auto;
+    text-align: center;
   }
   .guillo-pov__eyebrow {
     display: block;
@@ -52,7 +53,7 @@
     margin: 0;
     /* The two statement lines are the only large type in the section, and
        they stay on their own lines at every width rather than reflowing. */
-    font: 500 clamp(24px, 3.1vw, 42px)/1.18 var(--g-serif);
+    font: 400 clamp(30px, 3.5vw, 52px)/1.14 var(--g-serif);
     color: var(--g-ink);
     letter-spacing: -0.01em;
     /* If a line does wrap on a narrow phone, wrap it evenly rather than
@@ -60,11 +61,11 @@
     text-wrap: balance;
   }
   .guillo-pov__line { display: block; }
-  .guillo-pov__line--2 { color: var(--g-muted); }
+  .guillo-pov__line--2 { color: var(--g-ink); }
   .guillo-pov__text {
     font: 300 clamp(15px, 1.3vw, 17px)/1.75 var(--g-sans);
     color: var(--g-muted);
-    margin: 28px 0 0;
+    margin: 28px auto 0;
     max-width: 520px;
   }
   .guillo-pov__link { margin-top: 30px; display: inline-block; }

@@ -80,6 +80,20 @@
     padding-block: 98px 96px;
     background: var(--g-paper);
   }
+  .guillo-products .g-section-head {
+    position: relative;
+    justify-content: center;
+    text-align: center;
+    border: 0;
+    padding-bottom: 0;
+    margin-bottom: 44px;
+  }
+  .guillo-products .g-section-head > .g-link {
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+  }
+  .guillo-products .g-section-head h2 { font-weight: 400; }
   .guillo-products__grid {
     display: grid;
     grid-template-columns: repeat(var(--g-products-cols, 4), 1fr);
@@ -147,6 +161,8 @@
     .guillo-products__grid .g-card__info { padding-top: 14px; }
     .guillo-products__grid .g-card__title { font-size: 15px; }
     .guillo-products__grid .g-card__price { font-size: 12px; }
+    .guillo-products .g-section-head { align-items: center; gap: 20px; }
+    .guillo-products .g-section-head > .g-link { position: static; }
   }
 {% endstylesheet %}
 

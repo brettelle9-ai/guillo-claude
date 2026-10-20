@@ -8,7 +8,7 @@
   properties so a media query can pick between them.
 {% endcomment %}
 
-<section class="guillo-hero">
+<section class="guillo-hero{% if section.settings.presentation == 'campaign' %} guillo-hero--campaign{% endif %}">
   {%- liquid
     assign hero_d = section.settings.image
     assign hero_m = section.settings.image_mobile
@@ -71,6 +71,7 @@
         alt="{{ section.settings.image_alt | escape }}"
         class="guillo-hero__img"
         loading="eager"
+        fetchpriority="high"
         width="{{ hero_main.width }}"
         height="{{ hero_main.height }}"
         style="{{ hero_pos }}"
@@ -81,6 +82,7 @@
         alt="{{ section.settings.image_alt | escape }}"
         class="guillo-hero__img"
         loading="eager"
+        fetchpriority="high"
         width="1600"
         height="2000"
         style="{{ hero_pos }}"
@@ -150,6 +152,12 @@
   {%- endif -%}
   <div class="guillo-hero__wash"></div>
   <div class="guillo-hero__content">
+    {%- if section.settings.presentation == 'campaign' and section.settings.show_wordmark -%}
+      {%- assign campaign_logo = settings.logo_inverse | default: settings.logo -%}
+      {%- if campaign_logo != blank -%}
+        {{ campaign_logo | image_url: width: 900 | image_tag: class: 'guillo-hero__wordmark', alt: 'Guillo', widths: '320, 480, 640, 900', sizes: '(min-width: 750px) 360px, 240px', loading: 'eager' }}
+      {%- endif -%}
+    {%- endif -%}
     {%- if section.settings.eyebrow != blank -%}
       <p class="guillo-hero__eyebrow">{{ section.settings.eyebrow }}</p>
     {%- endif -%}
@@ -246,6 +254,68 @@
     gap: 12px;
     flex-wrap: wrap;
   }
+  .guillo-hero--campaign {
+    height: 86svh;
+    min-height: 620px;
+    max-height: 1050px;
+  }
+  .guillo-hero--campaign .guillo-hero__wash {
+    background: linear-gradient(180deg, rgb(10 17 20 / 0.4), transparent 27%, transparent 42%, rgb(10 17 20 / 0.53) 100%);
+  }
+  .guillo-hero--campaign .guillo-hero__content {
+    inset: auto 24px 68px;
+    max-width: none;
+    text-align: center;
+    color: #fff;
+  }
+  .guillo-hero__wordmark {
+    display: block;
+    width: min(360px, 65vw);
+    height: auto;
+    margin: 0 auto 30px;
+  }
+  .guillo-hero--campaign .guillo-hero__eyebrow {
+    margin-bottom: 15px;
+    color: #fff;
+    font-size: 10px;
+    letter-spacing: 0.26em;
+  }
+  .guillo-hero--campaign .guillo-hero__heading {
+    font-size: clamp(42px, 4.8vw, 72px);
+    line-height: 1.08;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    margin-bottom: 25px;
+    text-wrap: balance;
+  }
+  .guillo-hero--campaign .guillo-hero__text {
+    margin: 0 auto 26px;
+    color: #fff;
+    font-size: 15px;
+  }
+  .guillo-hero--campaign .guillo-hero__actions {
+    justify-content: center;
+    gap: 18px 38px;
+  }
+  .guillo-hero--campaign .g-btn {
+    height: auto;
+    min-height: 44px;
+    padding: 10px 0;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    text-decoration-thickness: 1px;
+  }
+  .guillo-hero--campaign .g-btn:hover { text-decoration-thickness: 2px; }
+  .guillo-hero--campaign .g-btn:focus-visible { outline: 2px solid #fff; outline-offset: 5px; }
+  @media (prefers-reduced-motion: reduce) {
+    .guillo-hero__content { animation: none; }
+  }
   @media screen and (max-width: 749px) {
     /* Was height:auto with 60vh of top padding on the content, which made the
        hero ~970px on a 812px screen: half a screen of dead image, and both
@@ -287,6 +357,27 @@
     .guillo-hero__wash {
       background: linear-gradient(180deg, rgb(12 13 16 / 0) 26%, rgb(12 13 16 / 0.72) 78%);
     }
+    .guillo-hero--campaign {
+      height: calc(100svh - 32px);
+      min-height: 580px;
+      max-height: 900px;
+    }
+    .guillo-hero--campaign .guillo-hero__content {
+      inset: auto;
+      padding: 0 24px 44px;
+    }
+    .guillo-hero__wordmark { width: 240px; max-width: 70vw; margin-bottom: 24px; }
+    .guillo-hero--campaign .guillo-hero__eyebrow { font-size: 9px; letter-spacing: 0.21em; }
+    .guillo-hero--campaign .guillo-hero__heading { font-size: clamp(35px, 9vw, 50px); margin-bottom: 18px; }
+    .guillo-hero--campaign .guillo-hero__actions { gap: 12px 28px; }
+    .guillo-hero--campaign .g-btn { font-size: 10px; }
+    .guillo-hero--campaign .guillo-hero__wash {
+      background: linear-gradient(180deg, rgb(10 17 20 / 0.32), transparent 25%, transparent 40%, rgb(10 17 20 / 0.68) 100%);
+    }
+  }
+  @media screen and (max-height: 650px) and (min-width: 750px) {
+    .guillo-hero--campaign { min-height: 540px; }
+    .guillo-hero--campaign .guillo-hero__content { bottom: 38px; }
   }
 {% endstylesheet %}
 
@@ -294,6 +385,22 @@
 {
   "name": "Guillo hero",
   "settings": [
+    {
+      "type": "select",
+      "id": "presentation",
+      "label": "Layout",
+      "options": [
+        { "value": "classic", "label": "Classic" },
+        { "value": "campaign", "label": "Campaign" }
+      ],
+      "default": "classic"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wordmark",
+      "label": "Show brand logo in campaign",
+      "default": true
+    },
     {
       "type": "image_picker",
       "id": "image",

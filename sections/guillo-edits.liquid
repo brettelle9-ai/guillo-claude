@@ -31,8 +31,11 @@
       %}
       <span class="guillo-edits__wash"></span>
       <span class="guillo-edits__caption">
+        {%- if block.settings.eyebrow != blank -%}
+          <span class="guillo-edits__eyebrow">{{ block.settings.eyebrow | escape }}</span>
+        {%- endif -%}
         <span class="guillo-edits__name">{{ tile_name }}</span>
-        <span class="guillo-edits__cta">Shop now</span>
+        <span class="guillo-edits__cta">{{ block.settings.cta_label | default: 'Shop the collection' | escape }}</span>
       </span>
     </a>
   {%- endfor -%}
@@ -42,10 +45,13 @@
   .guillo-edits {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px;
+    background: var(--g-paper);
   }
   .guillo-edits__tile {
     position: relative;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1 / 1.12;
     overflow: hidden;
     background: var(--g-canvas);
     display: block;
@@ -62,21 +68,30 @@
   .guillo-edits__wash {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgb(12 13 16 / 0) 46%, rgb(12 13 16 / 0.62) 100%);
+    background: linear-gradient(180deg, transparent 38%, rgb(10 17 20 / 0.58) 100%);
   }
   .guillo-edits__caption {
     position: absolute;
-    left: 44px;
-    right: 44px;
-    bottom: 40px;
+    left: 24px;
+    right: 24px;
+    bottom: 56px;
+    text-align: center;
+  }
+  .guillo-edits__eyebrow {
+    display: block;
+    font: 400 10px/1.4 var(--g-sans);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 18px;
   }
   .guillo-edits__name {
     display: block;
-    font: 400 24px/1.25 var(--g-sans);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    font: 400 clamp(34px, 3.5vw, 56px)/1.08 var(--g-serif);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
     color: #fff;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
   }
   .guillo-edits__cta {
     display: inline-block;
@@ -85,12 +100,19 @@
     text-transform: uppercase;
     color: #fff;
     border-bottom: 1px solid rgb(255 255 255 / 0.6);
-    padding-bottom: 5px;
+    padding-block: 8px;
+  }
+  .guillo-edits__tile:focus-visible { outline: 3px solid var(--g-ink); outline-offset: -6px; }
+  @media (prefers-reduced-motion: reduce) {
+    .guillo-edits__img { transition: none; }
+    .guillo-edits__tile:hover .guillo-edits__img { transform: none; }
   }
   @media screen and (max-width: 749px) {
-    .guillo-edits { grid-template-columns: 1fr; }
-    .guillo-edits__caption { left: 24px; right: 24px; bottom: 26px; }
-    .guillo-edits__name { font-size: 19px; }
+    .guillo-edits { grid-template-columns: 1fr; gap: 8px; padding: 8px; }
+    .guillo-edits__tile { aspect-ratio: 4 / 5; }
+    .guillo-edits__caption { left: 20px; right: 20px; bottom: 36px; }
+    .guillo-edits__name { font-size: 36px; }
+    .guillo-edits__eyebrow { font-size: 9px; margin-bottom: 14px; }
   }
 {% endstylesheet %}
 
@@ -105,6 +127,8 @@
       "settings": [
         { "type": "collection", "id": "collection", "label": "Collection" },
         { "type": "text", "id": "title", "label": "Title override" },
+        { "type": "text", "id": "eyebrow", "label": "Caption above title" },
+        { "type": "text", "id": "cta_label", "label": "Shopping link label" },
         { "type": "url", "id": "link", "label": "Link override" },
         { "type": "image_picker", "id": "image", "label": "Image override" },
         { "type": "text", "id": "image_position", "label": "Image focal point", "default": "center 20%" },
