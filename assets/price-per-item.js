@@ -132,4 +132,3 @@ class PricePerItemComponent extends Component {
 if (!customElements.get('price-per-item')) {
   customElements.define('price-per-item', PricePerItemComponent);
 }
-

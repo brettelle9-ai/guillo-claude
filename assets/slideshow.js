@@ -941,4 +941,3 @@ export class Slideshow extends Component {
 if (!customElements.get('slideshow-component')) {
   customElements.define('slideshow-component', Slideshow);
 }
-

@@ -84,4 +84,3 @@ if (!customElements.get('product-title')) {
 }
 
 export default ProductTitle;
-

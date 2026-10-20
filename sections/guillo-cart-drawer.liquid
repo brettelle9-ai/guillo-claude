@@ -168,7 +168,7 @@
 {{ 'guillo-cart-drawer.css' | asset_url | stylesheet_tag }}
 
 {%- comment -%} Only schema-driven values live inline; all real styling is in the CSS file. {%- endcomment -%}
-<style>
+<style id="GuilloCartVars">
   #GuilloCartDrawer {
     --gcart-bg: {{ section.settings.drawer_bg }};
     --gcart-text: {{ section.settings.text_color }};
@@ -310,29 +310,9 @@
   aria-hidden="true"
   tabindex="-1"
 >
-  {%- comment -%} ---------- Luxury loading overlay ---------- {%- endcomment -%}
-  <div class="gcart-loader" data-gcart-loader aria-hidden="true">
-    {%- if section.settings.loader_logo != blank -%}
-      <img
-        class="gcart-loader__logo"
-        src="{{ section.settings.loader_logo | image_url: width: 280 }}"
-        alt="{{ shop.name | escape }}"
-        width="130"
-        height="{{ 130 | times: section.settings.loader_logo.height | divided_by: section.settings.loader_logo.width }}"
-        loading="lazy"
-      >
-    {%- else -%}
-      <span class="gcart-loader__word">{{ shop.name }}</span>
-    {%- endif -%}
-    <span class="gcart-loader__line"></span>
-  </div>
-
   {%- comment -%} ---------- Header ---------- {%- endcomment -%}
   <header class="gcart-header">
-    <h2 class="gcart-title">
-      {{ section.settings.cart_title }}
-      <span class="gcart-count" data-gcart-count>(0)</span>
-    </h2>
+    <h2 class="gcart-title">{{ section.settings.cart_title }}<sup class="gcart-count" data-gcart-count>0</sup></h2>
     <button type="button" class="gcart-close" data-gcart-close aria-label="Close cart">
       <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
         <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -340,72 +320,61 @@
     </button>
   </header>
 
+  {%- comment -%} ---------- Progress to the three-piece discount, above the bag ----------
+    A bar that fills towards a lock, the percentage under the lock. The wordy
+    nudge lives under the items instead (data-gcart-wardrobe-msg). {%- endcomment -%}
+  {%- if section.settings.wardrobe_show -%}
+    <section class="gcart-goal" data-gcart-wardrobe aria-label="{{ section.settings.wardrobe_title | escape }}">
+      <div class="gcart-goal__bar">
+        <div class="gcart-progress__track" data-gcart-progress>
+          <div class="gcart-progress__fill" data-gcart-progress-fill></div>
+        </div>
+        {%- comment -%} The lock sits on the middle of the bar; the bar fills up to it, then all the way once unlocked. {%- endcomment -%}
+        <span class="gcart-goal__lock" aria-hidden="true">
+          <svg class="gcart-goal__lock-closed" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="5.5" y="10.5" width="13" height="9.5" rx="1.5"/><path d="M8.5 10.5V7.8a3.5 3.5 0 0 1 7 0v2.7"/></svg>
+          <svg class="gcart-goal__lock-open" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="5.5" y="10.5" width="13" height="9.5" rx="1.5"/><path d="M8.5 10.5V7.8a3.5 3.5 0 0 1 6.6-1.6"/></svg>
+        </span>
+      </div>
+      <div class="gcart-goal__foot">
+        <span class="gcart-goal__unlocked" data-gcart-unlocked-label hidden></span>
+        <span class="gcart-goal__pct">{{ section.settings.wardrobe_discount_percent | default: 20 }}% off</span>
+      </div>
+    </section>
+  {%- endif -%}
+
   {%- comment -%} ---------- Scrollable body ---------- {%- endcomment -%}
   <div class="gcart-body" data-gcart-body>
 
-    {%- comment -%} Line items (rendered by JS from /cart.js) ---------- {%- endcomment -%}
+    {%- comment -%} Line items (rendered by JS from /cart.js) {%- endcomment -%}
     <div class="gcart-items" data-gcart-items aria-live="polite"></div>
+    {%- if section.settings.wardrobe_show -%}
+      <p class="gcart-nudge" data-gcart-wardrobe-msg></p>
+    {%- endif -%}
 
-    {%- comment -%} Empty state ---------- {%- endcomment -%}
+    {%- comment -%} Empty state {%- endcomment -%}
     <div class="gcart-empty" data-gcart-empty hidden>
       <p>{{ section.settings.empty_cart_text }}</p>
     </div>
 
-    {%- comment -%} ---------- Build Your Wardrobe ---------- {%- endcomment -%}
-    {%- if section.settings.wardrobe_show -%}
-      <section class="gcart-wardrobe" data-gcart-wardrobe>
-        <div class="gcart-wardrobe__head">
-          <h3 class="gcart-eyebrow">{{ section.settings.wardrobe_title }}</h3>
-          <span class="gcart-wardrobe__unlocked" data-gcart-unlocked-label hidden></span>
-        </div>
-        <p class="gcart-wardrobe__msg" data-gcart-wardrobe-msg></p>
-
-        <div class="gcart-progress" data-gcart-progress>
-          <div class="gcart-progress__track">
-            <div class="gcart-progress__fill" data-gcart-progress-fill></div>
-          </div>
-          <div class="gcart-progress__nodes">
-            {%- assign threshold = section.settings.wardrobe_threshold | default: 3 -%}
-            {%- for i in (1..threshold) -%}
-              <div class="gcart-progress__node" data-gcart-node="{{ i }}">
-                <span class="gcart-progress__dot"></span>
-                <span class="gcart-progress__label">
-                  {{ i }}
-                  {%- if i == 1 -%} {{ section.settings.piece_singular }}
-                  {%- else -%} {{ section.settings.piece_plural }}{%- endif -%}
-                </span>
-              </div>
-            {%- endfor -%}
-          </div>
-        </div>
-
-        {%- comment -%} ---------- Matching pieces ----------
-          Merged into Build Your Wardrobe rather than sitting in its own
-          "Complete the Look" block. Two headings plus two progress ideas made
-          the bag busy, and collapsing the cards hid the recommendations
-          entirely. One heading, one progress line, cards always visible.
-        {%- endcomment -%}
-        {%- if section.settings.upsell_show -%}
-          {%- assign upsell_count = 0 -%}
-          <div class="gcart-upsell" data-gcart-upsell>
-            <div class="gcart-upsell__scroll" data-gcart-upsell-scroll>
+    {%- comment -%} ---------- Complete the look ---------- {%- endcomment -%}
+    {%- if section.settings.upsell_show -%}
+      {%- assign upsell_count = 0 -%}
+      <section class="gcart-upsell" data-gcart-upsell>
+        <h3 class="gcart-upsell__title">{{ section.settings.upsell_title }}</h3>
+        <div class="gcart-upsell__scroll" data-gcart-upsell-scroll>
           {%- for block in section.blocks -%}
             {%- if block.type == 'upsell_product' and block.settings.product != blank -%}
               {%- assign upsell_count = upsell_count | plus: 1 -%}
               {%- render 'guillo-cart-upsell-card', product: block.settings.product, block: block -%}
             {%- endif -%}
           {%- endfor -%}
-
-          {%- comment -%} Fallback: products picked in a single product_list setting {%- endcomment -%}
           {%- for product in section.settings.upsell_products -%}
-              {%- assign upsell_count = upsell_count | plus: 1 -%}
-              {%- render 'guillo-cart-upsell-card', product: product -%}
-            {%- endfor -%}
-            </div>
-            {%- if upsell_count == 0 -%}
-              <p class="gcart-upsell__empty">{{ 'Add upsell products in the theme editor.' }}</p>
-            {%- endif -%}
-          </div>
+            {%- assign upsell_count = upsell_count | plus: 1 -%}
+            {%- render 'guillo-cart-upsell-card', product: product -%}
+          {%- endfor -%}
+        </div>
+        {%- if upsell_count == 0 -%}
+          <p class="gcart-upsell__empty">Add matching pieces in the theme editor.</p>
         {%- endif -%}
       </section>
     {%- endif -%}
@@ -438,6 +407,30 @@
       </div>
     </div>
 
+    {%- if section.settings.show_promo -%}
+      {%- comment -%}
+        Discount code. Collapsed to a single line until asked for, so a bag with
+        no code to enter is not carrying an empty field. Applied through
+        /cart/update.js, which puts the code on the cart itself, so the totals
+        above update without leaving the drawer.
+      {%- endcomment -%}
+      <div class="gcart-promo" data-gcart-promo>
+        <button type="button" class="gcart-promo__toggle" data-gcart-promo-toggle aria-expanded="false" aria-controls="gcart-promo-panel">
+          <span class="gcart-promo__plus" aria-hidden="true"></span>
+          <span>{{ section.settings.promo_label }}</span>
+        </button>
+        <div class="gcart-promo__panel" id="gcart-promo-panel" data-gcart-promo-panel hidden>
+          <input type="text" class="gcart-promo__input" data-gcart-promo-input placeholder="{{ section.settings.promo_placeholder }}" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" aria-label="{{ section.settings.promo_label }}">
+          <button type="button" class="gcart-promo__apply" data-gcart-promo-apply>{{ section.settings.promo_apply_text }}</button>
+        </div>
+        <div class="gcart-promo__applied" data-gcart-promo-applied hidden>
+          <span class="gcart-promo__code" data-gcart-promo-code></span>
+          <button type="button" class="gcart-promo__remove" data-gcart-promo-remove>Remove</button>
+        </div>
+        <p class="gcart-promo__msg" data-gcart-promo-msg role="status" aria-live="polite" hidden></p>
+      </div>
+    {%- endif -%}
+
     {%- comment -%}
       Checkout is a real link to the checkout URL so no cart script can swallow
       the click. (Disable any third-party cart app embed, e.g. Unicorn, so it
@@ -449,13 +442,11 @@
       data-gcart-checkout
       role="button"
     >
-      {%- if section.settings.show_lock_icon -%}
-        <svg class="gcart-checkout__lock" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-          <path d="M7 10V8a5 5 0 0110 0v2m-11 0h12v9H6v-9z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        </svg>
-      {%- endif -%}
       <span class="gcart-checkout__text">{{ section.settings.checkout_text }}</span>
       <span class="gcart-checkout__badge" data-gcart-badge hidden></span>
+      {%- if section.settings.show_lock_icon -%}
+        <svg class="gcart-checkout__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M5 8.5h14l-1 12H6z"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/></svg>
+      {%- endif -%}
     </a>
 
     {%- if show_payment_market -%}
@@ -471,6 +462,42 @@
       </p>
     {%- endif -%}
   </footer>
+
+  {%- comment -%} ---------- Options sheet for Complete the look ----------
+    Slides up inside the drawer when a card is tapped: image, price, the
+    family's colours, this colour's sizes, add to bag. Filled by the drawer
+    script from the JSON each card carries. {%- endcomment -%}
+  <div class="gcart-sheet" data-gcart-sheet hidden>
+    <div class="gcart-sheet__scrim" data-gcart-sheet-close></div>
+    <div class="gcart-sheet__panel" role="dialog" aria-modal="true" aria-labelledby="gcart-sheet-title" tabindex="-1">
+      <div class="gcart-sheet__head">
+        <h3 class="gcart-sheet__title" id="gcart-sheet-title" data-gcart-sheet-title></h3>
+        <button type="button" class="gcart-sheet__close" data-gcart-sheet-close aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+        </button>
+      </div>
+      <div class="gcart-sheet__body">
+        {%- comment -%} 3:4 is the shape of the garment shots; CSS renders the true ratio. {%- endcomment -%}
+        {%- comment -%}
+          Eager for the same reason as the line-item images: this sheet is only
+          ever in the DOM once the drawer is open, so there is nothing below the
+          fold to defer. alt is filled in from the product family when the sheet
+          opens (see sh.img.alt in guillo-cart-drawer.js).
+        {%- endcomment -%}
+        <div class="gcart-sheet__media"><img data-gcart-sheet-img alt="" loading="eager" decoding="async" width="300" height="400"></div>
+        <p class="gcart-sheet__price" data-gcart-sheet-price></p>
+        <div class="gcart-sheet__group" data-gcart-sheet-colours-wrap hidden>
+          <p class="gcart-sheet__label">Colour</p>
+          <div class="gcart-sheet__opts" data-gcart-sheet-colours role="radiogroup" aria-label="Colour"></div>
+        </div>
+        <div class="gcart-sheet__group">
+          <p class="gcart-sheet__label" data-gcart-sheet-size-label>Size</p>
+          <div class="gcart-sheet__opts" data-gcart-sheet-sizes role="radiogroup" aria-label="Size"></div>
+        </div>
+      </div>
+      <button type="button" class="gcart-sheet__add" data-gcart-sheet-add>Add to bag</button>
+    </div>
+  </div>
 </aside>
 
 <script src="{{ 'guillo-cart-drawer.js' | asset_url }}" defer></script>
@@ -481,165 +508,801 @@
   "tag": "section",
   "class": "guillo-cart-drawer-section",
   "settings": [
-    { "type": "header", "content": "General" },
-    { "type": "text", "id": "cart_title", "label": "Cart title", "default": "Your Cart" },
-    { "type": "text", "id": "empty_cart_text", "label": "Empty cart message", "default": "Your cart is empty." },
-    { "type": "checkbox", "id": "open_on_add", "label": "Take over add-to-cart (AJAX add)", "default": true },
-    { "type": "checkbox", "id": "quiet_add", "label": "Quiet add confirmation", "default": true, "info": "On add to cart, show a small toast and bump the cart icon instead of opening the drawer. Untick to restore the old auto-opening drawer." },
-    { "type": "text", "id": "toast_text", "label": "Toast text", "default": "Added to bag" },
-    { "type": "text", "id": "toast_link_text", "label": "Toast link text", "default": "View bag" },
-    { "type": "image_picker", "id": "loader_logo", "label": "Loading logo", "info": "Shown on the brief loading animation. Falls back to your shop name if empty." },
-
-    { "type": "header", "content": "Colours" },
-    { "type": "color", "id": "drawer_bg", "label": "Drawer background", "default": "#ffffff" },
-    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#111111" },
-    { "type": "color", "id": "muted_color", "label": "Muted / secondary text", "default": "#8a8a8a" },
-    { "type": "color", "id": "border_color", "label": "Border colour", "default": "#e7e3dd" },
-    { "type": "color", "id": "button_bg", "label": "Checkout button background", "default": "#000000" },
-    { "type": "color", "id": "button_text", "label": "Checkout button text", "default": "#ffffff" },
-    { "type": "color", "id": "accent_color", "label": "Accent (progress / discount)", "default": "#111111" },
-
-    { "type": "header", "content": "Layout & Typography" },
-    { "type": "range", "id": "drawer_width", "label": "Drawer width (desktop)", "min": 360, "max": 560, "step": 10, "unit": "px", "default": 440 },
-    { "type": "range", "id": "base_font_size", "label": "Base font size", "min": 11, "max": 16, "step": 1, "unit": "px", "default": 13 },
-    { "type": "range", "id": "heading_font_size", "label": "Heading font size", "min": 16, "max": 30, "step": 1, "unit": "px", "default": 22 },
-
-    { "type": "header", "content": "Product Images" },
-    { "type": "range", "id": "item_image_width", "label": "Cart item image width", "min": 56, "max": 120, "step": 2, "unit": "px", "default": 78 },
-    { "type": "select", "id": "item_image_ratio", "label": "Cart item image ratio",
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "text",
+      "id": "cart_title",
+      "label": "Cart title",
+      "default": "Your Cart"
+    },
+    {
+      "type": "text",
+      "id": "empty_cart_text",
+      "label": "Empty cart message",
+      "default": "Your cart is empty."
+    },
+    {
+      "type": "checkbox",
+      "id": "open_on_add",
+      "label": "Take over add-to-cart (AJAX add)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "quiet_add",
+      "label": "Quiet add confirmation",
+      "default": true,
+      "info": "On add to cart, show a small toast and bump the cart icon instead of opening the drawer. Untick to restore the old auto-opening drawer."
+    },
+    {
+      "type": "text",
+      "id": "toast_text",
+      "label": "Toast text",
+      "default": "Added to bag"
+    },
+    {
+      "type": "text",
+      "id": "toast_link_text",
+      "label": "Toast link text",
+      "default": "View bag"
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "drawer_bg",
+      "label": "Drawer background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text colour",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Muted / secondary text",
+      "default": "#8a8a8a"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border colour",
+      "default": "#e7e3dd"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Checkout button background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Checkout button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent (progress / discount)",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Layout & Typography"
+    },
+    {
+      "type": "range",
+      "id": "drawer_width",
+      "label": "Drawer width (desktop)",
+      "min": 360,
+      "max": 560,
+      "step": 10,
+      "unit": "px",
+      "default": 440
+    },
+    {
+      "type": "range",
+      "id": "base_font_size",
+      "label": "Base font size",
+      "min": 11,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Heading font size",
+      "min": 16,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "header",
+      "content": "Product Images"
+    },
+    {
+      "type": "range",
+      "id": "item_image_width",
+      "label": "Cart item image width",
+      "min": 56,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 78
+    },
+    {
+      "type": "select",
+      "id": "item_image_ratio",
+      "label": "Cart item image ratio",
       "options": [
-        { "value": "1 / 1", "label": "Square (1:1)" },
-        { "value": "4 / 5", "label": "Portrait (4:5)" },
-        { "value": "3 / 4", "label": "Portrait (3:4)" },
-        { "value": "2 / 3", "label": "Tall (2:3)" },
-        { "value": "4 / 3", "label": "Landscape (4:3)" }
-      ], "default": "4 / 5" },
-    { "type": "range", "id": "upsell_card_width", "label": "Upsell card image width", "min": 100, "max": 220, "step": 5, "unit": "px", "default": 130 },
-    { "type": "select", "id": "upsell_image_ratio", "label": "Upsell image ratio",
+        {
+          "value": "1 / 1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Portrait (3:4)"
+        },
+        {
+          "value": "2 / 3",
+          "label": "Tall (2:3)"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Landscape (4:3)"
+        }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "range",
+      "id": "upsell_card_width",
+      "label": "Upsell card image width",
+      "min": 100,
+      "max": 220,
+      "step": 5,
+      "unit": "px",
+      "default": 130
+    },
+    {
+      "type": "select",
+      "id": "upsell_image_ratio",
+      "label": "Upsell image ratio",
       "options": [
-        { "value": "1 / 1", "label": "Square (1:1)" },
-        { "value": "4 / 5", "label": "Portrait (4:5)" },
-        { "value": "3 / 4", "label": "Portrait (3:4)" },
-        { "value": "2 / 3", "label": "Tall (2:3)" },
-        { "value": "4 / 3", "label": "Landscape (4:3)" }
-      ], "default": "4 / 5" },
-
-    { "type": "header", "content": "Build Your Wardrobe" },
-    { "type": "checkbox", "id": "wardrobe_show", "label": "Show section", "default": true },
-    { "type": "text", "id": "wardrobe_title", "label": "Title", "default": "Build Your Wardrobe" },
-    { "type": "range", "id": "wardrobe_threshold", "label": "Unlock threshold (total items)", "min": 1, "max": 6, "step": 1, "default": 3 },
-    { "type": "range", "id": "wardrobe_discount_percent", "label": "Discount percent", "min": 1, "max": 50, "step": 1, "unit": "%", "default": 20 },
-    { "type": "checkbox", "id": "wardrobe_show_discount_estimate", "label": "Show savings in totals", "default": true, "info": "Savings now read from the real cart discounts applied by Shopify." },
-    { "type": "text", "id": "wardrobe_building_message", "label": "Building message", "default": "Add {remaining} more {piece} and take {percent}% off", "info": "Tokens: {remaining} {piece} {percent}" },
-    { "type": "text", "id": "wardrobe_unlocked_label", "label": "Unlocked label (top-right)", "default": "{percent}% unlocked" },
-    { "type": "text", "id": "wardrobe_unlocked_message", "label": "Unlocked message", "default": "{percent}% off applied." },
-    { "type": "text", "id": "piece_singular", "label": "Piece word (singular)", "default": "Piece" },
-    { "type": "text", "id": "piece_plural", "label": "Piece word (plural)", "default": "Pieces" },
-
-    { "type": "header", "content": "Complete the Look (Upsells)" },
-    { "type": "checkbox", "id": "upsell_show", "label": "Show section", "default": true },
-    { "type": "text", "id": "upsell_title", "label": "Title", "default": "Complete the Look" },
-    { "type": "text", "id": "upsell_subtitle", "label": "Subtitle", "default": "Curated Pairings" },
-    { "type": "checkbox", "id": "upsell_hide_in_cart", "label": "Hide products already in cart", "default": true },
-    { "type": "product_list", "id": "upsell_products", "label": "Upsell products (global)", "limit": 12, "info": "Or add per-product blocks below for per-product text." },
-
-    { "type": "header", "content": "Checkout / Footer" },
-    { "type": "text", "id": "subtotal_label", "label": "Subtotal label", "default": "Subtotal" },
-    { "type": "text", "id": "shipping_label", "label": "Shipping label", "default": "Shipping" },
-    { "type": "text", "id": "discount_label", "label": "Discount row label (legacy, unused)", "default": "Wardrobe Discount ({percent}%)" },
-    { "type": "text", "id": "saved_label", "label": "Total saved row label", "default": "Total saved" },
-    { "type": "text", "id": "item_save_prefix", "label": "Line item saving prefix", "default": "You save" },
-    { "type": "text", "id": "total_label", "label": "Total label", "default": "Total" },
-    { "type": "text", "id": "checkout_text", "label": "Checkout button text", "default": "Secure Checkout" },
-    { "type": "color", "id": "checkout_hover_color", "label": "Checkout text colour on hover", "default": "#2f7d57" },
-    { "type": "checkbox", "id": "show_lock_icon", "label": "Show lock icon", "default": true },
-    { "type": "text", "id": "unlocked_badge", "label": "Checkout badge when unlocked", "default": "{percent}% OFF" },
-    { "type": "checkbox", "id": "show_payment", "label": "Show payment / installments line", "default": true },
-    { "type": "range", "id": "payment_installments", "label": "Number of installments", "min": 2, "max": 6, "step": 1, "default": 4 },
-    { "type": "text", "id": "payment_text", "label": "Payment text (default / Rest of World)", "default": "{installments} × {payment} payments with Afterpay", "info": "Tokens: {installments} {payment}" },
-    { "type": "checkbox", "id": "show_returns", "label": "Show returns line", "default": true },
-    { "type": "text", "id": "returns_text", "label": "Returns text (default / Rest of World)", "default": "44-day free returns & exchanges" },
-    { "type": "text", "id": "free_shipping_text", "label": "Free shipping text (default / Rest of World)", "default": "Free" },
-    { "type": "text", "id": "shipping_at_checkout_text", "label": "Shipping text when no rate is known", "default": "Calculated at checkout", "info": "Shown in any market with no threshold and no rate set below. Never claims free." },
-    { "type": "text", "id": "free_shipping_threshold", "label": "Free shipping threshold (default / Rest of World)", "info": "Cart total, after discounts, that unlocks free shipping. Numbers only, in that market's currency, e.g. 120. MUST match Settings > Shipping or the drawer will contradict checkout. Leave blank if the market has no free shipping." },
-    { "type": "text", "id": "shipping_rate", "label": "Shipping rate below threshold (default / Rest of World)", "info": "The cheapest rate the customer actually pays under the threshold. Numbers only, e.g. 16." },
-    { "type": "text", "id": "shipping_nudge_text", "label": "Free shipping nudge (default / Rest of World)", "default": "{amount} away from free delivery", "info": "Shown while the cart is under the threshold. Token: {amount}" },
-    { "type": "text", "id": "ship_unlocked_text", "label": "Free shipping unlocked (default / Rest of World)", "default": "Free delivery unlocked", "info": "Shown on the progress bar once the threshold is met." },
-    { "type": "range", "id": "money_decimals", "label": "Currency decimals", "min": 0, "max": 2, "step": 1, "default": 2, "info": "Use 0 for zero-decimal currencies (e.g. JPY)." },
-
-    { "type": "header", "content": "Market text — Australia (AU)" },
-    { "type": "text", "id": "au_free_shipping_text", "label": "Free shipping text" },
-    { "type": "text", "id": "au_returns_text", "label": "Returns text" },
-    { "type": "text", "id": "au_payment_text", "label": "Payment text" },
-    { "type": "text", "id": "au_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
-    { "type": "text", "id": "au_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
-    { "type": "text", "id": "au_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
-    { "type": "text", "id": "au_ship_unlocked_text", "label": "Free shipping unlocked" },
-    { "type": "checkbox", "id": "au_hide_payment", "label": "Hide the instalments line", "default": false },
-
-    { "type": "header", "content": "Market text — New Zealand (NZ)" },
-    { "type": "text", "id": "nz_free_shipping_text", "label": "Free shipping text" },
-    { "type": "text", "id": "nz_returns_text", "label": "Returns text" },
-    { "type": "text", "id": "nz_payment_text", "label": "Payment text" },
-    { "type": "text", "id": "nz_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
-    { "type": "text", "id": "nz_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
-    { "type": "text", "id": "nz_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
-    { "type": "text", "id": "nz_ship_unlocked_text", "label": "Free shipping unlocked" },
-    { "type": "checkbox", "id": "nz_hide_payment", "label": "Hide the instalments line", "default": false },
-
-    { "type": "header", "content": "Market text — United States (US)" },
-    { "type": "text", "id": "us_free_shipping_text", "label": "Free shipping text" },
-    { "type": "text", "id": "us_returns_text", "label": "Returns text" },
-    { "type": "text", "id": "us_payment_text", "label": "Payment text" },
-    { "type": "text", "id": "us_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
-    { "type": "text", "id": "us_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
-    { "type": "text", "id": "us_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
-    { "type": "text", "id": "us_ship_unlocked_text", "label": "Free shipping unlocked" },
-    { "type": "checkbox", "id": "us_hide_payment", "label": "Hide the instalments line", "default": false },
-
-    { "type": "header", "content": "Market text — United Kingdom (GB)" },
-    { "type": "text", "id": "gb_free_shipping_text", "label": "Free shipping text" },
-    { "type": "text", "id": "gb_returns_text", "label": "Returns text" },
-    { "type": "text", "id": "gb_payment_text", "label": "Payment text" },
-    { "type": "text", "id": "gb_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
-    { "type": "text", "id": "gb_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
-    { "type": "text", "id": "gb_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
-    { "type": "text", "id": "gb_ship_unlocked_text", "label": "Free shipping unlocked" },
-    { "type": "checkbox", "id": "gb_hide_payment", "label": "Hide the instalments line", "default": false },
-
-    { "type": "header", "content": "Market text — Canada (CA)" },
-    { "type": "text", "id": "ca_free_shipping_text", "label": "Free shipping text" },
-    { "type": "text", "id": "ca_returns_text", "label": "Returns text" },
-    { "type": "text", "id": "ca_payment_text", "label": "Payment text" },
-    { "type": "text", "id": "ca_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
-    { "type": "text", "id": "ca_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
-    { "type": "text", "id": "ca_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
-    { "type": "text", "id": "ca_ship_unlocked_text", "label": "Free shipping unlocked" },
-    { "type": "checkbox", "id": "ca_hide_payment", "label": "Hide the instalments line", "default": false },
-
-    { "type": "header", "content": "Market text — Singapore (SG)" },
-    { "type": "text", "id": "sg_free_shipping_text", "label": "Free shipping text" },
-    { "type": "text", "id": "sg_returns_text", "label": "Returns text" },
-    { "type": "text", "id": "sg_payment_text", "label": "Payment text" },
-    { "type": "text", "id": "sg_free_shipping_threshold", "label": "Free shipping threshold", "info": "Numbers only. MUST match Settings > Shipping." },
-    { "type": "text", "id": "sg_shipping_rate", "label": "Shipping rate below threshold", "info": "Numbers only. The cheapest rate actually charged." },
-    { "type": "text", "id": "sg_shipping_nudge_text", "label": "Free shipping nudge", "info": "Token: {amount}" },
-    { "type": "text", "id": "sg_ship_unlocked_text", "label": "Free shipping unlocked" },
-    { "type": "checkbox", "id": "sg_hide_payment", "label": "Hide the instalments line", "default": false }
+        {
+          "value": "1 / 1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Portrait (3:4)"
+        },
+        {
+          "value": "2 / 3",
+          "label": "Tall (2:3)"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Landscape (4:3)"
+        }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "header",
+      "content": "Build Your Wardrobe"
+    },
+    {
+      "type": "checkbox",
+      "id": "wardrobe_show",
+      "label": "Show section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "wardrobe_title",
+      "label": "Title",
+      "default": "Build Your Wardrobe"
+    },
+    {
+      "type": "range",
+      "id": "wardrobe_threshold",
+      "label": "Unlock threshold (total items)",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "wardrobe_discount_percent",
+      "label": "Discount percent",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "wardrobe_show_discount_estimate",
+      "label": "Show savings in totals",
+      "default": true,
+      "info": "Savings now read from the real cart discounts applied by Shopify."
+    },
+    {
+      "type": "text",
+      "id": "wardrobe_building_message",
+      "label": "Building message",
+      "default": "Add {remaining} more {piece} and take {percent}% off",
+      "info": "Tokens: {remaining} {piece} {percent}"
+    },
+    {
+      "type": "text",
+      "id": "wardrobe_unlocked_label",
+      "label": "Unlocked label (top-right)",
+      "default": "{percent}% unlocked"
+    },
+    {
+      "type": "text",
+      "id": "wardrobe_unlocked_message",
+      "label": "Unlocked message",
+      "default": "{percent}% off applied."
+    },
+    {
+      "type": "text",
+      "id": "piece_singular",
+      "label": "Piece word (singular)",
+      "default": "Piece"
+    },
+    {
+      "type": "text",
+      "id": "piece_plural",
+      "label": "Piece word (plural)",
+      "default": "Pieces"
+    },
+    {
+      "type": "header",
+      "content": "Complete the Look (Upsells)"
+    },
+    {
+      "type": "checkbox",
+      "id": "upsell_show",
+      "label": "Show section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "upsell_title",
+      "label": "Title",
+      "default": "Complete the Look"
+    },
+    {
+      "type": "text",
+      "id": "upsell_subtitle",
+      "label": "Subtitle",
+      "default": "Curated Pairings"
+    },
+    {
+      "type": "checkbox",
+      "id": "upsell_hide_in_cart",
+      "label": "Hide products already in cart",
+      "default": true
+    },
+    {
+      "type": "product_list",
+      "id": "upsell_products",
+      "label": "Upsell products (global)",
+      "limit": 12,
+      "info": "Or add per-product blocks below for per-product text."
+    },
+    {
+      "type": "header",
+      "content": "Checkout / Footer"
+    },
+    {
+      "type": "text",
+      "id": "subtotal_label",
+      "label": "Subtotal label",
+      "default": "Subtotal"
+    },
+    {
+      "type": "text",
+      "id": "shipping_label",
+      "label": "Shipping label",
+      "default": "Shipping"
+    },
+    {
+      "type": "text",
+      "id": "discount_label",
+      "label": "Discount row label (legacy, unused)",
+      "default": "Wardrobe Discount ({percent}%)"
+    },
+    {
+      "type": "text",
+      "id": "saved_label",
+      "label": "Total saved row label",
+      "default": "Total saved"
+    },
+    {
+      "type": "text",
+      "id": "item_save_prefix",
+      "label": "Line item saving prefix",
+      "default": "You save"
+    },
+    {
+      "type": "text",
+      "id": "total_label",
+      "label": "Total label",
+      "default": "Total"
+    },
+    {
+      "type": "header",
+      "content": "Discount code"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_promo",
+      "label": "Show discount code field",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "promo_label",
+      "label": "Link text",
+      "default": "Add a discount code"
+    },
+    {
+      "type": "text",
+      "id": "promo_placeholder",
+      "label": "Field placeholder",
+      "default": "Enter code"
+    },
+    {
+      "type": "text",
+      "id": "promo_apply_text",
+      "label": "Apply button",
+      "default": "Apply"
+    },
+    {
+      "type": "text",
+      "id": "checkout_text",
+      "label": "Checkout button text",
+      "default": "Secure Checkout"
+    },
+    {
+      "type": "color",
+      "id": "checkout_hover_color",
+      "label": "Checkout text colour on hover",
+      "default": "#2f7d57"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_lock_icon",
+      "label": "Show lock icon",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "unlocked_badge",
+      "label": "Checkout badge when unlocked",
+      "default": "{percent}% OFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment",
+      "label": "Show payment / installments line",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "payment_installments",
+      "label": "Number of installments",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "payment_text",
+      "label": "Payment text (default / Rest of World)",
+      "default": "{installments} × {payment} payments with Afterpay",
+      "info": "Tokens: {installments} {payment}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_returns",
+      "label": "Show returns line",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "returns_text",
+      "label": "Returns text (default / Rest of World)",
+      "default": "44-day free returns & exchanges"
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_text",
+      "label": "Free shipping text (default / Rest of World)",
+      "default": "Free"
+    },
+    {
+      "type": "text",
+      "id": "shipping_at_checkout_text",
+      "label": "Shipping text when no rate is known",
+      "default": "Calculated at checkout",
+      "info": "Shown in any market with no threshold and no rate set below. Never claims free."
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_threshold",
+      "label": "Free shipping threshold (default / Rest of World)",
+      "info": "Cart total, after discounts, that unlocks free shipping. Numbers only, in that market's currency, e.g. 120. MUST match Settings > Shipping or the drawer will contradict checkout. Leave blank if the market has no free shipping."
+    },
+    {
+      "type": "text",
+      "id": "shipping_rate",
+      "label": "Shipping rate below threshold (default / Rest of World)",
+      "info": "The cheapest rate the customer actually pays under the threshold. Numbers only, e.g. 16."
+    },
+    {
+      "type": "text",
+      "id": "shipping_nudge_text",
+      "label": "Free shipping nudge (default / Rest of World)",
+      "default": "{amount} away from free delivery",
+      "info": "Shown while the cart is under the threshold. Token: {amount}"
+    },
+    {
+      "type": "text",
+      "id": "ship_unlocked_text",
+      "label": "Free shipping unlocked (default / Rest of World)",
+      "default": "Free delivery unlocked",
+      "info": "Shown on the progress bar once the threshold is met."
+    },
+    {
+      "type": "range",
+      "id": "money_decimals",
+      "label": "Currency decimals",
+      "min": 0,
+      "max": 2,
+      "step": 1,
+      "default": 2,
+      "info": "Use 0 for zero-decimal currencies (e.g. JPY)."
+    },
+    {
+      "type": "header",
+      "content": "Market text — Australia (AU)"
+    },
+    {
+      "type": "text",
+      "id": "au_free_shipping_text",
+      "label": "Free shipping text"
+    },
+    {
+      "type": "text",
+      "id": "au_returns_text",
+      "label": "Returns text"
+    },
+    {
+      "type": "text",
+      "id": "au_payment_text",
+      "label": "Payment text"
+    },
+    {
+      "type": "text",
+      "id": "au_free_shipping_threshold",
+      "label": "Free shipping threshold",
+      "info": "Numbers only. MUST match Settings > Shipping."
+    },
+    {
+      "type": "text",
+      "id": "au_shipping_rate",
+      "label": "Shipping rate below threshold",
+      "info": "Numbers only. The cheapest rate actually charged."
+    },
+    {
+      "type": "text",
+      "id": "au_shipping_nudge_text",
+      "label": "Free shipping nudge",
+      "info": "Token: {amount}"
+    },
+    {
+      "type": "text",
+      "id": "au_ship_unlocked_text",
+      "label": "Free shipping unlocked"
+    },
+    {
+      "type": "checkbox",
+      "id": "au_hide_payment",
+      "label": "Hide the instalments line",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Market text — New Zealand (NZ)"
+    },
+    {
+      "type": "text",
+      "id": "nz_free_shipping_text",
+      "label": "Free shipping text"
+    },
+    {
+      "type": "text",
+      "id": "nz_returns_text",
+      "label": "Returns text"
+    },
+    {
+      "type": "text",
+      "id": "nz_payment_text",
+      "label": "Payment text"
+    },
+    {
+      "type": "text",
+      "id": "nz_free_shipping_threshold",
+      "label": "Free shipping threshold",
+      "info": "Numbers only. MUST match Settings > Shipping."
+    },
+    {
+      "type": "text",
+      "id": "nz_shipping_rate",
+      "label": "Shipping rate below threshold",
+      "info": "Numbers only. The cheapest rate actually charged."
+    },
+    {
+      "type": "text",
+      "id": "nz_shipping_nudge_text",
+      "label": "Free shipping nudge",
+      "info": "Token: {amount}"
+    },
+    {
+      "type": "text",
+      "id": "nz_ship_unlocked_text",
+      "label": "Free shipping unlocked"
+    },
+    {
+      "type": "checkbox",
+      "id": "nz_hide_payment",
+      "label": "Hide the instalments line",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Market text — United States (US)"
+    },
+    {
+      "type": "text",
+      "id": "us_free_shipping_text",
+      "label": "Free shipping text"
+    },
+    {
+      "type": "text",
+      "id": "us_returns_text",
+      "label": "Returns text"
+    },
+    {
+      "type": "text",
+      "id": "us_payment_text",
+      "label": "Payment text"
+    },
+    {
+      "type": "text",
+      "id": "us_free_shipping_threshold",
+      "label": "Free shipping threshold",
+      "info": "Numbers only. MUST match Settings > Shipping."
+    },
+    {
+      "type": "text",
+      "id": "us_shipping_rate",
+      "label": "Shipping rate below threshold",
+      "info": "Numbers only. The cheapest rate actually charged."
+    },
+    {
+      "type": "text",
+      "id": "us_shipping_nudge_text",
+      "label": "Free shipping nudge",
+      "info": "Token: {amount}"
+    },
+    {
+      "type": "text",
+      "id": "us_ship_unlocked_text",
+      "label": "Free shipping unlocked"
+    },
+    {
+      "type": "checkbox",
+      "id": "us_hide_payment",
+      "label": "Hide the instalments line",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Market text — United Kingdom (GB)"
+    },
+    {
+      "type": "text",
+      "id": "gb_free_shipping_text",
+      "label": "Free shipping text"
+    },
+    {
+      "type": "text",
+      "id": "gb_returns_text",
+      "label": "Returns text"
+    },
+    {
+      "type": "text",
+      "id": "gb_payment_text",
+      "label": "Payment text"
+    },
+    {
+      "type": "text",
+      "id": "gb_free_shipping_threshold",
+      "label": "Free shipping threshold",
+      "info": "Numbers only. MUST match Settings > Shipping."
+    },
+    {
+      "type": "text",
+      "id": "gb_shipping_rate",
+      "label": "Shipping rate below threshold",
+      "info": "Numbers only. The cheapest rate actually charged."
+    },
+    {
+      "type": "text",
+      "id": "gb_shipping_nudge_text",
+      "label": "Free shipping nudge",
+      "info": "Token: {amount}"
+    },
+    {
+      "type": "text",
+      "id": "gb_ship_unlocked_text",
+      "label": "Free shipping unlocked"
+    },
+    {
+      "type": "checkbox",
+      "id": "gb_hide_payment",
+      "label": "Hide the instalments line",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Market text — Canada (CA)"
+    },
+    {
+      "type": "text",
+      "id": "ca_free_shipping_text",
+      "label": "Free shipping text"
+    },
+    {
+      "type": "text",
+      "id": "ca_returns_text",
+      "label": "Returns text"
+    },
+    {
+      "type": "text",
+      "id": "ca_payment_text",
+      "label": "Payment text"
+    },
+    {
+      "type": "text",
+      "id": "ca_free_shipping_threshold",
+      "label": "Free shipping threshold",
+      "info": "Numbers only. MUST match Settings > Shipping."
+    },
+    {
+      "type": "text",
+      "id": "ca_shipping_rate",
+      "label": "Shipping rate below threshold",
+      "info": "Numbers only. The cheapest rate actually charged."
+    },
+    {
+      "type": "text",
+      "id": "ca_shipping_nudge_text",
+      "label": "Free shipping nudge",
+      "info": "Token: {amount}"
+    },
+    {
+      "type": "text",
+      "id": "ca_ship_unlocked_text",
+      "label": "Free shipping unlocked"
+    },
+    {
+      "type": "checkbox",
+      "id": "ca_hide_payment",
+      "label": "Hide the instalments line",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Market text — Singapore (SG)"
+    },
+    {
+      "type": "text",
+      "id": "sg_free_shipping_text",
+      "label": "Free shipping text"
+    },
+    {
+      "type": "text",
+      "id": "sg_returns_text",
+      "label": "Returns text"
+    },
+    {
+      "type": "text",
+      "id": "sg_payment_text",
+      "label": "Payment text"
+    },
+    {
+      "type": "text",
+      "id": "sg_free_shipping_threshold",
+      "label": "Free shipping threshold",
+      "info": "Numbers only. MUST match Settings > Shipping."
+    },
+    {
+      "type": "text",
+      "id": "sg_shipping_rate",
+      "label": "Shipping rate below threshold",
+      "info": "Numbers only. The cheapest rate actually charged."
+    },
+    {
+      "type": "text",
+      "id": "sg_shipping_nudge_text",
+      "label": "Free shipping nudge",
+      "info": "Token: {amount}"
+    },
+    {
+      "type": "text",
+      "id": "sg_ship_unlocked_text",
+      "label": "Free shipping unlocked"
+    },
+    {
+      "type": "checkbox",
+      "id": "sg_hide_payment",
+      "label": "Hide the instalments line",
+      "default": false
+    }
   ],
   "blocks": [
     {
       "type": "upsell_product",
       "name": "Upsell product",
       "settings": [
-        { "type": "product", "id": "product", "label": "Product" },
-        { "type": "text", "id": "custom_title", "label": "Override title (optional)" }
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Override title (optional)"
+        }
       ]
     }
   ],
   "presets": [
-    { "name": "Guillo Cart Drawer" }
+    {
+      "name": "Guillo Cart Drawer"
+    }
   ]
 }
 {% endschema %}
-

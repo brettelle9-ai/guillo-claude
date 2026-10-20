@@ -103,4 +103,3 @@
     return Number(navigator.hardwareConcurrency) <= 2 || Number(navigator.deviceMemory) <= 2;
   }
 })();
-

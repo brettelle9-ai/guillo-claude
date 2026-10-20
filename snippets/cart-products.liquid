@@ -154,8 +154,16 @@
                       class="cart-items__media-container"
                       style="--ratio:{{ ratio }};"
                     >
+                      {%- comment -%}
+                        This rendered with no alt attribute at all. The image's
+                        own alt, falling back to the product title and colour.
+                      {%- endcomment -%}
+                      {%- capture cart_img_alt -%}
+                        {%- render 'guillo-image-alt', media_alt: item.image.alt, product: item.product -%}
+                      {%- endcapture -%}
+                      {%- assign cart_img_alt = cart_img_alt | strip -%}
                       {%- liquid
-                        echo item.image | image_url: width: 250 | image_tag: class: 'cart-items__media-image border-style', style: border_override
+                        echo item.image | image_url: width: 250 | image_tag: class: 'cart-items__media-image border-style', style: border_override, alt: cart_img_alt
                       -%}
                     </a>
                   {%- endif %}
@@ -930,4 +938,3 @@
     }
   }
 {% endstylesheet %}
-

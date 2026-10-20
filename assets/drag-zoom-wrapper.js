@@ -508,4 +508,3 @@ if (!customElements.get('drag-zoom-wrapper')) {
  * @typedef {HTMLElement} ZoomDialogElement
  * @property {Function} close - Method to close the zoom dialog
  */
-

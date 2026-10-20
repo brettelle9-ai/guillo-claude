@@ -94,4 +94,3 @@
   const observer = new MutationObserver(patchAll);
   observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
-

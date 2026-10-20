@@ -111,4 +111,3 @@ class CartDrawerComponent extends DialogComponent {
 if (!customElements.get('cart-drawer-component')) {
   customElements.define('cart-drawer-component', CartDrawerComponent);
 }
-

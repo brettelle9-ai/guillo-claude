@@ -236,6 +236,42 @@
     }
     .guillo-cuts__grid { grid-template-columns: 1fr; gap: 52px; }
   }
+  /* Phones: the three cuts become one horizontal, snap-scrolling rail
+     instead of three full-height stacked cards. The rail bleeds to the
+     screen edge so the next cut peeks in and reads as swipeable. Pure CSS;
+     no script. */
+  @media screen and (max-width: 749px) {
+    .guillo-cuts { padding-block: 52px 48px; }
+    .guillo-cuts__head { margin-bottom: 26px; padding-bottom: 22px; gap: 16px; }
+    .guillo-cuts__heading { font-size: 30px; margin-bottom: 12px; }
+    .guillo-cuts__intro { font-size: 15px; }
+    .guillo-cuts__grid {
+      display: flex;
+      gap: 14px;
+      margin-inline: -20px;
+      padding-inline: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: 20px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .guillo-cuts__grid::-webkit-scrollbar { display: none; }
+    .guillo-cuts__cut {
+      flex: 0 0 78vw;
+      max-width: 340px;
+      scroll-snap-align: start;
+    }
+    .guillo-cuts__media { aspect-ratio: 4 / 5; margin-bottom: 18px; }
+    .guillo-cuts__tag { margin-bottom: 10px; }
+    .guillo-cuts__row { margin-bottom: 10px; }
+    .guillo-cuts__name { font-size: 22px; }
+    .guillo-cuts__price { font-size: 14px; }
+    .guillo-cuts__copy { font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+    .guillo-cuts__scale-wrap { padding-top: 18px; }
+    .guillo-cuts__scale-label { margin-bottom: 16px; }
+    .guillo-cuts__meta { margin-top: 16px; font-size: 12px; }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -404,4 +440,3 @@
   ]
 }
 {% endschema %}
-

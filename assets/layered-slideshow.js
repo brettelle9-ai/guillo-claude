@@ -600,4 +600,3 @@ export class LayeredSlideshowComponent extends Component {
 }
 
 customElements.define('layered-slideshow-component', LayeredSlideshowComponent);
-

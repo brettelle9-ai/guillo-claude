@@ -274,4 +274,3 @@ function animateValue({ from, to, duration, onUpdate, easing = (t) => t * t * (3
 if (!customElements.get('marquee-component')) {
   customElements.define('marquee-component', MarqueeComponent);
 }
-

@@ -160,4 +160,3 @@ class ShowMoreComponent extends Component {
 if (!customElements.get('show-more-component')) {
   customElements.define('show-more-component', ShowMoreComponent);
 }
-

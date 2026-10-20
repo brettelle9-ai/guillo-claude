@@ -132,4 +132,3 @@ class CartIcon extends Component {
 if (!customElements.get('cart-icon')) {
   customElements.define('cart-icon', CartIcon);
 }
-

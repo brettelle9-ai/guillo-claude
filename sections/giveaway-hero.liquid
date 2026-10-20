@@ -1,0 +1,88 @@
+{%- render 'giveaway-head' -%}
+{%- if section.settings.grain -%}<div class="gv-grain" aria-hidden="true"></div>{%- endif -%}
+{%- assign logo_fallback = 'https://guilloclothing.com/cdn/shop/files/guillo-wordmark-white.png?v=1' -%}
+<section class="gv gv-hero" data-gv-close="{{ section.settings.close_date | escape }}">
+  {%- render 'giveaway-img', image: section.settings.image, fallback: 'https://cdn.shopify.com/s/files/1/0876/6056/0684/files/red_porto.png?v=1', alt: section.settings.image_alt, pos: section.settings.image_position, class: 'gv-hero__img', eager: true -%}
+  <div class="gv-hero__shade"></div>
+  <header class="gv-hero__head">
+    <span class="gv-hero__kicker">{{ section.settings.kicker }}</span>
+    <div class="gv-hero__brand">
+      {%- comment -%}
+        The normal site header is hidden on this page, so the wordmark here is
+        the only way back to the store. It is a link.
+      {%- endcomment -%}
+      <a class="gv-hero__home" href="{{ routes.root_url }}" aria-label="Guillo home" style="display:inline-flex;align-items:center;text-decoration:none;color:inherit">
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url: height: 96 }}" alt="Guillo">
+        {%- else -%}
+          <img src="{{ logo_fallback }}" alt="Guillo">
+        {%- endif -%}
+      </a>
+      <span class="gv-script">{{ section.settings.presents }}</span>
+    </div>
+    <a class="gv-hero__enter" href="#enter">{{ section.settings.enter_link }}</a>
+  </header>
+  <div class="gv-hero__body">
+    <div class="gv-hero__title">
+      <h1>{{ section.settings.title }}</h1>
+      <div class="gv-script">{{ section.settings.script }}</div>
+    </div>
+    <div class="gv-hero__credits">
+      <div class="gv-hero__names">{{ section.settings.names }}</div>
+      <div class="gv-hero__facts">{{ section.settings.facts }}</div>
+      <div class="gv-hero__ctas">
+        <a class="gv-btn" href="#enter">{{ section.settings.primary_label }}</a>
+        <a class="gv-btn gv-btn--ghost" href="#prize">{{ section.settings.secondary_label }}</a>
+      </div>
+      {%- if section.settings.show_countdown -%}
+        <div class="gv-hero__count"><i></i><span data-gv-countdown>Entries close soon</span><i></i></div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  if (window.__gvCountdown) return; window.__gvCountdown = true;
+  var root = document.querySelector('[data-gv-close]');
+  var close = new Date((root && root.getAttribute('data-gv-close')) || '2026-11-01T23:59:00+10:00').getTime();
+  window.__gvClose = close;
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function tick(){
+    var diff = Math.max(0, Math.floor((close - Date.now()) / 1000));
+    var txt = diff > 0 ? 'Entries close in ' + pad(Math.floor(diff/86400)) + 'd ' + pad(Math.floor(diff%86400/3600)) + 'h ' + pad(Math.floor(diff%3600/60)) + 'm ' + pad(diff%60) + 's' : 'Entries have closed';
+    document.querySelectorAll('[data-gv-countdown]').forEach(function(el){ el.textContent = txt; });
+    if (diff <= 0) document.documentElement.classList.add('gv-is-closed');
+  }
+  tick(); setInterval(tick, 1000);
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('.gv a[href^="#"]');
+    if (!a) return; var t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+})();
+</script>
+{% schema %}
+{
+  "name": "Giveaway: title",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Hero photo" },
+    { "type": "text", "id": "image_alt", "label": "Photo description", "default": "The Portofino Polo in Red, part of the Summer Wardrobe prize" },
+    { "type": "text", "id": "image_position", "label": "Photo focus (CSS object-position)", "default": "50% 20%" },
+    { "type": "image_picker", "id": "logo", "label": "Logo (light version)" },
+    { "type": "checkbox", "id": "grain", "label": "Film grain overlay", "default": true },
+    { "type": "text", "id": "kicker", "label": "Top left label", "default": "The Summer Draw" },
+    { "type": "text", "id": "presents", "label": "Script under logo", "default": "presents" },
+    { "type": "text", "id": "enter_link", "label": "Top right link", "default": "Enter" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Summer," },
+    { "type": "text", "id": "script", "label": "Script line", "default": "is on us." },
+    { "type": "text", "id": "names", "label": "Piece names", "default": "Capri · Portofino · Classico · Rapallo · Firenze · Milano · Luxe Chino · Como · Alassio" },
+    { "type": "text", "id": "facts", "label": "Facts line", "default": "Eleven pieces · Worth around $1,500 · Drawn Monday 2 November" },
+    { "type": "text", "id": "primary_label", "label": "Primary button", "default": "Enter and get $20 off" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button", "default": "See the prize" },
+    { "type": "checkbox", "id": "show_countdown", "label": "Show countdown", "default": true },
+    { "type": "text", "id": "close_date", "label": "Entries close (ISO date and time)", "default": "2026-11-01T23:59:00+10:00", "info": "Used by every countdown and to close the entry form." }
+  ],
+  "presets": [{ "name": "Giveaway: title" }]
+}
+{% endschema %}

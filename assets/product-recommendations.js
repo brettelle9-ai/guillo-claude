@@ -157,4 +157,3 @@ class ProductRecommendations extends Component {
 if (!customElements.get('product-recommendations')) {
   customElements.define('product-recommendations', ProductRecommendations);
 }
-

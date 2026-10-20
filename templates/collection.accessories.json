@@ -18,7 +18,8 @@
     "grid": {
       "type": "guillo-collection-grid",
       "settings": {
-        "filter_chips": "Slim fit:slim-fit, Stretch:stretch, Under $120:under-120",
+        "filter_chips": "",
+        "desktop_columns": "3",
         "show_quick_add": true,
         "show_break": true,
         "break_eyebrow": "Not sure of your size",
@@ -38,4 +39,3 @@
     "grid"
   ]
 }
-

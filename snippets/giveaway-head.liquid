@@ -1,0 +1,57 @@
+{%- comment -%} Shared fonts and styles for the Summer Draw page sections. {%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italianno&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap">
+{{ 'giveaway.css' | asset_url | stylesheet_tag }}
+<style>
+.gv{--gv-serif:'Restora Neue','Cormorant Garamond',Georgia,serif}
+.gv[hidden],.gv [hidden]{display:none!important}
+.gv .gv-row__price,.gv .gv-hero__count,.gv .gv-ticket__count,.gv .gv-reel__count{font-variant-numeric:lining-nums tabular-nums}
+body:has(.gv-hero) #header-group,body:has(.gv-hero)>footer{display:none!important}
+@media (max-width:960px){.gv-ticket__stub{flex:1 1 100%;border-left:0;border-top:2px dashed rgba(235,201,160,.35)}.gv-ticket__notch{display:none}}
+@media (max-width:1000px){.gv-menu__photo{position:static}}
+/* $20 offer: slimmer, quieter band */
+.gv-offer{padding:clamp(56px,7vw,104px) var(--gv-px)}
+.gv-offer__grid{max-width:1100px;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(32px,5vw,80px)}
+.gv-offer__big{display:flex;align-items:flex-end;flex-wrap:wrap;justify-content:center;gap:.1em .3em;padding-bottom:0}
+.gv-offer__big .gv-serif{font-size:clamp(110px,13vw,210px)}
+.gv-offer__big .gv-script{position:static;font-size:clamp(32px,3vw,48px);transform:rotate(-6deg);margin-bottom:.5em;white-space:nowrap}
+.gv-offer__copy h2{font-size:clamp(30px,3vw,46px);margin-bottom:18px}
+.gv-offer__copy p{font-size:16px;margin-bottom:28px}
+.gv-offer__cell{padding:20px 20px 4px 0}
+.gv-offer__cell+.gv-offer__cell{padding:20px 0 4px 20px}
+.gv-offer__cell .gv-script{font-size:42px;margin-bottom:6px}
+.gv-offer__cell .gv-serif{font-size:19px}
+/* Code on the ticket stub stays hidden until entry */
+.gv-ticket__code.is-locked{filter:blur(7px);opacity:.75;user-select:none}
+.gv-ticket__hint{font:400 10px/1.4 var(--gv-sans);letter-spacing:.24em;text-transform:uppercase;color:var(--gv-gold);margin:-6px 0 14px}
+/* Ticket stub: clearer $20 offer text */
+#enter .gv-ticket__stub .gv-label{color:#5E5347!important;font-weight:500}
+#enter .gv-ticket__stub .gv-big{color:#14120F!important;font-weight:400!important}
+#enter .gv-ticket__stub .gv-script{color:#6E4F2C!important;font-size:46px!important;line-height:1.05!important;margin-top:12px!important}
+#enter .gv-ticket__hint{color:#6E4F2C!important}
+#enter .gv-ticket__count{color:#5E5347!important}
+/* Mobile hero: less crowded */
+@media (max-width:640px){
+.gv-hero__names{display:none}
+.gv-hero__title h1{font-size:88px}
+.gv-hero__title .gv-script{font-size:54px}
+.gv-hero__credits{gap:10px}
+.gv-hero__facts{font-size:11px;letter-spacing:.2em;line-height:1.7;max-width:300px}
+.gv-hero__ctas{flex-wrap:nowrap;width:100%;max-width:400px;gap:8px}
+.gv .gv-hero__ctas .gv-btn{flex:1 1 0;height:52px;padding:0 10px;font-size:10px;letter-spacing:.16em;white-space:nowrap}
+.gv-hero__count{font-size:10px;letter-spacing:.16em;gap:10px;white-space:nowrap}
+.gv-hero__count i{width:18px}
+}
+/* Mobile: photo panels stack as an accordion instead of thin slices */
+@media (max-width:700px){
+.gv-panels{flex-direction:column;height:auto;gap:6px;margin:0 calc(var(--gv-px) * -1) 80px;padding:0}
+.gv-panel,.gv-panel.is-active{flex:none}
+.gv-panel{height:84px;transition:height .9s cubic-bezier(.16,1,.3,1)}
+.gv-panel.is-active{height:min(118vw,520px)}
+.gv-panel__shade{background:linear-gradient(0deg,rgba(11,12,14,.8) 0%,rgba(11,12,14,.35) 60%,rgba(11,12,14,.25) 100%)}
+.gv-panel__vert{writing-mode:horizontal-tb;transform:translateY(-50%);left:20px;top:50%;bottom:auto}
+.gv-panel__cap .gv-script{font-size:46px}
+.gv-panel__cap .gv-serif{font-size:24px}
+}
+</style>

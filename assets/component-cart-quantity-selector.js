@@ -36,4 +36,3 @@ class CartQuantitySelectorComponent extends QuantitySelectorComponent {
 if (!customElements.get('cart-quantity-selector-component')) {
   customElements.define('cart-quantity-selector-component', CartQuantitySelectorComponent);
 }
-

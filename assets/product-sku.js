@@ -65,4 +65,3 @@ class ProductSkuComponent extends Component {
 if (!customElements.get('product-sku-component')) {
   customElements.define('product-sku-component', ProductSkuComponent);
 }
-

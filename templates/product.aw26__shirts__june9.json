@@ -58,14 +58,17 @@
           "type": "tab",
           "settings": {
             "title": "Shipping",
-            "content": "<p>Dispatched from Brisbane the same afternoon on orders placed before 4pm. Australia and New Zealand 2 to 4 days, Singapore and Hong Kong 4 to 6, the United Kingdom 5 to 8, Europe 6 to 9.</p><p>You do not pay duties or taxes. Every international order ships DDP, so all duties and import taxes are calculated and paid at checkout.</p><p>Free shipping over $150 in Australia.</p>"
+            "country_shipping": true,
+            "content_intl": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Singapore: 4 to 6 days. Free standard shipping over S$250.</li><li>United Kingdom: 5 to 8 days. Free standard shipping over £65.</li><li>Europe: 6 to 9 days.</li></ul><p>Every international order ships DDP. Duties and import taxes are calculated and paid at checkout, so nothing is owed on arrival.</p>",
+            "content": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Australia: 2 to 4 days. Free standard shipping over $100, free express over $200.</li><li>New Zealand: 2 to 4 days. Free priority express over NZ$160.</li></ul><p>Tracked door to door on every order.</p>"
           }
         },
         "tab4": {
           "type": "tab",
           "settings": {
             "title": "Exchanges & Returns",
-            "content": "<p>Free exchanges and returns within 44 days. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p>"
+            "content_intl": "<p>44-day returns and exchanges. Return postage is paid by you. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
+            "content": "<p>Free exchanges and returns within 44 days across Australia and New Zealand. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>"
           }
         },
         "sizeguide": {
@@ -135,15 +138,27 @@
         "sizeguide"
       ],
       "settings": {
-        "short_description": "Cut wider through the chest, shoulders and arms, then tapered at the waist. Lightweight, breathable and stretchy enough to move in.",
+        "availability_mode": "normal",
+        "avail_eyebrow": "Pre-order",
+        "avail_headline": "",
+        "avail_note": "",
+        "avail_reward": "",
+        "interest_cta": "Register your interest",
+        "interest_size_tag": "Register",
+        "interest_hint": "Choose the size you would take.",
+        "interest_panel_title": "Register your interest in size",
+        "interest_panel_sub": "One letter, the morning it opens. Nothing else.",
+        "short_description": "Fitted through the chest and tapered at the waist, with enough stretch to move in. Lightweight and breathable.",
         "fit_guide_link": "shopify://pages/fit-guide",
         "size_guide_page": "shopify://pages/fit-guide",
         "trust_line": "Same-day dispatch · 44-day returns and exchanges",
         "open_first_tab": false,
         "show_pair": true,
         "show_video_tile": true,
-        "video": "shopify://files/videos/IMG_3911 2.mov",
+        "video": "shopify://files/videos/lv_0_20260914131333.mp4",
         "video_position": "center center",
+        "video_ratio": "3 / 4",
+        "video_fit": "cover",
         "video_poster_asset": "",
         "video_caption": "Watch the fit in motion"
       }
@@ -183,6 +198,7 @@
           "settings": {
             "icon": "refresh",
             "title": "Easy 44 day returns",
+            "text_intl": "44-day returns and exchanges. Return postage is paid by you. Size swaps ship same day.",
             "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
           }
         },
@@ -213,7 +229,7 @@
           "type": "callout_left",
           "settings": {
             "title": "Athletic fit",
-            "text": "Cut wider through the chest, shoulders and arms, then tapered at the waist so it never hangs straight.",
+            "text": "Fitted through the chest and tapered at the waist, so it never hangs straight.",
             "spec": "Tapered through the body"
           }
         },
@@ -343,4 +359,3 @@
     "faq"
   ]
 }
-

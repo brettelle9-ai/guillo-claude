@@ -99,7 +99,7 @@
           "settings": {
             "fit": "Muscle, athletic",
             "fallback_asset": "guillo-bone-pool.jpg",
-            "text": "Cut wider through the chest, shoulders and arms, then tapered at the waist. The closest fit in the range, and the one to pick if you fill out a shirt through the top half.",
+            "text": "Fitted through the chest and tapered at the waist. The closest fit in the range, and the one to pick if you fill out a shirt through the top half.",
             "rise": "n/a",
             "thigh": "n/a",
             "opening": "n/a",
@@ -354,6 +354,7 @@
       "settings": {
         "image_position": "center 24%",
         "heading": "Now you know your cut.",
+        "text_intl": "Exchanges within 44 days, return postage paid by you, so the first order can still be the one that teaches you the size.",
         "text": "Free exchanges within 44 days, so the first order can be the one that teaches you the size.",
         "cta_label": "Shop the chinos",
         "cta_link": "shopify://collections/chinos"

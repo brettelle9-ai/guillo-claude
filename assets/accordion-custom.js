@@ -105,4 +105,3 @@ class AccordionCustom extends HTMLElement {
 if (!customElements.get('accordion-custom')) {
   customElements.define('accordion-custom', AccordionCustom);
 }
-

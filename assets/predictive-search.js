@@ -428,4 +428,3 @@ class PredictiveSearchComponent extends Component {
 if (!customElements.get('predictive-search-component')) {
   customElements.define('predictive-search-component', PredictiveSearchComponent);
 }
-

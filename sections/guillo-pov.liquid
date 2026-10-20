@@ -1,0 +1,94 @@
+{% comment %}
+  Brand point of view: a short, quiet positioning statement.
+  Deliberately typographic only — no image, no CTA, no cards. Its job is to
+  give the page one beat of brand before the next commerce section, so it is
+  kept short by design: two statement lines and one sentence.
+{% endcomment %}
+
+<section class="guillo-pov g-pad">
+  <div class="g-container">
+    <div class="guillo-pov__inner">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="g-eyebrow guillo-pov__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.line_1 != blank or section.settings.line_2 != blank -%}
+        <h2 class="guillo-pov__statement">
+          {%- if section.settings.line_1 != blank -%}
+            <span class="guillo-pov__line">{{ section.settings.line_1 }}</span>
+          {%- endif -%}
+          {%- if section.settings.line_2 != blank -%}
+            <span class="guillo-pov__line guillo-pov__line--2">{{ section.settings.line_2 }}</span>
+          {%- endif -%}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <p class="guillo-pov__text">{{ section.settings.text }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.link_label != blank and section.settings.link != blank -%}
+        <a href="{{ section.settings.link }}" class="g-link guillo-pov__link">{{ section.settings.link_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .guillo-pov {
+    padding-block: 104px;
+    background: var(--g-paper);
+    border-block: 1px solid var(--g-line);
+  }
+  .guillo-pov__inner {
+    max-width: 760px;
+  }
+  .guillo-pov__eyebrow {
+    display: block;
+    letter-spacing: 0.3em;
+    margin-bottom: 30px;
+  }
+  .guillo-pov__statement {
+    margin: 0;
+    /* The two statement lines are the only large type in the section, and
+       they stay on their own lines at every width rather than reflowing. */
+    font: 500 clamp(24px, 3.1vw, 42px)/1.18 var(--g-serif);
+    color: var(--g-ink);
+    letter-spacing: -0.01em;
+    /* If a line does wrap on a narrow phone, wrap it evenly rather than
+       leaving one orphan word under a full line. */
+    text-wrap: balance;
+  }
+  .guillo-pov__line { display: block; }
+  .guillo-pov__line--2 { color: var(--g-muted); }
+  .guillo-pov__text {
+    font: 300 clamp(15px, 1.3vw, 17px)/1.75 var(--g-sans);
+    color: var(--g-muted);
+    margin: 28px 0 0;
+    max-width: 520px;
+  }
+  .guillo-pov__link { margin-top: 30px; display: inline-block; }
+
+  @media screen and (max-width: 989px) {
+    .guillo-pov { padding-block: 62px; }
+    .guillo-pov__eyebrow { margin-bottom: 22px; }
+    .guillo-pov__text { margin-top: 22px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Guillo point of view",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Guillo view" },
+    { "type": "text", "id": "line_1", "label": "Statement line 1", "default": "Mediterranean by influence." },
+    { "type": "text", "id": "line_2", "label": "Statement line 2", "default": "Fitted by design." },
+    { "type": "textarea", "id": "text", "label": "Supporting sentence", "info": "Keep this to one sentence. The section is designed to be read in a few seconds.", "default": "Guillo creates fitted menswear for men who prefer to stand apart without dressing loudly." },
+    { "type": "text", "id": "link_label", "label": "Link label" },
+    { "type": "url", "id": "link", "label": "Link" }
+  ],
+  "presets": [
+    { "name": "Guillo point of view", "category": "Guillo" }
+  ]
+}
+{% endschema %}

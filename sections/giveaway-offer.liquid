@@ -1,0 +1,36 @@
+{%- render 'giveaway-head' -%}
+<section class="gv gv-offer" style="background:{{ section.settings.bg }}">
+  <div class="gv-offer__grid">
+    <div class="gv-offer__big">
+      <div class="gv-serif">{{ section.settings.big }}</div>
+      <div class="gv-script">{{ section.settings.big_script }}</div>
+    </div>
+    <div class="gv-offer__copy">
+      <h2>{{ section.settings.heading }} <em>{{ section.settings.heading_italic }}</em></h2>
+      <p>{{ section.settings.body }}</p>
+      <div class="gv-offer__cells">
+        <div class="gv-offer__cell"><div class="gv-script">{{ section.settings.cell1_script }}</div><div class="gv-serif">{{ section.settings.cell1_text }}</div></div>
+        <div class="gv-offer__cell"><div class="gv-script">{{ section.settings.cell2_script }}</div><div class="gv-serif">{{ section.settings.cell2_text }}</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Giveaway: offer",
+  "tag": "div",
+  "settings": [
+    { "type": "color", "id": "bg", "label": "Background", "default": "#173A5E" },
+    { "type": "text", "id": "big", "label": "Big figure", "default": "$20" },
+    { "type": "text", "id": "big_script", "label": "Script over figure", "default": "yours today" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Enter today." },
+    { "type": "text", "id": "heading_italic", "label": "Heading (italic part)", "default": "Spend it today." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Everyone who enters gets $20 off any order over $70, until Sunday 1 November. And if you're the winner, anything you bought during the giveaway is refunded." },
+    { "type": "text", "id": "cell1_script", "label": "Cell 1 script", "default": "today" },
+    { "type": "text", "id": "cell1_text", "label": "Cell 1 text", "default": "$20 off any order over $70." },
+    { "type": "text", "id": "cell2_script", "label": "Cell 2 script", "default": "2 November" },
+    { "type": "text", "id": "cell2_text", "label": "Cell 2 text", "default": "Win, and everything you bought comes back." }
+  ],
+  "presets": [{ "name": "Giveaway: offer" }]
+}
+{% endschema %}

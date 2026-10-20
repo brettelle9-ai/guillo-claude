@@ -3,4 +3,3 @@
   <path d="M10 9.5V13" stroke="currentColor" stroke-width="var(--icon-stroke-width)" stroke-linecap="round"/>
   <circle cx="10" cy="7.25" r="0.75" fill="currentColor"/>
 </svg>
-

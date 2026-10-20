@@ -357,4 +357,3 @@ class StickyAddToCartComponent extends Component {
 if (!customElements.get('sticky-add-to-cart')) {
   customElements.define('sticky-add-to-cart', StickyAddToCartComponent);
 }
-

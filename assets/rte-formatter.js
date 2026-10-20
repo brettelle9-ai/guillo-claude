@@ -27,4 +27,3 @@ class RTEFormatter extends Component {
 if (!customElements.get('rte-formatter')) {
   customElements.define('rte-formatter', RTEFormatter);
 }
-

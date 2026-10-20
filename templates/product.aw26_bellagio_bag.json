@@ -43,29 +43,32 @@
         "tab1": {
           "type": "tab",
           "settings": {
-            "title": "Fit & Care",
-            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+            "title": "Care",
+            "content": "<p>Full grain leather, hand finished. It darkens and softens with use rather than wearing out.</p><p>Spot clean with a damp cloth and air dry. Keep it out of prolonged direct sunlight.</p>"
           }
         },
         "tab2": {
           "type": "tab",
           "settings": {
             "title": "Details",
-            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+            "content": "<p>Built to be carried, not kept for best. Made to travel with the rest of the edit.</p><p>Designed in Brisbane.</p>"
           }
         },
         "tab3": {
           "type": "tab",
           "settings": {
             "title": "Shipping",
-            "content": "<p>Dispatched from Brisbane the same afternoon on orders placed before 4pm. Australia and New Zealand 2 to 4 days, Singapore and Hong Kong 4 to 6, the United Kingdom 5 to 8, Europe 6 to 9.</p><p>You do not pay duties or taxes. Every international order ships DDP, so all duties and import taxes are calculated and paid at checkout.</p><p>Free shipping over $150 in Australia.</p>"
+            "country_shipping": true,
+            "content_intl": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Singapore: 4 to 6 days. Free standard shipping over S$250.</li><li>United Kingdom: 5 to 8 days. Free standard shipping over £65.</li><li>Europe: 6 to 9 days.</li></ul><p>Every international order ships DDP. Duties and import taxes are calculated and paid at checkout, so nothing is owed on arrival.</p>",
+            "content": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Australia: 2 to 4 days. Free standard shipping over $100, free express over $200.</li><li>New Zealand: 2 to 4 days. Free priority express over NZ$160.</li></ul><p>Tracked door to door on every order.</p>"
           }
         },
         "tab4": {
           "type": "tab",
           "settings": {
             "title": "Exchanges & Returns",
-            "content": "<p>Free exchanges and returns within 44 days. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p>"
+            "content_intl": "<p>44-day returns and exchanges. Return postage is paid by you. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
+            "content": "<p>Free exchanges and returns within 44 days across Australia and New Zealand. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>"
           }
         }
       },
@@ -104,7 +107,7 @@
           "the-bellagio-passport-holder"
         ],
         "heading": "The matching set",
-        "wardrobe_note": "Build your wardrobe — three pieces or more, 20% off automatically.",
+        "wardrobe_note": "Build your wardrobe. Three pieces or more, 20% off automatically.",
         "wardrobe_link": "",
         "collection": "",
         "products_to_show": 8
@@ -126,6 +129,7 @@
           "settings": {
             "icon": "refresh",
             "title": "Easy 44 day returns",
+            "text_intl": "44-day returns and exchanges. Return postage is paid by you. Size swaps ship same day.",
             "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
           }
         },
@@ -193,7 +197,7 @@
       ],
       "settings": {
         "heading": "Leather made to travel.",
-        "image_alt": "The Luxe Chino in Chocolate, leg and taper",
+        "image_alt": "The Bellagio Weekender, full grain leather",
         "image_position": "center 74%"
       }
     },
@@ -285,4 +289,3 @@
     "faq"
   ]
 }
-

@@ -119,7 +119,7 @@
 -%}
 
 {%- if live_reviews.size > 0 or has_app_reviews -%}
-<section class="guillo-reviews g-pad">
+<section class="guillo-reviews g-pad"{% if product.handle == 'the-luxe-chino-stone' or product.template_suffix == 'aw26_luxe-chino_claude_' %} id="guillo-reviews"{% endif %}>
   <div class="g-container g-container--wide">
     <div class="g-section-head">
       <div>
@@ -277,6 +277,9 @@
     padding-block: 88px;
     border-top: 1px solid var(--g-line);
     background: var(--g-paper);
+    /* Anchor landing: the rating under the product title links here, so the
+       sticky header must not cover the heading when the page jumps. */
+    scroll-margin-top: calc(var(--header-height, 60px) + 24px);
   }
   .guillo-reviews__layout {
     display: grid;
@@ -560,4 +563,3 @@
   ]
 }
 {% endschema %}
-

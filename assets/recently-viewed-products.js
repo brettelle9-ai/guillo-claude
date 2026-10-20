@@ -33,4 +33,3 @@ export class RecentlyViewed {
     return JSON.parse(localStorage.getItem(this.#STORAGE_KEY) || '[]');
   }
 }
-

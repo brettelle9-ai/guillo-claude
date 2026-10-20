@@ -1,0 +1,463 @@
+<!-- /snippets/guillo-outfit-builder.liquid -->
+{%- comment -%}
+  "Complete the look" outfit builder. Replaces guillo-pair-builder under the
+  size selector. Same skeleton as the pair builder (collapsed "+" row, image
+  cards, inline sizes, one add-to-bag call) but the picker spans every family:
+
+    Row 1  "Another of these": the current product's family, own colourways first.
+    Tabs   Every other family: Chinos, Shirts, Shorts, Polos, Tees, Accessories.
+
+  Up to three extra pieces. The line under the toggle reads the 3+ offer
+  (Wardrobe 20) as a percentage, so it is correct in every market and quotes
+  no dollar figure. No pair pricing anywhere; the pair discounts are retired.
+
+  Products with zero on-hand stock are hidden even when orderable (pre-order
+  CONTINUE variants); they return when stock lands. Accessories with a single
+  default variant skip the size step.
+
+  Liquid gotchas honoured: file_reference lists cannot be index-accessed
+  (build a '|||' string and split); no negative literals in assign; every JSON
+  array closes with a trailing null so conditional entries never break commas.
+{%- endcomment -%}
+
+{%- liquid
+  assign fam = ''
+  if product.tags contains 'garment:chino'
+    assign fam = 'chino'
+  elsif product.tags contains 'garment:shirt'
+    assign fam = 'shirt'
+  elsif product.tags contains 'garment:short'
+    assign fam = 'short'
+  elsif product.tags contains 'garment:polo'
+    assign fam = 'polo'
+  elsif product.tags contains 'garment:tee'
+    assign fam = 'tee'
+  elsif product.tags contains 'garment:accessory'
+    assign fam = 'accessory'
+  endif
+
+  assign fam_keys = 'chino,shirt,short,polo,tee,accessory' | split: ','
+  assign fam_cols = 'chinos,shirts,shorts,polos,t-shirts,accessories-1' | split: ','
+  assign fam_labels = 'Chinos,Shirts,Shorts,Polos,Tees,Accessories' | split: ','
+-%}
+
+{%- if fam != '' -%}
+
+<div class="gob" data-gob>
+  <script type="application/json" data-gob-data>
+    {
+      "current": {{ product.handle | json }},
+      "family": {{ fam | json }},
+      "percent": 20,
+      "maxPicks": 3,
+      "families": [
+        {%- for fi in (0..5) -%}
+          {%- liquid
+            assign fk = fam_keys[fi]
+            assign fc = fam_cols[fi]
+            assign fl = fam_labels[fi]
+          -%}
+          {
+            "key": {{ fk | json }},
+            "label": {{ fl | json }},
+            "items": [
+              {%- for p in collections[fc].products limit: 24 -%}
+                {%- liquid
+                  assign stock = 0
+                  for v in p.variants
+                    if v.inventory_quantity > 0
+                      assign stock = stock | plus: v.inventory_quantity
+                    endif
+                  endfor
+
+                  assign pname = p.title
+                  assign psub = ''
+                  assign pimg = p.featured_image | image_url: width: 360
+                  assign mine = false
+
+                  assign g = p.metafields.custom.product_group.value
+                  if g != blank
+                    assign gi = 0
+                    assign gfound = false
+                    for gp in g.products.value
+                      if gp.handle == p.handle
+                        assign gfound = true
+                        assign gi = forloop.index0
+                      endif
+                      if gp.handle == product.handle
+                        assign mine = true
+                      endif
+                    endfor
+                    if gfound
+                      assign gnames = g.display_names.value
+                      if gnames[gi] != blank
+                        assign pname = gnames[gi]
+                      endif
+                      assign gcolours = g.colour_names.value
+                      if gcolours[gi] != blank
+                        assign psub = gcolours[gi]
+                      endif
+                      capture gimg_str
+                        for gim in g.custom_images.value
+                          echo gim | image_url: width: 360
+                          unless forloop.last
+                            echo '|||'
+                          endunless
+                        endfor
+                      endcapture
+                      assign gimg_urls = gimg_str | split: '|||'
+                      if gimg_urls[gi] != blank
+                        assign pimg = gimg_urls[gi]
+                      endif
+                    endif
+                  endif
+                -%}
+                {%- if stock > 0 -%}
+                {
+                  "h": {{ p.handle | json }},
+                  "name": {{ pname | json }},
+                  "sub": {{ psub | json }},
+                  "price": {{ p.price }},
+                  "img": {{ pimg | json }},
+                  "mine": {{ mine }},
+                  "single": {{ p.has_only_default_variant }},
+                  "variants": [
+                    {%- for v in p.variants -%}
+                      { "id": {{ v.id }}, "s": {{ v.title | json }}, "a": {{ v.available }} },
+                    {%- endfor -%}
+                    null
+                  ]
+                },
+                {%- endif -%}
+              {%- endfor -%}
+              null
+            ]
+          },
+        {%- endfor -%}
+        null
+      ]
+    }
+  </script>
+
+  <button type="button" class="gob__toggle" data-gob-toggle aria-expanded="false">
+    <span class="gob__plus" aria-hidden="true">+</span>
+    <span class="gob__toggle-label">Complete the look</span>
+    <span class="gob__deal" data-gob-deal></span>
+  </button>
+
+  <div class="gob__body" data-gob-body hidden>
+    <span class="gob__eyebrow">Abbina</span>
+
+    <div class="gob__slot">
+      <span class="gob__slot-label">Another of these</span>
+      <div class="gob__cards" data-gob-own></div>
+    </div>
+
+    <div class="gob__slot">
+      <div class="gob__tabs" data-gob-tabs role="tablist"></div>
+      <div class="gob__cards" data-gob-tabcards></div>
+    </div>
+
+    <div class="gob__slot" data-gob-picks-wrap hidden>
+      <span class="gob__slot-label">Your pieces</span>
+      <div class="gob__picks" data-gob-picks></div>
+    </div>
+
+    <p class="gob__line" data-gob-line></p>
+    <button type="button" class="gob__add" data-gob-add disabled>Add to bag</button>
+  </div>
+</div>
+
+<style>
+  .gob { border: 1px solid var(--g-line); margin: 22px 0 6px; background: var(--g-paper); font-family: var(--g-sans); }
+  .gob__toggle { display: flex; align-items: center; gap: 14px; width: 100%; background: none; border: 0; padding: 17px 18px; cursor: pointer; text-align: left; font-family: inherit; }
+  .gob__plus { flex: 0 0 auto; width: 18px; font-size: 1.25rem; font-weight: 300; line-height: 1; color: var(--g-ink); transition: transform .3s ease; }
+  .gob.is-open .gob__plus { transform: rotate(45deg); }
+  .gob__toggle-label { flex: 1; font-size: .76rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--g-ink); }
+  .gob__deal { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--g-ink); font-weight: 600; white-space: nowrap; }
+  .gob__body { padding: 18px 18px 18px; border-top: 1px solid var(--g-line); }
+  .gob__eyebrow { display: block; font-size: .56rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: var(--g-bronze); margin: 0 0 14px; }
+
+  .gob__slot { margin: 0 0 20px; }
+  .gob__slot-label { display: block; font-size: .64rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--g-whisper); margin: 0 0 10px; }
+
+  .gob__tabs { display: flex; gap: 8px; overflow-x: auto; padding: 0 0 10px; scrollbar-width: none; }
+  .gob__tabs::-webkit-scrollbar { display: none; }
+  .gob__tab { flex: 0 0 auto; border: 1px solid #CFD1D5; background: var(--g-paper); color: var(--g-ink); padding: 8px 12px; cursor: pointer; font-family: inherit; font-size: .64rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; transition: border-color .25s ease, background .25s ease; }
+  .gob__tab:hover { border-color: var(--g-ink); }
+  .gob__tab.is-on { background: var(--g-ink); border-color: var(--g-ink); color: var(--g-off); }
+
+  .gob__cards { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 6px; scrollbar-width: none; }
+  .gob__cards::-webkit-scrollbar { display: none; }
+  .gob__card { flex: 0 0 auto; width: 86px; background: none; border: 0; padding: 0; cursor: pointer; text-align: center; font-family: inherit; }
+  .gob__card-img { position: relative; display: block; width: 86px; height: 108px; border: 1px solid var(--g-line); overflow: hidden; transition: border-color .25s ease; }
+  .gob__card-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .gob__card:hover .gob__card-img { border-color: var(--g-ink); }
+  .gob__card.is-on .gob__card-img { border: 2px solid var(--g-ink); }
+  .gob__card-check { position: absolute; top: 5px; right: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--g-ink); color: var(--g-off); display: none; align-items: center; justify-content: center; font-size: .6rem; line-height: 1; }
+  .gob__card.is-on .gob__card-check { display: flex; }
+  .gob__card-sub { display: block; margin-top: 7px; font-size: .52rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--g-bronze); min-height: .8em; }
+  .gob__card-name { display: block; margin-top: 2px; font-size: .6rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--g-ink); }
+  .gob__card-price { display: block; margin-top: 2px; font-size: .6rem; color: var(--g-whisper); }
+  .gob__card[disabled] { opacity: .35; cursor: default; }
+
+  .gob__pick { padding: 10px 0; border-top: 1px solid var(--g-line); }
+  .gob__pick:first-child { border-top: 0; padding-top: 0; }
+  .gob__pick-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 8px; }
+  .gob__pick-name { font-size: .66rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--g-ink); }
+  .gob__pick-remove { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--g-whisper); }
+  .gob__pick-remove:hover { color: var(--g-ink); }
+  .gob__sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .gob__size { border: 1px solid #CFD1D5; background: var(--g-paper); color: var(--g-ink); padding: 10px 0; min-width: 52px; cursor: pointer; font-family: inherit; font-size: .74rem; font-weight: 500; letter-spacing: .04em; transition: border-color .25s ease; }
+  .gob__size:hover { border-color: var(--g-ink); }
+  .gob__size.is-on { background: var(--g-ink); border-color: var(--g-ink); color: var(--g-off); }
+  .gob__size[disabled] { opacity: .3; cursor: default; text-decoration: line-through; }
+  .gob__size[disabled]:hover { border-color: #CFD1D5; }
+  .gob__pick-one { font-size: .66rem; color: var(--g-whisper); }
+
+  .gob__line { margin: 0 0 12px; font-size: .7rem; letter-spacing: .06em; color: var(--g-ink); }
+  .gob__line.is-unlocked { font-weight: 600; }
+  .gob__add { width: 100%; border: 0; background: var(--g-ink); color: var(--g-off); padding: 16px 10px; cursor: pointer; font-family: inherit; font-size: .78rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; transition: background .3s ease, opacity .3s ease; }
+  .gob__add:hover { background: #2C2E33; }
+  .gob__add[disabled] { opacity: .45; cursor: default; }
+</style>
+
+<script>
+(function () {
+  var root = document.querySelector('[data-gob]:not([data-gob-ready])');
+  if (!root) return;
+  root.setAttribute('data-gob-ready', '1');
+
+  var data;
+  try { data = JSON.parse(root.querySelector('[data-gob-data]').textContent); } catch (e) { return; }
+  var families = (data.families || []).filter(Boolean).map(function (f) {
+    f.items = (f.items || []).filter(Boolean).map(function (it) {
+      it.variants = (it.variants || []).filter(Boolean);
+      return it;
+    });
+    return f;
+  });
+  var ownFam = null, current = null;
+  families.forEach(function (f) {
+    if (f.key === data.family) ownFam = f;
+    f.items.forEach(function (it) { if (it.h === data.current) current = it; });
+  });
+  if (!ownFam || !current) { root.style.display = 'none'; return; }
+
+  function q(sel) { return root.querySelector(sel); }
+  var els = {
+    toggle: q('[data-gob-toggle]'), body: q('[data-gob-body]'), deal: q('[data-gob-deal]'),
+    own: q('[data-gob-own]'), tabs: q('[data-gob-tabs]'), tabcards: q('[data-gob-tabcards]'),
+    picksWrap: q('[data-gob-picks-wrap]'), picks: q('[data-gob-picks]'),
+    line: q('[data-gob-line]'), add: q('[data-gob-add]')
+  };
+
+  // state.v1 = variant of the item on this page; picks = extra pieces.
+  var state = { v1: null, picks: [] };
+  var MAX = data.maxPicks || 3;
+  var PCT = data.percent || 20;
+
+  function money(cents) { return '$' + (cents % 100 === 0 ? (cents / 100) : (cents / 100).toFixed(2)); }
+  function label(it) { return it.sub ? it.sub + ' · ' + it.name : it.name; }
+  function picked(it) { return state.picks.some(function (p) { return p.item.h === it.h; }); }
+
+  // Prefill the current item's size from the main product form, if chosen.
+  function formVariantId() {
+    var f = document.querySelector('form[action*="/cart/add"] [name="id"]');
+    if (!f) return null;
+    var v = parseInt(f.value, 10);
+    return isNaN(v) ? null : v;
+  }
+
+  function card(it, onClick) {
+    var c = document.createElement('button');
+    c.type = 'button';
+    c.className = 'gob__card' + (picked(it) ? ' is-on' : '');
+    c.setAttribute('aria-label', label(it));
+    c.innerHTML =
+      '<span class="gob__card-img"><img src="' + it.img + '" alt="" loading="lazy"><span class="gob__card-check" aria-hidden="true">&#10003;</span></span>' +
+      '<span class="gob__card-sub">' + (it.sub || '') + '</span>' +
+      '<span class="gob__card-name">' + it.name + '</span>' +
+      '<span class="gob__card-price">' + money(it.price) + '</span>';
+    c.addEventListener('click', function () { onClick(it, c); });
+    return c;
+  }
+
+  function togglePick(it, cardEl) {
+    if (picked(it)) {
+      state.picks = state.picks.filter(function (p) { return p.item.h !== it.h; });
+    } else {
+      if (state.picks.length >= MAX) return;
+      state.picks.push({ item: it, vid: it.single ? it.variants[0].id : null });
+    }
+    refreshCards();
+    renderPicks();
+    update();
+  }
+
+  function refreshCards() {
+    root.querySelectorAll('.gob__card').forEach(function (c) {
+      var h = c.getAttribute('data-h');
+      var isOn = state.picks.some(function (p) { return p.item.h === h; });
+      c.classList.toggle('is-on', isOn);
+      c.disabled = !isOn && state.picks.length >= MAX;
+    });
+  }
+
+  function fillCards(holder, items) {
+    holder.innerHTML = '';
+    var n = 0;
+    items.forEach(function (it) {
+      if (!it.variants.some(function (v) { return v.a; })) return;
+      var c = card(it, togglePick);
+      c.setAttribute('data-h', it.h);
+      holder.appendChild(c);
+      n++;
+    });
+    return n;
+  }
+
+  function sizeRow(item, holder, onPick, preselect) {
+    holder.innerHTML = '';
+    item.variants.forEach(function (v) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'gob__size' + (preselect === v.id ? ' is-on' : '');
+      b.textContent = v.s;
+      if (!v.a) b.disabled = true;
+      b.addEventListener('click', function () {
+        holder.querySelectorAll('.gob__size').forEach(function (x) { x.classList.remove('is-on'); });
+        b.classList.add('is-on');
+        onPick(v.id);
+        update();
+      });
+      holder.appendChild(b);
+    });
+  }
+
+  function pickBlock(title, item, getVid, setVid, removable) {
+    var wrap = document.createElement('div');
+    wrap.className = 'gob__pick';
+    var head = document.createElement('div');
+    head.className = 'gob__pick-head';
+    head.innerHTML = '<span class="gob__pick-name">' + title + '</span>';
+    if (removable) {
+      var rm = document.createElement('button');
+      rm.type = 'button';
+      rm.className = 'gob__pick-remove';
+      rm.textContent = 'Remove';
+      rm.addEventListener('click', function () { togglePick(item); });
+      head.appendChild(rm);
+    }
+    wrap.appendChild(head);
+    if (item.single) {
+      var one = document.createElement('span');
+      one.className = 'gob__pick-one';
+      one.textContent = 'One size';
+      wrap.appendChild(one);
+    } else {
+      var sizes = document.createElement('div');
+      sizes.className = 'gob__sizes';
+      wrap.appendChild(sizes);
+      sizeRow(item, sizes, setVid, getVid());
+    }
+    return wrap;
+  }
+
+  function renderPicks() {
+    els.picks.innerHTML = '';
+    els.picksWrap.hidden = state.picks.length === 0;
+    if (state.picks.length === 0) return;
+    // This page's item first, then the extras.
+    els.picks.appendChild(pickBlock(label(current) + ' · this page', current,
+      function () { return state.v1; }, function (id) { state.v1 = id; }, false));
+    state.picks.forEach(function (p) {
+      els.picks.appendChild(pickBlock(label(p.item), p.item,
+        function () { return p.vid; }, function (id) { p.vid = id; }, true));
+    });
+  }
+
+  function update() {
+    var n = state.picks.length;
+    var total = n + 1;
+    var ready = n > 0 && state.v1 && state.picks.every(function (p) { return !!p.vid; });
+    els.add.disabled = !ready;
+    els.add.textContent = n > 0 ? 'Add ' + total + ' to bag' : 'Add to bag';
+
+    var line;
+    if (total >= 3) line = PCT + '% off. Applied in your bag.';
+    else if (total === 2) line = 'One more piece for ' + PCT + '% off.';
+    else line = 'Three pieces or more, ' + PCT + '% off.';
+    els.line.textContent = line;
+    els.line.classList.toggle('is-unlocked', total >= 3);
+    els.deal.textContent = total >= 3 ? PCT + '% off' : 'Three pieces, ' + PCT + '% off';
+  }
+
+  function buildTabs() {
+    els.tabs.innerHTML = '';
+    var first = null;
+    families.forEach(function (f) {
+      if (f.key === ownFam.key) return;
+      var live = f.items.filter(function (it) { return it.variants.some(function (v) { return v.a; }); });
+      if (!live.length) return;
+      var t = document.createElement('button');
+      t.type = 'button';
+      t.className = 'gob__tab';
+      t.setAttribute('role', 'tab');
+      t.textContent = f.label;
+      t.addEventListener('click', function () {
+        els.tabs.querySelectorAll('.gob__tab').forEach(function (x) { x.classList.remove('is-on'); });
+        t.classList.add('is-on');
+        fillCards(els.tabcards, f.items);
+        refreshCards();
+      });
+      els.tabs.appendChild(t);
+      if (!first) first = t;
+    });
+    if (first) first.click();
+  }
+
+  els.toggle.addEventListener('click', function () {
+    var open = els.body.hidden;
+    els.body.hidden = !open;
+    root.classList.toggle('is-open', open);
+    els.toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open && !state.v1) {
+      var fv = formVariantId();
+      if (fv && current.variants.some(function (v) { return v.id === fv && v.a; })) state.v1 = fv;
+      if (current.single) state.v1 = current.variants[0].id;
+      renderPicks();
+      update();
+    }
+  });
+
+  els.add.addEventListener('click', function () {
+    if (els.add.disabled) return;
+    els.add.disabled = true;
+    els.add.textContent = 'Adding...';
+    var items = [{ id: state.v1, quantity: 1 }].concat(state.picks.map(function (p) { return { id: p.vid, quantity: 1 }; }));
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ items: items })
+    }).then(function (r) { return r.json(); }).then(function () {
+      els.add.textContent = 'Added';
+      if (window.GuilloCart) {
+        window.GuilloCart.refresh().then(function () {
+          (window.GuilloCart.notifyAdded || window.GuilloCart.open)();
+        });
+      } else { window.location.href = '/cart'; }
+      setTimeout(function () { update(); }, 2000);
+    }).catch(function () { update(); });
+  });
+
+  // Row 1: own family, this product's colourways first.
+  var own = ownFam.items.slice().sort(function (a, b) { return (b.mine === true) - (a.mine === true); });
+  var built = fillCards(els.own, own);
+  buildTabs();
+  if (built === 0 && !els.tabs.children.length) { root.style.display = 'none'; return; }
+  update();
+})();
+</script>
+
+{%- endif -%}

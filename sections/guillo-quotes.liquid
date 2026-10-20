@@ -1,25 +1,100 @@
 {% comment %}
   Customer quote strip, led by the store's own Judge.me rating.
 
-  Reviews come from the shop-level judgeme.reviews_grid metafield, store
-  reviews first (those are about Guillo rather than one product), falling
-  back to featured reviews and finally to the hand-typed blocks. Highest
-  rated first, and duplicates dropped: Judge.me's own data repeats some.
+  Every quote is a real Judge.me review from the shop-level
+  judgeme.reviews_grid metafield. There are no hand-typed fallbacks. The
+  selection aims for one review each on fit, appearance and service, then
+  fills with the best rated; duplicates are dropped, since Judge.me's own
+  data repeats some.
 {% endcomment %}
 
 {%- liquid
   assign grid = shop.metafields.judgeme.reviews_grid.value
   assign store_rating = grid.average_rating
   assign store_count = grid.number_of_reviews
+  assign to_show = section.settings.quotes_to_show | default: 3
+  assign min_rating = section.settings.min_rating | default: 4
 
-  assign pool = blank
-  if grid.store_reviews.reviews != blank and grid.store_reviews.reviews.size > 0
-    assign pool = grid.store_reviews.reviews
-  elsif grid.featured_reviews.reviews != blank
-    assign pool = grid.featured_reviews.reviews
+  # Pool every review Judge.me publishes to the shop metafield: store
+  # reviews first (about Guillo as a whole), then featured, then the rest.
+  assign pool = '' | split: ''
+  if grid.store_reviews.reviews != blank
+    assign pool = pool | concat: grid.store_reviews.reviews
+  endif
+  if grid.featured_reviews.reviews != blank
+    assign pool = pool | concat: grid.featured_reviews.reviews
+  endif
+  if grid.all_reviews.reviews != blank
+    assign pool = pool | concat: grid.all_reviews.reviews
   endif
 
-  assign to_show = section.settings.quotes_to_show | default: 3
+  # Aim for one review per theme so the strip reads as fit, looks and
+  # service rather than three variations on one point. Themes are matched
+  # on words in the review text (editable in the section settings); a theme
+  # with no match simply gives its slot to the next best-rated review.
+  # Nothing here invents a review: every card is a real Judge.me entry.
+  assign theme_lists = section.settings.theme_fit | append: '|' | append: section.settings.theme_look | append: '|' | append: section.settings.theme_service | split: '|'
+  assign picks = ''
+  assign seen = ''
+
+  for theme in theme_lists
+    assign words = theme | downcase | split: ','
+    for r in pool
+      assign body = r.body_html | default: r.body | strip_html | strip
+      if body == blank or r.rating < min_rating
+        continue
+      endif
+      capture key
+        echo ',' | append: body | truncate: 40, '' | handleize | append: ','
+      endcapture
+      if seen contains key
+        continue
+      endif
+      assign body_dc = body | downcase
+      assign hit = false
+      for w in words
+        assign ws = w | strip
+        if ws != blank and body_dc contains ws
+          assign hit = true
+          break
+        endif
+      endfor
+      if hit
+        assign seen = seen | append: key
+        assign picks = picks | append: forloop.index0 | append: ','
+        break
+      endif
+    endfor
+  endfor
+
+  # Fill any remaining slots, best rated first, skipping repeats.
+  assign picked_count = picks | split: ',' | size
+  if picked_count < to_show
+    for star in (min_rating..5) reversed
+      for r in pool
+        if picked_count >= to_show
+          break
+        endif
+        if r.rating != star
+          continue
+        endif
+        assign body = r.body_html | default: r.body | strip_html | strip
+        if body == blank
+          continue
+        endif
+        capture key
+          echo ',' | append: body | truncate: 40, '' | handleize | append: ','
+        endcapture
+        if seen contains key
+          continue
+        endif
+        assign seen = seen | append: key
+        assign picks = picks | append: forloop.index0 | append: ','
+        assign picked_count = picked_count | plus: 1
+      endfor
+    endfor
+  endif
+  assign pick_list = picks | split: ','
 -%}
 
 <section class="guillo-quotes g-pad">
@@ -33,51 +108,26 @@
     {%- endif -%}
 
     <div class="guillo-quotes__grid">
-      {%- if pool != blank and pool.size > 0 -%}
-        {%- liquid
-          # Best first, then drop repeats: the same review appears more than
-          # once in Judge.me's data.
-          assign ordered = '' | split: ''
-          for star in (1..5) reversed
-            assign bucket = pool | where: 'rating', star
-            assign ordered = ordered | concat: bucket
-          endfor
-          if ordered.size == 0
-            assign ordered = pool
-          endif
-          assign seen = ''
-          assign shown = 0
-        -%}
-        {%- for r in ordered -%}
-          {%- if shown >= to_show -%}{%- break -%}{%- endif -%}
-          {%- assign body = r.body_html | default: r.body | strip_html | strip -%}
-          {%- capture key -%},{{ body | truncate: 40, '' | handleize }},{%- endcapture -%}
-          {%- unless body == blank or seen contains key -%}
-            {%- assign seen = seen | append: key -%}
-            {%- assign shown = shown | plus: 1 -%}
-            <div class="guillo-quotes__cell">
-              <div class="guillo-quotes__stars" aria-label="{{ r.rating }} star review">
-                {%- for i in (1..5) -%}{%- if i <= r.rating -%}&#9733;{%- else -%}&#9734;{%- endif -%}{%- endfor -%}
-              </div>
-              {%- if r.title != blank -%}
-                <div class="guillo-quotes__title">{{ r.title }}</div>
-              {%- endif -%}
-              <p class="guillo-quotes__quote">{{ body }}</p>
-              <div class="guillo-quotes__who">
-                {{ r.reviewer_name }}{% if r.verified_buyer %} &middot; Verified purchase{% endif %}
-              </div>
-            </div>
-          {%- endunless -%}
-        {%- endfor -%}
-      {%- else -%}
-        {%- for block in section.blocks -%}
-          <div class="guillo-quotes__cell" {{ block.shopify_attributes }}>
-            <div class="guillo-quotes__stars" aria-label="5 star review">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <p class="guillo-quotes__quote">{{ block.settings.quote }}</p>
-            <div class="guillo-quotes__who">{{ block.settings.who }}</div>
+      {%- assign shown = 0 -%}
+      {%- for pick in pick_list -%}
+        {%- if shown >= to_show or pick == blank -%}{%- break -%}{%- endif -%}
+        {%- assign idx = pick | plus: 0 -%}
+        {%- assign r = pool[idx] -%}
+        {%- assign body = r.body_html | default: r.body | strip_html | strip -%}
+        {%- assign shown = shown | plus: 1 -%}
+        <div class="guillo-quotes__cell">
+          <div class="guillo-quotes__stars" aria-label="{{ r.rating }} star review">
+            {%- for i in (1..5) -%}{%- if i <= r.rating -%}&#9733;{%- else -%}&#9734;{%- endif -%}{%- endfor -%}
           </div>
-        {%- endfor -%}
-      {%- endif -%}
+          {%- if r.title != blank -%}
+            <div class="guillo-quotes__title">{{ r.title }}</div>
+          {%- endif -%}
+          <p class="guillo-quotes__quote">{{ body }}</p>
+          <div class="guillo-quotes__who">
+            {{ r.reviewer_name }}{% if r.verified_buyer %} &middot; Verified purchase{% endif %}
+          </div>
+        </div>
+      {%- endfor -%}
     </div>
   </div>
 </section>
@@ -151,66 +201,16 @@
 {
   "name": "Guillo quote strip",
   "settings": [
-    {
-      "type": "range",
-      "id": "quotes_to_show",
-      "label": "Reviews to show",
-      "min": 2,
-      "max": 4,
-      "step": 1,
-      "default": 3
-    }
+    { "type": "range", "id": "quotes_to_show", "label": "Reviews to show", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "range", "id": "min_rating", "label": "Minimum star rating", "min": 3, "max": 5, "step": 1, "default": 4 },
+    { "type": "header", "content": "Balance" },
+    { "type": "paragraph", "content": "The strip tries to show one review per theme, matched on these words in the review text. Comma separated. Only genuine Judge.me reviews are ever shown." },
+    { "type": "text", "id": "theme_fit", "label": "Product and fit words", "default": "fit, fits, fitted, size, waist, thigh, leg, stretch, comfortable, comfy, cut, tailored, fabric, material" },
+    { "type": "text", "id": "theme_look", "label": "Appearance words", "default": "look, looks, compliment, style, stylish, smart, sharp, design, colour, color, handsome, classy" },
+    { "type": "text", "id": "theme_service", "label": "Service and delivery words", "default": "service, delivery, shipping, arrived, fast, quick, speedy, support, exchange, return, refund, website, easy, customer, communication, helpful" }
   ],
-  "blocks": [
-    {
-      "type": "quote",
-      "name": "Quote",
-      "settings": [
-        {
-          "type": "textarea",
-          "id": "quote",
-          "label": "Quote",
-          "default": "Office to dinner in the same pair and I forgot I had them on. First chinos in years that do not pull across the thigh."
-        },
-        {
-          "type": "text",
-          "id": "who",
-          "label": "Attribution",
-          "default": "Daniel M, Sydney"
-        }
-      ]
-    }
-  ],
-  "max_blocks": 3,
   "presets": [
-    {
-      "name": "Guillo quote strip",
-      "category": "Guillo",
-      "blocks": [
-        {
-          "type": "quote",
-          "settings": {
-            "quote": "Office to dinner in the same pair and I forgot I had them on. First chinos in years that do not pull across the thigh.",
-            "who": "Daniel M, Sydney"
-          }
-        },
-        {
-          "type": "quote",
-          "settings": {
-            "quote": "Two pairs, ten days in Europe. No creasing out of the case, no iron, still sharp on the flight home.",
-            "who": "Tom R, Melbourne"
-          }
-        },
-        {
-          "type": "quote",
-          "settings": {
-            "quote": "I squat and normally have to size up. Took my true waist as advised. Right first time.",
-            "who": "Alex P, Brisbane"
-          }
-        }
-      ]
-    }
+    { "name": "Guillo quote strip", "category": "Guillo" }
   ]
 }
 {% endschema %}
-

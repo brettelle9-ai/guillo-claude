@@ -31,4 +31,3 @@ class ProductCustomProperty extends Component {
 }
 
 customElements.define('product-custom-property-component', ProductCustomProperty);
-

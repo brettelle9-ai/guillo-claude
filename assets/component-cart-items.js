@@ -331,4 +331,3 @@ class CartItemsComponent extends Component {
 if (!customElements.get('cart-items-component')) {
   customElements.define('cart-items-component', CartItemsComponent);
 }
-

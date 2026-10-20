@@ -534,4 +534,3 @@ class QuickOrderListComponent extends Component {
 if (!customElements.get('quick-order-list-component')) {
   customElements.define('quick-order-list-component', QuickOrderListComponent);
 }
-

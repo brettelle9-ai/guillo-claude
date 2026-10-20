@@ -346,4 +346,3 @@ class MissingRefError extends Error {
     super(`Required ref "${ref}" not found in component ${component.tagName.toLowerCase()}`);
   }
 }
-

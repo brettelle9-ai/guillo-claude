@@ -1,13 +1,21 @@
 {% comment %}
-  Black utility bar above the header: uppercase messages separated by
-  hairline pipes. Each message can carry a shorter mobile wording, the way
-  the live store's gheader_announcement_m* settings do, so a phone shows the
-  same promises in fewer words rather than dropping them.
+  Black utility bar above the header: one message at a time, sliding across,
+  at every width. Showing them all in a row ran them off the edge of the bar
+  on desktop, so the rotation that was once a phone-only behaviour is now how
+  the bar works everywhere.
+
+  Each message can carry a shorter mobile wording, the way the live store's
+  gheader_announcement_m* settings do, so a phone shows the same promise in
+  fewer words rather than dropping it.
 
   Messages are country-aware, like the live gscene-header: a message can be
   limited to certain countries or hidden from them, so GB sees its own
   delivery and duties lines and never the AUD ones. Codes are ISO-2 and
   resolved from Shopify Markets via localization.country.iso_code.
+
+  A message can also carry an optional link. When one is set the message
+  renders as an anchor rather than a span, keeping the same
+  guillo-announce__msg class so the rotation still drives it.
 {% endcomment %}
 
 <div class="guillo-announce">
@@ -39,23 +47,29 @@
     <span aria-hidden="true">&#8249;</span>
   </button>
   <div class="guillo-announce__messages" data-ann-track>
-    {%- assign shown_count = 0 -%}
     {%- for block in section.blocks -%}
       {%- capture block_key -%},{{ block.id }},{%- endcapture -%}
       {%- unless shown contains block_key -%}{%- continue -%}{%- endunless -%}
-      {%- if shown_count > 0 -%}<span class="guillo-announce__sep" aria-hidden="true">|</span>{%- endif -%}
-      {%- assign shown_count = shown_count | plus: 1 -%}
-      <span
-        class="guillo-announce__msg{% if block.settings.accent %} guillo-announce__msg--accent{% endif %}"
-        {{ block.shopify_attributes }}
-      >
+      {%- capture msg_body -%}
         {%- if block.settings.text_mobile != blank -%}
           <span class="guillo-announce__long">{{ block.settings.text }}</span>
           <span class="guillo-announce__short">{{ block.settings.text_mobile }}</span>
         {%- else -%}
           {{- block.settings.text -}}
         {%- endif -%}
-      </span>
+      {%- endcapture -%}
+      {%- if block.settings.url != blank -%}
+        <a
+          class="guillo-announce__msg guillo-announce__msg--link{% if block.settings.accent %} guillo-announce__msg--accent{% endif %}"
+          href="{{ block.settings.url }}"
+          {{ block.shopify_attributes }}
+        >{{ msg_body }}</a>
+      {%- else -%}
+        <span
+          class="guillo-announce__msg{% if block.settings.accent %} guillo-announce__msg--accent{% endif %}"
+          {{ block.shopify_attributes }}
+        >{{ msg_body }}</span>
+      {%- endif -%}
     {%- endfor -%}
   </div>
   <button type="button" class="guillo-announce__nav" data-ann-next aria-label="Next announcement">
@@ -68,87 +82,91 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 40px;
+    gap: 0;
     height: 38px;
-    padding: 0 40px;
+    padding: 0 8px;
     background: #000000;
     /* Fine white hairline separating the pure-black utility bar from the
-       near-black header below it. rgba(255,255,255,.6) is the design's own
-       white hairline value. */
+       near-black header below it. */
     border-bottom: 2px solid rgba(255, 255, 255, 0.75);
     color: var(--g-faint);
     font: 500 10px/1 var(--g-sans);
     letter-spacing: 0.2em;
     text-transform: uppercase;
   }
+
+  /* One message at a time at every width. The message travels across the bar
+     rather than blinking over: the one leaving slides out the way it is
+     going, the next comes in behind it. */
   .guillo-announce__messages {
+    position: relative;
+    flex: 1;
+    height: 38px;
+    overflow: hidden;
+  }
+  .guillo-announce__msg {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
-    gap: 22px;
+    justify-content: center;
+    text-align: center;
+    padding-inline: 4px;
+    white-space: normal;
+    opacity: 0;
+    transform: translateX(24px);
+    transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
   }
-  .guillo-announce__msg { white-space: nowrap; }
+  .guillo-announce__msg.is-leaving { opacity: 0; transform: translateX(-24px); }
+  .guillo-announce--back .guillo-announce__msg { transform: translateX(-24px); }
+  .guillo-announce--back .guillo-announce__msg.is-leaving { transform: translateX(24px); }
+  .guillo-announce__msg.is-current {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
   .guillo-announce__short { display: none; }
+
+  /* A linked message keeps the bar's type and colour and underlines the words
+     themselves, not the full width of the bar. The colour reset has to come
+     before the accent rule below, or it cancels the bronze. */
+  .guillo-announce__msg--link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .guillo-announce__msg--link:hover { text-decoration-thickness: 2px; }
   .guillo-announce__msg--accent { color: var(--g-bronze); }
-  .guillo-announce__sep { opacity: 0.35; }
-  /* The arrows are a phone affordance only. */
-  .guillo-announce__nav { display: none; }
+
+  /* Nothing sits beside anything now, so the pipes have no job. */
+  .guillo-announce__sep { display: none; }
+
+  .guillo-announce__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 26px;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: 300 17px/1 var(--g-sans);
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 0.25s ease;
+  }
+  .guillo-announce__nav:hover,
+  .guillo-announce__nav:active { opacity: 1; }
 
   @media screen and (max-width: 989px) {
-    .guillo-announce { padding: 0 6px; gap: 0; }
+    .guillo-announce { padding: 0 6px; }
     .guillo-announce__long { display: none; }
     .guillo-announce__short { display: inline; }
-
-    /* One message at a time, stepped with the arrows, rather than four
-       competing for the width of a phone. */
-    .guillo-announce__messages {
-      position: relative;
-      flex: 1;
-      height: 38px;
-      gap: 0;
-      overflow: hidden;
-    }
-    /* The message travels across the bar rather than blinking over: the one
-       leaving slides out the way it is going, the next comes in behind it. */
-    .guillo-announce__msg {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding-inline: 4px;
-      white-space: normal;
-      opacity: 0;
-      transform: translateX(24px);
-      transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-      pointer-events: none;
-    }
-    .guillo-announce__msg.is-leaving { opacity: 0; transform: translateX(-24px); }
-    .guillo-announce--back .guillo-announce__msg { transform: translateX(-24px); }
-    .guillo-announce--back .guillo-announce__msg.is-leaving { transform: translateX(24px); }
-    .guillo-announce__msg.is-current {
-      opacity: 1;
-      transform: none;
-      pointer-events: auto;
-    }
-    .guillo-announce__sep { display: none; }
-
-    .guillo-announce__nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 0 0 auto;
-      width: 26px;
-      height: 38px;
-      padding: 0;
-      border: 0;
-      background: none;
-      color: inherit;
-      font: 300 17px/1 var(--g-sans);
-      cursor: pointer;
-      opacity: 0.7;
-    }
-    .guillo-announce__nav:active { opacity: 1; }
   }
   @media (prefers-reduced-motion: reduce) {
     .guillo-announce__msg { transition: none; }
@@ -166,10 +184,7 @@
     }
 
     const bar = track.closest('.guillo-announce');
-    const seconds = {{ section.settings.rotate_seconds | default: 2 }};
-    // Only one shows at a time below this width; above it they all sit in a
-    // row, so there is nothing to rotate.
-    const stacked = window.matchMedia('(max-width: 989px)');
+    const seconds = {{ section.settings.rotate_seconds | default: 6 }};
     const still = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     let i = 0;
@@ -188,9 +203,9 @@
     const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
     const start = () => {
       stop();
-      // Auto-advance only where it is one at a time, the tab is visible, and
-      // the visitor has not asked for less motion. The arrows always work.
-      if (!stacked.matches || still.matches || document.hidden) return;
+      // Auto-advance while the tab is visible and the visitor has not asked
+      // for less motion. The arrows always work either way.
+      if (still.matches || document.hidden) return;
       timer = setInterval(() => show(i + 1), seconds * 1000);
     };
 
@@ -212,7 +227,6 @@
       bar.addEventListener('touchstart', stop, { passive: true });
     }
     document.addEventListener('visibilitychange', start);
-    stacked.addEventListener('change', start);
 
     let x0 = null;
     track.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
@@ -238,7 +252,7 @@
     {
       "type": "range",
       "id": "rotate_seconds",
-      "label": "Seconds per message (mobile)",
+      "label": "Seconds per message",
       "min": 3,
       "max": 12,
       "step": 1,
@@ -263,6 +277,12 @@
           "id": "text_mobile",
           "label": "Short text (mobile)",
           "info": "Optional shorter wording for phones."
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link",
+          "info": "Optional. Makes this message clickable."
         },
         {
           "type": "checkbox",
@@ -315,5 +335,3 @@
   ]
 }
 {% endschema %}
-
-

@@ -21,6 +21,36 @@
     if pos_m == blank
       assign pos_m = pos_d
     endif
+
+    # Video is optional and never the thing the page waits on. The image above
+    # stays the LCP element; the video fades in over it only once it can play.
+    # Pick the largest mp4 under the cap so a 4K master never reaches a phone.
+    assign vid_d = blank
+    if section.settings.media_type == 'video'
+      assign vid_d = section.settings.video
+    endif
+
+    # One video setting only. Two `video`-type settings in a single section are
+    # rejected by the theme editor's validator, even though Liquid renders them.
+    # Liquid also exposes fewer transcodes than the Files API, so never filter on
+    # an assumed height: take the largest mp4 up to 1080, else any mp4 going.
+    assign vid_d_url = ''
+    assign vid_d_h = 0
+    assign vid_d_any = ''
+    for s in vid_d.sources
+      if s.format == 'mp4'
+        if vid_d_any == blank
+          assign vid_d_any = s.url
+        endif
+        if s.height <= 1080 and s.height > vid_d_h
+          assign vid_d_h = s.height
+          assign vid_d_url = s.url
+        endif
+      endif
+    endfor
+    if vid_d_url == blank
+      assign vid_d_url = vid_d_any
+    endif
   -%}
   {%- capture hero_pos -%}--hero-pos-d:{{ pos_d }};--hero-pos-m:{{ pos_m }}{%- endcapture -%}
   <picture class="guillo-hero__picture">
@@ -57,6 +87,67 @@
       >
     {%- endif -%}
   </picture>
+  {%- if vid_d_url != blank -%}
+    {%- liquid
+      assign vid_poster = vid_d.preview_image
+    -%}
+    <video
+      class="guillo-hero__video"
+      data-src="{{ vid_d_url }}"
+      data-mobile-enabled="{{ section.settings.video_mobile_enabled }}"
+      style="{{ hero_pos }}"
+      {% if vid_poster != blank %}poster="{{ vid_poster | image_url: width: 1600 }}"{% endif %}
+      muted
+      loop
+      playsinline
+      preload="none"
+      tabindex="-1"
+      aria-hidden="true"
+    ></video>
+    <script>
+      // Deferred on purpose: nothing is fetched until the page has loaded and the
+      // browser is idle, so the video never competes with the hero image or the
+      // cart script. If any bail-out below hits, the still image simply stays.
+      (function () {
+        var el = document.currentScript.previousElementSibling;
+        if (!el || el.tagName !== 'VIDEO') el = document.querySelector('.guillo-hero__video');
+        if (!el || el.dataset.mounted === 'true') return;
+        el.dataset.mounted = 'true';
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (conn && (conn.saveData === true || /^(slow-2g|2g)$/.test(conn.effectiveType || ''))) return;
+
+        var isMobile = window.matchMedia('(max-width: 749px)').matches;
+        if (isMobile && el.dataset.mobileEnabled !== 'true') return;
+
+        var src = el.dataset.src;
+        if (!src) return;
+
+        function reveal() { el.classList.add('is-ready'); }
+
+        function start() {
+          el.addEventListener('loadeddata', reveal, { once: true });
+          el.addEventListener('playing', reveal, { once: true });
+          el.muted = true;
+          el.preload = 'auto';
+          el.src = src;
+          el.load();
+          var played = el.play();
+          if (played && played.catch) played.catch(function () { reveal(); });
+        }
+
+        function whenIdle() {
+          if (window.requestIdleCallback) window.requestIdleCallback(start, { timeout: 1500 });
+          else window.setTimeout(start, 250);
+        }
+
+        if (document.readyState === 'complete') whenIdle();
+        else window.addEventListener('load', whenIdle, { once: true });
+      })();
+    </script>
+  {%- endif -%}
   <div class="guillo-hero__wash"></div>
   <div class="guillo-hero__content">
     {%- if section.settings.eyebrow != blank -%}
@@ -101,6 +192,23 @@
     object-fit: cover;
     display: block;
     object-position: var(--hero-pos-d, 50% 50%);
+  }
+  .guillo-hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--hero-pos-d, 50% 50%);
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    pointer-events: none;
+  }
+  .guillo-hero__video.is-ready {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .guillo-hero__video { display: none; }
   }
   .guillo-hero__wash {
     position: absolute;
@@ -156,6 +264,7 @@
       inset: 0;
     }
     .guillo-hero__img { object-position: var(--hero-pos-m, var(--hero-pos-d, 50% 50%)); }
+    .guillo-hero__video { object-position: var(--hero-pos-m, var(--hero-pos-d, 50% 50%)); }
     .guillo-hero__content {
       position: relative;
       left: 0;
@@ -216,6 +325,45 @@
       "info": "Leave blank to use the desktop focal point."
     },
     {
+      "type": "header",
+      "content": "Video (optional)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Choose Video to play a clip over the image. The image still loads first and stays visible until the video is ready, so the page never waits on the video. Keep clips short and quiet — 8 to 15 seconds, no sound, looping."
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Hero media",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image only"
+        },
+        {
+          "value": "video",
+          "label": "Image + video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Plays over the image once loaded, on desktop and mobile.",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_mobile_enabled",
+      "label": "Play video on mobile",
+      "default": true,
+      "info": "Turn off to serve phones the image only. Video is skipped automatically on Data Saver and slow connections either way.",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
@@ -264,4 +412,3 @@
   ]
 }
 {% endschema %}
-

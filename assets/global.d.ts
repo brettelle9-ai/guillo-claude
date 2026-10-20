@@ -71,4 +71,3 @@ declare global {
     readonly deviceMemory?: number;
   }
 }
-

@@ -72,4 +72,3 @@ class ProductPrice extends Component {
 if (!customElements.get('product-price')) {
   customElements.define('product-price', ProductPrice);
 }
-

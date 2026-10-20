@@ -128,4 +128,3 @@ export class AnnouncementBar extends Component {
 if (!customElements.get('announcement-bar-component')) {
   customElements.define('announcement-bar-component', AnnouncementBar);
 }
-

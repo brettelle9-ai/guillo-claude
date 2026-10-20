@@ -490,4 +490,3 @@ export default class VariantPicker extends Component {
 if (!customElements.get('variant-picker')) {
   customElements.define('variant-picker', VariantPicker);
 }
-

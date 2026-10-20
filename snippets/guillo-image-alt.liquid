@@ -1,0 +1,85 @@
+{%- comment -%}
+  ============================================================================
+  GUILLO — image alt text
+  ----------------------------------------------------------------------------
+  Returns the alt text for a product image. One place, so the product page,
+  the product cards and the cart cannot drift apart.
+
+  Order of preference:
+    1. The image's OWN alt, as set on the media in Shopify admin. Always wins.
+    2. Product title plus colour, e.g. "The Luxe Chino in Black".
+    3. Product title alone, when no colour can be established.
+
+  Nothing is hardcoded here: every word comes from the product's own data.
+
+  ----------------------------------------------------------------------------
+  THE THING THAT MAKES THIS SNIPPET NECESSARY
+
+  Liquid's media.alt is NEVER blank for product media. When no alt text is set
+  in admin, Shopify quietly returns the PRODUCT TITLE instead. So a theme that
+  does alt: media.alt looks correct in the markup while actually shipping no
+  real description at all. Checked 2026-10-03: 224 of the 258 images on the 48
+  active products have an empty alt in the Admin API, yet every one of them was
+  already rendering the product title on the storefront.
+
+  So an alt that is exactly equal to the product title is treated as "no alt",
+  which lets the colour be added. Colour is what separates one colourway from
+  another in Google Images, and it is the one fact the title never carries.
+  If someone has genuinely typed the product title in as the alt text, adding
+  the colour is still an improvement, so this is safe either way.
+  ----------------------------------------------------------------------------
+
+  Colour is read from custom.colour_name first (11 of 48 active products have
+  it, and it is already nicely cased), then the "colour:" tag (43 of 48). No
+  product currently has a Color/Colour option, so that is not consulted.
+
+  The "#note:" convention: some PDP media carry alt text like
+  "Front view #note:Model is 188cm" so sections/guillo-product.liquid can pull
+  a caption out of it. Only the part before #note: describes the picture, so
+  that is all that reaches the alt attribute.
+
+  Params:
+    media_alt : the raw alt string from the media (optional)
+    product   : the product it belongs to (optional, used for the fallback)
+
+  Usage:
+    {%- capture img_alt -%}
+      {%- render 'guillo-image-alt', media_alt: media.alt, product: product -%}
+    {%- endcapture -%}
+  ============================================================================
+{%- endcomment -%}
+{%- liquid
+  assign gia_alt = ''
+
+  if media_alt != blank
+    assign gia_alt = media_alt
+    if gia_alt contains '#note:'
+      assign gia_alt = gia_alt | split: '#note:' | first
+    endif
+    assign gia_alt = gia_alt | strip
+  endif
+
+  # Shopify's silent title fallback, see the note above. Treat it as no alt.
+  if product.title != blank and gia_alt == product.title
+    assign gia_alt = ''
+  endif
+
+  if gia_alt == blank and product.title != blank
+    assign gia_colour = product.metafields.custom.colour_name.value | default: ''
+
+    if gia_colour == blank
+      for gia_tag in product.tags
+        if gia_tag contains 'colour:'
+          assign gia_colour = gia_tag | split: 'colour:' | last | strip | replace: '-', ' ' | capitalize
+        endif
+      endfor
+    endif
+
+    if gia_colour != blank
+      assign gia_alt = product.title | append: ' in ' | append: gia_colour
+    else
+      assign gia_alt = product.title
+    endif
+  endif
+-%}
+{{- gia_alt -}}

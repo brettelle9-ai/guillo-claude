@@ -67,4 +67,3 @@ class VolumePricingInfoComponent extends Component {
 if (!customElements.get('volume-pricing-info')) {
   customElements.define('volume-pricing-info', VolumePricingInfoComponent);
 }
-

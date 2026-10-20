@@ -155,4 +155,3 @@ export class ComparisonSliderComponent extends Component {
 if (!customElements.get('comparison-slider-component')) {
   customElements.define('comparison-slider-component', ComparisonSliderComponent);
 }
-

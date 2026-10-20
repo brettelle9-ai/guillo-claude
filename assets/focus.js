@@ -102,4 +102,3 @@ export function cycleFocus(items, increment) {
 
   targetItem.focus();
 }
-

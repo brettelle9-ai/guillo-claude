@@ -389,4 +389,3 @@ if (window.Shopify?.designMode && !isIOS) {
     });
   })();
 }
-

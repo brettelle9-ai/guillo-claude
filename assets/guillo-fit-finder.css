@@ -1,0 +1,552 @@
+/* ==========================================================================
+   GUILLO FIT — size recommendation modal
+   Renders inside a shadow root (see guillo-fit-finder.js), so none of the
+   theme's own CSS reaches it and none of this reaches the page. The design
+   tokens still arrive, because custom properties inherit through a shadow
+   boundary.
+   ========================================================================== */
+
+:host { all: initial; }
+
+.gff,
+.gff *,
+.gff *::before,
+.gff *::after { box-sizing: border-box; }
+
+.gff {
+  position: fixed;
+  inset: 0;
+  z-index: 1499997;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  font-family: var(--g-sans, system-ui, sans-serif);
+  color: #121212;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+.gff[hidden] { display: none !important; }
+
+.gff__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 13, 13, 0.38);
+  opacity: 0;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.gff.is-open .gff__scrim { opacity: 1; }
+
+.gff__panel {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #e4e4e2;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1), transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+.gff.is-open .gff__panel { opacity: 1; transform: translateY(0); }
+
+/* ----- Shared type ------------------------------------------------------- */
+.gff__label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6f7276;
+}
+.gff h2 {
+  margin: 0;
+  font-family: var(--g-serif, Georgia, serif);
+  font-weight: 400;
+  font-size: clamp(26px, 3.2vw, 32px);
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.gff p { margin: 0; }
+/* :where() keeps this at zero specificity. As `.gff button` it outranked every
+   single-class component rule below, so the dark Continue button was drawing
+   ink-on-ink text and the button looked blank. */
+:where(.gff) :where(button) { font-family: inherit; color: inherit; }
+
+/* ----- Header ------------------------------------------------------------ */
+.gff__head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 32px;
+  border-bottom: 1px solid #e4e4e2;
+}
+.gff__brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.gff__logo { height: 13px; width: auto; display: block; flex: 0 0 auto; }
+.gff__mark {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.gff__divider { width: 1px; height: 14px; background: #cfcfcc; flex: 0 0 auto; }
+.gff__product {
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6f7276;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gff__close {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  margin-right: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.gff__close:hover { background: rgba(18, 18, 18, 0.04); }
+
+/* ----- Running estimate -------------------------------------------------- */
+.gff__strip {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 32px;
+  background: #fbfbfa;
+  border-bottom: 1px solid #e4e4e2;
+}
+.gff__strip[hidden] { display: none !important; }
+.gff__estimate { display: flex; flex-direction: column; gap: 6px; }
+.gff__estimate-size { font-size: 34px; font-weight: 300; line-height: 1; letter-spacing: -0.01em; }
+.gff__conf { display: flex; flex-direction: column; gap: 8px; }
+.gff__conf-labels { display: flex; justify-content: space-between; gap: 8px; }
+.gff__conf-track { height: 3px; background: rgba(18, 18, 18, 0.1); position: relative; overflow: hidden; }
+.gff__conf-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: #121212;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.gff__conf-pct { font-size: 18px; font-weight: 300; min-width: 48px; text-align: right; }
+
+/* ----- Body -------------------------------------------------------------- */
+.gff__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 32px 32px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.gff__stepno { font-size: 14px; font-weight: 300; letter-spacing: 0.06em; color: #6f7276; }
+.gff__sub { font-size: 15px; line-height: 1.65; color: #3a3d41; }
+.gff__intro { display: flex; flex-direction: column; gap: 10px; max-width: 380px; }
+.gff__introrow { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+
+/* Unit toggle */
+.gff__units { display: flex; gap: 2px; border: 1px solid #e4e4e2; border-radius: 999px; padding: 3px; }
+.gff__unit {
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 16px;
+  background: transparent;
+  color: #3a3d41;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.gff__unit.is-on { background: #121212; color: #fff; }
+
+/* Route picker: estimate, or a measurement the shopper already knows. */
+/* The escape hatch for a man who does not know his size. Quiet on purpose:
+   one path is obvious, the other is merely available. */
+.gff__switch {
+  align-self: flex-start;
+  background: none;
+  border: 0;
+  padding: 2px 0;
+  font-size: 12px;
+  color: #6f7276;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.gff__switch:hover { color: #121212; }
+.gff__askfit { font-size: 14px; color: #3a3d41; margin: 4px 0 0; }
+.gff__known-note { font-size: 13px; color: #6f7276; line-height: 1.5; }
+/* The size he already wears, as tiles rather than a dropdown. */
+.gff__sizes { display: grid; grid-template-columns: repeat(auto-fit, minmax(54px, 1fr)); gap: 6px; }
+/* The odd sizes are ones we do not cut; quieter, so the even ones read as ours. */
+.gff__size-btn--between { color: #6f7276; }
+.gff__size-btn--between.is-on { color: #fff; }
+.gff__size-btn {
+  padding: 13px 4px;
+  border: 1px solid #e4e4e2;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.gff__size-btn:hover { border-color: #9a958c; }
+.gff__size-btn.is-on { background: #121212; border-color: #121212; color: #fff; }
+
+/* ----- Ruler sliders ----------------------------------------------------- */
+.gff__dial { display: flex; flex-direction: column; gap: 4px; }
+.gff__dial-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.gff__dial-label { font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #3a3d41; }
+.gff__dial-val { font-size: 46px; font-weight: 300; line-height: 1; letter-spacing: -0.01em; }
+.gff__dial-unit { font-size: 15px; color: #6f7276; margin-left: 4px; }
+.gff__dial-hit {
+  position: relative;
+  height: 64px;
+  touch-action: none;
+  cursor: pointer;
+  outline: none;
+}
+.gff__dial-hit:focus-visible { outline: 2px solid #121212; outline-offset: 6px; }
+.gff__ticks { position: absolute; left: 0; right: 0; top: 24px; display: flex; justify-content: space-between; align-items: flex-start; }
+.gff__tick { width: 1px; flex: 0 0 1px; background: currentColor; }
+.gff__track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 42px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(18, 18, 18, 0.12);
+}
+.gff__track-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: #121212; }
+.gff__knob {
+  position: absolute;
+  top: 44px;
+  width: 26px;
+  height: 26px;
+  margin-left: -13px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid #121212;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.gff__knob::after { content: ''; width: 6px; height: 6px; border-radius: 999px; background: #121212; }
+.gff__dial-ends { display: flex; justify-content: space-between; font-size: 11px; font-weight: 300; color: #6f7276; }
+
+/* ----- Step 2 groups ----------------------------------------------------- */
+.gff__group { padding: 20px 0; border-top: 1px solid #e4e4e2; transition: opacity 0.2s ease; }
+.gff__group:first-child { border-top: 0; padding-top: 0; }
+.gff__group.is-locked { opacity: 0.4; }
+.gff__group-head { display: flex; align-items: center; gap: 12px; }
+.gff__num {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid #cfcfcc;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #121212;
+}
+.gff__group.is-open .gff__num { border-color: #121212; }
+.gff__group.is-done .gff__num { border-color: #121212; background: #121212; color: #fff; }
+.gff__group-title { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.gff__group-sum { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.gff__group-val { font-size: 14px; color: #3a3d41; }
+.gff__change {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6f7276;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.gff__change:hover { color: #121212; }
+.gff__group-body { padding-left: 44px; margin-top: 16px; display: flex; flex-direction: column; gap: 14px; }
+.gff__prompt { font-family: var(--g-serif, Georgia, serif); font-size: 20px; line-height: 1.3; }
+
+.gff__cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+.gff__card {
+  text-align: left;
+  padding: 14px;
+  border: 1px solid #e4e4e2;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.gff__card:hover { border-color: #9a958c; }
+.gff__card.is-on { border-color: #121212; box-shadow: inset 0 0 0 1px #121212; }
+.gff__card-l { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.gff__card-d { font-size: 13px; color: #3a3d41; line-height: 1.4; }
+
+.gff__seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #e4e4e2; }
+.gff__seg-btn {
+  padding: 14px 8px;
+  background: #fff;
+  border: 0;
+  border-left: 1px solid #e4e4e2;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.gff__seg-btn:first-child { border-left: 0; }
+.gff__seg-btn.is-on { background: #121212; color: #fff; }
+.gff__seg-l { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.gff__seg-d { font-size: 11px; opacity: 0.8; }
+
+/* ----- Checking ---------------------------------------------------------- */
+.gff__reading { display: flex; flex-direction: column; gap: 22px; }
+.gff__reading-top { display: flex; align-items: center; gap: 10px; }
+.gff__dot { width: 6px; height: 6px; border-radius: 999px; background: #121212; animation: gffPulse 1.6s ease-in-out infinite; }
+@keyframes gffPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+.gff__scan { position: relative; height: 1px; background: #e4e4e2; overflow: hidden; }
+.gff__scan::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 25%;
+  background: #121212;
+  animation: gffScan 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes gffScan { 0% { transform: translateX(-100%); } 100% { transform: translateX(400%); } }
+.gff__readrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 0;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.gff__readrow.is-in { opacity: 1; transform: translateY(0); }
+.gff__readrow span:first-child { font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #6f7276; }
+.gff__readrow span:last-child { font-size: 14px; font-weight: 300; }
+
+/* ----- Result ------------------------------------------------------------ */
+.gff__res { display: flex; flex-direction: column; gap: 24px; }
+.gff__res-head { display: flex; flex-direction: column; gap: 12px; }
+.gff__res-size-row { display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+.gff__res-size {
+  font-family: var(--g-serif, Georgia, serif);
+  font-weight: 400;
+  font-size: clamp(64px, 13vw, 116px);
+  line-height: 0.9;
+}
+.gff__res-match { display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; }
+.gff__res-match-l { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.gff__res-pct { font-size: 28px; font-weight: 300; line-height: 1; }
+.gff__res-bar { width: 180px; max-width: 100%; height: 3px; background: rgba(18, 18, 18, 0.1); position: relative; }
+.gff__res-bar i { position: absolute; left: 0; top: 0; bottom: 0; background: #121212; transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+.gff__res-note {
+  border-top: 1px solid #121212;
+  padding-top: 18px;
+  font-family: var(--g-serif, Georgia, serif);
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+.gff__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; padding: 16px 0; border-top: 1px solid #e4e4e2; align-items: start; }
+.gff__row-l { display: flex; flex-direction: column; gap: 5px; }
+.gff__row-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.gff__row-label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.gff__row-spec { font-size: 12px; font-weight: 300; color: #6f7276; }
+.gff__row-note { font-size: 13px; color: #3a3d41; line-height: 1.45; }
+.gff__row-r { display: flex; flex-direction: column; gap: 8px; padding-top: 6px; }
+.gff__scale { position: relative; height: 2px; background: rgba(18, 18, 18, 0.12); }
+.gff__scale-tick { position: absolute; left: 50%; top: -3px; width: 1px; height: 8px; background: rgba(18, 18, 18, 0.25); }
+.gff__scale-dot {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: #121212;
+  transition: left 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.gff__scale-labels { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #6f7276; }
+
+.gff__cross { background: #fbfbfa; border: 1px solid #e4e4e2; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.gff__cross-top { display: flex; justify-content: space-between; gap: 12px; }
+.gff__cross-title { font-family: var(--g-serif, Georgia, serif); font-size: 24px; line-height: 1.2; }
+.gff__cross-note { font-size: 13px; color: #3a3d41; line-height: 1.5; }
+.gff__cross-cta {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 11px 18px;
+  background: none;
+  border: 1px solid #121212;
+  color: #121212;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.gff__cross-cta:hover { background: #121212; color: #fff; }
+
+.gff__alt { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 14px; color: #3a3d41; }
+.gff__alt-cta {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #121212;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.gff__atc {
+  width: 100%;
+  padding: 18px;
+  background: #121212;
+  color: #fff;
+  border: 0;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: opacity 0.2s ease;
+}
+.gff__atc:hover { opacity: 0.88; }
+.gff__atc.is-loading { opacity: 0.55; pointer-events: none; }
+.gff__reassure { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: #3a3d41; }
+.gff__restart {
+  align-self: center;
+  background: none;
+  border: 0;
+  padding: 4px;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6f7276;
+  cursor: pointer;
+}
+.gff__restart:hover { color: #121212; }
+
+/* ----- Footer ------------------------------------------------------------ */
+.gff__foot {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 32px 32px;
+}
+.gff__foot[hidden] { display: none !important; }
+.gff__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 0;
+  padding: 4px 0;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #3a3d41;
+  cursor: pointer;
+}
+.gff__back:hover { color: #121212; }
+.gff__back[hidden] { visibility: hidden; display: inline-flex !important; }
+.gff__next {
+  margin-left: auto;
+  padding: 15px 28px;
+  background: #121212;
+  color: #fff;
+  border: 0;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.gff__next:disabled { opacity: 0.45; cursor: default; }
+
+/* ----- Phone ------------------------------------------------------------- */
+@media (max-width: 560px) {
+  .gff { padding: 0; align-items: flex-end; }
+  .gff__panel { max-height: 94vh; border: 0; }
+  .gff__head { padding: 16px 20px; }
+  /* Two labels sharing a narrow column collide, so the bar takes its own row. */
+  .gff__strip {
+    padding: 14px 20px;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "est pct" "conf conf";
+    gap: 10px 14px;
+  }
+  .gff__estimate { grid-area: est; }
+  .gff__conf { grid-area: conf; }
+  .gff__conf-pct { grid-area: pct; align-self: center; }
+  .gff__body { padding: 24px 20px 8px; gap: 24px; }
+  .gff__foot { padding: 18px 20px 24px; }
+  .gff__group-body { padding-left: 0; }
+  .gff__cards { grid-template-columns: minmax(0, 1fr); }
+  .gff__row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .gff__dial-val { font-size: 38px; }
+  .gff__product { display: none; }
+}
+
+/* iOS zooms a focused field under 16px and a fixed panel never zooms back
+   out. There are no text fields here, but keep the rule for any added later. */
+@media (pointer: coarse) {
+  .gff input,
+  .gff select,
+  .gff textarea { font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gff__scrim,
+  .gff__panel,
+  .gff__conf-fill,
+  .gff__scale-dot,
+  .gff__res-bar i,
+  .gff__readrow { transition: none; }
+  .gff__dot,
+  .gff__scan::after { animation: none; }
+}

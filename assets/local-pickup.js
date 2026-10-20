@@ -77,4 +77,3 @@ class LocalPickup extends Component {
 if (!customElements.get('local-pickup')) {
   customElements.define('local-pickup', LocalPickup);
 }
-

@@ -201,4 +201,3 @@ class CartDiscount extends Component {
 if (!customElements.get('cart-discount-component')) {
   customElements.define('cart-discount-component', CartDiscount);
 }
-

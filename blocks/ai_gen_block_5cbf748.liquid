@@ -1,0 +1,169 @@
+{% doc %}
+  @prompt
+    full width image
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-full-width-image-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .ai-full-width-image-{{ ai_gen_id }}__media {
+    width: 100%;
+    overflow: hidden;
+    background: #17181b;
+    aspect-ratio: {{ block.settings.image_ratio }};
+  }
+
+  .ai-full-width-image-{{ ai_gen_id }}__media img,
+  .ai-full-width-image-{{ ai_gen_id }}__media svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: {{ block.settings.image_fit }};
+  }
+
+  .ai-full-width-image-{{ ai_gen_id }}__empty {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 240px;
+  }
+
+  .ai-full-width-image-{{ ai_gen_id }}__empty svg {
+    color: #a9abb1;
+  }
+
+  .ai-full-width-image-{{ ai_gen_id }}__hint {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 8px 12px;
+    color: #fff;
+    background: rgba(23, 24, 27, 0.88);
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .ai-full-width-image-{{ ai_gen_id }}__caption {
+    width: 100%;
+    margin: 10px 0 0;
+    color: #17181b;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-full-width-image-{{ ai_gen_id }}__media {
+      aspect-ratio: {{ block.settings.mobile_image_ratio }};
+    }
+  }
+{% endstyle %}
+
+<div class="ai-full-width-image-{{ ai_gen_id }}" style="width: {{ block.settings.desktop_width_percent }}%;" {{ block.shopify_attributes }}>
+  {% if block.settings.image_link != blank %}<a href="{{ block.settings.image_link }}" aria-label="{{ block.settings.image_alt | default: block.settings.image.alt | escape }}">{% endif %}
+    <div class="ai-full-width-image-{{ ai_gen_id }}__media">
+      {% if block.settings.image != blank %}
+        <img
+          src="{{ block.settings.image | image_url: width: 2400 }}"
+          srcset="{{ block.settings.image | image_url: width: 750 }} 750w, {{ block.settings.image | image_url: width: 1200 }} 1200w, {{ block.settings.image | image_url: width: 1800 }} 1800w, {{ block.settings.image | image_url: width: 2400 }} 2400w"
+          sizes="100vw"
+          alt="{{ block.settings.image_alt | default: block.settings.image.alt | escape }}"
+          width="{{ block.settings.image.width }}"
+          height="{{ block.settings.image.height }}"
+          loading="lazy"
+        >
+      {% else %}
+        <div class="ai-full-width-image-{{ ai_gen_id }}__empty">
+          {{ 'image' | placeholder_svg_tag }}
+          <p class="ai-full-width-image-{{ ai_gen_id }}__hint">Add an image to display it at full width.</p>
+        </div>
+      {% endif %}
+    </div>
+  {% if block.settings.image_link != blank %}</a>{% endif %}
+  {% if block.settings.caption != blank %}<p class="ai-full-width-image-{{ ai_gen_id }}__caption">{{ block.settings.caption | escape }}</p>{% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Full width image",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Alt text"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption"
+    },
+    {
+      "type": "url",
+      "id": "image_link",
+      "label": "Image link"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Desktop image ratio",
+      "options": [
+        { "value": "21 / 9", "label": "Wide (21:9)" },
+        { "value": "16 / 9", "label": "Landscape (16:9)" },
+        { "value": "3 / 2", "label": "Classic (3:2)" },
+        { "value": "1 / 1", "label": "Square (1:1)" }
+      ],
+      "default": "16 / 9"
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_ratio",
+      "label": "Mobile image ratio",
+      "options": [
+        { "value": "4 / 5", "label": "Portrait (4:5)" },
+        { "value": "1 / 1", "label": "Square (1:1)" },
+        { "value": "16 / 9", "label": "Landscape (16:9)" }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "options": [
+        { "value": "cover", "label": "Fill frame" },
+        { "value": "contain", "label": "Show entire image" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Full width image"
+    }
+  ],
+  "tag": null,
+  "class": "full-width-image-block"
+}
+{% endschema %}

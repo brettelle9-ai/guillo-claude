@@ -412,4 +412,3 @@ class GiftCardRecipientForm extends Component {
 
 // Register the custom element
 customElements.define('gift-card-recipient-form', GiftCardRecipientForm);
-

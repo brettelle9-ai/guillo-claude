@@ -797,4 +797,3 @@ if (typeof Theme !== 'undefined') {
     scheduler: scheduler,
   };
 }
-

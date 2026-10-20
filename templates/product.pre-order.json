@@ -15,57 +15,58 @@
         "tab1": {
           "type": "tab",
           "settings": {
-            "title": "Fit & Care",
-            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+            "title": "How pre-order works",
+            "content": "<p>You order now at the pre-order price. The run goes into production, your size is cut with it, and it ships to you first — before the piece reaches the collection pages.</p><p>You are charged at checkout, which is what reserves the size. If the run is delayed beyond the date shown, we write to you and you can cancel for a full refund, no questions.</p>"
           }
         },
         "tab2": {
           "type": "tab",
           "settings": {
-            "title": "Details",
-            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+            "title": "Fit & Care",
+            "content": "<p>Cut on the same block as the rest of the range, so if you know your Guillo size, take it.</p><p>Machine wash cold, hang to dry.</p>"
           }
         },
         "tab3": {
           "type": "tab",
           "settings": {
-            "title": "Shipping",
-            "content": "<p>Dispatched from Brisbane the same afternoon on orders placed before 4pm. Australia and New Zealand 2 to 4 days, Singapore and Hong Kong 4 to 6, the United Kingdom 5 to 8, Europe 6 to 9.</p><p>You do not pay duties or taxes. Every international order ships DDP, so all duties and import taxes are calculated and paid at checkout.</p><p>Free shipping over $150 in Australia.</p>"
+            "title": "When it ships",
+            "content": "<p>The dispatch window is shown against each size. Once the run lands in Brisbane, pre-orders go out first, the same afternoon they are picked.</p><p>You do not pay duties or taxes. Every international order ships DDP.</p>"
           }
         },
         "tab4": {
           "type": "tab",
           "settings": {
             "title": "Exchanges & Returns",
-            "content": "<p>Free exchanges and returns within 44 days. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p>"
+            "content_intl": "<p>44-day returns and exchanges from delivery. Return postage is paid by you. The window starts when it arrives, not when you ordered.</p><p>Cancel any time before it ships for a full refund.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
+            "content": "<p>Free exchanges and returns within 44 days of delivery — the window starts when it arrives, not when you ordered.</p><p>Cancel any time before it ships for a full refund.</p>"
           }
         },
         "feat1": {
           "type": "feature",
           "settings": {
-            "label": "Genuine leather",
-            "icon": "shield"
+            "label": "Cut to order",
+            "icon": "dot"
           }
         },
         "feat2": {
           "type": "feature",
           "settings": {
-            "label": "Hand finished",
-            "icon": "dot"
+            "label": "Limited run",
+            "icon": "shield"
           }
         },
         "feat3": {
           "type": "feature",
           "settings": {
-            "label": "One small run",
-            "icon": "refresh"
+            "label": "Shipped first",
+            "icon": "truck"
           }
         },
         "feat4": {
           "type": "feature",
           "settings": {
-            "label": "Your size held",
-            "icon": "clock"
+            "label": "Wrinkle resistant",
+            "icon": "no_iron"
           }
         }
       },
@@ -80,13 +81,19 @@
         "tab4"
       ],
       "settings": {
-        "short_description": "Made in one small run. Reserve your size now and it is held for you until the run lands.",
+        "short_description": "",
         "fit_guide_link": "shopify://pages/fit-guide",
         "size_guide_page": "shopify://pages/fit-guide",
-        "trust_line": "Same-day dispatch · 44-day returns and exchanges",
-        "show_pair": true,
+        "trust_line": "Reserved at checkout · 44 days to decide, from the day it lands",
+        "show_pair": false,
         "show_video_tile": true,
-        "video_caption": "Watch the fit in motion"
+        "video_caption": "Watch the fit in motion",
+        "availability_mode": "preorder",
+        "avail_eyebrow": "Pre-order",
+        "avail_headline": "Reserved now. Made in the next run.",
+        "avail_note": "Your size is cut and set aside when the run goes in. Nothing ships today.",
+        "avail_reward": "",
+        "show_short_description": false
       }
     },
     "trust": {
@@ -105,6 +112,7 @@
           "settings": {
             "icon": "refresh",
             "title": "Easy 44 day returns",
+            "text_intl": "44-day returns and exchanges. Return postage is paid by you. Size swaps ship same day.",
             "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
           }
         },
@@ -134,33 +142,33 @@
         "cl1": {
           "type": "callout_left",
           "settings": {
-            "title": "Pre-order",
-            "text": "Reserve your size now. It is held for you and ships as soon as the run lands.",
-            "spec": "Your size is held"
+            "title": "Genuine leather",
+            "text": "Full grain leather, hand finished, built to be carried rather than kept for best.",
+            "spec": "Ages with use"
           }
         },
         "cl2": {
           "type": "callout_left",
           "settings": {
-            "title": "One run only",
-            "text": "Made in a single small run rather than restocked on a schedule.",
-            "spec": "Limited numbers"
+            "title": "Built for travel",
+            "text": "Designed to carry the essentials, with dimensions listed in the product details.",
+            "spec": "Check your carry-on limits"
           }
         },
         "cr1": {
           "type": "callout_right",
           "settings": {
-            "title": "Free to change your mind",
-            "text": "Complimentary returns and exchanges within 44 days of delivery.",
-            "spec": "44 days to decide"
+            "title": "Care",
+            "text": "Spot clean with a damp cloth and air dry. Keep it out of prolonged direct sunlight.",
+            "spec": "Darkens, does not dry out"
           }
         },
         "cr2": {
           "type": "callout_right",
           "settings": {
-            "title": "Dispatch",
-            "text": "You are charged now and told the moment it ships.",
-            "spec": "Tracked delivery"
+            "title": "Pairs with",
+            "text": "The rest of the travel edit. Pack a chino and a polo and you are ready.",
+            "spec": "The Travel Edit"
           }
         }
       },
@@ -171,7 +179,7 @@
         "cr2"
       ],
       "settings": {
-        "heading": "Made in one run, then gone.",
+        "heading": "Leather made to travel.",
         "image_position": "center 74%"
       }
     },
@@ -217,14 +225,14 @@
           "type": "faq",
           "settings": {
             "question": "What is your return policy?",
-            "answer": "<p>Complimentary returns &amp; exchanges within 44 days for AU/NZ orders. International orders: 44-day returns and exchanges, return shipping paid by the customer. All returns via our self-service portal, no emails, no waiting.</p>"
+            "answer": "<p>44 days to decide, starting the day it arrives. Exchanges and returns are free within Australia and New Zealand, returned in the satchel it came in.</p><p>Outside Australia and New Zealand you cover the return postage. Duties and taxes are included in every price, so nothing is owed on arrival.</p>"
           }
         },
         "q6": {
           "type": "faq",
           "settings": {
             "question": "When will it arrive?",
-            "answer": "<p>All orders dispatched within 24 hours. Standard delivery to Australia in 2 to 8 business days. Express in 1 to 4. International shipping available to Singapore, UK, US and Europe.</p>"
+            "answer": "<p>This is a pre-order. The run ships in <strong>early November 2026</strong>, and pre-orders go out first, the same afternoon they are picked. You are charged at checkout, which is what reserves your size.</p><p>If the run is delayed beyond that date we write to you, and you can cancel for a full refund.</p>"
           }
         }
       },
@@ -246,8 +254,13 @@
     "wear": {
       "type": "guillo-wear-with",
       "settings": {
-        "heading": "Wear it with",
-        "products_to_show": 8
+        "heading": "The matching set",
+        "products_to_show": 8,
+        "products": [
+          "bellagio-leather-weekender-duffel-bag",
+          "the-bellagio-wash-bag",
+          "the-bellagio-passport-holder"
+        ]
       }
     }
   },
@@ -260,4 +273,3 @@
     "faq"
   ]
 }
-

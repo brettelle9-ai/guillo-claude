@@ -1,0 +1,415 @@
+{% comment %}
+  Stone Luxe Chino product story. Rendered by sections/guillo-product.liquid
+  on that one product only, below the gallery and buy column.
+
+  Kept in its own snippet so the story can be edited without touching the
+  130KB product section. Every selector is scoped to .guillo-pdp--stone.
+
+  Order on desktop: video left; story, fit gauges, feature rows and a real
+  review on the right. On a phone: gauges, features, story, video, review.
+  Then a full-width editorial image with one line of copy.
+
+  Expects: product, section, gstone_video (captured video tile markup).
+{% endcomment %}
+
+{%- liquid
+  assign st_story_title = section.settings.stone_story_title | default: 'A sharp fit without the stiff feel'
+  assign st_story_text = section.settings.stone_story_text | default: 'Slim and clean through the leg, with stretch where you move. Sharp enough for dinner on a warm evening, easy enough for every day in between.'
+-%}
+
+<div class="gstone-band">
+  <div class="gstone-band__head">
+    <p class="gstone-band__eyebrow">The Luxe Chino in {{ product.handle | remove_first: 'the-luxe-chino-' | replace: '-', ' ' | capitalize }}</p>
+    <h2 class="gstone-band__title">{{ st_story_title }}</h2>
+    <p class="gstone-band__sub">{{ st_story_text }}</p>
+  </div>
+  <div class="gstone-band__media">{{ gstone_video }}</div>
+  <div class="gstone-band__fit" aria-label="How it fits">
+    {%- comment -%}
+      Two left to right scales. Positions are percentages along the track.
+      Not measurements, just where this cut lands between the two ends.
+    {%- endcomment -%}
+    <div class="gstone-fitbar">
+      <div class="gstone-fitbar__row"><span class="gstone-fitbar__name">Fit</span><span class="gstone-fitbar__val">Slim</span></div>
+      <div class="gstone-fitbar__track"><span class="gstone-fitbar__dot" style="left: 74%"></span></div>
+      <div class="gstone-fitbar__ends"><span>Baggy</span><span>Skinny</span></div>
+    </div>
+    <div class="gstone-fitbar">
+      <div class="gstone-fitbar__row"><span class="gstone-fitbar__name">Leg length</span><span class="gstone-fitbar__val">Runs slightly short</span></div>
+      <div class="gstone-fitbar__track"><span class="gstone-fitbar__dot" style="left: 38%"></span></div>
+      <div class="gstone-fitbar__ends"><span>Runs short</span><span>Runs long</span></div>
+    </div>
+  </div>
+  <div class="gstone-band__feats">
+    {%- comment -%}
+      One closed row labelled Features, with a down arrow that turns up when
+      open. Nothing inside it is visible until it is tapped. Open, it shows
+      four features, each an icon, a name and one line of explanation.
+      Native <details>, so it is keyboard operable and announces open or
+      closed with no script. Icons are the same set the feature blocks in
+      sections/guillo-product.liquid use (stretch, taper, breathable, silk).
+      Every line is taken from the Fit & Care and Details copy already on
+      this page.
+    {%- endcomment -%}
+    <details class="gstone-featgroup">
+      <summary class="gstone-featgroup__btn">
+        <span class="gstone-featgroup__label">Features</span>
+        <span class="gstone-feat__mark" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+      </summary>
+      <div class="gstone-feats">
+        <div class="gstone-feat">
+          <span class="gstone-feat__icon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 12h20"/><path d="M6 8l-4 4 4 4"/><path d="M18 8l4 4-4 4"/></svg></span>
+          <div class="gstone-feat__body">
+            <p class="gstone-feat__label">Stretch through the waist</p>
+            <p class="gstone-feat__text">A stretch waistband that stays comfortable through a full day of sitting, walking and eating. Take your true waist. The twill gives one to two centimetres in the first week of wear.</p>
+          </div>
+        </div>
+        <div class="gstone-feat">
+          <span class="gstone-feat__icon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 3h12l-3 18H9L6 3z"/><path d="M8.5 12h7"/></svg></span>
+          <div class="gstone-feat__body">
+            <p class="gstone-feat__label">Slim, tapered leg</p>
+            <p class="gstone-feat__text">Close through the leg with room drafted into the seat and thigh, then a clean taper from the knee to a narrow ankle. No flare at the hem.</p>
+          </div>
+        </div>
+        <div class="gstone-feat">
+          <span class="gstone-feat__icon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M3 8h9a2.5 2.5 0 1 0-2.5-2.5"/><path d="M3 12h13a2.5 2.5 0 1 1-2.5 2.5"/><path d="M3 16h7a2 2 0 1 1-2 2"/></svg></span>
+          <div class="gstone-feat__body">
+            <p class="gstone-feat__label">Lightweight and breathable</p>
+            <p class="gstone-feat__text">Cotton twill with elastane, finished to resist wrinkles. Light enough for warm weather, with enough structure for evening.</p>
+          </div>
+        </div>
+        <div class="gstone-feat">
+          <span class="gstone-feat__icon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M3 7c3-2.6 6-2.6 9 0s6 2.6 9 0"/><path d="M3 12c3-2.6 6-2.6 9 0s6 2.6 9 0"/><path d="M3 17c3-2.6 6-2.6 9 0s6 2.6 9 0"/></svg></span>
+          <div class="gstone-feat__body">
+            <p class="gstone-feat__label">Built to move</p>
+            <p class="gstone-feat__text">The fabric moves when you do and recovers on the hanger instead of holding the shape of the chair. Seams are reinforced at every stress point.</p>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+  <div class="gstone-band__voices">
+    {%- liquid
+      # Up to five real verified reviews from the same Judge.me data the
+      # reviews section already reads, fit first then comfort or stretch.
+      # Nothing is written or reworded here; with none, nothing renders.
+      assign st_blob = ''
+      assign st_n = 0
+      assign st_pool = blank
+      if collections.chinos != blank
+        assign st_pool = collections.chinos.products
+      endif
+      for st_pass in (1..3)
+        for st_p in st_pool
+          assign st_d = st_p.metafields.judgeme.review_widget_data.value
+          if st_d != blank and st_d.reviews != blank
+            for st_r in st_d.reviews
+              if st_n < 5 and st_r.verified_buyer and st_r.rating >= 4
+                assign st_body = st_r.body | strip_html | strip
+                assign st_key = st_body | downcase
+                assign st_hit = false
+                if st_pass == 1
+                  if st_key contains 'fit'
+                    assign st_hit = true
+                  endif
+                elsif st_pass == 2
+                  if st_key contains 'comfort'
+                    assign st_hit = true
+                  endif
+                  if st_key contains 'stretch'
+                    assign st_hit = true
+                  endif
+                elsif st_r.rating == 5
+                  assign st_hit = true
+                endif
+                if st_key contains 'hubby' or st_key contains 'husband'
+                  assign st_hit = false
+                endif
+                if st_hit and st_body.size > 20 and st_body.size < 190
+                  unless st_blob contains st_body
+                    assign st_blob = st_blob | append: st_body | append: '~~' | append: st_r.reviewer_name | append: '||'
+                    assign st_n = st_n | plus: 1
+                  endunless
+                endif
+              endif
+            endfor
+          endif
+        endfor
+      endfor
+      assign st_list = st_blob | split: '||'
+    -%}
+    {%- if st_list.size > 0 -%}
+      <div class="gstone-voices" data-gstone-voices aria-label="Customer reviews">
+        {%- for st_item in st_list -%}
+          {%- assign st_parts = st_item | split: '~~' -%}
+          <figure class="gstone-voice{% if forloop.first %} is-on{% endif %}" data-gstone-voice{% unless forloop.first %} aria-hidden="true"{% endunless %}>
+            <blockquote class="gstone-voice__text">{{ st_parts[0] }}</blockquote>
+            <figcaption class="gstone-voice__meta">
+              <span>{{ st_parts[1] }}</span>
+              <span class="gstone-voice__dot" aria-hidden="true">&middot;</span>
+              <span class="gstone-voice__verified">Verified purchase</span>
+              <a class="gstone-voice__all" href="#guillo-reviews">Read all reviews</a>
+            </figcaption>
+          </figure>
+        {%- endfor -%}
+        {%- if st_list.size > 1 -%}
+          <div class="gstone-voices__dots" role="tablist" aria-label="Choose a review">
+            {%- for st_item in st_list -%}
+              <button type="button" class="gstone-voices__dot{% if forloop.first %} is-on{% endif %}" data-gstone-dot="{{ forloop.index0 }}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Review {{ forloop.index }}"></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- if section.settings.stone_scene_image != blank -%}
+  {%- assign st_scene_pos = 'object-position:' | append: section.settings.stone_scene_position | default: 'center center' -%}
+  {%- comment -%}
+    One editorial moment: a full-width genuine Guillo campaign photograph and
+    a single line. Where the chino belongs, not what it is made of. Lazy
+    loaded; the product gallery above stays the page's LCP.
+  {%- endcomment -%}
+  <figure class="gstone-scene">
+    {{
+      section.settings.stone_scene_image
+      | image_url: width: 2400
+      | image_tag: class: 'gstone-scene__img', widths: '750, 1100, 1600, 2000, 2400', sizes: '100vw', loading: 'lazy', alt: section.settings.stone_scene_alt, style: st_scene_pos
+    }}
+    {%- if section.settings.stone_scene_line != blank -%}
+      <figcaption class="gstone-scene__cap">{{ section.settings.stone_scene_line }}</figcaption>
+    {%- endif -%}
+  </figure>
+{%- endif -%}
+
+<style>
+  /* Stone test: the story band under the gallery and column. */
+  .guillo-pdp--stone .gstone-band {
+    display: grid;
+    grid-template-columns: minmax(280px, 400px) minmax(0, 1fr);
+    grid-template-rows: 1fr auto auto auto auto 1fr;
+    grid-template-areas:
+      "media ."
+      "media head"
+      "media fit"
+      "media feats"
+      "media voices"
+      "media .";
+    column-gap: 72px;
+    row-gap: 0;
+    margin: 72px 40px 0;
+    padding-top: 56px;
+    border-top: 1px solid var(--g-line);
+  }
+  .guillo-pdp--stone .gstone-band__head { grid-area: head; align-self: end; }
+  .guillo-pdp--stone .gstone-band__media { grid-area: media; }
+  .guillo-pdp--stone .gstone-band__fit { grid-area: fit; margin: 0 0 30px; display: grid; gap: 22px; max-width: 460px; }
+  .guillo-pdp--stone .gstone-band__feats { grid-area: feats; max-width: 520px; }
+  .guillo-pdp--stone .gstone-band__voices { grid-area: voices; align-self: start; }
+  .guillo-pdp--stone .gstone-band__eyebrow {
+    margin: 0 0 16px;
+    font: 500 10px/1 var(--g-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--g-bronze);
+  }
+  /* The story is the one moment on this page that is allowed to be large. */
+  .guillo-pdp--stone .gstone-band__title {
+    margin: 0 0 16px;
+    font: 400 clamp(32px, 3.4vw, 46px)/1.1 var(--g-serif);
+    letter-spacing: 0;
+    color: var(--g-ink);
+    max-width: 16ch;
+  }
+  .guillo-pdp--stone .gstone-band__sub {
+    margin: 0 0 38px;
+    font: 300 17px/1.65 var(--g-sans);
+    color: var(--g-muted);
+    max-width: 40ch;
+  }
+  .guillo-pdp--stone .gstone-band .guillo-pdp__video { margin: 0; }
+
+  /* Fit gauges. */
+  .guillo-pdp--stone .gstone-fitbar__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin: 0 0 10px;
+    font: 500 10.5px/1 var(--g-sans);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--g-ink);
+  }
+  .guillo-pdp--stone .gstone-fitbar__val {
+    font: 400 12px/1 var(--g-sans);
+    letter-spacing: 0.02em;
+    text-transform: none;
+    text-align: right;
+    color: var(--g-muted);
+  }
+  .guillo-pdp--stone .gstone-fitbar__track { position: relative; height: 1px; background: var(--g-line); }
+  .guillo-pdp--stone .gstone-fitbar__dot {
+    position: absolute;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--g-ink);
+    transform: translate(-50%, -50%);
+  }
+  .guillo-pdp--stone .gstone-fitbar__ends {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0 0;
+    font: 400 10px/1 var(--g-sans);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--g-muted);
+  }
+
+  /* Features: one closed row with a down arrow. Same hairline and label type
+     as the fit gauges above it. Open, it shows icon rows. */
+  .guillo-pdp--stone .gstone-featgroup {
+    border-top: 1px solid var(--g-line);
+    border-bottom: 1px solid var(--g-line);
+  }
+  .guillo-pdp--stone .gstone-featgroup__btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 0;
+    list-style: none;
+    cursor: pointer;
+    font: 500 10.5px/1 var(--g-sans);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--g-ink);
+  }
+  .guillo-pdp--stone .gstone-featgroup__btn::-webkit-details-marker { display: none; }
+  .guillo-pdp--stone .gstone-featgroup__btn:focus-visible { outline: 1px solid var(--g-ink); outline-offset: 4px; }
+  .guillo-pdp--stone .gstone-feat__mark {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: #A0A3A9;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  .guillo-pdp--stone .gstone-featgroup[open] .gstone-feat__mark { transform: rotate(180deg); color: var(--g-ink); }
+  .guillo-pdp--stone .gstone-feats { border-top: 1px solid var(--g-line); }
+  .guillo-pdp--stone .gstone-feat {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--g-line);
+  }
+  .guillo-pdp--stone .gstone-feat:last-child { border-bottom: 0; }
+  .guillo-pdp--stone .gstone-feat__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--g-ink);
+  }
+  .guillo-pdp--stone .gstone-feat__body { min-width: 0; }
+  .guillo-pdp--stone .gstone-feat__label {
+    margin: 0 0 4px;
+    font: 400 13px/1.3 var(--g-sans);
+    letter-spacing: 0.02em;
+    color: var(--g-ink);
+  }
+  .guillo-pdp--stone .gstone-feat__text {
+    margin: 0;
+    font: 300 14px/1.65 var(--g-sans);
+    color: var(--g-muted);
+    max-width: 52ch;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .guillo-pdp--stone .gstone-feat__mark { transition: none; }
+  }
+
+  /* One real review at a time, cycling. */
+  .guillo-pdp--stone .gstone-band .gstone-voices { margin: 34px 0 0; display: grid; }
+  .guillo-pdp--stone .gstone-voice {
+    grid-area: 1 / 1;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease;
+  }
+  .guillo-pdp--stone .gstone-voice.is-on { opacity: 1; visibility: visible; }
+  .guillo-pdp--stone .gstone-band .gstone-voice__text { margin: 0 0 7px; font: 400 20px/1.4 var(--g-serif); color: var(--g-ink); }
+  .guillo-pdp--stone .gstone-voice__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font: 400 11px/1.4 var(--g-sans);
+    letter-spacing: 0.04em;
+    color: var(--g-muted);
+  }
+  .guillo-pdp--stone .gstone-voice__verified { color: var(--g-bronze); }
+  .guillo-pdp--stone .gstone-voice__all { margin-left: auto; color: var(--g-ink); text-decoration: underline; text-underline-offset: 3px; }
+  .guillo-pdp--stone .gstone-voices__dots { grid-area: 2 / 1; display: flex; gap: 6px; margin-top: 12px; }
+  .guillo-pdp--stone .gstone-voices__dot { width: 18px; height: 2px; padding: 0; border: 0; background: var(--g-line); cursor: pointer; }
+  .guillo-pdp--stone .gstone-voices__dot.is-on { background: var(--g-ink); }
+
+  /* Editorial scene: full width, one line, nothing else. */
+  .guillo-pdp--stone .gstone-scene {
+    position: relative;
+    margin: 72px 0 0;
+    background: var(--g-canvas);
+  }
+  .guillo-pdp--stone .gstone-scene__img {
+    display: block;
+    width: 100%;
+    height: clamp(420px, 56vw, 720px);
+    object-fit: cover;
+  }
+  .guillo-pdp--stone .gstone-scene__cap {
+    position: absolute;
+    left: 40px;
+    bottom: 36px;
+    max-width: 30ch;
+    font: 400 15px/1.5 var(--g-sans);
+    letter-spacing: 0.02em;
+    color: #fff;
+    text-shadow: 0 1px 14px rgb(12 13 16 / 0.45);
+  }
+
+  @media screen and (max-width: 989px) {
+    .guillo-pdp--stone .gstone-band {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto;
+      grid-template-areas: "fit" "feats" "head" "media" "voices";
+      margin: 40px 20px 0;
+      padding-top: 0;
+      border-top: 0;
+      text-align: center;
+    }
+    .guillo-pdp--stone .gstone-band__title,
+    .guillo-pdp--stone .gstone-band__sub { margin-left: auto; margin-right: auto; }
+    .guillo-pdp--stone .gstone-band__title { font-size: 30px; }
+    .guillo-pdp--stone .gstone-band__sub { font-size: 15px; margin-bottom: 26px; }
+    .guillo-pdp--stone .gstone-band__fit { margin: 0 auto 30px; max-width: 320px; }
+    .guillo-pdp--stone .gstone-band__feats { max-width: none; text-align: left; }
+    .guillo-pdp--stone .gstone-featgroup__btn { padding: 15px 0; }
+    .guillo-pdp--stone .gstone-feat { padding: 14px 0; }
+    .guillo-pdp--stone .gstone-band__head { margin-top: 40px; }
+    .guillo-pdp--stone .gstone-band__eyebrow { margin-bottom: 10px; }
+    .guillo-pdp--stone .gstone-band__media { margin: 0; }
+    .guillo-pdp--stone .gstone-band .gstone-voices { margin-top: 30px; }
+    .guillo-pdp--stone .gstone-band .gstone-voice__meta { justify-content: center; }
+    .guillo-pdp--stone .gstone-band .gstone-voice__all { margin-left: 0; }
+    .guillo-pdp--stone .gstone-band .gstone-voices__dots { justify-content: center; }
+    .guillo-pdp--stone .gstone-scene { margin-top: 48px; }
+    .guillo-pdp--stone .gstone-scene__img { height: auto; aspect-ratio: 4 / 5; }
+    .guillo-pdp--stone .gstone-scene__cap { left: 20px; right: 20px; bottom: 22px; font-size: 14px; }
+  }
+</style>

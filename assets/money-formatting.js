@@ -204,4 +204,3 @@ export function formatMoney(moneyValue, format, currency) {
     return formatCents(moneyValue, thousandsSeparator, decimalSeparator, precision, divisor);
   });
 }
-

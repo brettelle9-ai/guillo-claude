@@ -1,0 +1,25 @@
+{%- comment -%}
+  Renders a theme-editor image, or a fallback CDN URL when no image is picked.
+  Params: image, fallback, alt, pos, class, eager
+{%- endcomment -%}
+{%- if image != blank -%}
+  {%- assign gv_alt = alt | default: image.alt -%}
+  <img
+    src="{{ image | image_url: width: 1600 }}"
+    srcset="{{ image | image_url: width: 800 }} 800w, {{ image | image_url: width: 1200 }} 1200w, {{ image | image_url: width: 1600 }} 1600w, {{ image | image_url: width: 2400 }} 2400w"
+    sizes="100vw"
+    alt="{{ gv_alt | escape }}"
+    {% if class %}class="{{ class }}"{% endif %}
+    style="object-position:{{ pos | default: '50% 50%' }}"
+    {% if eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+    width="{{ image.width }}" height="{{ image.height }}">
+{%- else -%}
+  <img
+    src="{{ fallback }}&width=1600"
+    srcset="{{ fallback }}&width=800 800w, {{ fallback }}&width=1200 1200w, {{ fallback }}&width=1600 1600w"
+    sizes="100vw"
+    alt="{{ alt | escape }}"
+    {% if class %}class="{{ class }}"{% endif %}
+    style="object-position:{{ pos | default: '50% 50%' }}"
+    {% if eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+{%- endif -%}

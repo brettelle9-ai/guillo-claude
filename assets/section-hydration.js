@@ -33,4 +33,3 @@ export async function hydrate(sectionId, url) {
     requestIdleCallback(() => hydrateSection(sectionId, url));
   });
 }
-

@@ -130,4 +130,3 @@ export class AnchoredPopoverComponent extends Component {
 if (!customElements.get('anchored-popover-component')) {
   customElements.define('anchored-popover-component', AnchoredPopoverComponent);
 }
-

@@ -14,9 +14,9 @@
     "newsletter": {
       "type": "guillo-newsletter",
       "settings": {
-        "eyebrow": "The list",
+        "eyebrow": "A welcome from Guillo",
         "heading": "First look at the drop, before it goes public.",
-        "text": "Restocks, new colourways and the occasional fit note. Nothing else.",
+        "text": "Restocks, new colourways and the occasional fit note. Join and we will send $35 towards a first order over $180.",
         "button_label": "Join"
       }
     },
@@ -64,4 +64,3 @@
     "footer"
   ]
 }
-

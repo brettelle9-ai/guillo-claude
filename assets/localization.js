@@ -550,4 +550,3 @@ if (!customElements.get('dropdown-localization-component')) {
 if (!customElements.get('drawer-localization-component')) {
   customElements.define('drawer-localization-component', DrawerLocalizationComponent);
 }
-

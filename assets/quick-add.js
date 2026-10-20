@@ -340,4 +340,3 @@ class QuickAddDialog extends DialogComponent {
 if (!customElements.get('quick-add-dialog')) {
   customElements.define('quick-add-dialog', QuickAddDialog);
 }
-

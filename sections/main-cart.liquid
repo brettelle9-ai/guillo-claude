@@ -1,3 +1,17 @@
+{%- comment -%}
+  The bag is the Guillo drawer, which opens itself over this page on load
+  (assets/guillo-cart-drawer.js). Keep the theme's own cart page out of
+  sight in the meantime; if the drawer script never arrives, show it after
+  all so nobody is left with a blank screen.
+{%- endcomment -%}
+<style>html.gcart-cart-page .cart-items-component { visibility: hidden; }</style>
+<script>
+  document.documentElement.classList.add('gcart-cart-page');
+  setTimeout(function () {
+    if (!window.GuilloCart) document.documentElement.classList.remove('gcart-cart-page');
+  }, 4000);
+</script>
+
 {% capture cart_page_more_blocks_content %}
   <div class="cart-page__more-blocks">
     {%- content_for 'blocks' -%}
@@ -236,4 +250,3 @@
   ]
 }
 {% endschema %}
-

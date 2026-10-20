@@ -778,4 +778,3 @@ class ProductFormComponent extends Component {
 if (!customElements.get('product-form-component')) {
   customElements.define('product-form-component', ProductFormComponent);
 }
-

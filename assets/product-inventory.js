@@ -37,4 +37,3 @@ class ProductInventory extends Component {
 if (!customElements.get('product-inventory')) {
   customElements.define('product-inventory', ProductInventory);
 }
-

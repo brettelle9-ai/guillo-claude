@@ -1,18 +1,20 @@
 /* ==========================================================================
-   GUILLO — Custom Cart Drawer
-   Premium, editorial, black & white. All colours/sizes come from CSS vars
-   set by the section schema (see sections/cart-drawer.liquid).
+   GUILLO — Cart drawer
+   Slides in from the right. Uppercase sans, product images shown whole on a
+   soft grey panel, the three-piece progress bar at the top, matching pieces
+   as wide cards below the bag. Colours and sizes come from the section's
+   CSS variables (see sections/guillo-cart-drawer.liquid).
    ========================================================================== */
 
 /* ----- Overlay ----------------------------------------------------------- */
 .gcart-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.42);
+  background: rgba(17, 17, 17, 0.38);
   opacity: 0;
-  transition: opacity 0.35s ease;
-  z-index: 9998;
+  transition: opacity 0.28s ease;
   pointer-events: none;
+  z-index: 1499998;
 }
 .gcart-overlay.is-open {
   opacity: 1;
@@ -25,216 +27,111 @@
   top: 0;
   right: 0;
   height: 100%;
-  width: var(--gcart-width, 440px);
-  max-width: 92vw;
+  width: var(--gcart-width, 460px);
+  max-width: 94vw;
   background: var(--gcart-bg, #fff);
   color: var(--gcart-text, #111);
+  font-family: var(--g-sans, sans-serif);
   font-size: var(--gcart-base-size, 13px);
-  line-height: 1.5;
+  line-height: 1.45;
   display: flex;
   flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
-  z-index: 9999;
-  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.08);
+  transform: translateX(102%);
+  transition: transform 0.34s cubic-bezier(0.22, 0.8, 0.24, 1);
+  will-change: transform;
+  contain: layout paint;
+  z-index: 1499999;
   -webkit-font-smoothing: antialiased;
 }
-.gcart-drawer.is-open {
-  transform: translateX(0);
-}
+.gcart-drawer.is-open { transform: translateX(0); }
+/* The drawer renders inside a shadow root (see the script), where the theme's
+   own reset does not reach, so it carries the little it needs. */
+.gcart-drawer,
+.gcart-drawer *,
+.gcart-drawer *::before,
+.gcart-drawer *::after { box-sizing: border-box; }
+/* :where() keeps these at zero specificity, so every component rule below
+   still wins (Remove stays grey, the quantity signs keep their size). */
+:where(.gcart-drawer) :where(button, input, select) { font: inherit; color: inherit; margin: 0; -webkit-tap-highlight-color: transparent; }
+:where(.gcart-drawer) :where(a) { color: inherit; }
+:where(.gcart-drawer) :where(img) { max-width: 100%; }
+:where(.gcart-drawer) :where(h2, h3, h4) { font-weight: 500; }
 
-/* Headings inherit the theme's serif/heading face for a luxury feel */
-.gcart-heading,
-.gcart-title {
-  font-family: var(--g-serif);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-}
+/* display: flex / grid on children would otherwise beat the browser's own
+   [hidden] rule. */
+.gcart-drawer [hidden] { display: none !important; }
+.gcart-drawer button { font-family: inherit; }
 
-/* Small uppercase "eyebrow" label used throughout */
+/* The theme sets its serif on every heading; the drawer is sans throughout. */
+.gcart-drawer h2,
+.gcart-drawer h3,
+.gcart-drawer h4,
+.gcart-drawer p { font-family: var(--g-sans, sans-serif); }
+
+/* Small uppercase label used throughout */
 .gcart-eyebrow {
-  font-size: 0.78em;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 /* ----- Header ------------------------------------------------------------ */
 .gcart-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 22px 24px 18px;
-  border-bottom: 1px solid var(--gcart-border, var(--g-line));
+  padding: 26px 24px 16px;
   flex: 0 0 auto;
 }
 .gcart-title {
-  font-size: var(--gcart-heading-size, 22px);
   margin: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
+  font: 500 22px/1 var(--g-sans, sans-serif);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 .gcart-count {
-  font-size: 0.55em;
-  color: var(--gcart-muted, var(--g-whisper));
-  letter-spacing: 0.05em;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  vertical-align: top;
+  position: relative;
+  top: -2px;
+  margin-left: 5px;
 }
 .gcart-close {
   background: none;
   border: 0;
+  padding: 2px;
+  margin: -4px -4px 0 0;
   color: var(--gcart-text, #111);
   cursor: pointer;
-  padding: 4px;
   line-height: 0;
   transition: opacity 0.2s ease;
 }
 .gcart-close:hover { opacity: 0.55; }
 
-/* ----- Scrollable body --------------------------------------------------- */
-.gcart-body {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+/* ----- Progress to the discount: a bar that fills towards a lock --------- */
+.gcart-goal {
+  padding: 4px 24px 16px;
+  border-bottom: 1px solid var(--gcart-border, #E6E6E6);
+  flex: 0 0 auto;
 }
-
-/* ----- Line items -------------------------------------------------------- */
-.gcart-item {
-  display: grid;
-  grid-template-columns: var(--gcart-item-img-w, 78px) 1fr auto;
-  gap: 16px;
-  padding: 20px 24px;
-  border-bottom: 1px solid var(--gcart-border, var(--g-line));
-}
-.gcart-item__media {
-  width: var(--gcart-item-img-w, 78px);
-  aspect-ratio: var(--gcart-item-img-ratio, 4 / 5);
-  background: var(--g-off);
-  overflow: hidden;
-}
-.gcart-item__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.gcart-item__info { min-width: 0; }
-.gcart-item__title {
-  font-size: 0.92em;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin: 0 0 4px;
-}
-.gcart-item__title a { color: inherit; text-decoration: none; }
-.gcart-item__variant {
-  font-size: 0.82em;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--gcart-muted, var(--g-whisper));
-  margin: 0 0 14px;
-}
-
-/* Quantity selector */
-.gcart-qty {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--gcart-border, #CFD1D5);
-}
-.gcart-qty__btn {
-  width: 30px;
-  height: 30px;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  color: var(--gcart-text, #111);
-  font-size: 15px;
-  line-height: 1;
+/* Full-width bar with the lock in a ring on its midpoint. */
+.gcart-goal__bar {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  height: 36px;
 }
-.gcart-qty__btn:disabled { opacity: 0.3; cursor: default; }
-.gcart-qty__value {
-  min-width: 30px;
-  text-align: center;
-  font-size: 0.9em;
-}
-
-/* Right column: price + remove */
-.gcart-item__aside {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: space-between;
-  text-align: right;
-}
-.gcart-item__price { font-size: 0.95em; }
-.gcart-item__price s { color: var(--gcart-muted, var(--g-whisper)); margin-right: 6px; }
-.gcart-remove {
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  font-size: 0.74em;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gcart-muted, var(--g-whisper));
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.gcart-remove:hover { color: var(--gcart-text, #111); }
-
-/* Empty state */
-.gcart-empty {
-  padding: 60px 24px;
-  text-align: center;
-  color: var(--gcart-muted, var(--g-whisper));
-}
-
-/* ----- Build Your Wardrobe ---------------------------------------------- */
-.gcart-wardrobe {
-  padding: 22px 24px;
-  border-bottom: 1px solid var(--gcart-border, var(--g-line));
-}
-.gcart-wardrobe__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.gcart-wardrobe__unlocked {
-  font-size: 0.78em;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gcart-accent, #111);
-}
-.gcart-wardrobe__msg {
-  margin: 4px 0 18px;
-  font-style: italic;
-  color: var(--gcart-muted, var(--g-muted));
-  font-size: 0.92em;
-}
-/* Cart-specific pair nudges read as an offer, not a footnote */
-.gcart-wardrobe__msg.is-nudge {
-  font-style: normal;
-  color: var(--gcart-text, #111);
-  font-size: 1em;
-  font-weight: 500;
-  line-height: 1.5;
-}
-
-/* Progress bar */
-.gcart-progress { position: relative; }
 .gcart-progress__track {
-  position: absolute;
-  top: 5px;
-  left: 6px;
-  right: 6px;
-  height: 1px;
-  background: var(--gcart-border, #CFD1D5);
+  position: relative;
+  flex: 1 1 auto;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--gcart-border, #E6E6E6);
+  overflow: hidden;
 }
 .gcart-progress__fill {
   position: absolute;
@@ -242,159 +139,194 @@
   left: 0;
   height: 100%;
   width: 0;
-  background: var(--gcart-accent, #111);
-  transition: width 0.45s ease;
+  border-radius: 4px;
+  background: var(--gcart-text, #111);
+  transition: width 0.6s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.3s ease;
 }
-.gcart-progress__nodes {
-  position: relative;
+.gcart-goal__lock {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 34px;
+  transform: translate(-50%, -50%);
   display: flex;
-  justify-content: space-between;
-}
-.gcart-progress__node {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
-}
-.gcart-progress__node:first-child { align-items: flex-start; }
-.gcart-progress__node:last-child { align-items: flex-end; }
-.gcart-progress__dot {
-  width: 11px;
-  height: 11px;
+  justify-content: center;
   border-radius: 50%;
+  border: 1.5px solid var(--gcart-text, #111);
   background: var(--gcart-bg, #fff);
-  border: 1.5px solid var(--gcart-border, #CFD1D5);
-  box-sizing: border-box;
+  color: var(--gcart-text, #111);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
-.gcart-progress__node.is-complete .gcart-progress__dot {
+.gcart-goal__lock-open { display: none; }
+.gcart-goal.is-unlocked .gcart-progress__fill { background: var(--gcart-accent, #111); }
+.gcart-goal.is-unlocked .gcart-goal__lock {
   background: var(--gcart-accent, #111);
   border-color: var(--gcart-accent, #111);
+  color: #fff;
 }
-.gcart-progress__label {
-  font-size: 0.7em;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+.gcart-goal.is-unlocked .gcart-goal__lock-closed { display: none; }
+.gcart-goal.is-unlocked .gcart-goal__lock-open { display: block; }
+.gcart-goal__foot {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--gcart-muted, var(--g-whisper));
-  white-space: nowrap;
+  line-height: 1;
+  color: var(--gcart-text, #111);
 }
-.gcart-progress__node.is-complete .gcart-progress__label { color: var(--gcart-text, #111); }
+.gcart-goal.is-unlocked .gcart-goal__foot { color: var(--gcart-accent, #111); }
+.gcart-goal__unlocked:not([hidden]) + .gcart-goal__pct { display: none; }
 
-/* ----- Complete the Look (upsells) -------------------------------------- */
-.gcart-upsell { padding: 24px 0 24px 24px; }
-.gcart-upsell__head { padding-right: 24px; }
-.gcart-heading { font-size: var(--gcart-heading-size, 22px); margin: 0; }
-.gcart-upsell__sub {
-  color: var(--gcart-muted, var(--g-whisper));
-  margin: 4px 0 18px;
+/* The quiet nudge under the bag: one line, no shouting. */
+.gcart-nudge {
+  margin: 0;
+  padding: 14px 24px 0;
+  font-size: 12px;
+  color: var(--gcart-muted, #8A8A8A);
 }
-.gcart-upsell__scroll {
+.gcart-nudge:empty,
+.gcart-items[hidden] + .gcart-nudge { display: none; }
+
+/* ----- Scrollable body --------------------------------------------------- */
+/* Items at the top, matching pieces pushed to the bottom so they sit just
+   above the subtotal; with a long bag the whole thing scrolls. */
+.gcart-body {
+  flex: 1 1 auto;
   display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 6px;
-  padding-right: 24px;
-  scrollbar-width: none;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
-.gcart-upsell__scroll::-webkit-scrollbar { display: none; }
-.gcart-upsell__empty { color: var(--gcart-muted, var(--g-whisper)); padding-right: 24px; }
+.gcart-body > * { flex: 0 0 auto; }
+.gcart-body .gcart-upsell { margin-top: auto; }
+/* Waiting on Shopify: a light veil, never a blocked bag. */
+.gcart-drawer.is-loading .gcart-body { opacity: 0.72; transition: opacity 0.15s ease; }
+/* The new line is showing but Shopify has not confirmed the totals yet. */
+.gcart-drawer.is-settling .gcart-totals,
+.gcart-drawer.is-settling .gcart-goal { opacity: 0.45; transition: opacity 0.15s ease; }
+.gcart-item.is-leaving { opacity: 0.3; transition: opacity 0.15s ease; pointer-events: none; }
 
-.gcart-card {
-  flex: 0 0 auto;
-  width: var(--gcart-card-w, 130px);
-  scroll-snap-align: start;
+/* ----- Line items -------------------------------------------------------- */
+.gcart-item {
+  display: grid;
+  grid-template-columns: var(--gcart-item-img-w, 104px) minmax(0, 1fr);
+  gap: 18px;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--gcart-border, #E6E6E6);
 }
-.gcart-card[hidden] { display: none; }
-.gcart-card__media {
-  position: relative;
+/* The whole photograph at its own shape: no crop, and no panel behind it,
+   so there are no grey bands either side of a portrait image. */
+.gcart-item__media {
   display: block;
-  width: var(--gcart-card-w, 130px);
-  aspect-ratio: var(--gcart-card-ratio, 4 / 5);
-  background: var(--g-ink);
+  align-self: start;
   overflow: hidden;
 }
-.gcart-card__img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.gcart-card__placeholder {
-  position: absolute;
-  inset: 0;
+.gcart-item__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.gcart-item__info { min-width: 0; }
+.gcart-item__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.gcart-item__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+.gcart-item__title a { color: inherit; text-decoration: none; }
+.gcart-item__price {
+  flex: 0 0 auto;
+  font-size: 13.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.gcart-item__price s { color: var(--gcart-muted, #8A8A8A); font-weight: 400; margin-right: 6px; }
+.gcart-item__variant {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--gcart-text, #111);
+}
+.gcart-item__save {
+  margin: 4px 0 0;
+  font-size: 11.5px;
+  color: var(--gcart-muted, #8A8A8A);
+}
+.gcart-item__actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--g-muted);
-  font-size: 0.7em;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  gap: 18px;
+  margin-top: 16px;
 }
-.gcart-card__add {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 30px;
-  height: 30px;
-  background: #fff;
+
+/* Quantity selector: three equal cells in one hairline box */
+.gcart-qty {
+  display: inline-grid;
+  grid-template-columns: 40px 40px 40px;
+  border: 1px solid var(--gcart-border, #E6E6E6);
+}
+.gcart-qty__btn {
+  height: 40px;
+  background: none;
   border: 0;
   cursor: pointer;
-  color: #111;
+  color: var(--gcart-text, #111);
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease, background 0.2s ease;
 }
-.gcart-card__add:hover { background: #111; color: #fff; }
-.gcart-card__add.is-loading { opacity: 0.5; pointer-events: none; }
-.gcart-card__title {
-  font-size: 0.78em;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin: 12px 0 4px;
+.gcart-qty__btn:disabled { opacity: 0.3; cursor: default; }
+.gcart-qty__value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-left: 1px solid var(--gcart-border, #E6E6E6);
+  border-right: 1px solid var(--gcart-border, #E6E6E6);
+  font-size: 14px;
 }
-.gcart-card__price { font-size: 0.82em; margin: 0; }
-.gcart-card__price--sale { color: var(--gcart-accent, #111); }
-.gcart-card__price--was { color: var(--gcart-muted, var(--g-whisper)); margin-left: 6px; }
-
-/* Size / variant selector on upsell cards */
-.gcart-card__size {
-  margin-top: 8px;
-  width: 100%;
-  padding: 6px 22px 6px 8px;
-  font-size: 0.74em;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--gcart-text, #111);
-  background: var(--gcart-bg, #fff);
-  border: 1px solid var(--gcart-border, #CFD1D5);
-  border-radius: 0;
+.gcart-remove {
+  background: none;
+  border: 0;
+  padding: 0;
   cursor: pointer;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  /* Minimal chevron */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23111' fill='none' stroke-width='1.3'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
+  font-size: 13px;
+  color: var(--gcart-muted, #8A8A8A);
+  transition: color 0.15s ease;
 }
-.gcart-card__size:focus { outline: 1px solid var(--gcart-accent, #111); outline-offset: 1px; }
-/* iOS Safari auto-zooms the whole page when a focused control has text under
-   16px, which leaves the fixed drawer clipped off-screen. Keep touch-device
-   form controls at 16px so the zoom never triggers. */
-@media (pointer: coarse) {
-  .gcart-card__size { font-size: 16px; letter-spacing: 0.02em; padding: 8px 24px 8px 10px; }
+.gcart-remove:hover { color: var(--gcart-text, #111); }
+
+/* Empty state */
+.gcart-empty {
+  padding: 60px 24px;
+  text-align: center;
+  color: var(--gcart-muted, #8A8A8A);
 }
 
-/* Pre-order line-item note */
-/* Pre-order line note. Grey small print was too quiet for "this ships weeks
-   from now"; a tinted box was too loud. Navy micro-type with a small dot, in
-   the same uppercase eyebrow language the rest of the drawer already uses. */
+/* Pre-order line note */
 .gcart-item__preorder {
-  margin: 5px 0 0;
-  font-size: 9.5px;
+  margin: 6px 0 0;
+  font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   line-height: 1.5;
-  color: var(--g-ink);
+  color: var(--g-ink, #111);
 }
 .gcart-item__preorder::before {
   content: '';
@@ -403,11 +335,9 @@
   height: 4px;
   margin-right: 6px;
   border-radius: 50%;
-  background: var(--g-ink);
+  background: var(--g-ink, #111);
   vertical-align: 1px;
 }
-/* Ships-by date behind an info mark so the line stays two words. Shown on
-   hover for mouse and on focus so a tap or the keyboard reaches it too. */
 .gcart-item__preinfo {
   position: relative;
   display: inline-flex;
@@ -438,23 +368,347 @@
   z-index: 6;
   padding: 5px 9px;
   border-radius: 3px;
-  background: var(--g-ink);
+  background: var(--g-ink, #111);
   color: #fff;
   font-size: 10px;
   font-weight: 400;
-  letter-spacing: .02em;
+  letter-spacing: 0.02em;
   text-transform: none;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .15s ease;
+  transition: opacity 0.15s ease;
 }
-/* :focus not :focus-visible - a tap on mobile sets focus but never
-   focus-visible, so the date would be unreachable on phones. */
 .gcart-item__preinfo:hover::after,
 .gcart-item__preinfo:focus::after { opacity: 1; }
 .gcart-item__preinfo:focus { outline: none; }
-.gcart-item__preinfo:focus-visible { outline: 1px solid var(--g-ink); outline-offset: 2px; }
+.gcart-item__preinfo:focus-visible { outline: 1px solid var(--g-ink, #111); outline-offset: 2px; }
+
+/* ----- Complete the look ------------------------------------------------- */
+.gcart-upsell { padding: 28px 0 14px 24px; }
+.gcart-upsell__title {
+  margin: 0 0 14px;
+  font: 500 15px/1 var(--g-sans, sans-serif);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.gcart-upsell__scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 0 24px 8px 0;
+  scrollbar-width: none;
+}
+.gcart-upsell__scroll::-webkit-scrollbar { display: none; }
+.gcart-upsell__empty { color: var(--gcart-muted, #8A8A8A); padding-right: 24px; }
+
+/* One wide card: garment on the left panel, details on the right. */
+.gcart-card {
+  flex: 0 0 auto;
+  width: min(360px, calc(100% - 40px));
+  scroll-snap-align: start;
+  display: grid;
+  grid-template-columns: 38% minmax(0, 1fr);
+  min-height: 168px;
+  background: var(--gcart-panel-deep, #EDEDED);
+}
+.gcart-card__media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gcart-panel, #F2F2F2);
+  overflow: hidden;
+}
+.gcart-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.gcart-card__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gcart-muted, #8A8A8A);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.gcart-card__body {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 14px;
+  min-width: 0;
+}
+.gcart-card__title {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+.gcart-card__title a { color: inherit; text-decoration: none; }
+.gcart-card__price { margin: 6px 0 0; font-size: 13px; }
+.gcart-card__price--sale { color: var(--gcart-accent, #111); }
+.gcart-card__price--was { color: var(--gcart-muted, #8A8A8A); margin-left: 6px; }
+.gcart-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+.gcart-card__row--solo { justify-content: stretch; }
+/* "Select colour and size" is longer than the column on a phone: let it take
+   the full row and break onto a second line, icon held to the right. */
+.gcart-card__row--solo .gcart-card__add {
+  flex: 1 1 auto;
+  justify-content: space-between;
+  min-width: 0;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+  text-align: left;
+}
+.gcart-card__row--solo .gcart-card__add span { min-width: 0; white-space: normal; }
+.gcart-card__pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+/* A native select sizes itself to its longest option ("M (sold out)") and
+   would spill under the ADD button, so it is boxed to the space it is given. */
+.gcart-card__size {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  max-width: 120px;
+  box-sizing: border-box;
+  padding: 4px 18px 4px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--gcart-text, #111);
+  font: 500 12px/1.4 var(--g-sans, sans-serif);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23111' fill='none' stroke-width='1.3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  text-overflow: ellipsis;
+}
+.gcart-card__size:focus-visible { outline: 1px solid var(--gcart-accent, #111); outline-offset: 2px; }
+.gcart-card__add {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: var(--gcart-text, #111);
+  font: 500 12px/1 var(--g-sans, sans-serif);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: opacity 0.2s ease;
+}
+.gcart-card__add:hover { opacity: 0.6; }
+.gcart-card__add.is-loading { opacity: 0.5; pointer-events: none; }
+.gcart-card__add svg { flex: 0 0 auto; }
+
+/* ----- Footer (totals + checkout) --------------------------------------- */
+.gcart-footer {
+  flex: 0 0 auto;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--gcart-border, #E6E6E6);
+  background: var(--gcart-bg, #fff);
+}
+.gcart-totals { margin-bottom: 14px; }
+.gcart-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+.gcart-row--subtotal .gcart-eyebrow { font-size: 14px; letter-spacing: 0.04em; }
+.gcart-row--subtotal .gcart-row__value { font-size: 15px; font-weight: 500; }
+.gcart-row--subtotal .gcart-row__value.is-struck {
+  text-decoration: line-through;
+  font-weight: 400;
+  color: var(--gcart-muted, #8A8A8A);
+}
+.gcart-row__value { font-size: 13px; }
+.gcart-row__value--free { letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; font-size: 11px; }
+.gcart-row__value--minus { color: var(--gcart-accent, #111); }
+.gcart-row--total {
+  border-top: 1px solid var(--gcart-border, #E6E6E6);
+  margin-top: 6px;
+  padding-top: 12px;
+}
+.gcart-row--total .gcart-row__value { font-size: 15px; font-weight: 500; }
+.gcart-duties {
+  margin: -2px 0 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--gcart-muted, #8A8A8A);
+}
+
+/* Checkout button */
+.gcart-checkout {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--gcart-btn-bg, #111);
+  color: var(--gcart-btn-text, #fff);
+  border: 0;
+  padding: 19px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+.gcart-checkout:hover { background: var(--gcart-checkout-hover, var(--gcart-btn-bg, #111)); }
+.gcart-checkout:disabled,
+.gcart-checkout.is-disabled { opacity: 0.4; cursor: default; pointer-events: none; }
+.gcart-checkout__icon { flex: 0 0 auto; }
+.gcart-checkout__badge {
+  background: rgba(255, 255, 255, 0.18);
+  padding: 3px 8px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+/* Payment + returns */
+.gcart-payment {
+  text-align: center;
+  font-size: 12px;
+  color: var(--gcart-text, #111);
+  margin: 12px 0 0;
+}
+.gcart-payment b { font-weight: 500; }
+.gcart-returns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--gcart-muted, #8A8A8A);
+  margin: 10px 0 0;
+}
+
+/* ---- Discount code ------------------------------------------------------
+   One quiet line above the checkout button until it is asked for. */
+.gcart-promo { margin: 0 0 14px; }
+.gcart-promo__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: 400 12px/1 var(--g-sans, inherit);
+  letter-spacing: 0.04em;
+  color: var(--gcart-muted, #8A8A8A);
+  transition: color 0.15s ease;
+}
+.gcart-promo__toggle:hover { color: var(--gcart-text, #111); }
+.gcart-promo__plus { position: relative; width: 11px; height: 11px; flex: none; }
+.gcart-promo__plus::before,
+.gcart-promo__plus::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+.gcart-promo__plus::before { width: 11px; height: 1px; }
+.gcart-promo__plus::after { width: 1px; height: 11px; transition: transform 0.2s ease; }
+.gcart-promo__toggle[aria-expanded="true"] .gcart-promo__plus::after { transform: translate(-50%, -50%) scaleY(0); }
+.gcart-promo__panel { display: flex; gap: 8px; margin-top: 10px; }
+.gcart-promo__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--gcart-border, #E6E6E6);
+  border-radius: 0;
+  background: #fff;
+  font: 400 13px/1 var(--g-sans, inherit);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gcart-text, #111);
+}
+.gcart-promo__input::placeholder { text-transform: none; letter-spacing: 0.02em; color: var(--gcart-muted, #8A8A8A); }
+.gcart-promo__input:focus { outline: none; border-color: var(--gcart-text, #111); }
+.gcart-promo__apply {
+  flex: none;
+  height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--gcart-text, #111);
+  background: none;
+  cursor: pointer;
+  font: 500 11px/1 var(--g-sans, inherit);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gcart-text, #111);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.gcart-promo__apply:hover:not(:disabled) { background: var(--gcart-text, #111); color: #fff; }
+.gcart-promo__apply:disabled, .gcart-promo__input:disabled { opacity: 0.5; cursor: default; }
+.gcart-promo__applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--gcart-border, #E6E6E6);
+}
+.gcart-promo__code {
+  font: 500 11px/1 var(--g-sans, inherit);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gcart-text, #111);
+}
+.gcart-promo__remove {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: 400 12px/1 var(--g-sans, inherit);
+  color: var(--gcart-muted, #8A8A8A);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.gcart-promo__remove:hover { color: var(--gcart-text, #111); }
+.gcart-promo__msg { margin: 8px 0 0; font: 400 11px/1.4 var(--g-sans, inherit); color: var(--gcart-muted, #8A8A8A); }
+.gcart-promo__msg.is-error { color: #A8321E; }
 
 /* ===== Quiet add confirmation (drawer does not auto-open) ================ */
 .gcart-toast {
@@ -467,10 +721,10 @@
   align-items: center;
   gap: 10px;
   max-width: calc(100vw - 32px);
-  background: var(--g-ink);
+  background: var(--g-ink, #111);
   color: #fff;
   padding: 13px 18px;
-  font-family: var(--g-sans);
+  font-family: var(--g-sans, sans-serif);
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.05em;
@@ -519,191 +773,168 @@
   text-transform: inherit;
 }
 
+/* No scroll-lock class on <body>: toggling one restyles the whole page and
+   was the slow part of opening the bag. Scroll is held in the script, and
+   scrolling inside the drawer never chains out to the page. */
+.gcart-overlay { touch-action: none; }
+.gcart-drawer,
+.gcart-body,
+.gcart-sheet__body { overscroll-behavior: contain; }
+
+/* ----- Phone ------------------------------------------------------------- */
+@media (max-width: 600px) {
+  .gcart-drawer { width: 94%; max-width: 94%; }
+  .gcart-header { padding: 22px 18px 14px; }
+  .gcart-goal { padding-left: 18px; padding-right: 18px; }
+  .gcart-item { padding: 20px 18px; gap: 14px; grid-template-columns: 96px minmax(0, 1fr); }
+  .gcart-upsell { padding-left: 18px; }
+  .gcart-upsell__scroll { padding-right: 18px; }
+  .gcart-footer { padding-left: 18px; padding-right: 18px; }
+}
+
+/* ----- Reduced motion ---------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
+  .gcart-drawer,
+  .gcart-overlay,
+  .gcart-progress__fill { transition: none; }
   .gcart-bump { animation: none; }
   .gcart-fly { display: none; }
   .gcart-toast { transition: opacity 0.25s ease; transform: translate(-50%, 0); }
 }
 
-/* ----- Footer (totals + checkout) --------------------------------------- */
-.gcart-footer {
-  flex: 0 0 auto;
-  padding: 20px 24px 22px;
-  border-top: 1px solid var(--gcart-border, var(--g-line));
-  background: var(--gcart-bg, #fff);
-}
-.gcart-totals { margin-bottom: 16px; }
-.gcart-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 7px 0;
-}
-.gcart-row[hidden] { display: none; }
-.gcart-row--total {
-  border-top: 1px solid var(--gcart-border, var(--g-line));
-  margin-top: 6px;
-  padding-top: 12px;
-}
-.gcart-row__total-label { font-size: 0.85em; }
-.gcart-row__value { font-size: 0.95em; }
-.gcart-row--subtotal .gcart-row__value.is-struck {
-  text-decoration: line-through;
-  color: var(--gcart-muted, var(--g-whisper));
-}
-.gcart-row__value--free { letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; font-size: 0.82em; }
-.gcart-row__value--minus { color: var(--gcart-accent, #111); }
-.gcart-row--total .gcart-row__value { font-size: 1.05em; font-weight: 700; }
-
-/* Checkout button */
-.gcart-checkout {
-  width: 100%;
-  background: var(--gcart-btn-bg, #000);
-  color: var(--gcart-btn-text, #fff);
-  border: 0;
-  padding: 17px 18px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 0.82em;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: opacity 0.2s ease, color 0.2s ease;
-}
-.gcart-checkout:hover { color: var(--gcart-checkout-hover, #2F7D5F); }
-.gcart-checkout:hover .gcart-checkout__lock { opacity: 1; }
-.gcart-checkout:disabled,
-.gcart-checkout.is-disabled { opacity: 0.4; cursor: default; pointer-events: none; }
-.gcart-checkout__lock { flex: 0 0 auto; opacity: 0.85; }
-.gcart-checkout__badge {
-  background: rgba(255, 255, 255, 0.18);
-  padding: 3px 8px;
-  font-size: 0.85em;
-  letter-spacing: 0.08em;
-}
-
-/* Payment + returns */
-.gcart-payment {
-  text-align: center;
-  font-size: 0.84em;
-  color: var(--gcart-text, #111);
-  margin: 14px 0 0;
-}
-.gcart-payment b { font-weight: 700; }
-.gcart-returns {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 0.82em;
-  color: var(--gcart-muted, var(--g-whisper));
-  margin: 12px 0 0;
-  padding-top: 14px;
-  border-top: 1px solid var(--gcart-border, var(--g-line));
-}
-
-/* ----- Loading state ----------------------------------------------------- */
-.gcart-drawer.is-loading .gcart-body { opacity: 0.5; pointer-events: none; }
-
-/* Luxury logo loader (shown on cold open + add-to-cart) */
-.gcart-loader {
+/* ----- Options sheet (Complete the look) --------------------------------
+   Lives inside the drawer: a scrim over the bag and a panel that rises from
+   the bottom, like a native picker. */
+.gcart-sheet {
   position: absolute;
   inset: 0;
-  z-index: 5;
-  background: var(--gcart-bg, #fff);
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+}
+.gcart-sheet__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.45);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+.gcart-sheet.is-open .gcart-sheet__scrim { opacity: 1; }
+.gcart-sheet__panel {
+  position: relative;
+  width: 100%;
+  max-height: 92%;
   display: flex;
   flex-direction: column;
+  background: var(--gcart-bg, #fff);
+  border-radius: 18px 18px 0 0;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.22, 0.8, 0.24, 1);
+  outline: none;
+}
+.gcart-sheet.is-open .gcart-sheet__panel { transform: translateY(0); }
+.gcart-sheet__head {
+  display: grid;
+  grid-template-columns: 24px 1fr 24px;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.45s ease, visibility 0.45s ease;
+  padding: 18px 18px 6px;
 }
-.gcart-drawer.is-booting .gcart-loader { opacity: 1; visibility: visible; }
-.gcart-loader__logo {
-  width: 120px;
-  height: auto;
-  opacity: 0.9;
-  animation: gcart-pulse 1.7s ease-in-out infinite;
+.gcart-sheet__title {
+  grid-column: 2;
+  margin: 0;
+  text-align: center;
+  font: 500 14px/1.3 var(--g-sans, sans-serif);
+  letter-spacing: 0.02em;
 }
-.gcart-loader__word {
-  font-family: var(--g-serif);
-  font-size: 26px;
-  letter-spacing: 0.36em;
-  text-transform: uppercase;
+.gcart-sheet__close {
+  grid-column: 3;
+  background: none;
+  border: 0;
+  padding: 0;
+  line-height: 0;
+  cursor: pointer;
   color: var(--gcart-text, #111);
-  padding-left: 0.36em;
-  animation: gcart-pulse 1.7s ease-in-out infinite;
 }
-.gcart-loader__line {
-  position: relative;
-  width: 64px;
-  height: 1px;
-  background: var(--gcart-border, var(--g-line));
+.gcart-sheet__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 6px 18px 12px;
+}
+/* The product's own first image, at its own shape, like the bag rows: a
+   square box would letterbox a portrait garment shot and shrink it. */
+.gcart-sheet__media {
+  width: 168px;
+  margin: 0 auto 16px;
+}
+.gcart-sheet__media img { width: 100%; height: auto; display: block; }
+.gcart-sheet__price { margin: 0 0 12px; font-size: 14px; font-weight: 500; }
+.gcart-sheet__group { margin-bottom: 14px; }
+.gcart-sheet__label { margin: 0 0 8px; font-size: 12px; color: var(--gcart-text, #111); }
+.gcart-sheet__opts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.gcart-sheet__opt {
+  height: 38px;
+  padding: 0 6px;
+  border: 1px solid var(--gcart-border, #D6D6D6);
+  border-radius: 3px;
+  background: var(--gcart-bg, #fff);
+  color: var(--gcart-text, #111);
+  font: 400 13px/1 var(--g-sans, sans-serif);
+  cursor: pointer;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
-.gcart-loader__line::after {
-  content: '';
-  position: absolute;
-  left: -40%;
-  top: 0;
-  width: 40%;
-  height: 100%;
-  background: var(--gcart-accent, #111);
-  animation: gcart-slide 1.3s ease-in-out infinite;
+.gcart-sheet__opt.is-on {
+  background: var(--gcart-text, #111);
+  border-color: var(--gcart-text, #111);
+  color: #fff;
 }
-@keyframes gcart-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
-@keyframes gcart-slide { 0% { left: -40%; } 100% { left: 100%; } }
-
-/* Lock page scroll when drawer open */
-body.gcart-open { overflow: hidden; }
-
-/* ----- Mobile ------------------------------------------------------------ */
-/* ----- Keep floating widgets off the open drawer ------------------------
-   The drawer sits at z-index 9999. Shopify Inbox renders <shopify-chat> at
-   2147483000 and the theme's own drawers/popdowns sit at 18000-30000, so all
-   of them paint over the cart. Raising the drawer above the theme's layers and
-   hiding the chat launcher while the drawer is open keeps the totals readable.
-   The cookie banner (2000000) is deliberately left above the drawer so consent
-   is never blocked. */
-.gcart-overlay { z-index: 1499998; }
-.gcart-drawer  { z-index: 1499999; }
-body.gcart-open shopify-chat { display: none !important; }
-
-@media (max-width: 600px) {
-  /* Leave a sliver of the dimmed page showing on the left so the drawer reads
-     as a panel over the store, not a new full-screen page. A full-width
-     takeover on mobile makes people feel they have navigated away. */
-  .gcart-drawer { width: 92%; max-width: 92%; }
-  .gcart-header { padding: 18px 18px 14px; }
-  .gcart-item { padding: 18px; gap: 12px; }
-  .gcart-wardrobe,
-  .gcart-footer { padding-left: 18px; padding-right: 18px; }
-  .gcart-upsell { padding-left: 18px; }
+.gcart-sheet__opt:disabled {
+  color: var(--gcart-muted, #8A8A8A);
+  text-decoration: line-through;
+  cursor: default;
 }
-
-/* Respect reduced motion */
+.gcart-sheet__opt:focus-visible { outline: 2px solid var(--gcart-text, #111); outline-offset: 1px; }
+.gcart-sheet__add {
+  margin: 4px 18px 18px;
+  height: 46px;
+  border: 0;
+  border-radius: 3px;
+  background: var(--gcart-text, #111);
+  color: #fff;
+  font: 500 13px/1 var(--g-sans, sans-serif);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.gcart-sheet__add:disabled { opacity: 0.45; cursor: default; }
+.gcart-sheet__add.is-loading { opacity: 0.6; pointer-events: none; }
+.gcart-card__media { border: 0; padding: 0; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
-  .gcart-drawer,
-  .gcart-overlay,
-  .gcart-progress__fill { transition: none; }
-  .gcart-loader__logo,
-  .gcart-loader__word,
-  .gcart-loader__line::after { animation: none; }
+  .gcart-sheet__panel, .gcart-sheet__scrim { transition: none; }
 }
 
-/* ----- Duties reassurance under the subtotal --------------------------- */
-.gcart-duties {
-  margin: -4px 0 10px; font-size: 10.5px; letter-spacing: .04em;
-  color: var(--gcart-muted, var(--g-whisper));
+/* ==========================================================================
+   Touch devices: every focusable field at 16px. LAST IN THE FILE ON PURPOSE.
+   --------------------------------------------------------------------------
+   iOS Safari zooms the page in whenever a focused text field is under 16px,
+   and because the drawer is position: fixed the page never zooms back out:
+   the shopper is left stuck at the discount field, magnified, unable to
+   reach checkout. (Android does not do this, which is why an S26 looked fine
+   while an iPhone 16 did not.) These selectors are no more specific than the
+   component rules above, so sitting earlier in the file meant the 13px `font`
+   shorthand on .gcart-promo__input simply won. Keep this block last, and add
+   any new field to it.
+   ========================================================================== */
+@media (pointer: coarse) {
+  .gcart-promo__input,
+  .gcart-card__size {
+    font-size: 16px;
+    letter-spacing: 0.02em;
+  }
 }
-
-/* ----- Matching pieces inside Build Your Wardrobe ---------------------- */
-.gcart-wardrobe .gcart-upsell { margin-top: 16px; padding: 0; }
-.gcart-wardrobe .gcart-upsell__scroll { margin-top: 0; }
-

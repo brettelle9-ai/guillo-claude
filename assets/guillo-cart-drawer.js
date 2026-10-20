@@ -27,6 +27,38 @@
   var overlay = document.getElementById('GuilloCartOverlay');
   if (!drawer || !overlay) return;
 
+  /* ---- Isolate the drawer in a shadow root -------------------------------
+     Horizon styles the page with body:has(...) rules, so any element added or
+     removed anywhere under <body> makes the browser restyle the whole
+     document. Measured on the product page: ~150ms for every change inside
+     the drawer (each quantity tap, each re-render), far worse on a phone.
+     :has() cannot see into a shadow tree, so once the drawer lives in one the
+     same change costs ~8ms. Nothing else about the drawer changes: same
+     markup, same stylesheet, same variables, inherited fonts and tokens. */
+  (function isolate() {
+    if (!document.body.attachShadow) return;
+    if (window.Shopify && window.Shopify.designMode) return; // the editor swaps sections in place
+    var cssLink = document.querySelector('link[href*="guillo-cart-drawer.css"]');
+    if (!cssLink) return;
+    var host = document.createElement('div');
+    host.id = 'GuilloCartHost';
+    host.style.display = 'none'; // until its stylesheet is in, so nothing flashes unstyled
+    var root = host.attachShadow({ mode: 'open' });
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = cssLink.href;
+    var show = function () { host.style.display = ''; };
+    link.addEventListener('load', show);
+    link.addEventListener('error', show);
+    root.appendChild(link);
+    var vars = document.getElementById('GuilloCartVars');
+    if (vars) root.appendChild(vars.cloneNode(true));
+    root.appendChild(overlay);
+    root.appendChild(drawer);
+    document.body.appendChild(host);
+    window.setTimeout(show, 1500);
+  })();
+
   /* ---- Element references --------------------------------------------- */
   var els = {
     items:        drawer.querySelector('[data-gcart-items]'),
@@ -37,6 +69,15 @@
     subtotal:     drawer.querySelector('[data-gcart-subtotal]'),
     shipping:     drawer.querySelector('[data-gcart-shipping]'),
     discountRow:  drawer.querySelector('[data-gcart-discount-row]'),
+    promo:        drawer.querySelector('[data-gcart-promo]'),
+    promoToggle:  drawer.querySelector('[data-gcart-promo-toggle]'),
+    promoPanel:   drawer.querySelector('[data-gcart-promo-panel]'),
+    promoInput:   drawer.querySelector('[data-gcart-promo-input]'),
+    promoApply:   drawer.querySelector('[data-gcart-promo-apply]'),
+    promoApplied: drawer.querySelector('[data-gcart-promo-applied]'),
+    promoCode:    drawer.querySelector('[data-gcart-promo-code]'),
+    promoRemove:  drawer.querySelector('[data-gcart-promo-remove]'),
+    promoMsg:     drawer.querySelector('[data-gcart-promo-msg]'),
     discountLabel:drawer.querySelector('[data-gcart-discount-label]'),
     discountValue:drawer.querySelector('[data-gcart-discount-value]'),
     totalRow:     drawer.querySelector('[data-gcart-total-row]'),
@@ -58,6 +99,7 @@
   /* ---- Helpers -------------------------------------------------------- */
   var locale = (document.documentElement.lang || 'en');
   var lastCart = null; // cached cart so the drawer opens instantly
+  var lastItemsSig = null; // what the item list currently shows
 
   // Pre-order variants (id -> ships-by string), rendered by the section from
   // variant custom.preorder metafields. Empty when no product runs pre-orders.
@@ -213,27 +255,49 @@
   }
 
   /* ---- Open / close --------------------------------------------------- */
-  function openDrawer() {
-    document.body.classList.add('gcart-open');
+  // The page behind is held still without touching <body>. A class on body
+  // (the old "gcart-open" scroll lock) restyled and re-laid-out the whole
+  // page: measured at ~120ms on the product page before the drawer could even
+  // start to move, several times that on a phone. The overlay covers the page,
+  // so blocking scroll on the overlay and on the drawer's fixed parts is enough.
+  function holdPage(on) {
+    var chat = document.querySelector('shopify-chat');
+    if (chat) chat.style.display = on ? 'none' : '';
+  }
+  function blockScroll(e) {
+    if (e.target.closest && e.target.closest('.gcart-body, .gcart-upsell__scroll, .gcart-sheet__body')) return;
+    if (e.cancelable) e.preventDefault();
+  }
+  overlay.addEventListener('touchmove', blockScroll, { passive: false });
+  overlay.addEventListener('wheel', blockScroll, { passive: false });
+  drawer.addEventListener('touchmove', blockScroll, { passive: false });
+  drawer.addEventListener('wheel', blockScroll, { passive: false });
+
+  var wantOpen = false;
+  function openDrawer(noRefresh) {
+    wantOpen = true;
+    holdPage(true);
     overlay.hidden = false;
-    // Force reflow so the transition runs
-    void overlay.offsetWidth;
-    overlay.classList.add('is-open');
-    drawer.classList.add('is-open');
+    // Start the slide on the next frame instead of forcing a synchronous layout.
+    window.requestAnimationFrame(function () {
+      if (!wantOpen) return; // closed again before the frame arrived
+      overlay.classList.add('is-open');
+      drawer.classList.add('is-open');
+    });
     drawer.setAttribute('aria-hidden', 'false');
-    // Show the luxury logo loader on a true cold start (no cart cached yet).
-    if (lastCart === null) drawer.classList.add('is-booting');
     // Open instantly: if we already have a cart, show it now and sync quietly
     // in the background; only show the loading state on a true cold start.
-    refresh(lastCart !== null);
+    // A caller that is mid-add passes noRefresh and refreshes once the add lands.
+    if (noRefresh !== true) refresh(lastCart !== null);
   }
 
   function closeDrawer() {
+    wantOpen = false;
     overlay.classList.remove('is-open');
     drawer.classList.remove('is-open');
     drawer.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('gcart-open');
-    window.setTimeout(function () { overlay.hidden = true; }, 350);
+    holdPage(false);
+    window.setTimeout(function () { if (!wantOpen) overlay.hidden = true; }, 350);
   }
 
   /* ---- Render --------------------------------------------------------- */
@@ -246,7 +310,7 @@
     var count = cart.item_count;
 
     // Header count
-    els.count.forEach(function (el) { el.textContent = '(' + count + ')'; });
+    els.count.forEach(function (el) { el.textContent = count; });
     updateSiteCart(cart);
 
     // Empty vs filled
@@ -255,8 +319,15 @@
     els.items.hidden = isEmpty;
     if (els.footer) els.footer.style.display = isEmpty ? 'none' : '';
 
-    // Line items
-    els.items.innerHTML = cart.items.map(itemHTML.bind(null, currency)).join('');
+    // Line items. Rebuilding the list re-decodes every image, so skip it when
+    // nothing a shopper can see has changed (the common case on a quiet sync).
+    var sig = currency + '|' + cart.items.map(function (it) {
+      return it.key + ':' + it.quantity + ':' + it.final_line_price + ':' + it.original_line_price;
+    }).join(',');
+    if (sig !== lastItemsSig) {
+      els.items.innerHTML = cart.items.map(itemHTML.bind(null, currency)).join('');
+      lastItemsSig = sig;
+    }
 
     // Totals / wardrobe / upsells
     syncPreorderNote(cart);
@@ -267,9 +338,21 @@
 
   function itemHTML(currency, item) {
     var imgSrc = item.image ? (item.image.indexOf('?') === -1
-      ? item.image + '?width=160' : item.image + '&width=160') : '';
+      ? item.image + '?width=320' : item.image + '&width=320') : '';
+    // These images are written into the DOM at the moment the drawer opens, and
+    // the drawer only exists once it is open. loading="lazy" let the browser
+    // defer the fetch past that moment, so the first item sat blank for one to
+    // two seconds on a cold cache (naturalWidth 0) before appearing. Nothing
+    // here is below the fold, so the image is fetched eagerly and at high
+    // priority. Width stays at 320: the slot renders at 78 CSS px, so this
+    // still covers a 3x screen without pulling a full size file.
+    // No width/height attributes on purpose. These images are deliberately
+    // shown at their own shape (see .gcart-item__media img, height: auto), so
+    // asserting one ratio here would reserve the wrong box and make the row
+    // jump when the real image lands.
     var img = item.image
-      ? '<img src="' + imgSrc + '" alt="' + escapeHtml(item.product_title) + '" loading="lazy">'
+      ? '<img src="' + imgSrc + '" alt="' + escapeHtml(item.product_title) +
+        '" loading="eager" fetchpriority="high" decoding="async">'
       : '';
     var lineSave = (item.original_line_price || 0) - (item.final_line_price || 0);
     var hasCompare = lineSave > 0;
@@ -278,12 +361,19 @@
       : money(item.final_line_price, currency);
     // Dollar saving per line, from the real cart discount (no percentages).
     var saveHTML = hasCompare
-      ? '<p class="gcart-item__save" style="margin:2px 0 0;font-size:.85em;opacity:.65;">' +
+      ? '<p class="gcart-item__save">' +
           escapeHtml(CFG.itemSavePrefix || 'You save') + ' ' + money(lineSave, currency) + '</p>'
       : '';
 
-    var variant = (item.variant_title && item.variant_title !== 'Default Title')
-      ? '<p class="gcart-item__variant">' + escapeHtml(item.variant_title) + '</p>' : '';
+    // "Size: 32" rather than a bare "32": the option name comes from the
+    // cart line itself, so it reads Colour or Length where that is the option.
+    var opts = (item.options_with_values || []).filter(function (o) {
+      return o && o.value && o.value !== 'Default Title';
+    }).map(function (o) { return escapeHtml(o.name) + ': ' + escapeHtml(o.value); });
+    var variant = opts.length
+      ? '<p class="gcart-item__variant">' + opts.join(' &middot; ') + '</p>'
+      : ((item.variant_title && item.variant_title !== 'Default Title')
+          ? '<p class="gcart-item__variant">' + escapeHtml(item.variant_title) + '</p>' : '');
     // Just the dot and the word. The ships-by date lives behind the info mark,
     // on hover and on focus so it is reachable by tap and by keyboard too.
     var preBy = PREORDER[item.variant_id];
@@ -307,19 +397,21 @@
       '<div class="gcart-item" data-key="' + item.key + '">' +
         '<a class="gcart-item__media" href="' + item.url + '" tabindex="-1">' + img + '</a>' +
         '<div class="gcart-item__info">' +
-          '<h3 class="gcart-item__title"><a href="' + item.url + '">' + escapeHtml(item.product_title) + '</a></h3>' +
-          variant +
-          preNote +
-          '<div class="gcart-qty">' +
-            '<button type="button" class="gcart-qty__btn" data-gcart-minus aria-label="Decrease quantity">&minus;</button>' +
-            '<span class="gcart-qty__value">' + item.quantity + '</span>' +
-            '<button type="button" class="gcart-qty__btn" data-gcart-plus aria-label="Increase quantity">+</button>' +
+          '<div class="gcart-item__head">' +
+            '<h3 class="gcart-item__title"><a href="' + item.url + '">' + escapeHtml(item.product_title) + '</a></h3>' +
+            '<span class="gcart-item__price">' + priceHTML + '</span>' +
           '</div>' +
-        '</div>' +
-        '<div class="gcart-item__aside">' +
-          '<span class="gcart-item__price">' + priceHTML + '</span>' +
+          variant +
           saveHTML +
-          '<button type="button" class="gcart-remove" data-gcart-remove>Remove</button>' +
+          preNote +
+          '<div class="gcart-item__actions">' +
+            '<div class="gcart-qty">' +
+              '<button type="button" class="gcart-qty__btn" data-gcart-minus aria-label="Decrease quantity">&minus;</button>' +
+              '<span class="gcart-qty__value">' + item.quantity + '</span>' +
+              '<button type="button" class="gcart-qty__btn" data-gcart-plus aria-label="Increase quantity">+</button>' +
+            '</div>' +
+            '<button type="button" class="gcart-remove" data-gcart-remove>Remove</button>' +
+          '</div>' +
         '</div>' +
       '</div>';
   }
@@ -380,6 +472,96 @@
       .catch(function () { preSyncing = false; });
   }
 
+  /* ---- Discount code ---------------------------------------------------
+     /cart/update.js with a `discount` value puts the code on the cart itself
+     (not just checkout), so cart.total_discount — which the totals above
+     already read — picks it up with no extra work. An empty value clears it.
+     A code Shopify will not honour comes back in cart.discount_codes with
+     applicable:false, which is how a bad code is detected. */
+  function promoMessage(text, isError) {
+    if (!els.promoMsg) return;
+    els.promoMsg.textContent = text || '';
+    els.promoMsg.hidden = !text;
+    els.promoMsg.classList.toggle('is-error', !!isError);
+  }
+
+  function appliedCode(cart) {
+    var codes = (cart && cart.discount_codes) || [];
+    for (var i = 0; i < codes.length; i++) {
+      if (codes[i] && codes[i].applicable) return codes[i].code;
+    }
+    return '';
+  }
+
+  function renderPromo(cart) {
+    if (!els.promo) return;
+    var code = appliedCode(cart);
+    if (code) {
+      els.promoApplied.hidden = false;
+      els.promoCode.textContent = code;
+      els.promoToggle.hidden = true;
+      els.promoPanel.hidden = true;
+      els.promoToggle.setAttribute('aria-expanded', 'false');
+      promoMessage('');
+    } else {
+      els.promoApplied.hidden = true;
+      els.promoToggle.hidden = false;
+    }
+  }
+
+  function setPromoBusy(busy) {
+    if (els.promoApply) els.promoApply.disabled = !!busy;
+    if (els.promoInput) els.promoInput.disabled = !!busy;
+  }
+
+  function applyPromo() {
+    if (!els.promoInput) return;
+    var code = (els.promoInput.value || '').trim();
+    if (!code) { promoMessage('Enter a code first.', true); els.promoInput.focus(); return; }
+    setPromoBusy(true);
+    promoMessage('');
+    postJSON('/cart/update.js', { discount: code })
+      .then(function (cart) {
+        setPromoBusy(false);
+        if (appliedCode(cart)) {
+          els.promoInput.value = '';
+          render(cart);
+          return;
+        }
+        // Not honoured: take it back off so the bag is not left carrying a
+        // code that does nothing, and say so.
+        promoMessage('That code cannot be used on this bag.', true);
+        return postJSON('/cart/update.js', { discount: '' }).then(render);
+      })
+      .catch(function () {
+        setPromoBusy(false);
+        promoMessage('Could not apply that code. Try again.', true);
+      });
+  }
+
+  function removePromo() {
+    setPromoBusy(true);
+    postJSON('/cart/update.js', { discount: '' })
+      .then(function (cart) { setPromoBusy(false); promoMessage(''); render(cart); })
+      .catch(function () { setPromoBusy(false); });
+  }
+
+  if (els.promoToggle) {
+    els.promoToggle.addEventListener('click', function () {
+      var open = els.promoPanel.hidden;
+      els.promoPanel.hidden = !open;
+      els.promoToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open && els.promoInput) els.promoInput.focus();
+    });
+  }
+  if (els.promoApply) els.promoApply.addEventListener('click', applyPromo);
+  if (els.promoRemove) els.promoRemove.addEventListener('click', removePromo);
+  if (els.promoInput) {
+    els.promoInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); applyPromo(); }
+    });
+  }
+
   function renderTotals(cart) {
     var currency = cart.currency;
     var count = cart.item_count;
@@ -413,6 +595,8 @@
       els.discountRow.hidden = true;
       els.totalRow.hidden = true;
     }
+    renderPromo(cart);
+
     // The percentage badge is retired; savings read as dollars in the totals.
     if (els.badge) els.badge.hidden = true;
 
@@ -440,9 +624,7 @@
   })();
 
   // One line based on cart contents. Returns { text, loud } or null.
-  // Priority: chino/shirt pair (loud, hero offers) > shorts/polo/tee pair
-  // (quiet, less advertised) > generic 2-item line. Dollar-figure lines only
-  // show in AUD; they quote the ladder pricing.
+  // Priority: free-delivery nudge > 3+ nudge. No pair pricing anywhere.
   function nudgeLine(cart) {
     var count = cart.item_count;
     if (count >= (CFG.threshold || 3)) return null; // unlocked message handles 3+
@@ -459,51 +641,7 @@
       };
     }
 
-    // Non-AUD markets: the pair lines below quote hardcoded AUD figures, so they
-    // stay AUD-only. Everyone else gets the same prompt without a number; the
-    // totals block above already shows the real saving in their currency.
-    if (cart.currency !== 'AUD') {
-      var g2 = {}, n2 = 0;
-      cart.items.forEach(function (it) {
-        var g = GARMENTS[it.handle];
-        if (!g) return;
-        g2[g.g] = (g2[g.g] || 0) + it.quantity; n2 += it.quantity;
-      });
-      var solo = Object.keys(g2).filter(function (k) { return g2[k] === 1; })[0];
-      var NOUN = { chino: 'chino', shirt: 'shirt', short: 'pair of shorts', polo: 'polo', tee: 'tee' };
-      if (n2 === 1 && solo && NOUN[solo]) {
-        return { text: 'Add a second ' + NOUN[solo] + ' and the pair saving applies in your bag.', loud: true };
-      }
-    }
-
-    if (cart.currency === 'AUD') {
-      var qty = { chino: 0, shirt: 0, short: 0, polo: 0, tee: 0 };
-      var chinoType = '', shirtPrice = 0, teePrice = 0;
-      cart.items.forEach(function (it) {
-        var g = GARMENTS[it.handle];
-        if (!g || !qty.hasOwnProperty(g.g)) return;
-        qty[g.g] += it.quantity;
-        if (g.g === 'chino') chinoType = g.t || '';
-        if (g.g === 'shirt') shirtPrice = it.price;
-        if (g.g === 'tee') teePrice = it.price;
-      });
-      // Hero pairs (prominent)
-      if (qty.chino === 1) {
-        if (chinoType === 'signore') return { text: 'A second Signore brings the pair to $270. Save $46. Or add a Luxe Chino for $260.', loud: true };
-        if (chinoType === 'luxe') return { text: 'Add a second chino and pay $240 for the pair. Save $36.', loud: true };
-      }
-      if (qty.shirt === 1) {
-        if (shirtPrice === 13200) return { text: 'A second shirt brings the pair to $220. Save $44.', loud: true };
-        if (shirtPrice === 14200) return { text: 'A second shirt brings the pair to $240. Save $44.', loud: true };
-      }
-      // Quiet pairs (less advertised)
-      if (qty.polo === 1) return { text: 'Add a second polo for the pair at $240.', loud: false };
-      if (qty.short === 1) return { text: 'A second pair of shorts brings both to $200.', loud: false };
-      if (qty.tee === 1) {
-        if (teePrice === 7400) return { text: 'A second tee brings the pair to $130.', loud: false };
-        if (teePrice === 8400) return { text: 'A second tee brings the pair to $150.', loud: false };
-      }
-    }
+    // Pair discounts retired 2026-09-21. One line only, towards the 3+ offer.
     if (count === 2) return { text: 'A third piece takes 20% off everything.', loud: false };
     return null;
   }
@@ -540,8 +678,10 @@
       node.classList.toggle('is-complete', count >= idx);
     });
 
-    // Fill: 0 at <=1 item, full at threshold (connects node centres)
-    var pos = Math.max(0, Math.min(count, threshold) - 1) / Math.max(1, threshold - 1);
+    // The lock sits at the midpoint: each piece moves the bar a step towards
+    // it, and reaching it fills the whole bar.
+    var pos = unlocked ? 1 : (count / Math.max(1, threshold)) * 0.5;
+    els.wardrobe.classList.toggle('is-unlocked', unlocked);
     if (els.progressFill) els.progressFill.style.width = (pos * 100) + '%';
   }
 
@@ -593,35 +733,74 @@
   /* ---- Data actions --------------------------------------------------- */
   // quiet = true skips the dimmed loading state (used when we already have a
   // rendered cart on screen and are just syncing in the background).
+  // /cart/add.js answers with the line it just made. Drop that into the cart
+  // we already hold and draw it straight away, so the shopper sees their item
+  // one round trip sooner; the totals stay veiled until the real cart arrives
+  // (discounts are only known then).
+  function showAdded(item) {
+    if (!lastCart || !item || !item.key) return false;
+    var c = JSON.parse(JSON.stringify(lastCart));
+    var found = false;
+    c.items = c.items.map(function (it) {
+      if (it.key === item.key) { found = true; return item; }
+      return it;
+    });
+    if (!found) c.items.unshift(item);
+    c.item_count = c.items.reduce(function (n, it) { return n + (it.quantity || 0); }, 0);
+    c.total_price = c.items.reduce(function (n, it) { return n + (it.final_line_price || 0); }, 0);
+    c.items_subtotal_price = c.total_price;
+    c.original_total_price = c.items.reduce(function (n, it) { return n + (it.original_line_price || 0); }, 0);
+    drawer.classList.add('is-settling');
+    render(c);
+    drawer.classList.remove('is-loading');
+    return true;
+  }
+  function settle() {
+    return refresh(true).then(function (cart) { drawer.classList.remove('is-settling'); return cart; });
+  }
+
   function refresh(quiet) {
     if (!quiet) drawer.classList.add('is-loading');
     return getCart().then(function (cart) {
       render(cart);
       drawer.classList.remove('is-loading');
-      drawer.classList.remove('is-booting');
       return cart;
     }).catch(function () {
       drawer.classList.remove('is-loading');
-      drawer.classList.remove('is-booting');
     });
   }
 
+  // Optimistic: the number (or the row) changes on the tap itself. Rapid taps
+  // are folded into one request per line, and only the newest reply is drawn.
+  var qtyTimers = {};
+  var qtySeq = 0;
   function changeQty(key, qty) {
-    drawer.classList.add('is-loading');
-    return postJSON('/cart/change.js', { id: key, quantity: qty })
-      .then(function (cart) { render(cart); drawer.classList.remove('is-loading'); })
-      .catch(function () { drawer.classList.remove('is-loading'); });
+    var lines = els.items.querySelectorAll('.gcart-item');
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i].getAttribute('data-key') !== key) continue;
+      if (qty <= 0) {
+        lines[i].classList.add('is-leaving');
+      } else {
+        lines[i].querySelector('.gcart-qty__value').textContent = qty;
+      }
+    }
+    window.clearTimeout(qtyTimers[key]);
+    qtyTimers[key] = window.setTimeout(function () {
+      var mine = ++qtySeq;
+      postJSON('/cart/change.js', { id: key, quantity: Math.max(0, qty) })
+        .then(function (cart) { if (mine === qtySeq) { lastItemsSig = null; render(cart); } })
+        .catch(function () { lastItemsSig = null; refresh(true); });
+    }, qty <= 0 ? 0 : 160);
   }
 
   function quickAdd(variantId, btn) {
     if (btn) btn.classList.add('is-loading');
-    drawer.classList.add('is-booting'); // show logo loader while adding
     return postJSON('/cart/add.js', { items: [{ id: variantId, quantity: 1 }] })
       .then(function () {
         if (btn) btn.classList.remove('is-loading');
         openDrawer(); // openDrawer triggers a single background refresh
       })
-      .catch(function () { if (btn) btn.classList.remove('is-loading'); drawer.classList.remove('is-booting'); });
+      .catch(function () { if (btn) btn.classList.remove('is-loading'); });
   }
 
   /* ---- Event delegation inside the drawer ----------------------------- */
@@ -702,7 +881,8 @@
 
       var btn = form.querySelector('[type="submit"], button:not([type])');
       if (btn) btn.classList.add('is-loading');
-      drawer.classList.add('is-booting'); // logo loader while adding
+      // Do not wait for the network to start moving: open now, fill in after.
+      if (!CFG.quietAdd) { openDrawer(true); drawer.classList.add('is-loading'); }
 
       fetch('/cart/add.js', {
         method: 'POST',
@@ -714,18 +894,121 @@
           if (btn) btn.classList.remove('is-loading');
           var failed = !item || !item.key; // /cart/add.js errors have no line key
           if (CFG.quietAdd && !failed) {
-            drawer.classList.remove('is-booting');
             refresh(true).then(function () {
               confirmQuiet({ img: item.image, fromEl: btn });
               btnAdded(btn);
             });
+          } else if (!failed && showAdded(item)) {
+            settle();
           } else {
-            openDrawer();
+            refresh(false);
           }
         })
-        .catch(function () { if (btn) btn.classList.remove('is-loading'); drawer.classList.remove('is-booting'); });
+        .catch(function () { if (btn) btn.classList.remove('is-loading'); refresh(false); });
     }, true);
   }
+
+  /* ---- Options sheet for Complete the look ------------------------------
+     A card carries its family as JSON (colours = the Guillo Product Group's
+     products, each with its own sizes). Tap the card, pick, add. */
+  var sheet = drawer.querySelector('[data-gcart-sheet]');
+  var sh = sheet ? {
+    panel:   sheet.querySelector('.gcart-sheet__panel'),
+    title:   sheet.querySelector('[data-gcart-sheet-title]'),
+    img:     sheet.querySelector('[data-gcart-sheet-img]'),
+    price:   sheet.querySelector('[data-gcart-sheet-price]'),
+    cWrap:   sheet.querySelector('[data-gcart-sheet-colours-wrap]'),
+    colours: sheet.querySelector('[data-gcart-sheet-colours]'),
+    sizeLbl: sheet.querySelector('[data-gcart-sheet-size-label]'),
+    sizes:   sheet.querySelector('[data-gcart-sheet-sizes]'),
+    add:     sheet.querySelector('[data-gcart-sheet-add]')
+  } : null;
+  var shFamily = null, shColour = 0, shVariant = null, shReturnTo = null;
+
+  function optButton(label, on, disabled, attr, val) {
+    return '<button type="button" class="gcart-sheet__opt' + (on ? ' is-on' : '') + '"' +
+      ' role="radio" aria-checked="' + (on ? 'true' : 'false') + '"' +
+      (disabled ? ' disabled' : '') + ' ' + attr + '="' + val + '">' + escapeHtml(label) + '</button>';
+  }
+
+  function renderSheet() {
+    if (!sh || !shFamily) return;
+    var colour = shFamily.colours[shColour] || shFamily.colours[0];
+    sh.title.textContent = shFamily.title + (shFamily.colours.length > 1 ? ' in ' + colour.name : '');
+    if (colour.image) { sh.img.src = colour.image; sh.img.alt = shFamily.title; } else { sh.img.removeAttribute('src'); }
+    sh.cWrap.hidden = shFamily.colours.length < 2;
+    sh.colours.innerHTML = shFamily.colours.map(function (c, i) {
+      return optButton(c.name, i === shColour, !c.available, 'data-gcart-sheet-colour', i);
+    }).join('');
+    // Default size: keep the one already chosen if this colour has it, else the first in stock.
+    var variants = colour.variants || [];
+    var chosen = null;
+    variants.forEach(function (v) { if (shVariant && v.title === shVariant.title && v.available) chosen = v; });
+    if (!chosen) variants.some(function (v) { if (v.available) { chosen = v; return true; } return false; });
+    shVariant = chosen;
+    sh.sizeLbl.textContent = shFamily.sizeLabel || 'Size';
+    sh.sizes.innerHTML = variants.map(function (v) {
+      return optButton(v.title, chosen && v.id === chosen.id, !v.available, 'data-gcart-sheet-size', v.id);
+    }).join('');
+    sh.price.textContent = chosen ? chosen.price : (variants[0] ? variants[0].price : '');
+    sh.add.disabled = !chosen;
+    sh.add.textContent = chosen ? 'Add to bag' : 'Sold out';
+  }
+
+  function openSheet(card) {
+    if (!sh) return;
+    var data = card.querySelector('[data-gcart-family]');
+    try { shFamily = JSON.parse(data.textContent); } catch (e) { shFamily = null; }
+    if (!shFamily || !shFamily.colours || !shFamily.colours.length) return;
+    shColour = 0; shVariant = null;
+    shFamily.colours.some(function (c, i) { if (c.available) { shColour = i; return true; } return false; });
+    renderSheet();
+    var scope = drawer.getRootNode ? drawer.getRootNode() : document;
+    shReturnTo = (scope && scope.activeElement) || document.activeElement;
+    sheet.hidden = false;
+    void sheet.offsetWidth;
+    sheet.classList.add('is-open');
+    sh.panel.focus();
+  }
+
+  function closeSheet() {
+    if (!sh || sheet.hidden) return;
+    sheet.classList.remove('is-open');
+    window.setTimeout(function () { sheet.hidden = true; }, 320);
+    if (shReturnTo && shReturnTo.focus) shReturnTo.focus();
+  }
+
+  drawer.addEventListener('click', function (e) {
+    var t = e.target;
+    if (!t.closest) return;
+    var pick = t.closest('[data-gcart-pick]');
+    if (pick) { e.preventDefault(); openSheet(pick.closest('[data-gcart-upsell-card]')); return; }
+    if (t.closest('[data-gcart-sheet-close]')) { e.preventDefault(); closeSheet(); return; }
+    var cBtn = t.closest('[data-gcart-sheet-colour]');
+    if (cBtn) { shColour = parseInt(cBtn.getAttribute('data-gcart-sheet-colour'), 10) || 0; renderSheet(); return; }
+    var sBtn = t.closest('[data-gcart-sheet-size]');
+    if (sBtn) {
+      var id = parseInt(sBtn.getAttribute('data-gcart-sheet-size'), 10);
+      var colour = shFamily.colours[shColour];
+      (colour.variants || []).forEach(function (v) { if (v.id === id) shVariant = v; });
+      renderSheet(); return;
+    }
+    if (t.closest('[data-gcart-sheet-add]') && shVariant) {
+      var addId = shVariant.id;
+      closeSheet();
+      drawer.classList.add('is-loading');
+      postJSON('/cart/add.js', { items: [{ id: addId, quantity: 1 }] })
+        .then(function (res) {
+          var item = res && res.items && res.items[0];
+          if (showAdded(item)) return settle();
+          return refresh(false);
+        })
+        .catch(function () { refresh(false); });
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && sheet && !sheet.hidden) { e.stopPropagation(); closeSheet(); }
+  }, true);
 
   /* ---- Public API (optional manual control) --------------------------- */
   window.GuilloCart = {
@@ -748,6 +1031,23 @@
     }
   };
 
+  /* ---- The bag is always the drawer ------------------------------------
+     Two ways a shopper used to land on the theme's plain /cart page: a tap on
+     the bag before this script had loaded (layout/theme.liquid now holds that
+     tap and flags it here), or a direct visit to /cart. Both open the drawer
+     instead; closing it on /cart goes back to where they came from. */
+  var onCartPage = /\/cart\/?$/.test(window.location.pathname);
+  if (window.__guilloCartPending || onCartPage) {
+    window.__guilloCartPending = false;
+    openDrawer();
+  }
+  if (onCartPage) {
+    drawer.addEventListener('transitionend', function (e) {
+      if (e.propertyName !== 'transform' || drawer.classList.contains('is-open')) return;
+      if (window.history.length > 1) window.history.back(); else window.location.href = '/';
+    });
+  }
+
   /* ---- Small escaper -------------------------------------------------- */
   function escapeHtml(s) {
     return String(s == null ? '' : s)
@@ -766,4 +1066,3 @@
     prime();
   }
 })();
-

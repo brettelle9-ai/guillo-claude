@@ -6,20 +6,16 @@
   lang="{{ request.locale.iso_code }}"
 >
   <head>
-    <!-- Google Tag Manager -->
-    <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', 'GTM-5CMSDLTF');
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16607878860">
     </script>
-    <!-- End Google Tag Manager -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'AW-16607878860');
+    </script>
 
     {%- if settings.favicon != blank -%}
       <link
@@ -43,6 +39,21 @@
     {%- render 'stylesheets' -%}
     {%- render 'fonts' -%}
     {%- render 'scripts' -%}
+    <script>
+      // A tap on the bag icon before the cart drawer script is ready must not
+      // fall through to the /cart page. Hold it, and the drawer opens itself
+      // the moment it loads (see assets/guillo-cart-drawer.js).
+      (function () {
+        var S = 'a[href="/cart"],a[href$="/cart"],a[href*="/cart?"]';
+        window.addEventListener('click', function (e) {
+          var t = e.target && e.target.closest && e.target.closest(S);
+          if (!t || window.GuilloCart) return;
+          e.preventDefault();
+          e.stopPropagation();
+          window.__guilloCartPending = true;
+        }, true);
+      })();
+    </script>
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-schemes' -%}
     {%- render 'guillo-fonts' -%}
@@ -166,4 +177,3 @@
     {% endif %}
   </body>
 </html>
-

@@ -20,7 +20,18 @@
             {%- endcase -%}
           </span>
           <div class="guillo-trust__title">{{ block.settings.title }}</div>
-          <p class="guillo-trust__text">{{ block.settings.text }}</p>
+          {%- liquid
+            # Free return postage is AU/NZ only. Outside those markets a card
+            # can carry its own wording so nothing promises what we do not do.
+            assign trust_cc = localization.country.iso_code | default: 'ZZ'
+            assign trust_text = block.settings.text
+            unless trust_cc == 'AU' or trust_cc == 'NZ'
+              if block.settings.text_intl != blank
+                assign trust_text = block.settings.text_intl
+              endif
+            endunless
+          -%}
+          <p class="guillo-trust__text">{{ trust_text }}</p>
         </div>
       {%- endfor -%}
     </div>
@@ -149,7 +160,8 @@
           "default": "truck"
         },
         { "type": "text", "id": "title", "label": "Title", "default": "Fast, tracked shipping" },
-        { "type": "textarea", "id": "text", "label": "Text", "default": "Dispatched from Brisbane before 4pm, tracked door to door on every order." }
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Dispatched from Brisbane before 4pm, tracked door to door on every order." },
+        { "type": "textarea", "id": "text_intl", "label": "Text outside AU and NZ", "info": "Shown instead of the text above to shoppers in every other country. Leave blank to show the same text everywhere." }
       ]
     }
   ],
@@ -167,4 +179,3 @@
   ]
 }
 {% endschema %}
-

@@ -44,4 +44,3 @@ class CartNote extends Component {
 if (!customElements.get('cart-note')) {
   customElements.define('cart-note', CartNote);
 }
-

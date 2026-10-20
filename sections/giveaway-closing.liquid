@@ -1,0 +1,23 @@
+{%- render 'giveaway-head' -%}
+<section class="gv gv-closing">
+  {%- render 'giveaway-img', image: section.settings.image, fallback: 'https://cdn.shopify.com/s/files/1/0876/6056/0684/files/rn-image_picker_lib_temp_d393d90d-d2d8-4c05-b059-8a181abc2e1b.jpg?v=1', alt: section.settings.image_alt, pos: section.settings.image_position -%}
+  <div class="gv-closing__shade"></div>
+  <div class="gv-closing__in">
+    <div class="gv-script">{{ section.settings.script }}</div>
+    <a class="gv-btn" href="#enter">{{ section.settings.button }}</a>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Giveaway: closing",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "image_alt", "label": "Photo description", "default": "The Rapallo shirt, part of the Summer Wardrobe prize" },
+    { "type": "text", "id": "image_position", "label": "Photo focus", "default": "50% 30%" },
+    { "type": "text", "id": "script", "label": "Script line", "default": "see you in the sun" },
+    { "type": "text", "id": "button", "label": "Button", "default": "Enter and get $20 off" }
+  ],
+  "presets": [{ "name": "Giveaway: closing" }]
+}
+{% endschema %}

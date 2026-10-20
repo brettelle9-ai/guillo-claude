@@ -35,12 +35,22 @@
   endfor
 -%}
 <div class="g-card">
+  {%- comment -%}
+    The image's own alt, falling back to the product title and colour, so a
+    card never ships an empty alt to Google Images. The hover image keeps an
+    empty alt on purpose: it is a second view of the same garment, so naming it
+    again would only repeat the first image to anyone reading the markup.
+  {%- endcomment -%}
+  {%- capture card_img_alt -%}
+    {%- render 'guillo-image-alt', media_alt: product.featured_media.alt, product: product -%}
+  {%- endcapture -%}
+  {%- assign card_img_alt = card_img_alt | strip -%}
   <a href="{{ product.url }}" class="g-card__media" tabindex="-1" aria-hidden="true">
     {%- if product.featured_media -%}
       {{
         product.featured_media
         | image_url: width: 1200
-        | image_tag: class: 'g-card__img', widths: '300, 450, 600, 900, 1200', sizes: card_sizes, alt: product.featured_media.alt
+        | image_tag: class: 'g-card__img', widths: '300, 450, 600, 900, 1200', sizes: card_sizes, alt: card_img_alt
       }}
     {%- else -%}
       {{ 'product-apparel-1' | placeholder_svg_tag: 'g-card__img' }}
@@ -91,6 +101,12 @@
           endif
         endfor
         assign card_style = card_names[card_i]
+        # Shorts carry a leg length; say it on the card, where there is room,
+        # rather than inside the colour names on the product page.
+        assign card_leg = product.metafields.custom.leg_length.value
+        if card_leg != blank and card_style != blank
+          assign card_style = card_style | append: ' · ' | append: card_leg
+        endif
       endif
     -%}
     <div class="g-card__row">
@@ -121,4 +137,3 @@
     {%- endif -%}
   </div>
 </div>
-

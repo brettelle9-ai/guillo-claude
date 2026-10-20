@@ -1,0 +1,279 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "guillo-product",
+      "blocks": {
+        "tab1": {
+          "type": "tab",
+          "settings": {
+            "title": "How this works",
+            "content": "<p>Nothing is for sale on this page. You pick the size you would take and leave an email, and that is the whole commitment — no card, no charge, no obligation to buy.</p><p>We read the sizes before we cut. A run only happens if enough people ask for it, and the size curve we order is the one registered here.</p>"
+          }
+        },
+        "tab2": {
+          "type": "tab",
+          "settings": {
+            "title": "What you are looking at",
+            "content": "<p>Photography and specification are indicative while the piece is under consideration. Fabric, trims and finish can still change before a run is confirmed.</p>"
+          }
+        },
+        "tab3": {
+          "type": "tab",
+          "settings": {
+            "title": "If it gets made",
+            "content": "<p>Everyone registered hears first, the morning it opens, before it reaches the collection pages.</p><p>If it does not get made, we write once to tell you, and that is the end of it.</p>"
+          }
+        },
+        "tab4": {
+          "type": "tab",
+          "settings": {
+            "title": "Your details",
+            "content": "<p>Your email is used for this piece only. It does not sign you up to anything else, and you can unsubscribe from the letter itself.</p>"
+          }
+        },
+        "feat1": {
+          "type": "feature",
+          "settings": {
+            "label": "Not yet made",
+            "icon": "dot"
+          }
+        },
+        "feat2": {
+          "type": "feature",
+          "settings": {
+            "label": "Your size counts",
+            "icon": "shield"
+          }
+        },
+        "feat3": {
+          "type": "feature",
+          "settings": {
+            "label": "No payment now",
+            "icon": "refresh"
+          }
+        },
+        "feat4": {
+          "type": "feature",
+          "settings": {
+            "label": "First access",
+            "icon": "clock"
+          }
+        }
+      },
+      "block_order": [
+        "feat1",
+        "feat2",
+        "feat3",
+        "feat4",
+        "tab1",
+        "tab2",
+        "tab3",
+        "tab4"
+      ],
+      "settings": {
+        "short_description": "",
+        "fit_guide_link": "shopify://pages/fit-guide",
+        "size_guide_page": "shopify://pages/fit-guide",
+        "trust_line": "No payment · No obligation · One letter if it gets made",
+        "show_pair": false,
+        "show_video_tile": false,
+        "video_caption": "Watch the fit in motion",
+        "availability_mode": "interest",
+        "avail_eyebrow": "Under consideration",
+        "avail_headline": "Not made yet. Tell us if you would wear it.",
+        "avail_note": "This piece is being considered for the next run. The sizes people register are the sizes we cut — and if enough of you want it, it gets made.",
+        "avail_reward": "",
+        "interest_cta": "Register your interest",
+        "interest_size_tag": "Register",
+        "interest_hint": "Choose the size you would take.",
+        "interest_panel_title": "Register your interest in size",
+        "interest_panel_sub": "One letter, the morning it opens. Nothing else, and no newsletter.",
+        "show_short_description": false
+      }
+    },
+    "trust": {
+      "type": "guillo-trust",
+      "blocks": {
+        "card1": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Fast, tracked shipping",
+            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order."
+          }
+        },
+        "card2": {
+          "type": "card",
+          "settings": {
+            "icon": "refresh",
+            "title": "Easy 44 day returns",
+            "text_intl": "44-day returns and exchanges. Return postage is paid by you. Size swaps ship same day.",
+            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
+          }
+        },
+        "card3": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Duties and taxes covered",
+            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship."
+          }
+        }
+      },
+      "block_order": [
+        "card1",
+        "card2",
+        "card3"
+      ],
+      "settings": {
+        "show_press": true,
+        "press_logo_alt": "7NEWS",
+        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
+      }
+    },
+    "anatomy": {
+      "type": "guillo-anatomy",
+      "blocks": {
+        "cl1": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Genuine leather",
+            "text": "Full grain leather, hand finished, built to be carried rather than kept for best.",
+            "spec": "Ages with use"
+          }
+        },
+        "cl2": {
+          "type": "callout_left",
+          "settings": {
+            "title": "Built for travel",
+            "text": "Designed to carry the essentials, with dimensions listed in the product details.",
+            "spec": "Check your carry-on limits"
+          }
+        },
+        "cr1": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Care",
+            "text": "Spot clean with a damp cloth and air dry. Keep it out of prolonged direct sunlight.",
+            "spec": "Darkens, does not dry out"
+          }
+        },
+        "cr2": {
+          "type": "callout_right",
+          "settings": {
+            "title": "Pairs with",
+            "text": "The rest of the travel edit. Pack a chino and a polo and you are ready.",
+            "spec": "The Travel Edit"
+          }
+        }
+      },
+      "block_order": [
+        "cl1",
+        "cl2",
+        "cr1",
+        "cr2"
+      ],
+      "settings": {
+        "heading": "Leather made to travel.",
+        "image_position": "center 74%"
+      }
+    },
+    "reviews": {
+      "type": "guillo-pdp-reviews",
+      "settings": {
+        "heading": "Worn, washed, reported back.",
+        "fit_marker": 50
+      }
+    },
+    "faq": {
+      "type": "guillo-faq",
+      "blocks": {
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "What fits inside?",
+            "answer": "<p>It is designed to carry the essentials. Dimensions are listed in the product details above.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I care for it?",
+            "answer": "<p>Spot clean with a damp cloth and air dry. Keep it away from prolonged direct sunlight.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I travel with it?",
+            "answer": "<p>It is built with travel in mind. Check your airline's carry on limits against the dimensions in the product details.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "What should I pair it with?",
+            "answer": "<p>The rest of the travel edit. Pack the Luxe Chino and a polo and you are ready.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>44 days to decide, starting the day it arrives. Exchanges and returns are free within Australia and New Zealand, returned in the satchel it came in.</p><p>Outside Australia and New Zealand you cover the return postage. Duties and taxes are included in every price, so nothing is owed on arrival.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "question": "When will it arrive?",
+            "answer": "<p>It has not been made yet, so there is no delivery date. Register the size you would take and you will hear first if it goes into production.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6"
+      ],
+      "settings": {
+        "layout": "split",
+        "eyebrow": "Questions",
+        "heading": "Before you order.",
+        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time."
+      }
+    },
+    "wear": {
+      "type": "guillo-wear-with",
+      "settings": {
+        "heading": "The matching set",
+        "products_to_show": 8,
+        "products": [
+          "bellagio-leather-weekender-duffel-bag",
+          "the-bellagio-wash-bag",
+          "the-bellagio-passport-holder"
+        ]
+      }
+    }
+  },
+  "order": [
+    "main",
+    "wear",
+    "trust",
+    "anatomy",
+    "reviews",
+    "faq"
+  ]
+}

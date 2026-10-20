@@ -13,8 +13,18 @@
   %}
   <div class="guillo-cta__content">
     <h2 class="guillo-cta__heading">{{ section.settings.heading }}</h2>
-    {%- if section.settings.text != blank -%}
-      <p class="guillo-cta__text">{{ section.settings.text }}</p>
+    {%- liquid
+      # Free return postage is AU/NZ only; other markets get their own line.
+      assign cta_cc = localization.country.iso_code | default: 'ZZ'
+      assign cta_text = section.settings.text
+      unless cta_cc == 'AU' or cta_cc == 'NZ'
+        if section.settings.text_intl != blank
+          assign cta_text = section.settings.text_intl
+        endif
+      endunless
+    -%}
+    {%- if cta_text != blank -%}
+      <p class="guillo-cta__text">{{ cta_text }}</p>
     {%- endif -%}
     {%- if section.settings.cta_label != blank -%}
       <a href="{{ section.settings.cta_link }}" class="g-btn g-btn--light">{{ section.settings.cta_label }}</a>
@@ -67,6 +77,7 @@
     { "type": "text", "id": "image_position", "label": "Image focal point", "default": "center 24%" },
     { "type": "textarea", "id": "heading", "label": "Heading", "default": "Now you know your cut." },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Free exchanges within 44 days, so the first order can be the one that teaches you the size." },
+    { "type": "textarea", "id": "text_intl", "label": "Text outside AU and NZ", "info": "Shown instead of the text above to shoppers in every other country. Leave blank to show the same text everywhere." },
     { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop the chinos" },
     { "type": "url", "id": "cta_link", "label": "Button link" }
   ],
@@ -75,4 +86,3 @@
   ]
 }
 {% endschema %}
-

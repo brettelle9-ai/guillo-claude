@@ -1,0 +1,29 @@
+{%- render 'giveaway-head' -%}
+<footer class="gv gv-foot">
+  <div class="gv-foot__in">
+    <div class="gv-foot__row">
+      {%- if section.settings.logo != blank -%}<img src="{{ section.settings.logo | image_url: height: 80 }}" alt="Guillo">{%- else -%}<img src="https://guilloclothing.com/cdn/shop/files/guillo-wordmark-white.png?v=1" alt="Guillo">{%- endif -%}
+      <div class="gv-foot__links">
+        <a href="{{ section.settings.terms_url }}">Full terms</a>
+        <a href="{{ section.settings.privacy_url }}">Privacy</a>
+        <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
+        <a href="/">guilloclothing.com</a>
+      </div>
+    </div>
+    <p class="gv-foot__terms">{{ section.settings.terms }}</p>
+  </div>
+</footer>
+{% schema %}
+{
+  "name": "Giveaway: footer",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo (light version)" },
+    { "type": "text", "id": "terms_url", "label": "Full terms link", "default": "/pages/summer-wardrobe-terms" },
+    { "type": "text", "id": "privacy_url", "label": "Privacy link", "default": "/policies/privacy-policy" },
+    { "type": "text", "id": "instagram_url", "label": "Instagram link", "default": "https://www.instagram.com/guilloclothing/" },
+    { "type": "textarea", "id": "terms", "label": "Terms summary", "default": "Open to Australian residents aged 18 and over. One entry per person. Entries close 11:59pm AEST on Sunday 1 November 2026 and the winner is drawn on Monday 2 November 2026. One winner receives eleven pieces worth $1,418, sent in their sizes: eight pieces after the draw and three from the Summer Menu once they land. Everyone who enters receives the code ESTATE20 for $20 off any order over $70, valid until Sunday 1 November 2026. If the winner bought anything during the giveaway, it is refunded." }
+  ],
+  "presets": [{ "name": "Giveaway: footer" }]
+}
+{% endschema %}

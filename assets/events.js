@@ -288,4 +288,3 @@ export class FilterUpdateEvent extends Event {
     return [...this.detail.queryParams.entries()].filter(([key]) => key.startsWith('filter.')).length > 0;
   }
 }
-

@@ -1,0 +1,79 @@
+{%- comment -%}
+  Country-specific Shipping accordion. Picks the shopper's market from
+  Shopify Markets (localization.country.iso_code) and shows only that
+  market's delivery time and rates, so a shopper in London never reads
+  about Brisbane-to-Sydney times.
+
+  Rates and thresholds mirror the "ALL" delivery profile in
+  Settings > Shipping and delivery. Will edits those by hand, so when a
+  rate changes there, change it here too. Last checked against the admin
+  on 2026-09-19. Delivery-day estimates are the ones the store has always
+  published; nothing new is claimed.
+{%- endcomment -%}
+{%- liquid
+  assign ship_cc = localization.country.iso_code | default: 'ZZ'
+  assign eu_zone = 'AT,BE,CZ,DK,FI,FR,DE,GR,IE,IT,LU,NL,NO,PL,PT,ES,SE,CH,HU' | split: ','
+  assign ship_zone = 'other'
+  case ship_cc
+    when 'AU'
+      assign ship_zone = 'au'
+    when 'NZ'
+      assign ship_zone = 'nz'
+    when 'SG'
+      assign ship_zone = 'sg'
+    when 'GB'
+      assign ship_zone = 'gb'
+    when 'US'
+      assign ship_zone = 'us'
+    else
+      if eu_zone contains ship_cc
+        assign ship_zone = 'eu'
+      endif
+  endcase
+-%}
+<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p>
+{%- case ship_zone -%}
+  {%- when 'au' -%}
+    <ul>
+      <li>Delivery across Australia in 2 to 4 days.</li>
+      <li>Standard $9.95, free on orders over $100.</li>
+      <li>Express $14.95, free on orders over $200.</li>
+    </ul>
+    <p>Tracked door to door on every order.</p>
+  {%- when 'nz' -%}
+    <ul>
+      <li>Delivery to New Zealand in 2 to 4 days.</li>
+      <li>Standard NZ$12.</li>
+      <li>Priority express free on orders over NZ$160.</li>
+    </ul>
+    <p>Tracked door to door on every order.</p>
+  {%- when 'sg' -%}
+    <ul>
+      <li>Delivery to Singapore in 4 to 6 days.</li>
+      <li>Standard S$15, free on orders over S$250.</li>
+      <li>Express S$27, free on orders over S$350.</li>
+    </ul>
+    <p>Ships DDP. Duties and taxes are paid at checkout, so nothing is owed on arrival.</p>
+  {%- when 'gb' -%}
+    <ul>
+      <li>Delivery to the United Kingdom in 5 to 8 days.</li>
+      <li>Standard £16, free on orders over £65.</li>
+      <li>Express £25, free on orders over £180.</li>
+    </ul>
+    <p>Ships DDP. Duties and taxes are paid at checkout, so nothing is owed on arrival.</p>
+  {%- when 'eu' -%}
+    <ul>
+      <li>Delivery across Europe in 6 to 9 days.</li>
+      <li>Standard €25.</li>
+    </ul>
+    <p>Ships DDP. Duties and taxes are paid at checkout, so nothing is owed on arrival.</p>
+  {%- when 'us' -%}
+    <ul>
+      <li>Standard US$20.</li>
+      <li>Express US$28.</li>
+    </ul>
+    <p>Ships DDP. Duties and taxes are paid at checkout, so nothing is owed on arrival.</p>
+  {%- else -%}
+    <p>Shipping options and cost for your country are shown at checkout.</p>
+    <p>Ships DDP. Duties and taxes are paid at checkout, so nothing is owed on arrival.</p>
+{%- endcase -%}

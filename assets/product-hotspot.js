@@ -336,4 +336,3 @@ export class ProductHotspotComponent extends Component {
 
 // Register custom element
 customElements.define('product-hotspot-component', ProductHotspotComponent);
-

@@ -1,0 +1,141 @@
+{
+  "sections": {
+    "hero": {
+      "type": "giveaway-hero",
+      "settings": {
+        "image": "shopify://shop_images/20260906_103147.jpg",
+        "image_alt": "The Milano pinstripe shirt by a villa pool, part of the Summer Wardrobe prize",
+        "image_position": "50% 20%",
+        "grain": true,
+        "kicker": "The Summer Draw",
+        "presents": "presents",
+        "enter_link": "Enter",
+        "title": "Summer,",
+        "script": "is on us.",
+        "names": "Capri · Portofino · Classico · Rapallo · Firenze · Milano · Luxe Chino · Como · Alassio",
+        "facts": "Eleven pieces · Worth around $1,500 · Drawn Monday 2 November",
+        "primary_label": "Enter and get $20 off",
+        "secondary_label": "See the prize",
+        "show_countdown": true,
+        "close_date": "2026-11-01T23:59:00+10:00"
+      }
+    },
+    "quick": {
+      "type": "giveaway-quick",
+      "settings": {
+        "script": "enter in seconds",
+        "text": "Your name and email puts you in the draw, and your $20 off is yours straight away.",
+        "button": "Enter the draw",
+        "fine": "Australian residents 18 and over. One entry per person. Full terms below.",
+        "sticky": true,
+        "sticky_left": "Win the summer wardrobe",
+        "sticky_button": "Enter",
+        "hide_popups": true
+      }
+    },
+    "prize": {
+      "type": "giveaway-prize",
+      "blocks": {
+        "panel_1": { "type": "panel", "settings": { "image": "shopify://shop_images/rn-image_picker_lib_temp_1ac1fba7-423b-4c3c-b1bb-bf1fb97534d2.jpg", "alt": "The Capri Chino Short in Reef", "position": "50% 60%", "label": "day one", "line": "The Capri Short in Reef. Bags not unpacked yet, already by the pool." } },
+        "panel_2": { "type": "panel", "settings": { "image": "shopify://shop_images/FullSizeRender_20.heic", "alt": "The Amalfi shirt and the Luxe Chino in Black at a table in a stone courtyard", "position": "50% 30%", "label": "after lunch", "line": "The Amalfi and the Luxe Chino in Black. One more coffee in the shade before anyone moves." } },
+        "panel_3": { "type": "panel", "settings": { "image": "shopify://shop_images/rn-image_picker_lib_temp_1d477c80-339f-47c0-8a5b-d360e9e34c2b.jpg", "alt": "The Milano pinstripe shirt, walking through a villa", "position": "50% 40%", "label": "dinner at eight", "line": "The Milano. Showered, dressed and heading out as it cools down." } },
+        "panel_4": { "type": "panel", "settings": { "image": "shopify://shop_images/rn-image_picker_lib_temp_52b83b3a-a12d-4fa9-a15b-5b863e6290a0.jpg", "alt": "The Firenze shirt", "position": "50% 25%", "label": "aperitivo", "line": "The Firenze. A drink on the terrace while the heat drops off." } },
+        "panel_5": { "type": "panel", "settings": { "image": "shopify://shop_images/Mediterranean_Villa_Summer_Style.png", "alt": "The Alassio Linen Pants in white with a striped shirt", "position": "50% 25%", "label": "midday", "line": "The Alassio Linen Pants. Light enough for the hottest part of the day." } },
+        "now_1": { "type": "item_now", "settings": { "name": "Capri Chino Short", "colour": "Reef", "price": "$114", "image": "shopify://shop_images/rn-image_picker_lib_temp_1ac1fba7-423b-4c3c-b1bb-bf1fb97534d2.jpg", "position": "50% 55%", "link": "shopify://products/the-capri-chino-short-reef" } },
+        "now_2": { "type": "item_now", "settings": { "name": "Capri Chino Short", "colour": "Navy", "price": "$114", "image": "shopify://shop_images/rn-image_picker_lib_temp_ef8c83ff-d149-4cee-9283-a24cfa0444fc.jpg", "position": "50% 55%", "link": "shopify://products/the-capri-chino-short-navy" } },
+        "now_3": { "type": "item_now", "settings": { "name": "Portofino Polo", "colour": "Red", "price": "$138", "image": "shopify://shop_images/red_porto.png", "position": "50% 25%", "link": "shopify://products/the-portofino-polo-red" } },
+        "now_4": { "type": "item_now", "settings": { "name": "Classico Tee", "colour": "Off-White", "price": "$84", "image": "shopify://shop_images/rn-image_picker_lib_temp_d6f37873-c47d-403b-b706-f3addb1dd8a0.jpg", "position": "50% 30%", "link": "shopify://products/the-classico-raglan-tee-off-white" } },
+        "now_5": { "type": "item_now", "settings": { "name": "The Rapallo Shirt", "colour": "", "price": "$132", "image": "shopify://shop_images/rn-image_picker_lib_temp_d393d90d-d2d8-4c05-b059-8a181abc2e1b.jpg", "position": "50% 25%", "link": "shopify://products/guillo-rapallo-short-sleeve-shirt" } },
+        "now_6": { "type": "item_now", "settings": { "name": "The Firenze Shirt", "colour": "", "price": "$142", "image": "shopify://shop_images/rn-image_picker_lib_temp_52b83b3a-a12d-4fa9-a15b-5b863e6290a0.jpg", "position": "50% 25%", "link": "shopify://products/firenze-chevron-shirt" } },
+        "now_7": { "type": "item_now", "settings": { "name": "The Milano Shirt", "colour": "", "price": "$142", "image": "shopify://shop_images/rn-image_picker_lib_temp_a7bc0f2e-3fcf-46b8-8c2e-347ab8a72915.jpg", "position": "50% 25%", "link": "shopify://products/milano-pinstripe-shirt" } },
+        "now_8": { "type": "item_now", "settings": { "name": "Luxe Chino", "colour": "Black", "price": "$138", "image": "shopify://shop_images/rn-image_picker_lib_temp_8319f3de-f2b3-47df-aec8-33e7edef02db.jpg", "position": "50% 45%", "link": "shopify://products/the-luxe-chino-black" } },
+        "later_1": { "type": "item_later", "settings": { "name": "The Como Shirt", "price": "$142", "image": "shopify://shop_images/forst_green_sirt.png", "position": "50% 25%", "link": "" } },
+        "later_2": { "type": "item_later", "settings": { "name": "The Alassio Linen Pants", "price": "$158", "image": "shopify://shop_images/rn-image_picker_lib_temp_4b8cced4-ff02-4d4e-9e91-19278ac0d2c5.jpg", "position": "50% 40%", "link": "shopify://products/the-alassio-linen-pants-white" } },
+        "later_3": { "type": "item_later", "settings": { "name": "The Capri Chino 5\"", "price": "$114", "image": "shopify://shop_images/rn-image_picker_lib_temp_1d1ce7b4-a7ab-4c17-aebd-4a4aab135a74.jpg", "position": "50% 40%", "link": "shopify://products/the-capri-chino-short-grey-5in" } }
+      },
+      "block_order": ["panel_1","panel_2","panel_3","panel_4","panel_5","now_1","now_2","now_3","now_4","now_5","now_6","now_7","now_8","later_1","later_2","later_3"],
+      "settings": {
+        "script": "everything you could win",
+        "heading": "The Summer Wardrobe",
+        "intro": "One winner gets eleven pieces, worth around $1,500 and sent in their sizes.",
+        "bg_color": "#f6f1e7",
+        "bg_image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_06_AM.png",
+        "bg_opacity": 30,
+        "bg_position": "88% 1000%",
+        "menu_image": "shopify://shop_images/Mediterranean_Villa_Poolside_Style.png",
+        "menu_position": "50% 40%",
+        "menu_caption_left": "The Como Shirt",
+        "menu_caption_right": "From the Summer Menu",
+        "now_heading": "eight pieces now",
+        "now_total": "$1,004",
+        "later_heading": "three from the Summer Menu",
+        "later_total": "$414",
+        "later_sub": "Sent the moment they land",
+        "total_label": "Eleven pieces · In your sizes",
+        "total": "$1,418",
+        "reel_button": "See every piece",
+        "reel_cta": "Enter and get $20 off"
+      }
+    },
+    "offer": {
+      "type": "giveaway-offer",
+      "disabled": true,
+      "settings": {
+        "bg": "#173a5e",
+        "big": "$20",
+        "big_script": "yours today",
+        "heading": "Enter today.",
+        "heading_italic": "Spend it today.",
+        "body": "Everyone who enters gets $20 off any order over $70, until Sunday 1 November. And if you're the winner, anything you bought during the giveaway is refunded.",
+        "cell1_script": "today",
+        "cell1_text": "$20 off any order over $70.",
+        "cell2_script": "2 November",
+        "cell2_text": "Win, and everything you bought comes back."
+      }
+    },
+    "ticket": {
+      "type": "giveaway-ticket",
+      "settings": {
+        "script": "your ticket to",
+        "heading": "The Summer Draw",
+        "cell1_label": "Eleven pieces",
+        "cell1_value": "Around $1,500",
+        "cell2_label": "Entries close",
+        "cell2_value": "Sunday 1 November",
+        "cell3_label": "The draw",
+        "cell3_value": "Monday 2 November",
+        "button": "Enter and get $20 off",
+        "fine": "Australian residents 18 and over. One ticket per person. Entering adds you to Guillo emails, and you can unsubscribe any time. Full terms below.",
+        "code": "ESTATE20",
+        "spend_url": "shopify://collections/all",
+        "closed_text": "Thank you to everyone who entered. The winner is drawn on Monday 2 November and will hear from us by email.",
+        "map_image": "shopify://shop_images/ChatGPT_Image_Jul_3_2026_09_31_14_AM_883c9130-c1ba-4b09-a833-485e270e4f08.png",
+        "map_position": "50% 50%",
+        "show_palms": true,
+        "palm_opacity": 40,
+        "klaviyo_company_id": "YgJzQa",
+        "klaviyo_list_id": "Txqz9w"
+      }
+    },
+    "closing": {
+      "type": "giveaway-closing",
+      "settings": {
+        "image": "shopify://shop_images/rn-image_picker_lib_temp_d393d90d-d2d8-4c05-b059-8a181abc2e1b.jpg",
+        "image_alt": "The Rapallo shirt, part of the Summer Wardrobe prize",
+        "image_position": "50% 25%",
+        "script": "see you in the sun",
+        "button": "Enter and get $20 off"
+      }
+    },
+    "footer": {
+      "type": "giveaway-footer",
+      "settings": {
+        "terms_url": "/pages/summer-wardrobe-terms",
+        "privacy_url": "/policies/privacy-policy",
+        "instagram_url": "https://www.instagram.com/guilloclothing/",
+        "terms": "Open to Australian residents aged 18 and over. One entry per person. Entries close 11:59pm AEST on Sunday 1 November 2026 and the winner is drawn on Monday 2 November 2026. One winner receives eleven pieces worth $1,418, sent in their sizes: eight pieces after the draw and three from the Summer Menu once they land. Everyone who enters receives the code ESTATE20 for $20 off any order over $70, valid until Sunday 1 November 2026. If the winner bought anything during the giveaway, it is refunded."
+      }
+    }
+  },
+  "order": ["hero","quick","prize","offer","ticket","closing","footer"]
+}

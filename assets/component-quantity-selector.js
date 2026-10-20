@@ -295,4 +295,3 @@ export class QuantitySelectorComponent extends Component {
 if (!customElements.get('quantity-selector-component')) {
   customElements.define('quantity-selector-component', QuantitySelectorComponent);
 }
-

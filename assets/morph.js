@@ -576,4 +576,3 @@ function same(a, b, options) {
   // If we get here and nodes are elements with same tag (and compatible keys), they're the same
   return true;
 }
-

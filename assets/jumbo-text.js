@@ -191,4 +191,3 @@ class JumboText extends Component {
 if (!customElements.get('jumbo-text')) {
   customElements.define('jumbo-text', JumboText);
 }
-

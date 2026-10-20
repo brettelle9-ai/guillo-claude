@@ -1,0 +1,341 @@
+{%- render 'giveaway-head' -%}
+{%- assign fb = 'https://cdn.shopify.com/s/files/1/0876/6056/0684/files/rn-image_picker_lib_temp_1ac1fba7-423b-4c3c-b1bb-bf1fb97534d2.jpg?v=1|https://cdn.shopify.com/s/files/1/0876/6056/0684/files/rn-image_picker_lib_temp_d6f37873-c47d-403b-b706-f3addb1dd8a0.jpg?v=1|https://cdn.shopify.com/s/files/1/0876/6056/0684/files/rn-image_picker_lib_temp_8319f3de-f2b3-47df-aec8-33e7edef02db.jpg?v=1|https://cdn.shopify.com/s/files/1/0876/6056/0684/files/rn-image_picker_lib_temp_52b83b3a-a12d-4fa9-a15b-5b863e6290a0.jpg?v=1|https://cdn.shopify.com/s/files/1/0876/6056/0684/files/rn-image_picker_lib_temp_a7bc0f2e-3fcf-46b8-8c2e-347ab8a72915.jpg?v=1' | split: '|' -%}
+<section class="gv gv-prize" id="prize" style="--gv-prize-bg:{{ section.settings.bg_color }};--gv-prize-img-op:{{ section.settings.bg_opacity | divided_by: 100.0 }}">
+  {%- if section.settings.bg_image != blank -%}
+    <div class="gv-prize__bgimg" aria-hidden="true" style="background-image:url({{ section.settings.bg_image | image_url: width: 2400 }});background-position:{{ section.settings.bg_position }}"></div>
+  {%- endif -%}
+  <div class="gv-prize__head">
+    <div class="gv-script">{{ section.settings.script }}</div>
+    <h2>{{ section.settings.heading }}</h2>
+    <p>{{ section.settings.intro }}</p>
+    <button type="button" class="gv-btn gv-btn--ghost gv-reel-open" data-gv-open-reel>{{ section.settings.reel_button }}</button>
+  </div>
+
+  <div class="gv-panels" data-gv-panels>
+    {%- assign pi = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'panel' -%}
+        <div class="gv-panel{% if pi == 0 %} is-active{% endif %}" {{ block.shopify_attributes }}>
+          {%- assign f = fb[pi] | default: fb[0] -%}
+          {%- render 'giveaway-img', image: block.settings.image, fallback: f, alt: block.settings.alt, pos: block.settings.position -%}
+          <div class="gv-panel__shade"></div>
+          <div class="gv-panel__vert">{{ block.settings.label }}</div>
+          <div class="gv-panel__cap">
+            <div class="gv-script">{{ block.settings.label }}</div>
+            <div class="gv-serif">{{ block.settings.line }}</div>
+          </div>
+        </div>
+        {%- assign pi = pi | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="gv-menu">
+    <div class="gv-menu__photo">
+      <div class="gv-menu__frame" data-gv-frame>
+        {%- render 'giveaway-img', image: section.settings.menu_image, fallback: 'https://cdn.shopify.com/s/files/1/0876/6056/0684/files/rn-image_picker_lib_temp_8319f3de-f2b3-47df-aec8-33e7edef02db.jpg?v=1', alt: 'Man in a black shirt and black Luxe Chino', pos: section.settings.menu_position -%}
+        <div class="gv-menu__swap" data-gv-swap aria-hidden="true"><img alt="" data-gv-swap-img><div class="gv-menu__soon" data-gv-swap-soon hidden><span class="gv-script">arriving soon</span></div></div>
+      </div>
+      <div class="gv-menu__caption"><span data-gv-cap-l data-default="{{ section.settings.menu_caption_left | escape }}">{{ section.settings.menu_caption_left }}</span><span data-gv-cap-r data-default="{{ section.settings.menu_caption_right | escape }}">{{ section.settings.menu_caption_right }}</span></div>
+    </div>
+    <div>
+      <div class="gv-menu__group"><span class="gv-script">{{ section.settings.now_heading }}</span><span class="gv-serif">{{ section.settings.now_total }}</span></div>
+      <div class="gv-menu__hint" data-gv-hint-text>Hover a piece to see it. Tap to open.</div>
+      {%- assign mi = 0 -%}
+      <div class="gv-menu__list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'item_now' -%}
+            {%- assign mi = mi | plus: 1 -%}
+            <div class="gv-row" role="button" tabindex="0" {{ block.shopify_attributes }} data-gv-idx="{{ mi | minus: 1 }}"{% if block.settings.image != blank %} data-img="{{ block.settings.image | image_url: width: 1000 }}" data-pos="{{ block.settings.position | default: '50% 30%' }}"{% endif %} data-name="{{ block.settings.name | escape }}" data-tag="{% if block.type == 'item_later' %}Summer Menu{% else %}{{ block.settings.colour | escape }}{% endif %}">
+              <span class="gv-row__name">{{ block.settings.name }}</span>
+              {%- if block.settings.colour != blank -%}<span class="gv-row__colour gv-script">{{ block.settings.colour }}</span>{%- endif -%}
+              <span class="gv-row__dots"></span>
+              <span class="gv-row__price">{{ block.settings.price }}</span>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="gv-menu__group"><span class="gv-script">{{ section.settings.later_heading }}</span><span class="gv-serif">{{ section.settings.later_total }}</span></div>
+      <div class="gv-menu__sub">{{ section.settings.later_sub }}</div>
+      <div>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'item_later' -%}
+            {%- assign mi = mi | plus: 1 -%}
+            <div class="gv-row" role="button" tabindex="0" {{ block.shopify_attributes }} data-gv-idx="{{ mi | minus: 1 }}"{% if block.settings.image != blank %} data-img="{{ block.settings.image | image_url: width: 1000 }}" data-pos="{{ block.settings.position | default: '50% 30%' }}"{% endif %} data-name="{{ block.settings.name | escape }}" data-tag="{% if block.type == 'item_later' %}Summer Menu{% else %}{{ block.settings.colour | escape }}{% endif %}">
+              <span class="gv-row__name">{{ block.settings.name }}</span>
+              <span class="gv-row__dots"></span>
+              <span class="gv-row__price">{{ block.settings.price }}</span>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="gv-menu__total"><span class="gv-label">{{ section.settings.total_label }}</span><span class="gv-serif">{{ section.settings.total }}</span></div>
+      <button type="button" class="gv-reel-link" data-gv-open-reel>{{ section.settings.reel_button }}</button>
+    </div>
+  </div>
+
+  <div class="gv gv-reel" data-gv-reel hidden role="dialog" aria-modal="true" aria-label="{{ section.settings.heading | escape }}">
+    <div class="gv-reel__top">
+      <span class="gv-label">{{ section.settings.heading }}</span>
+      <span class="gv-reel__count"><span data-gv-reel-now>01</span> / <span data-gv-reel-total>00</span></span>
+      <button type="button" class="gv-reel__close" data-gv-reel-close>Close</button>
+    </div>
+    <div class="gv-reel__track" data-gv-reel-track>
+      {%- assign ri = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'item_now' or block.type == 'item_later' -%}
+          {%- assign ri = ri | plus: 1 -%}
+          <figure class="gv-reel__card{% if ri == 1 %} is-current{% endif %}">
+            <div class="gv-reel__ph">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 900 }}" srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 900 }} 900w" sizes="(max-width:700px) 80vw, 420px" alt="{{ block.settings.name | escape }}" loading="lazy" style="object-position:{{ block.settings.position | default: '50% 30%' }}">
+              {%- else -%}
+                <div class="gv-reel__soon"><span class="gv-script">arriving soon</span><span class="gv-serif">{{ block.settings.name }}</span></div>
+              {%- endif -%}
+              {%- if block.type == 'item_later' -%}<span class="gv-reel__tag">Summer Menu</span>{%- endif -%}
+            </div>
+            <figcaption>
+              <span class="gv-reel__no">{{ ri | prepend: '0' | slice: -2, 2 }}</span>
+              <span class="gv-reel__name">{{ block.settings.name }}</span>
+              {%- if block.settings.colour != blank -%}<span class="gv-script gv-reel__colour">{{ block.settings.colour }}</span>{%- endif -%}
+              <span class="gv-reel__price">{{ block.settings.price }}</span>
+              {%- if block.settings.link != blank -%}<a class="gv-reel__shop" href="{{ block.settings.link }}">View the piece</a>{%- endif -%}
+            </figcaption>
+          </figure>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class="gv-reel__foot">
+      <button type="button" class="gv-reel__arrow" data-gv-reel-prev aria-label="Previous piece">&#8592;</button>
+      <span class="gv-reel__sum">{{ section.settings.total_label }} <b>{{ section.settings.total }}</b></span>
+      <button type="button" class="gv-reel__arrow" data-gv-reel-next aria-label="Next piece">&#8594;</button>
+    </div>
+    <a class="gv-btn gv-reel__cta" href="#enter" data-gv-reel-close>{{ section.settings.reel_cta }}</a>
+  </div>
+</section>
+<style>
+/* Light summer prize section */
+#prize{position:relative;background:var(--gv-prize-bg,#F6F1E7);color:#1F1C19}
+#prize .gv-prize__bgimg{position:absolute;inset:0;background-size:cover;background-repeat:no-repeat;opacity:var(--gv-prize-img-op,.25);pointer-events:none}
+#prize>*:not(.gv-prize__bgimg){position:relative}
+#prize .gv-prize__head .gv-script,#prize .gv-menu__group .gv-script{color:#8A6A45}
+#prize .gv-prize__head h2{color:#1F1C19}
+#prize .gv-prize__head p{color:#5E5347}
+#prize .gv-btn--ghost{color:#1F1C19!important;border-color:rgba(31,28,25,.45)}
+#prize .gv-btn--ghost:hover{background:#1F1C19;color:#FBF7F0!important;border-color:#1F1C19}
+#prize .gv-reel-link{color:#6E4F2C;border-bottom-color:rgba(110,79,44,.5)}
+#prize .gv-reel-link:hover{color:#1F1C19;border-color:#1F1C19}
+#prize .gv-menu__frame{background:#E9E2D2}
+#prize .gv-menu__caption,#prize .gv-menu__sub{color:#8C7D6B}
+#prize .gv-menu__group{border-bottom-color:#1F1C19}
+#prize .gv-menu__group .gv-serif{color:#1F1C19}
+#prize .gv-row{border-bottom-color:rgba(110,94,76,.22)}
+#prize .gv-row__name{color:#1F1C19}
+#prize .gv-row__colour{color:#9A7A55}
+#prize .gv-row__dots{border-bottom-color:rgba(110,94,76,.45)}
+#prize .gv-row__price{color:#4A4239}
+#prize .gv-menu__total{border-top-color:#1F1C19}
+#prize .gv-menu__total .gv-label{color:#5E5347}
+#prize .gv-menu__total .gv-serif{color:#1F1C19}
+#prize .gv-menu__frame{position:relative}
+#prize .gv-menu__swap{position:absolute;inset:0;opacity:0;transition:opacity .45s ease;background:#E9E2D2;pointer-events:none}
+#prize .gv-menu__swap.is-on{opacity:1}
+#prize .gv-menu__swap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+#prize .gv-menu__swap.is-on img{transform:scale(1)}
+#prize .gv-menu__soon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border:1px solid rgba(138,106,69,.35);outline:1px solid rgba(138,106,69,.18);outline-offset:-10px}
+#prize .gv-menu__soon[hidden]{display:none}
+#prize .gv-menu__soon .gv-script{font-size:52px;color:#8A6A45}
+#prize .gv-row{cursor:pointer;outline:none}
+#prize .gv-row:hover .gv-row__name,#prize .gv-row:focus-visible .gv-row__name,#prize .gv-row.is-hot .gv-row__name{color:#8A6A45}
+#prize .gv-row::after{content:"\2197";font:300 16px/1 var(--gv-serif);color:#8A6A45;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s}
+#prize .gv-row:hover::after,#prize .gv-row.is-hot::after{opacity:1;transform:none}
+#prize .gv-menu__hint{font:400 10px/1.4 var(--gv-sans);letter-spacing:.28em;text-transform:uppercase;color:#8C7D6B;padding-top:12px}
+@media (hover:none){#prize .gv-row::after{opacity:.6;transform:none}}
+.gv-reel-open{margin-top:34px}
+.gv-reel-link{all:unset;cursor:pointer;display:inline-block;margin-top:22px;font:500 11px/1 var(--gv-sans);letter-spacing:.28em;text-transform:uppercase;color:var(--gv-gold);padding-bottom:6px;border-bottom:1px solid rgba(235,201,160,.5)}
+.gv-reel-link:hover{color:#fff;border-color:#fff}
+.gv-reel{--card:min(400px,74vw,calc((100svh - 300px) * .75));position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;background:rgba(11,12,14,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--gv-cream);opacity:0;transition:opacity .5s ease}
+.gv-reel.is-open{opacity:1}
+.gv-reel__top{width:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:22px clamp(20px,4vw,48px)}
+.gv-reel__top .gv-label{color:#9A9CA2}
+.gv-reel__count{font:300 20px/1 var(--gv-serif);letter-spacing:.08em;color:#fff;font-variant-numeric:tabular-nums}
+.gv-reel__close{all:unset;cursor:pointer;justify-self:end;font:500 10px/1 var(--gv-sans);letter-spacing:.3em;text-transform:uppercase;color:var(--gv-cream);padding:6px 0;border-bottom:1px solid rgba(244,238,227,.5)}
+.gv-reel__track{flex:1;width:100%;display:flex;align-items:center;gap:clamp(16px,2.4vw,32px);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 calc(50% - var(--card) / 2)}
+.gv-reel__track::-webkit-scrollbar{display:none}
+.gv-reel__card{flex:0 0 var(--card);margin:0;scroll-snap-align:center;transform:scale(.84);opacity:.38;transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .7s}
+.gv-reel__card.is-current{transform:scale(1);opacity:1}
+.gv-reel__card.is-current .gv-reel__ph{animation:gvFloat 6s ease-in-out infinite;box-shadow:0 40px 80px -30px rgba(0,0,0,.8)}
+@keyframes gvFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.gv-reel__ph{position:relative;aspect-ratio:3/4;overflow:hidden;background:#1E1F22}
+.gv-reel__ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gv-reel__soon{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;border:1px solid rgba(235,201,160,.3);outline:1px solid rgba(235,201,160,.15);outline-offset:-10px}
+.gv-reel__soon .gv-script{font-size:48px;color:var(--gv-gold)}
+.gv-reel__soon .gv-serif{font-weight:300;font-size:30px;color:#fff;padding:0 20px}
+.gv-reel__tag{position:absolute;left:14px;top:14px;background:var(--gv-cream);color:var(--gv-ink);font:500 9px/1 var(--gv-sans);letter-spacing:.24em;text-transform:uppercase;padding:8px 10px}
+.gv-reel__card figcaption{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;padding-top:18px}
+.gv-reel__no{font:500 10px/1 var(--gv-sans);letter-spacing:.3em;color:#9A9CA2;width:100%}
+.gv-reel__name{font:400 clamp(22px,2vw,28px)/1.1 var(--gv-serif);color:#fff}
+.gv-reel__colour{font-size:30px;color:#C9B79E}
+.gv-reel__price{margin-left:auto;font:300 22px/1 var(--gv-serif);color:#D8D2C8}
+.gv-reel__shop{width:100%;font:500 10px/1 var(--gv-sans);letter-spacing:.26em;text-transform:uppercase;color:var(--gv-gold)!important;margin-top:6px}
+.gv-reel__foot{width:100%;max-width:640px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px 10px}
+.gv-reel__arrow{all:unset;cursor:pointer;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(244,238,227,.35);font:300 22px/1 var(--gv-serif);color:#fff;transition:border-color .3s}
+.gv-reel__arrow:hover{border-color:#fff}
+.gv-reel__sum{font:500 10px/1.6 var(--gv-sans);letter-spacing:.26em;text-transform:uppercase;color:#D8D2C8;text-align:center}
+.gv-reel__sum b{display:block;font:300 34px/1 var(--gv-serif);letter-spacing:0;color:#fff;margin-top:4px}
+.gv-reel__cta{margin:6px 0 26px}
+@media (prefers-reduced-motion:reduce){.gv-reel__card.is-current .gv-reel__ph{animation:none}}
+</style>
+<script>
+(function(){
+  var reel = document.querySelector('[data-gv-reel]');
+  if (!reel || reel.__gv) return; reel.__gv = true;
+  document.body.appendChild(reel);
+  var track = reel.querySelector('[data-gv-reel-track]');
+  var cards = [].slice.call(track.querySelectorAll('.gv-reel__card'));
+  var now = reel.querySelector('[data-gv-reel-now]');
+  reel.querySelector('[data-gv-reel-total]').textContent = (cards.length < 10 ? '0' : '') + cards.length;
+  var current = 0, raf;
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function update(){
+    var mid = track.getBoundingClientRect().left + track.clientWidth / 2, best = 0, bd = 1e9;
+    cards.forEach(function(c, i){ var r = c.getBoundingClientRect(); var d = Math.abs(r.left + r.width / 2 - mid); if (d < bd) { bd = d; best = i; } });
+    if (best !== current || !cards[best].classList.contains('is-current')) {
+      cards.forEach(function(c, i){ c.classList.toggle('is-current', i === best); });
+      current = best; now.textContent = pad(best + 1);
+    }
+  }
+  track.addEventListener('scroll', function(){ cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, { passive: true });
+  function go(i){ i = Math.max(0, Math.min(cards.length - 1, i)); var c = cards[i]; track.scrollTo({ left: c.offsetLeft - (track.clientWidth - c.offsetWidth) / 2, behavior: 'smooth' }); }
+  reel.querySelector('[data-gv-reel-prev]').addEventListener('click', function(){ go(current - 1); });
+  reel.querySelector('[data-gv-reel-next]').addEventListener('click', function(){ go(current + 1); });
+  cards.forEach(function(c, i){ c.addEventListener('click', function(e){ if (i !== current && !e.target.closest('a')) { e.preventDefault(); go(i); } }); });
+  var lastFocus;
+  function open(at){
+    lastFocus = document.activeElement;
+    var idx = typeof at === 'number' ? at : 0;
+    reel.hidden = false; document.documentElement.style.overflow = 'hidden';
+    requestAnimationFrame(function(){ reel.classList.add('is-open'); var c = cards[idx] || cards[0]; track.scrollLeft = idx ? c.offsetLeft - (track.clientWidth - c.offsetWidth) / 2 : 0; update(); reel.querySelector('[data-gv-reel-next]').focus({ preventScroll: true }); });
+  }
+  window.__gvOpenReel = open;
+  function close(){
+    reel.classList.remove('is-open'); document.documentElement.style.overflow = '';
+    setTimeout(function(){ reel.hidden = true; }, 450);
+    if (lastFocus) lastFocus.focus({ preventScroll: true });
+  }
+  document.querySelectorAll('[data-gv-open-reel]').forEach(function(b){ b.addEventListener('click', function(){ open(0); }); });
+  reel.querySelectorAll('[data-gv-reel-close]').forEach(function(b){
+    b.addEventListener('click', function(e){
+      var href = b.getAttribute('href'); close();
+      if (href) { e.preventDefault(); setTimeout(function(){ var t = document.querySelector(href); if (t) t.scrollIntoView({ behavior: 'smooth' }); }, 120); }
+    });
+  });
+  document.addEventListener('keydown', function(e){
+    if (reel.hidden) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight') go(current + 1);
+    if (e.key === 'ArrowLeft') go(current - 1);
+  });
+})();
+(function(){
+  var menu = document.querySelector('#prize .gv-menu'); if (!menu || menu.__gv) return; menu.__gv = true;
+  var swap = menu.querySelector('[data-gv-swap]'), img = menu.querySelector('[data-gv-swap-img]'), soon = menu.querySelector('[data-gv-swap-soon]');
+  var capL = menu.querySelector('[data-gv-cap-l]'), capR = menu.querySelector('[data-gv-cap-r]');
+  var rows = [].slice.call(menu.querySelectorAll('.gv-row[data-gv-idx]'));
+  var canHover = window.matchMedia && matchMedia('(hover:hover)').matches;
+  var hint = menu.querySelector('[data-gv-hint-text]'); if (hint && !canHover) hint.textContent = 'Tap a piece to see it.';
+  if (canHover) rows.forEach(function(r){ if (r.dataset.img) { var p = new Image(); p.src = r.dataset.img; } });
+  var t;
+  function show(r){
+    clearTimeout(t);
+    rows.forEach(function(x){ x.classList.toggle('is-hot', x === r); });
+    if (r.dataset.img) { soon.hidden = true; img.style.display = ''; if (img.getAttribute('src') !== r.dataset.img) img.src = r.dataset.img; img.style.objectPosition = r.dataset.pos || '50% 30%'; }
+    else { img.style.display = 'none'; soon.hidden = false; }
+    swap.classList.add('is-on');
+    capL.textContent = r.dataset.name; capR.textContent = r.dataset.tag || 'Part of the prize';
+  }
+  function reset(){ t = setTimeout(function(){ swap.classList.remove('is-on'); rows.forEach(function(x){ x.classList.remove('is-hot'); }); capL.textContent = capL.dataset.default; capR.textContent = capR.dataset.default; }, 120); }
+  rows.forEach(function(r){
+    if (canHover) { r.addEventListener('mouseenter', function(){ show(r); }); r.addEventListener('mouseleave', reset); r.addEventListener('focus', function(){ show(r); }); r.addEventListener('blur', reset); }
+    function openIt(){ if (window.__gvOpenReel) window.__gvOpenReel(parseInt(r.dataset.gvIdx, 10) || 0); }
+    r.addEventListener('click', openIt);
+    r.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openIt(); } });
+  });
+})();
+(function(){
+  document.querySelectorAll('[data-gv-panels]').forEach(function(row){
+    if (row.__gv) return; row.__gv = true;
+    var panels = row.querySelectorAll('.gv-panel');
+    function pick(p){ panels.forEach(function(x){ x.classList.toggle('is-active', x === p); }); }
+    panels.forEach(function(p){
+      p.addEventListener('mouseenter', function(){ pick(p); });
+      p.addEventListener('click', function(){ pick(p); });
+    });
+  });
+})();
+</script>
+{% schema %}
+{
+  "name": "Giveaway: prize",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "script", "label": "Script line", "default": "everything you could win" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The Summer Wardrobe" },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "One winner gets eleven pieces, worth around $1,500 and sent in their sizes." },
+    { "type": "header", "content": "Background" },
+    { "type": "color", "id": "bg_color", "label": "Background colour", "default": "#F6F1E7" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image (optional)" },
+    { "type": "range", "id": "bg_opacity", "label": "Background image strength", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 20 },
+    { "type": "text", "id": "bg_position", "label": "Background image focus", "default": "50% 50%" },
+    { "type": "header", "content": "Prize menu" },
+    { "type": "image_picker", "id": "menu_image", "label": "Menu photo" },
+    { "type": "text", "id": "menu_position", "label": "Menu photo focus", "default": "50% 30%" },
+    { "type": "text", "id": "menu_caption_left", "label": "Photo caption left", "default": "Luxe Chino, Black" },
+    { "type": "text", "id": "menu_caption_right", "label": "Photo caption right", "default": "Part of the prize" },
+    { "type": "text", "id": "now_heading", "label": "First group heading", "default": "eight pieces now" },
+    { "type": "text", "id": "now_total", "label": "First group total", "default": "$1,004" },
+    { "type": "text", "id": "later_heading", "label": "Second group heading", "default": "three from the Summer Menu" },
+    { "type": "text", "id": "later_total", "label": "Second group total", "default": "$414" },
+    { "type": "text", "id": "later_sub", "label": "Second group note", "default": "Sent the moment they land" },
+    { "type": "text", "id": "total_label", "label": "Total label", "default": "Eleven pieces · In your sizes" },
+    { "type": "text", "id": "total", "label": "Total value", "default": "$1,418" },
+    { "type": "header", "content": "Prize carousel" },
+    { "type": "text", "id": "reel_button", "label": "Carousel button", "default": "See every piece" },
+    { "type": "text", "id": "reel_cta", "label": "Carousel entry button", "default": "Enter and get $20 off" }
+  ],
+  "blocks": [
+    {
+      "type": "panel", "name": "Photo panel", "limit": 7,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "alt", "label": "Photo description" },
+        { "type": "text", "id": "position", "label": "Photo focus", "default": "50% 30%" },
+        { "type": "text", "id": "label", "label": "Script label", "default": "the pool deck" },
+        { "type": "text", "id": "line", "label": "Caption", "default": "Short sleeves and nowhere to be by noon." }
+      ]
+    },
+    {
+      "type": "item_now", "name": "Prize piece (now)",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Capri Chino Short" },
+        { "type": "text", "id": "colour", "label": "Colour (optional)" },
+        { "type": "text", "id": "price", "label": "Price", "default": "$114" },
+        { "type": "image_picker", "id": "image", "label": "Carousel photo" },
+        { "type": "text", "id": "position", "label": "Photo focus", "default": "50% 30%" },
+        { "type": "url", "id": "link", "label": "Product link" }
+      ]
+    },
+    {
+      "type": "item_later", "name": "Prize piece (Summer Menu)",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "The Como Shirt" },
+        { "type": "text", "id": "price", "label": "Price", "default": "$142" },
+        { "type": "image_picker", "id": "image", "label": "Carousel photo" },
+        { "type": "text", "id": "position", "label": "Photo focus", "default": "50% 30%" },
+        { "type": "url", "id": "link", "label": "Product link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Giveaway: prize" }]
+}
+{% endschema %}

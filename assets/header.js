@@ -272,4 +272,3 @@ onDocumentLoaded(() => {
     mutationObserver.observe(headerGroup, { childList: true });
   }
 });
-

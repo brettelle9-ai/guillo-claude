@@ -619,4 +619,3 @@ class SwatchesVariantPickerComponent extends VariantPicker {
 if (!customElements.get('swatches-variant-picker-component')) {
   customElements.define('swatches-variant-picker-component', SwatchesVariantPickerComponent);
 }
-
