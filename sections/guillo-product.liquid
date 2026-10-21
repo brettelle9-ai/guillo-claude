@@ -51,6 +51,11 @@
 
   if gr_products != blank and gr_products.size > 0
     for gr_p in gr_products
+      if product.handle contains 'the-luxe-chino-'
+        unless gr_p.handle contains 'the-luxe-chino-'
+          continue
+        endunless
+      endif
       assign gr_d = gr_p.metafields.judgeme.review_widget_data.value
       if gr_d != blank and gr_d.reviews != blank
         assign gr_reviews = gr_reviews | concat: gr_d.reviews
@@ -121,7 +126,7 @@
     endif
   endif
   if stone_test
-    assign short_desc = ''
+    assign short_desc = 'A defined waist. A slim leg. A clean finish above the shoe.'
   endif
 
   assign group = product.metafields.custom.product_group.value
@@ -179,6 +184,10 @@
     assign size_tag_label = section.settings.interest_size_tag | default: 'Register'
   endif
 -%}
+{%- if stone_test -%}
+  {{ 'guillo-luxe.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'guillo-luxe.js' | asset_url }}" defer></script>
+{%- endif -%}
 <section
   class="guillo-pdp guillo-pdp--{{ avail_mode }}{% if stone_test %} guillo-pdp--stone{% endif %}"
   data-guillo-pdp
@@ -259,11 +268,13 @@
           {%- endcapture -%}
           {%- assign pdp_img_alt = pdp_img_alt | strip -%}
           {%- if media.media_type == 'image' -%}
+            {%- if stone_test -%}<button type="button" class="luxe-zoom" data-luxe-zoom="{{ media | image_url: width: 2000 }}" aria-label="Enlarge {{ pdp_img_alt | escape }}">{%- endif -%}
             {{
               media
               | image_url: width: 1400
-              | image_tag: class: 'guillo-pdp__media', widths: '500, 700, 900, 1200, 1400', sizes: '(min-width: 990px) 33vw, 50vw', alt: pdp_img_alt, loading: media_loading
+              | image_tag: class: 'guillo-pdp__media', widths: '500, 700, 900, 1200, 1400', sizes: '(min-width: 990px) 33vw, 100vw', alt: pdp_img_alt, loading: media_loading
             }}
+            {%- if stone_test -%}<span class="luxe-zoom__mark" aria-hidden="true">+</span></button>{%- endif -%}
             {%- if media.alt contains '#note:' -%}
               <span class="guillo-pdp__note">{{ media.alt | split: '#note:' | last }}</span>
             {%- endif -%}
@@ -286,12 +297,13 @@
           ></span>
         </div>
       {%- endif -%}
+      {%- if stone_test and media_count > 4 -%}<button type="button" class="luxe-gallery-more luxe-text-link" data-luxe-gallery-more aria-expanded="false">View all photographs <span aria-hidden="true">+</span></button>{%- endif -%}
     </div>
 
     <div class="guillo-pdp__panel">
       <div class="guillo-pdp__titlerow">
         <h1 class="guillo-pdp__title">
-          {%- if product.tags contains 'garment:shirt' and style_name != blank -%}{%- if style_name == 'Milano' -%}Milano Pinstripe Shirt{%- else -%}{{ style_name }} Shirt{%- endif -%}{%- else -%}{{ group_title }}{%- endif -%}
+          {%- if stone_test -%}The Luxe Chino{%- elsif product.tags contains 'garment:shirt' and style_name != blank -%}{%- if style_name == 'Milano' -%}Milano Pinstripe Shirt{%- else -%}{{ style_name }} Shirt{%- endif -%}{%- else -%}{{ group_title }}{%- endif -%}
           {%- unless product.tags contains 'garment:shirt' -%}{%- if style_name != blank -%}
             <span class="guillo-pdp__style">{{ style_name }}</span>
           {%- endif -%}{%- endunless -%}
@@ -328,14 +340,14 @@
             anchor, so it works with keyboard, screen readers and no script;
             the smooth scroll and the landing offset are CSS.
           {%- endcomment -%}
-          <a class="guillo-pdp__rating guillo-pdp__rating--link" href="#guillo-reviews" aria-label="Rated {{ rating }} out of 5 from {{ rating_count }} reviews. Read the reviews.">
+          <a class="guillo-pdp__rating guillo-pdp__rating--link" href="#guillo-reviews" aria-label="Rated {{ rating }} out of 5. Read customer reviews.">
             <span class="guillo-pdp__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <span class="guillo-pdp__rating-note">{{ rating }} from {{ rating_count }} reviews</span>
+            <span class="guillo-pdp__rating-note">{{ rating }} / 5</span>
           </a>
         {%- else -%}
           <div class="guillo-pdp__rating">
             <span class="guillo-pdp__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <span class="guillo-pdp__rating-note">{{ rating }} from {{ rating_count }} reviews</span>
+            <span class="guillo-pdp__rating-note">{{ rating }} / 5</span>
           </div>
         {%- endif -%}
       {%- endif -%}
@@ -686,7 +698,7 @@
           with no pair discount, so the section setting is only an override to
           hide it.
         {%- endcomment -%}
-        {%- if section.settings.show_pair -%}
+        {%- if section.settings.show_pair and stone_test == false -%}
           {% render 'guillo-pair-builder', product: product %}
         {%- endif -%}
 
@@ -696,6 +708,18 @@
           {%- unless stone_test -%}<div class="guillo-pdp__trust">{{ section.settings.trust_line }}</div>{%- endunless -%}
         {%- endif -%}
       {% endform %}
+      {%- if stone_test -%}
+        <div class="luxe-assurance"><span>{{ ret_line }}</span><a href="#LuxeLook-{{ section.id }}">Complete the look <span aria-hidden="true">↗</span></a></div>
+        {%- for luxe_review in gr_reviews -%}
+          {%- assign luxe_quote = luxe_review.body_html | default: luxe_review.body | strip_html | strip -%}
+          {%- assign luxe_quote_lower = luxe_quote | downcase -%}
+          {%- if luxe_review.verified_buyer and luxe_quote.size <= 140 and luxe_quote_lower contains 'fit' -%}
+            <figure class="luxe-buy-quote"><blockquote>{{ luxe_quote | escape }}</blockquote><figcaption>{{ luxe_review.reviewer_name | default: luxe_review.reviewer.name | escape }} · Verified purchase</figcaption></figure>
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if product.metafields.custom.model_height != blank and product.metafields.custom.model_size != blank -%}<p class="luxe-model">Model: {{ product.metafields.custom.model_height | escape }} · wears {{ product.metafields.custom.model_size | escape }}</p>{%- endif -%}
+      {%- endif -%}
 
       {%- assign icon_blocks = section.blocks | where: 'type', 'feature' -%}
       {%- capture gstone_features -%}
@@ -912,7 +936,8 @@
       gets a band of its own. Lives in snippets/guillo-stone-band.liquid so it
       can be edited without touching this file.
     {%- endcomment -%}
-    {% render 'guillo-stone-band', product: product, section: section, gstone_video: gstone_video %}
+    {% render 'guillo-luxe-story', product: product, section: section %}
+    {% render 'guillo-luxe-look', product: product, section: section, style_name: style_name %}
   {%- endif -%}
 
   <div class="guillo-pdp__sticky" data-sticky-atc hidden>
@@ -922,7 +947,7 @@
       {%- endif -%}
       <div class="guillo-pdp__sticky-copy">
         <div class="guillo-pdp__sticky-title">{{ product.title }}</div>
-        <div class="guillo-pdp__sticky-price" data-price>{{ current_variant.price | money }}</div>
+        <div class="guillo-pdp__sticky-price"><span data-price>{{ current_variant.price | money }}</span>{% if stone_test %}<span data-luxe-sticky-size> · {{ style_name }} · Choose size</span>{% endif %}</div>
       </div>
       <button type="submit" form="GuilloProductForm" class="guillo-pdp__atc guillo-pdp__atc--sticky" data-atc{% unless product.has_only_default_variant %} disabled{% endunless %}>
         <span data-atc-label>{% if product.has_only_default_variant %}Add to bag{% else %}Select a size{% endif %}</span>
@@ -1357,7 +1382,8 @@
       window.addEventListener(
         'scroll',
         () => {
-          const on = window.scrollY > 640;
+          const mainBuy = root.querySelector('.guillo-pdp__panel [data-atc]');
+          const on = root.classList.contains('guillo-pdp--stone') && mainBuy ? mainBuy.getBoundingClientRect().bottom < (document.querySelector('#header-component')?.getBoundingClientRect().bottom || 80) : window.scrollY > 640;
           if (on !== shown) {
             shown = on;
             sticky.hidden = !on;

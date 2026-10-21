@@ -450,7 +450,7 @@
     var onRec = i === r.idx;
     var label = P.sizes[i];
     var conf = onRec ? r.conf : Math.max(70, r.conf - 8);
-    var match = conf >= 88 ? 'Strong match' : conf >= 80 ? 'Good match' : 'Between sizes';
+    var match = P.noConfidence ? 'Based on your answers' : conf >= 88 ? 'Strong match' : conf >= 80 ? 'Good match' : 'Between sizes';
     var out = '' +
       '<div class="gff__res">' +
         '<div class="gff__res-head">' +
@@ -459,8 +459,7 @@
             '<span class="gff__res-size">' + esc(label) + '</span>' +
             '<span class="gff__res-match">' +
               '<span class="gff__res-match-l">' + esc(match) + '</span>' +
-              '<span class="gff__res-pct">' + conf + '%</span>' +
-              '<span class="gff__res-bar"><i style="width:' + conf + '%"></i></span>' +
+              (P.noConfidence ? '' : '<span class="gff__res-pct">' + conf + '%</span><span class="gff__res-bar"><i style="width:' + conf + '%"></i></span>') +
             '</span>' +
           '</div>' +
         '</div>' +
@@ -516,7 +515,7 @@
       var live = r.conf;
       var haveSize = S.route === 'estimate' || S.usual != null;
       el.liveSize.textContent = haveSize ? P.sizes[r.idx] : '\u2014';
-      el.livePct.textContent = haveSize ? live + '%' : '\u2014';
+      el.livePct.textContent = P.noConfidence ? '' : haveSize ? live + '%' : '\u2014';
       el.liveFill.style.width = haveSize ? live + '%' : '0%';
       el.liveHint.textContent = num === 1 ? 'From your size' : done ? 'Ready' : 'Two more to go';
       el.back.hidden = num < 2;
@@ -662,7 +661,7 @@
     var r = compute();
     var i = S.chosen == null ? r.idx : S.chosen;
     var conf = i === r.idx ? r.conf : Math.max(70, r.conf - 8);
-    var match = conf >= 88 ? 'Strong match' : conf >= 80 ? 'Good match' : 'Between sizes';
+    var match = P.noConfidence ? 'Based on your answers' : conf >= 88 ? 'Strong match' : conf >= 80 ? 'Good match' : 'Between sizes';
 
     selectSizeOnPage(size);
     showPickNote(size, match);

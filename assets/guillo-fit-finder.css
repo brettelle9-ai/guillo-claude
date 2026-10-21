@@ -550,3 +550,7 @@
   .gff__dot,
   .gff__scan::after { animation: none; }
 }
+
+/* Luxe test: recommendations are guidance, not a measured probability. */
+.gff--luxe .gff__conf-pct,.gff--luxe .gff__conf-track{display:none}
+.gff--luxe .gff__res-match{max-width:150px}

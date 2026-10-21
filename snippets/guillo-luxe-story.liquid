@@ -1,0 +1,27 @@
+{%- liquid
+  assign luxe_image = product.media[1].preview_image | default: product.featured_image
+  assign luxe_film = false
+  if product.handle == 'the-luxe-chino-stone'
+    assign luxe_film = true
+  endif
+-%}
+<section class="luxe-story" aria-labelledby="LuxeStory-{{ section.id }}">
+  <div class="luxe-story__visual" data-luxe-reveal>
+    {%- if luxe_film -%}
+      <video class="luxe-story__film" muted loop playsinline preload="none" poster="{{ 'guillo-luxe-stone-film.jpg' | asset_url }}" data-luxe-film data-src="{{ 'guillo-luxe-stone-film.mp4' | asset_url }}" aria-label="The Luxe Chino in Stone worn with the Milano shirt"></video>
+      <button class="luxe-story__play" type="button" data-luxe-film-toggle aria-label="Play the Luxe Chino film">Play film</button>
+    {%- else -%}
+      {{ luxe_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '480, 750, 1100', sizes: '(min-width: 990px) 42vw, 100vw', alt: product.title }}
+    {%- endif -%}
+  </div>
+  <div class="luxe-story__copy" data-luxe-reveal>
+    <p class="luxe-kicker">The fit, in focus</p>
+    <h2 id="LuxeStory-{{ section.id }}">A sharper line.<br>A natural presence.</h2>
+    <div class="luxe-story__points">
+      <div><h3>Defined at the waist.</h3><p>A clean front, with belt loops to frame a tucked-in shirt.</p></div>
+      <div><h3>Slim through the leg.</h3><p>A close silhouette that tapers towards the ankle.</p></div>
+      <div><h3>Finished above the shoe.</h3><p>Wear with loafers for a sharper look. Check the inside-leg measurement to find your preferred length.</p></div>
+    </div>
+    <button class="luxe-text-link" type="button" data-luxe-size-guide>Find your fit <span aria-hidden="true">↗</span></button>
+  </div>
+</section>

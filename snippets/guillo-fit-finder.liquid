@@ -117,6 +117,7 @@
   <script type="application/json" data-gff-data>
     {
       "kind": {{ ff_kind | json }},
+      "noConfidence": {% if product.handle contains 'the-luxe-chino-' %}true{% else %}false{% endif %},
       "freeExchange": {% assign ff_cc = localization.country.iso_code | default: 'ZZ' %}{% if ff_cc == 'AU' or ff_cc == 'NZ' %}true{% else %}false{% endif %},
       "leg": {{ ff_leg }},
       "thighCut": {{ ff_thigh_cut | json }},
@@ -144,7 +145,7 @@
     }
   </script>
 
-  <div class="gff" data-gff-root hidden>
+  <div class="gff{% if product.handle contains 'the-luxe-chino-' %} gff--luxe{% endif %}" data-gff-root hidden>
     <div class="gff__scrim" data-gff-close></div>
     <div class="gff__panel" role="dialog" aria-modal="true" aria-label="The Fitting" tabindex="-1" data-gff-panel>
 
@@ -169,7 +170,7 @@
         </div>
         <div class="gff__conf">
           <div class="gff__conf-labels">
-            <span class="gff__label">Confidence</span>
+            <span class="gff__label">{% if product.handle contains 'the-luxe-chino-' %}Size guidance{% else %}Confidence{% endif %}</span>
             <span class="gff__label" data-gff-live-hint></span>
           </div>
           <div class="gff__conf-track"><div class="gff__conf-fill" data-gff-live-fill></div></div>

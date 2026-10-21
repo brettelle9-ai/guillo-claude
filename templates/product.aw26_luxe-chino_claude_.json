@@ -13,15 +13,15 @@
         "tab1": {
           "type": "tab",
           "settings": {
-            "title": "Fit & Care",
-            "content": "<p>A slim silhouette, from the waist through the leg. Pair with a fitted shirt or polo.</p><p>Compare the measurements in the size guide before choosing. Follow the care label supplied with your piece.</p>"
+            "title": "Fit & sizing",
+            "content": "<p>Slim through the leg, tapering towards the ankle. Start with your usual waist size, then use Find my size to adjust for your preferred fit.</p><p>Compare the inside-leg measurement with a pair you already like. Follow the care label supplied with your piece.</p>"
           }
         },
         "tab2": {
           "type": "tab",
           "settings": {
             "title": "Details",
-            "content": "<p>A slim silhouette, from the waist through the leg. Pair with a fitted shirt or polo.</p>"
+            "content": "<p>Belt loops at the waist, a clean front and a tapered leg. Wear with a tucked-in shirt to define the waist, or a polo for a more relaxed look.</p>"
           }
         },
         "tab3": {
@@ -47,11 +47,11 @@
             "button_text": "Guillo Find Your Size",
             "show_icon": true,
             "eyebrow": "Size Guide",
-            "heading": "Guillo Find Your Size",
+            "heading": "The Luxe Chino — size guide",
             "subheading": "Use your body measurements to choose the right Guillo fit.",
             "logo_image": "shopify://shop_images/Black_and_Brown_Stylish_and_Edgy_Black_Friday_Fashion_Sale_Instagram_Post_31.png",
             "logo_url": "",
-            "show_fit_profile": true,
+            "show_fit_profile": false,
             "fit_profile_heading": "Fit Profile",
             "fit_profile_left": "Relaxed",
             "fit_profile_center": "Fitted",
@@ -71,12 +71,12 @@
             "show_fit_notes": true,
             "fit_notes_heading": "Fit Notes",
             "note1_title": "Between sizes?",
-            "note1_text": "Choose the larger size for more comfort.",
+            "note1_text": "Use Find my size to compare your usual waist and preferred fit.",
             "note2_title": "Prefer a sharper fit?",
-            "note2_text": "Choose your usual waist size.",
+            "note2_text": "Start with your usual waist, then choose your preferred fit in the fitting.",
             "note3_title": "Bigger thighs?",
-            "note3_text": "Size up for more room through the upper leg.",
-            "show_sit": true,
+            "note3_text": "Use Find my size to account for your build. Compare measurements before choosing.",
+            "show_sit": false,
             "sit_heading": "How They Sit",
             "sit1_title": "Short Legs",
             "sit1_text": "Sits a touch lower with a slight break for shorter heights.",
@@ -85,14 +85,14 @@
             "sit3_title": "Long Legs",
             "sit3_text": "More break over the shoe for taller builds.",
             "conversion_heading": "International Size Conversion",
-            "conversion_table": "Guillo Size|EU|UK|US|Australia|Singapore\\nXS|44|34|34|34|XS\\nS|46|36|36|36|S\\nM|48|38|38|38|M\\nL|50|40|40|40|L\\nXL|52|42|42|42|XL\\nXXL|54|44|44|44|XXL",
-            "show_reco": true,
+            "conversion_table": "",
+            "show_reco": false,
             "reco_title": "Too short or too tight?",
             "reco_text": "If these feel snug or short, our roomier cut offers a longer, more relaxed fit.",
             "reco_link_label": "Discover the alternative",
             "reco_link_url": "",
             "help_title": "Still unsure?",
-            "help_text": "<p>Need help? Message us and we'll recommend your best size.</p>"
+            "help_text": "Message Guillo for help choosing your size."
           }
         }
       },
@@ -116,12 +116,12 @@
         "interest_panel_title": "Register your interest in size",
         "interest_panel_sub": "One letter, the morning it opens. Nothing else.",
         "short_description": "A slim silhouette, from the waist through the leg. Pair with a fitted shirt or polo.",
-        "fit_guide_link": "shopify://pages/fit-guide",
+        "fit_guide_link": "",
         "size_guide_page": "shopify://pages/fit-guide",
         "trust_line": "Same-day dispatch · 44-day returns and exchanges",
         "open_first_tab": false,
-        "show_pair": true,
-        "show_video_tile": true,
+        "show_pair": false,
+        "show_video_tile": false,
         "video": "shopify://files/videos/lv_0_20260914132640.mp4",
         "video_position": "center center",
         "video_ratio": "9 / 16",
@@ -133,121 +133,14 @@
         "stone_scene_image": "shopify://shop_images/0S0A4597.jpg",
         "stone_scene_alt": "The Luxe Chino worn with a red shirt and black loafers at the edge of a pool",
         "stone_scene_position": "center top",
-        "stone_scene_line": "Warm evenings, long dinners, the walk back."
-      }
-    },
-    "wear": {
-      "type": "guillo-wear-with",
-      "settings": {
-        "products": [
-          "the-genova-belt",
-          "the-classico-raglan-tee-off-white",
-          "milano-pinstripe-shirt",
-          "siracusa-short-sleeve-slim-fit-shirt",
-          "the-capri-chino-short-stone",
-          "the-portofino-polo-black"
-        ],
-        "heading": "Wear it with",
-        "wardrobe_note": "Chosen to wear together.",
-        "wardrobe_link": "",
-        "collection": "",
-        "products_to_show": 6
-      }
-    },
-    "trust": {
-      "type": "guillo-trust",
-      "blocks": {
-        "card1": {
-          "type": "card",
-          "settings": {
-            "icon": "truck",
-            "title": "Fast, tracked shipping",
-            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order."
-          }
-        },
-        "card2": {
-          "type": "card",
-          "settings": {
-            "icon": "refresh",
-            "title": "Easy 44 day returns",
-            "text_intl": "44-day returns and exchanges. Return postage is paid by you. Size swaps ship same day.",
-            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
-          }
-        },
-        "card3": {
-          "type": "card",
-          "settings": {
-            "icon": "shield",
-            "title": "Duties and taxes covered",
-            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship."
-          }
-        }
-      },
-      "block_order": [
-        "card1",
-        "card2",
-        "card3"
-      ],
-      "settings": {
-        "show_press": true,
-        "press_logo_alt": "7NEWS",
-        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
-      }
-    },
-    "anatomy": {
-      "type": "guillo-anatomy",
-      "blocks": {
-        "cl1": {
-          "type": "callout_left",
-          "settings": {
-            "title": "The silhouette",
-            "text": "A slim silhouette, from the waist through the leg. Pair with a fitted shirt or polo.",
-            "spec": ""
-          }
-        },
-        "cl2": {
-          "type": "callout_left",
-          "settings": {
-            "title": "The waist",
-            "text": "See the waistband and fastening in the product views.",
-            "spec": ""
-          }
-        },
-        "cr1": {
-          "type": "callout_right",
-          "settings": {
-            "title": "The full view",
-            "text": "Explore the front, side and back views.",
-            "spec": ""
-          }
-        },
-        "cr2": {
-          "type": "callout_right",
-          "settings": {
-            "title": "Choose your size",
-            "text": "Compare your measurements with the size guide.",
-            "spec": ""
-          }
-        }
-      },
-      "block_order": [
-        "cl1",
-        "cl2",
-        "cr1",
-        "cr2"
-      ],
-      "settings": {
-        "heading": "The shape, considered.",
-        "image": "",
-        "image_alt": "",
-        "image_position": "center 25%",
-        "use_product_image": true
+        "stone_scene_line": "Warm evenings, long dinners, the walk back.",
+        "show_short_description": true
       }
     },
     "reviews": {
       "type": "guillo-pdp-reviews",
       "settings": {
-        "heading": "Worn, washed, reported back.",
+        "heading": "The fit, according to you.",
         "write_link": "",
         "all_link": "",
         "fit_marker": 50,
@@ -264,7 +157,7 @@
           "type": "faq",
           "settings": {
             "question": "How do they fit?",
-            "answer": "<p>Slim tapered through the leg with a clean silhouette from waist to ankle. Engineered for movement without losing shape. If between sizes, go a size up.</p>"
+            "answer": "<p>A slim cut through the leg with a tapered ankle. Start with your usual waist and use Find my size to account for your build and preferred fit. The size guide lists waist and inside-leg measurements.</p>"
           }
         },
         "q3": {
@@ -285,21 +178,19 @@
           "type": "faq",
           "settings": {
             "question": "What is your return policy?",
-            "answer": "<p>Complimentary returns &amp; exchanges within 44 days for AU/NZ orders. International orders: 44-day returns and exchanges, return shipping paid by the customer. All returns via our self-service portal, no emails, no waiting.</p><p><strong>How do I start a return?</strong> Head to our <a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\" target=\"_blank\" title=\"https://guilloclothing.com/apps/redo/returns-portal/login\">returns portal</a> to get started. It is free and takes just a few minutes.</p>"
+            "answer": "<p>44-day returns and exchanges. Free return postage for Australia and New Zealand; customers elsewhere cover return postage. Start through our <a href=\"/apps/redo/returns-portal/login\">returns portal</a>.</p>"
           }
         },
         "q6": {
           "type": "faq",
           "settings": {
             "question": "When will they arrive?",
-            "answer": "<p>All orders dispatched within 24 hours. Standard delivery to Australia in 2 to 8 business days. Express in 1 to 4. International shipping available to Singapore, UK, US and Europe.</p>"
+            "answer": "<p>Delivery options and an estimated arrival are shown at checkout for your address. Check the shipping information beside the size selector for your region.</p>"
           }
         }
       },
       "block_order": [
         "q1",
-        "q3",
-        "q4",
         "q5",
         "q6"
       ],
@@ -307,7 +198,7 @@
         "layout": "split",
         "anchor": "",
         "eyebrow": "Questions",
-        "heading": "Before you order.",
+        "heading": "A few final details.",
         "text": "For sizing or order questions, contact Guillo.",
         "link_label": "Ask a question",
         "link": "shopify://pages/contact",
@@ -317,10 +208,7 @@
   },
   "order": [
     "main",
-    "wear",
-    "trust",
-    "anatomy",
-    "faq",
-    "reviews"
+    "reviews",
+    "faq"
   ]
 }

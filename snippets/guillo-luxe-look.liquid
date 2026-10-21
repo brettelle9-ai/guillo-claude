@@ -1,0 +1,50 @@
+{%- liquid
+  assign look_shirt = all_products['milano-pinstripe-shirt']
+  assign look_belt = all_products['the-genova-belt']
+  assign look_image = product.media[1].preview_image | default: product.featured_image
+  assign look_handles = 'milano-pinstripe-shirt,the-genova-belt' | split: ','
+-%}
+{%- if look_shirt != blank or look_belt != blank -%}
+<section class="luxe-look" id="LuxeLook-{{ section.id }}" data-luxe-look aria-labelledby="LuxeLookHeading-{{ section.id }}">
+  <div class="luxe-look__visual" data-luxe-reveal>
+    {{ look_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '480, 750, 1100', sizes: '(min-width: 990px) 45vw, 100vw', alt: product.title }}
+  </div>
+  <div class="luxe-look__shop" data-luxe-reveal>
+    <p class="luxe-kicker">Styled by Guillo</p>
+    <h2 id="LuxeLookHeading-{{ section.id }}">Complete the look.</h2>
+    <p class="luxe-look__intro">Pinstripes, a defined waist, black leather. Choose the pieces to make it yours.</p>
+    <form data-luxe-look-form>
+      <div class="luxe-look__base">
+        <span>The Luxe Chino <small>{{ style_name | default: product.handle | remove_first: 'the-luxe-chino-' | capitalize }}</small></span>
+        <label for="LuxeLookSize-{{ section.id }}" class="visually-hidden">Luxe Chino size</label>
+        <select id="LuxeLookSize-{{ section.id }}" name="chino" required data-luxe-base>
+          <option value="">Choose size</option>
+          {%- for v in product.variants -%}<option value="{{ v.id }}" data-price="{{ v.price }}"{% unless v.available %} disabled{% endunless %}>{{ v.title }}{% unless v.available %} — unavailable{% endunless %}</option>{%- endfor -%}
+        </select>
+      </div>
+      {%- for handle in look_handles -%}
+        {%- assign piece = all_products[handle] -%}
+        {%- if piece != blank and piece.available -%}
+        <div class="luxe-look__piece" data-luxe-piece data-price="{{ piece.price }}">
+          <label class="luxe-look__pick"><input type="checkbox" data-luxe-include aria-label="Include {{ piece.title | escape }}">
+            {{ piece.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', width: 64, height: 84, alt: piece.title }}
+            <span>{% if handle == 'milano-pinstripe-shirt' %}Milano Pinstripe Shirt{% else %}{{ piece.title }}{% endif %}<small>{{ piece.price | money }}</small></span>
+          </label>
+          <label class="visually-hidden" for="LuxePiece-{{ section.id }}-{{ forloop.index }}">{{ piece.title }} size</label>
+          <select id="LuxePiece-{{ section.id }}-{{ forloop.index }}" data-luxe-variant disabled>
+            {%- unless piece.has_only_default_variant -%}<option value="">Choose size</option>{%- endunless -%}
+            {%- for v in piece.variants -%}<option value="{{ v.id }}" data-price="{{ v.price }}"{% unless v.available %} disabled{% endunless %}>{% if piece.has_only_default_variant %}One size{% else %}{{ v.title }}{% endif %}{% unless v.available %} — unavailable{% endunless %}</option>{%- endfor -%}
+          </select>
+        </div>
+        {%- endif -%}
+      {%- endfor -%}
+      <p class="luxe-look__offer">Build your wardrobe — 3+ pieces, 20% off.</p>
+      <div class="luxe-look__total"><span>Selected pieces</span><span><s data-luxe-original hidden></s> <strong data-luxe-total>{{ product.price | money }}</strong></span></div>
+      <p class="luxe-look__hint" data-luxe-look-hint aria-live="polite">Choose your chino size above.</p>
+      <button class="luxe-look__add" type="submit" data-luxe-look-add disabled>Add selected pieces to bag</button>
+      <p class="luxe-look__status" data-luxe-look-status role="status" aria-live="polite"></p>
+    </form>
+    <script type="application/json" data-luxe-money>{"currency":{{ cart.currency.iso_code | json }},"locale":{{ request.locale.iso_code | json }},"basePrice":{{ product.price }}}</script>
+  </div>
+</section>
+{%- endif -%}
