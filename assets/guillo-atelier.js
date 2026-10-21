@@ -16,7 +16,7 @@ if (!customElements.get('guillo-atelier')) {
       const chapters = [...this.querySelectorAll('[data-chapter]')];
       const controls = [...this.querySelectorAll('[data-view-button]')];
       const clamp = n => Math.max(0, Math.min(1, n));
-      let current = -1, manual, manualY = 0;
+      let current = -1, manual, manualY = 0, manualUntil = 0;
       const setView = n => {
         if (n === current) return;
         current = n;
@@ -53,7 +53,10 @@ if (!customElements.get('guillo-atelier')) {
           const box = story.getBoundingClientRect();
           const progress = clamp((hh-box.top)/Math.max(1,box.height-stage.offsetHeight));
           story.style.setProperty('--ga-story-progress',progress.toFixed(4));
-          if (manual !== undefined && Math.abs(scrollY-manualY)>24) manual=undefined;
+          if (manual !== undefined) {
+            if (performance.now()<manualUntil) manualY=scrollY;
+            else if (Math.abs(scrollY-manualY)>24) manual=undefined;
+          }
           const view = manual ?? (progress<.36?0:progress<.72?1:2);
           setView(view);
           frames.forEach((frame,i) => {
@@ -69,7 +72,10 @@ if (!customElements.get('guillo-atelier')) {
         hero?.classList.toggle('has-exit-motion',!reduced.matches);
         schedule();
       };
-      controls.forEach(button => button.addEventListener('click',() => {manual=Number(button.dataset.viewButton);manualY=scrollY;setView(manual);schedule();},{signal}));
+      controls.forEach(button => button.addEventListener('click',() => {manual=Number(button.dataset.viewButton);manualY=scrollY;manualUntil=performance.now()+500;setView(manual);schedule();},{signal}));
+      const resumeScroll=()=>{manual=undefined;schedule();};
+      window.addEventListener('wheel',resumeScroll,{passive:true,signal});
+      window.addEventListener('touchmove',resumeScroll,{passive:true,signal});
       window.addEventListener('scroll',schedule,{passive:true,signal});
       window.addEventListener('resize',schedule,{passive:true,signal});
       reduced.addEventListener('change',motion,{signal});
