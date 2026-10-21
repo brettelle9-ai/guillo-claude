@@ -14,8 +14,8 @@
     "newsletter": {
       "type": "guillo-newsletter",
       "settings": {
-        "eyebrow": "Guillo updates",
-        "heading": "New collections. First access.",
+        "eyebrow": "",
+        "heading": "First access.",
         "text": "New releases, restocks and notes on fit. Join for $35 towards your first order over $180.",
         "button_label": "Join the list"
       }
