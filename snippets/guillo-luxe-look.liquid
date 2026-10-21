@@ -19,13 +19,13 @@
         <label for="LuxeLookSize-{{ section.id }}" class="visually-hidden">Luxe Chino size</label>
         <select id="LuxeLookSize-{{ section.id }}" name="chino" required data-luxe-base>
           <option value="">Choose size</option>
-          {%- for v in product.variants -%}<option value="{{ v.id }}" data-price="{{ v.price }}"{% unless v.available %} disabled{% endunless %}>{{ v.title }}{% unless v.available %} — unavailable{% endunless %}</option>{%- endfor -%}
+          {%- for v in product.variants -%}<option value="{{ v.id }}" data-luxe-price="{{ v.price }}"{% unless v.available %} disabled{% endunless %}>{{ v.title }}{% unless v.available %} — unavailable{% endunless %}</option>{%- endfor -%}
         </select>
       </div>
       {%- for handle in look_handles -%}
         {%- assign piece = all_products[handle] -%}
         {%- if piece != blank and piece.available -%}
-        <div class="luxe-look__piece" data-luxe-piece data-price="{{ piece.price }}">
+        <div class="luxe-look__piece" data-luxe-piece data-luxe-price="{{ piece.price }}">
           <label class="luxe-look__pick"><input type="checkbox" data-luxe-include aria-label="Include {{ piece.title | escape }}">
             {{ piece.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', width: 64, height: 84, alt: piece.title }}
             <span>{% if handle == 'milano-pinstripe-shirt' %}Milano Pinstripe Shirt{% else %}{{ piece.title }}{% endif %}<small>{{ piece.price | money }}</small></span>
@@ -33,7 +33,7 @@
           <label class="visually-hidden" for="LuxePiece-{{ section.id }}-{{ forloop.index }}">{{ piece.title }} size</label>
           <select id="LuxePiece-{{ section.id }}-{{ forloop.index }}" data-luxe-variant disabled>
             {%- unless piece.has_only_default_variant -%}<option value="">Choose size</option>{%- endunless -%}
-            {%- for v in piece.variants -%}<option value="{{ v.id }}" data-price="{{ v.price }}"{% unless v.available %} disabled{% endunless %}>{% if piece.has_only_default_variant %}One size{% else %}{{ v.title }}{% endif %}{% unless v.available %} — unavailable{% endunless %}</option>{%- endfor -%}
+            {%- for v in piece.variants -%}<option value="{{ v.id }}" data-luxe-price="{{ v.price }}"{% unless v.available %} disabled{% endunless %}>{% if piece.has_only_default_variant %}One size{% else %}{{ v.title }}{% endif %}{% unless v.available %} — unavailable{% endunless %}</option>{%- endfor -%}
           </select>
         </div>
         {%- endif -%}

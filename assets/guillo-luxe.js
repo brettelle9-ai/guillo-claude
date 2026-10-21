@@ -90,7 +90,7 @@
   const update = () => {
     const chosen=selected();
     const ready=chosen.every(piece=>!!piece.select.value&&!piece.select.selectedOptions[0].disabled);
-    let total=chosen.reduce((sum,piece)=>sum+Number(piece.select.selectedOptions[0]?.dataset.price|| (piece.select===base?cfg.basePrice:piece.select.closest('[data-luxe-piece]').dataset.price)),0);
+    let total=chosen.reduce((sum,piece)=>sum+Number(piece.select.selectedOptions[0]?.dataset.luxePrice|| (piece.select===base?cfg.basePrice:piece.select.closest('[data-luxe-piece]').dataset.luxePrice)),0);
     const discounted=chosen.length>=3;
     const original=look.querySelector('[data-luxe-original]');
     original.hidden=!discounted;

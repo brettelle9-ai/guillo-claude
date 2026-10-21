@@ -683,8 +683,10 @@
           endif
         -%}
         <div class="guillo-pdp__size-hint" data-size-hint>
-          {%- unless product.has_only_default_variant -%}Select a size. {% endunless -%}
-          {{- ret_line -}}
+          {%- if stone_test -%}Choose your waist size.{%- else -%}
+            {%- unless product.has_only_default_variant -%}Select a size. {% endunless -%}
+            {{- ret_line -}}
+          {%- endif -%}
         </div>
 
         <button type="submit" class="guillo-pdp__atc" data-atc{% unless product.has_only_default_variant %} disabled{% endunless %}>
@@ -713,6 +715,7 @@
         {%- for luxe_review in gr_reviews -%}
           {%- assign luxe_quote = luxe_review.body_html | default: luxe_review.body | strip_html | strip -%}
           {%- assign luxe_quote_lower = luxe_quote | downcase -%}
+          {%- if luxe_quote_lower contains 'material' or luxe_quote_lower contains 'fabric' or luxe_quote_lower contains 'stretch' -%}{%- continue -%}{%- endif -%}
           {%- if luxe_review.verified_buyer and luxe_quote.size <= 140 and luxe_quote_lower contains 'fit' -%}
             <figure class="luxe-buy-quote"><blockquote>{{ luxe_quote | escape }}</blockquote><figcaption>{{ luxe_review.reviewer_name | default: luxe_review.reviewer.name | escape }} · Verified purchase</figcaption></figure>
             {%- break -%}
