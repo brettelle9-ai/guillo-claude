@@ -75,71 +75,128 @@
     film.addEventListener('play',label);film.addEventListener('pause',label);
   }
 
-  const look = root.querySelector('[data-luxe-look]');
-  if (!look || !mainForm) return;
-  const form=look.querySelector('form');
-  const base=look.querySelector('[data-luxe-base]');
-  const add=look.querySelector('[data-luxe-look-add]');
-  const status=look.querySelector('[data-luxe-look-status]');
-  const pieces=[...look.querySelectorAll('[data-luxe-piece]')];
+  // An active size action guides the shopper; it never chooses a variant for them.
+  const sizeWrap=mainForm?.querySelector('[data-option-index]');
+  const variants=JSON.parse(root.querySelector('[data-variant-data]').textContent);
+  let fitData={};
+  try {fitData=JSON.parse(root.querySelector('[data-gff-data]')?.textContent||'{}');} catch {}
+  const norm=value=>String(value||'').replace(/[″′"'\s]/g,'').toLowerCase();
+  const mainVariant=()=>{
+    if(!mainForm?.querySelector('[data-option-index] input:checked'))return null;
+    const id=Number(mainForm.querySelector('[name="id"]')?.value);
+    return variants.find(variant=>variant.id===id&&variant.available)||null;
+  };
+  const chooseSize=()=>{
+    if(!sizeWrap)return;
+    sizeWrap.scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'center'});
+    sizeWrap.querySelector('input[type=radio]:not(:disabled)')?.focus({preventScroll:true});
+    sizeWrap.classList.add('is-size-prompt');
+    setTimeout(()=>sizeWrap.classList.remove('is-size-prompt'),1800);
+  };
+  function dispatchCopy(date=new Date()) {
+    const parts=new Intl.DateTimeFormat('en-AU',{timeZone:'Australia/Brisbane',weekday:'short',hour:'numeric',hourCycle:'h23'}).formatToParts(date);
+    const day=parts.find(part=>part.type==='weekday').value;
+    const hour=Number(parts.find(part=>part.type==='hour').value);
+    return !['Sat','Sun'].includes(day)&&hour<16?'In stock · dispatches today':'In stock · dispatches next business day';
+  }
+  const updateBuy=()=>{
+    const variant=mainVariant();
+    root.querySelectorAll('[data-atc]').forEach(button=>{
+      if(button.dataset.notifyAll==='true')return;
+      if(!variant){button.disabled=false;button.type='button';button.dataset.luxeSizeAction='true';button.querySelector('[data-atc-label]').textContent='Choose your size';}
+      else {button.type='submit';delete button.dataset.luxeSizeAction;}
+    });
+    const size=mainForm?.querySelector('[data-option-value-label]')?.textContent;
+    const colour=root.querySelector('.guillo-pdp__style')?.textContent.trim()||'';
+    const sticky=root.querySelector('[data-luxe-sticky-size]');
+    if(sticky)sticky.textContent=` · ${colour} · ${variant?size:'Choose size'}`;
+    const hint=root.querySelector('[data-size-hint]');
+    if(variant&&hint) {
+      const isPreorder=!!mainForm.querySelector('input:checked[data-preorder="true"]');
+      const idx=(fitData.sizes||[]).findIndex(label=>norm(label)===norm(size));
+      const inseam=fitData.inside?.[idx];
+      hint.textContent=(isPreorder?'Pre-order':dispatchCopy())+(inseam?` · ${inseam} cm inside leg`:'');
+    }
+  };
+  root.querySelectorAll('[data-atc]').forEach(button=>button.addEventListener('click',event=>{
+    if(button.dataset.luxeSizeAction==='true'){event.preventDefault();event.stopImmediatePropagation();chooseSize();}
+  },true));
+  root.querySelectorAll('[data-luxe-choose-size]').forEach(button=>button.addEventListener('click',chooseSize));
+  mainForm?.addEventListener('change',()=>queueMicrotask(()=>{updateBuy();updateLook?.();}));
+  const details=root.querySelector('[data-luxe-details]');
+  details?.querySelectorAll('[data-luxe-detail]').forEach(button=>button.addEventListener('click',()=>{
+    const mode=button.dataset.luxeDetail;
+    details.querySelectorAll('[data-luxe-detail]').forEach(control=>control.setAttribute('aria-pressed',String(control===button)));
+    details.querySelectorAll('[data-luxe-detail-view]').forEach(view=>view.hidden=view.dataset.luxeDetailView!==mode);
+    if(mode!=='motion')film?.pause();
+    else if(film&&film.paused&&!reduced.matches&&!navigator.connection?.saveData)filmToggle?.click();
+  }));
+
+  const look=root.querySelector('[data-luxe-look]');
+  let updateLook;
+  if(!look||!mainForm){updateBuy();return;}
+  const form=look.querySelector('form'),add=look.querySelector('[data-luxe-look-add]'),status=look.querySelector('[data-luxe-look-status]');
   const cfg=JSON.parse(look.querySelector('[data-luxe-money]').textContent);
   const currency=new Intl.NumberFormat(cfg.locale||'en',{style:'currency',currency:cfg.currency||'AUD',maximumFractionDigits:2});
   const money=cents=>currency.format(cents/100);
-  let busy=false;
-  const selected = () => [{select:base,included:true},...pieces.map(piece=>({select:piece.querySelector('select'),included:piece.querySelector('input').checked}))].filter(piece=>piece.included);
-  const update = () => {
-    const chosen=selected();
-    const ready=chosen.every(piece=>!!piece.select.value&&!piece.select.selectedOptions[0].disabled);
-    let total=chosen.reduce((sum,piece)=>sum+Number(piece.select.selectedOptions[0]?.dataset.luxePrice|| (piece.select===base?cfg.basePrice:piece.select.closest('[data-luxe-piece]').dataset.luxePrice)),0);
-    const discounted=chosen.length>=3;
-    const original=look.querySelector('[data-luxe-original]');
-    original.hidden=!discounted;
-    original.textContent=money(total);
-    look.querySelector('[data-luxe-total]').textContent=money(discounted?Math.round(total*.8):total);
-    look.querySelector('[data-luxe-look-hint]').textContent=!ready?'Choose a size for each selected piece.':discounted?'20% wardrobe offer included. Final total confirmed in your bag.':`${chosen.length} ${chosen.length===1?'piece':'pieces'} selected. Add 3+ pieces for the wardrobe offer.`;
-    add.disabled=busy||!ready;
-    add.textContent=busy?'Adding…':`Add ${chosen.length===1?'chino':'selected pieces'} to bag`;
-    const sticky=root.querySelector('[data-luxe-sticky-size]');
-    if(sticky) {
-      const size=mainForm.querySelector('[data-option-value-label]')?.textContent;
-      const colour=root.querySelector('.guillo-pdp__style')?.textContent.trim()||'';
-      sticky.textContent=` · ${colour} · ${size&&size!=='Select'?size:'Choose size'}`;
-    }
+  const picks={shirt:null,polo:null,belt:null};
+  let mode='shirt',busy=false;
+  const selected=()=>{
+    const variant=mainVariant();
+    return [...(variant?[{id:variant.id,price:Number(variant.price_cents||cfg.basePrice)}]:[]),picks[mode],picks.belt].filter(Boolean);
   };
-  pieces.forEach(piece=>piece.querySelector('input').addEventListener('change',()=>{
-    piece.querySelector('select').disabled=!piece.querySelector('input').checked;
-    status.textContent='';update();
+  updateLook=()=>{
+    const variant=mainVariant(),chosen=selected();
+    const count=chosen.length;
+    let total=chosen.reduce((sum,piece)=>sum+piece.price,0);
+    if(!variant)total+=cfg.basePrice;
+    const discounted=!!variant&&count>=3;
+    const original=look.querySelector('[data-luxe-original]');
+    original.hidden=!discounted;original.textContent=money(total);
+    look.querySelector('[data-luxe-total]').textContent=money(discounted?Math.round(total*.8):total);
+    look.querySelector('[data-luxe-base-label]').textContent=variant?`Size ${mainForm.querySelector('[data-option-value-label]').textContent}`:'Choose your size';
+    look.querySelector('[data-luxe-choose-size]').textContent=variant?'Change size':'Choose size';
+    look.querySelector('[data-luxe-look-hint]').textContent=!variant?'Choose your chino size to complete the selection.':discounted?'20% wardrobe offer included. Final total confirmed in your bag.':`${count} ${count===1?'piece':'pieces'} selected · 3+ pieces unlock 20% off.`;
+    add.disabled=busy;
+    add.textContent=busy?'Adding…':!variant?'Choose chino size':`Add ${count===1?'chino':count+' pieces'} to bag`;
+    look.querySelectorAll('[data-luxe-pick]').forEach(button=>{
+      const pick=picks[button.dataset.luxePick];
+      const active=pick?.id===Number(button.dataset.luxeVariantId);
+      button.setAttribute('aria-pressed',String(active));
+      if(button.dataset.luxePick==='belt')button.textContent=active?'Included':'Add belt';
+    });
+    look.querySelectorAll('[data-luxe-remove]').forEach(button=>button.hidden=!picks[button.dataset.luxeRemove]);
+  };
+  look.querySelectorAll('[data-luxe-mode]').forEach(button=>button.addEventListener('click',()=>{
+    mode=button.dataset.luxeMode;
+    look.querySelectorAll('[data-luxe-mode]').forEach(control=>control.setAttribute('aria-pressed',String(control===button)));
+    look.querySelectorAll('[data-luxe-piece]').forEach(piece=>piece.hidden=!['belt',mode].includes(piece.dataset.luxePiece));
+    look.querySelectorAll('[data-luxe-look-scene]').forEach(scene=>{const active=scene.dataset.luxeLookScene===mode;scene.classList.toggle('is-current',active);scene.setAttribute('aria-hidden',String(!active));});
+    look.querySelector('[data-luxe-look-caption]').textContent=mode==='shirt'?'With a shirt.':'With a polo.';
+    look.querySelector('[data-luxe-look-intro]').textContent=mode==='shirt'?'A pinstripe shirt, tucked in. A defined waist. The details do the talking.':'A navy polo, a clean silhouette. A different expression of the same wardrobe.';
+    status.textContent='';updateLook();
   }));
-  form.addEventListener('change',()=>{status.textContent='';update();});
-  mainForm.addEventListener('change',()=>queueMicrotask(()=>{
-    const checked=mainForm.querySelector('[data-option-index] input:checked');
-    const id=mainForm.querySelector('[name="id"]')?.value;
-    if(checked&&[...base.options].some(option=>option.value===id&&!option.disabled)) base.value=id;
-    update();
+  look.querySelectorAll('[data-luxe-pick]').forEach(button=>button.addEventListener('click',()=>{
+    const key=button.dataset.luxePick,id=Number(button.dataset.luxeVariantId);
+    picks[key]=picks[key]?.id===id?null:{id,price:Number(button.dataset.luxePrice)};
+    status.textContent='';updateLook();
   }));
-  base.addEventListener('change',()=>{
-    const text=base.selectedOptions[0]?.textContent;
-    const norm=value=>value.replace(/[″′"'\s]/g,'').toLowerCase();
-    const radio=[...mainForm.querySelectorAll('[data-option-index] input[type=radio]')].find(input=>norm(input.value)===norm(text||''));
-    if(radio&&!radio.disabled) {radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));}
-  });
+  look.querySelectorAll('[data-luxe-remove]').forEach(button=>button.addEventListener('click',()=>{picks[button.dataset.luxeRemove]=null;status.textContent='';updateLook();}));
   form.addEventListener('submit',async event=>{
     event.preventDefault();
-    if(add.disabled||busy) return;
-    busy=true;status.textContent='';update();
-    const items=selected().map(piece=>({id:Number(piece.select.value),quantity:1}));
+    if(busy)return;
+    if(!mainVariant()){chooseSize();return;}
+    busy=true;status.textContent='';updateLook();
+    const items=selected().map(piece=>({id:piece.id,quantity:1}));
     try {
       const response=await fetch((window.Shopify?.routes?.root||'/')+'cart/add.js',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({items})});
       const result=await response.json();
-      if(!response.ok) throw new Error(result.description||'That selection could not be added. Please check the sizes and try again.');
+      if(!response.ok)throw new Error(result.description||'That selection could not be added. Check the sizes and try again.');
       status.textContent='Added to your bag.';
-      // Cart refresh failing must never suggest retrying an already successful add.
-      if(window.GuilloCart) {
-        try {await window.GuilloCart.refresh();(window.GuilloCart.notifyAdded||window.GuilloCart.open)();}
-        catch {status.textContent='Added to your bag. Open your bag to continue.';}
-      } else location.assign((window.Shopify?.routes?.root||'/')+'cart');
-    } catch(error) {status.textContent=error.message||'Could not add those pieces. Please try again.';}
-    finally {busy=false;update();}
+      if(window.GuilloCart){try{await window.GuilloCart.refresh();(window.GuilloCart.notifyAdded||window.GuilloCart.open)();}catch{status.textContent='Added to your bag. Open your bag to continue.';}}
+      else location.assign((window.Shopify?.routes?.root||'/')+'cart');
+    } catch(error){status.textContent=error.message||'Could not add those pieces. Please try again.';}
+    finally{busy=false;updateLook();}
   });
-  update();
+  updateBuy();updateLook();
 })();

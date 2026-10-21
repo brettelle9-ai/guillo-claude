@@ -208,7 +208,7 @@
     }
     var spec = (P.inside && P.inside[i] != null) ? 'Inside leg ' + len(P.inside[i]) : 'Full length';
     return { label: 'Length', spec: spec,
-      note: band === 'tall' ? 'Finishes above the ankle. A sharp, modern break.'
+      note: P.noConfidence ? 'Compare this inside-leg measurement with a pair you already like. The finish depends on your leg length and where you wear the waist.' : band === 'tall' ? 'Finishes above the ankle. A sharp, modern break.'
         : band === 'short' ? 'Finishes on the ankle. Clean, no bunching.'
         : 'Finishes just above the ankle. Clean, no bunching.',
       pos: band === 'tall' ? '26%' : band === 'short' ? '56%' : '42%', a: 'Short', b: 'Right', c: 'Long' };
@@ -221,6 +221,7 @@
     else if (r.move < 0 || (r.between && r.move === 0)) waistNote = 'A clean, fitted waist. Stretch built in, so it moves with you.';
     else if (r.move > 0) waistNote = 'A little more ease at the waist.';
     else waistNote = 'Sits right at the waist. No belt needed.';
+    if (P.noConfidence) waistNote = 'Suggested from your usual waist and preferred fit. Compare the measurement before choosing.';
     var rows = [
       { label: 'Waist', spec: len(P.chart[i]) + yours,
         note: waistNote,
@@ -232,6 +233,7 @@
   }
 
   function noteFor(r, label) {
+    if (P.noConfidence) return 'Suggested size: ' + label + '. Based on your answers about your usual size, build and preferred fit. Check the measurements below before choosing.';
     var s = 'Take the ' + label + '.';
     if (r.between) {
       var u = usualEntry();
@@ -543,6 +545,7 @@
 
   function go(step) {
     clearTimers();
+    if (step === 'reading' && P.noConfidence) {remember();S.step='result';S.chosen=null;render();return;}
     if (step === 'reading') {
       remember();
       S.step = 'reading'; S.readIdx = 0; render();

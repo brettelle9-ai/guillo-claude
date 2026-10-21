@@ -247,10 +247,16 @@
         assign gallery_mod = ' guillo-pdp__gallery--pair'
       endif
     -%}
+  {%- assign gallery_media = product.media -%}
+  {%- if stone_test and product.handle == 'the-luxe-chino-stone' and media_count == 7 -%}
+    {%- assign gallery_media = product.media | slice: 0, 1 -%}
+    {%- assign gallery_order = '3,5,1,2,4,6' | split: ',' -%}
+    {%- for index in gallery_order -%}{%- assign n = index | plus: 0 -%}{%- assign next_media = product.media | slice: n, 1 -%}{%- assign gallery_media = gallery_media | concat: next_media -%}{%- endfor -%}
+  {%- endif -%}
   <div class="guillo-pdp__layout{% if media_count <= 1 %} guillo-pdp__layout--single{% endif %}">
     <div class="guillo-pdp__gallery-wrap">
     <div class="guillo-pdp__gallery{{ gallery_mod }}" data-gallery>
-      {%- for media in product.media -%}
+      {%- for media in gallery_media -%}
         <div class="guillo-pdp__frame">
           {%- liquid
             assign media_loading = 'lazy'
@@ -297,7 +303,7 @@
           ></span>
         </div>
       {%- endif -%}
-      {%- if stone_test and media_count > 4 -%}<button type="button" class="luxe-gallery-more luxe-text-link" data-luxe-gallery-more aria-expanded="false">View all photographs <span aria-hidden="true">+</span></button>{%- endif -%}
+      {%- if stone_test and media_count > 3 -%}<button type="button" class="luxe-gallery-more luxe-text-link" data-luxe-gallery-more aria-expanded="false">View all photographs <span aria-hidden="true">+</span></button>{%- endif -%}
     </div>
 
     <div class="guillo-pdp__panel">
@@ -964,6 +970,7 @@
         {
           "id": {{ variant.id }},
           "available": {{ variant.available }},
+          "price_cents": {{ variant.price }},
           "price": {{ variant.price | money | json }},
           "options": {{ variant.options | json }}
         }{% unless forloop.last %},{% endunless %}

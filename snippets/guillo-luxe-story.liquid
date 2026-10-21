@@ -1,26 +1,38 @@
 {%- liquid
-  assign luxe_image = product.media[1].preview_image | default: product.featured_image
-  assign luxe_film = false
+  assign is_stone = false
   if product.handle == 'the-luxe-chino-stone'
-    assign luxe_film = true
+    assign is_stone = true
   endif
+  assign detail_indices = '0,5,6' | split: ','
+  assign detail_titles = 'The waist.|The taper.|The finish.' | split: '|'
+  assign detail_texts = 'Defined at the front. Clean under a tucked-in shirt.|A slim line, narrowing towards the ankle.|A clear view of where the hem meets the shoe.' | split: '|'
 -%}
-<section class="luxe-story" aria-labelledby="LuxeStory-{{ section.id }}">
+<section class="luxe-mood" aria-labelledby="LuxeMood-{{ section.id }}">
+  <div class="luxe-mood__image" data-luxe-reveal><img src="{{ 'guillo-summer-mood.jpg' | asset_url }}" width="2172" height="724" loading="lazy" alt="Sunlit stone terrace overlooking the Mediterranean sea"></div>
+  <div class="luxe-mood__copy"><p class="luxe-kicker">The Guillo point of view</p><h2 id="LuxeMood-{{ section.id }}">Your own standard.</h2><p>Mediterranean by influence. Fitted by Guillo.</p></div>
+</section>
+<section class="luxe-story" aria-labelledby="LuxeStory-{{ section.id }}" data-luxe-details>
   <div class="luxe-story__visual" data-luxe-reveal>
-    {%- if luxe_film -%}
-      <video class="luxe-story__film" muted loop playsinline preload="none" poster="{{ 'guillo-luxe-stone-film.jpg' | asset_url }}" data-luxe-film data-src="{{ 'guillo-luxe-stone-film.mp4' | asset_url }}" aria-label="The Luxe Chino in Stone worn with the Milano shirt"></video>
-      <button class="luxe-story__play" type="button" data-luxe-film-toggle aria-label="Play the Luxe Chino film">Play film</button>
-    {%- else -%}
-      {{ luxe_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '480, 750, 1100', sizes: '(min-width: 990px) 42vw, 100vw', alt: product.title }}
-    {%- endif -%}
+    <div class="luxe-detail-view" data-luxe-detail-view="motion" id="LuxeDetailMotion-{{ section.id }}">
+      {%- if is_stone -%}
+        <video class="luxe-story__film" muted loop playsinline preload="none" poster="{{ 'guillo-luxe-stone-fit.jpg' | asset_url }}" data-luxe-film data-src="{{ 'guillo-luxe-stone-fit.mp4' | asset_url }}" aria-label="Close views of the Stone Luxe Chino from waist to shoes"></video>
+        <button class="luxe-story__play" type="button" data-luxe-film-toggle aria-label="Play the Luxe Chino film">Play film</button>
+      {%- else -%}
+        {{ product.featured_image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 42vw, 100vw', alt: product.title }}
+      {%- endif -%}
+    </div>
+    {%- for idx in detail_indices -%}
+      {%- assign n = idx | plus: 0 -%}
+      {%- assign detail = product.featured_image -%}
+      {%- if is_stone -%}{%- assign detail = product.media[n].preview_image | default: product.featured_image -%}{%- endif -%}
+      <div class="luxe-detail-view luxe-detail-view--{{ forloop.index }}" data-luxe-detail-view="{{ forloop.index }}" id="LuxeDetail-{{ section.id }}-{{ forloop.index }}" hidden>{{ detail | image_url: width: 1100 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 42vw, 100vw', alt: detail_titles[forloop.index0] }}</div>
+    {%- endfor -%}
   </div>
-  <div class="luxe-story__copy" data-luxe-reveal>
-    <p class="luxe-kicker">The fit, in focus</p>
-    <h2 id="LuxeStory-{{ section.id }}">A sharper line.<br>A natural presence.</h2>
-    <div class="luxe-story__points">
-      <div><h3>Defined at the waist.</h3><p>A clean front, with belt loops to frame a tucked-in shirt.</p></div>
-      <div><h3>Slim through the leg.</h3><p>A close silhouette that tapers towards the ankle.</p></div>
-      <div><h3>Finished above the shoe.</h3><p>Wear with loafers for a sharper look. Check the inside-leg measurement to find your preferred length.</p></div>
+  <div class="luxe-story__copy">
+    <p class="luxe-kicker">The Luxe, up close</p><h2 id="LuxeStory-{{ section.id }}">From waist<br>to ankle.</h2>
+    <div class="luxe-story__points" role="group" aria-label="Explore the Luxe Chino details">
+      {%- for title in detail_titles -%}<button type="button" data-luxe-detail="{{ forloop.index }}" aria-pressed="false" aria-controls="LuxeDetail-{{ section.id }}-{{ forloop.index }}"><span>{{ title }}</span><p>{{ detail_texts[forloop.index0] }}</p><i aria-hidden="true">↗</i></button>{%- endfor -%}
+      <button type="button" class="luxe-detail-motion is-current" data-luxe-detail="motion" aria-pressed="true" aria-controls="LuxeDetailMotion-{{ section.id }}">{% if is_stone %}See the cut in motion{% else %}See the full view{% endif %}<i aria-hidden="true">↗</i></button>
     </div>
     <button class="luxe-text-link" type="button" data-luxe-size-guide>Find your fit <span aria-hidden="true">↗</span></button>
   </div>

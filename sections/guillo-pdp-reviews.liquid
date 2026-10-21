@@ -115,6 +115,27 @@
   assign rating = gr_rating
   assign rating_count = gr_count
   assign histogram = blank
+  if product.handle contains 'the-luxe-chino-'
+    assign opening_reviews = '' | split: ''
+    assign remaining_reviews = '' | split: ''
+    assign opening_names = '|'
+    assign opening_count = 0
+    assign opening_limit = section.settings.reviews_visible | default: 3
+    for review in live_reviews
+      assign reviewer_key = review.reviewer_name | default: review.reviewer.name | handleize | prepend: '|' | append: '|'
+      assign review_array = live_reviews | slice: forloop.index0, 1
+      if opening_count < opening_limit
+        unless opening_names contains reviewer_key
+          assign opening_reviews = opening_reviews | concat: review_array
+          assign opening_names = opening_names | append: reviewer_key
+          assign opening_count = opening_count | plus: 1
+          continue
+        endunless
+      endif
+      assign remaining_reviews = remaining_reviews | concat: review_array
+    endfor
+    assign live_reviews = opening_reviews | concat: remaining_reviews
+  endif
 
   assign app_blocks = section.blocks | where: 'type', '@app'
   assign has_app_reviews = false
