@@ -374,7 +374,7 @@
           <button type="button" class="guillo-pdp__desc-more" data-desc-toggle hidden>Read more</button>
         </div>
       {%- endif -%}
-      {%- if stone_test -%}{% render 'guillo-luxe-fit-profile', product: product %}{%- endif -%}
+      {%- if stone_test -%}{% render 'guillo-luxe-product-notes' %}{%- endif -%}
       <div class="guillo-pdp__rule"></div>
 
 
@@ -718,6 +718,7 @@
       {% endform %}
       {%- if stone_test -%}
         <div class="luxe-assurance"><span>{{ ret_line }}</span><a href="#LuxeLook-{{ section.id }}">Complete the look <span aria-hidden="true">↗</span></a></div>
+        {% render 'guillo-luxe-fit-profile' %}
         {%- assign luxe_quote_authors = 'Ken C.|Nath W|Nathan|Ben|Steve' | split: '|' -%}
         {%- assign luxe_quote_count = 0 -%}
         {%- capture luxe_quote_slides -%}

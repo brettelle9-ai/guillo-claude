@@ -99,9 +99,6 @@
   // An active size action guides the shopper; it never chooses a variant for them.
   const sizeWrap=mainForm?.querySelector('[data-option-index]');
   const variants=JSON.parse(root.querySelector('[data-variant-data]').textContent);
-  let fitData={};
-  try {fitData=JSON.parse(root.querySelector('[data-gff-data]')?.textContent||'{}');} catch {}
-  const norm=value=>String(value||'').replace(/[″′"'\s]/g,'').toLowerCase();
   const mainVariant=()=>{
     if(!mainForm?.querySelector('[data-option-index] input:checked'))return null;
     const id=Number(mainForm.querySelector('[name="id"]')?.value);
@@ -131,23 +128,10 @@
     const colour=root.querySelector('.guillo-pdp__style')?.textContent.trim()||'';
     const sticky=root.querySelector('[data-luxe-sticky-size]');
     if(sticky)sticky.textContent=` · ${colour} · ${variant?size:'Choose size'}`;
-    const measure = root.querySelector('[data-luxe-inseam]');
-    if (measure) {
-      const idx = (fitData.sizes || []).findIndex(label => norm(label) === norm(size));
-      const inseam = fitData.inside?.[idx];
-      const lengths = (fitData.inside || []).map(Number).filter(value => value > 0);
-      if (variant && inseam) measure.textContent = `${inseam} cm inside leg in size ${size} · compare with a pair you own.`;
-      else if (lengths.length) {
-        const low = Math.min(...lengths), high = Math.max(...lengths);
-        measure.textContent = `${low === high ? low : low + '–' + high} cm inside leg, depending on size.`;
-      }
-    }
     const hint=root.querySelector('[data-size-hint]');
     if(variant&&hint) {
       const isPreorder=!!mainForm.querySelector('input:checked[data-preorder="true"]');
-      const idx=(fitData.sizes||[]).findIndex(label=>norm(label)===norm(size));
-      const inseam=fitData.inside?.[idx];
-      hint.textContent=(isPreorder?'Pre-order':dispatchCopy())+(inseam?` · ${inseam} cm inside leg`:'');
+      hint.textContent=isPreorder?'Pre-order':dispatchCopy();
     }
   };
   root.querySelectorAll('[data-atc]').forEach(button=>button.addEventListener('click',event=>{
