@@ -12,7 +12,7 @@
   <div class="luxe-mood__copy"><p class="luxe-kicker">The Guillo point of view</p><h2 id="LuxeMood-{{ section.id }}">Your own standard.</h2><p>Mediterranean by influence. Fitted by Guillo.</p></div>
 </section>
 <section class="luxe-story" aria-labelledby="LuxeStory-{{ section.id }}" data-luxe-details>
-  <div class="luxe-story__visual" data-luxe-reveal>
+  <div class="luxe-story__visual" data-luxe-reveal style="--luxe-media-ratio:{% if is_stone %}0.5625{% else %}{{ product.featured_image.aspect_ratio | default: 0.75 }}{% endif %}">
     <div class="luxe-detail-view" data-luxe-detail-view="motion" id="LuxeDetailMotion-{{ section.id }}">
       {%- if is_stone -%}
         <video class="luxe-story__film" muted loop playsinline preload="none" poster="{{ 'guillo-luxe-stone-fit.jpg' | asset_url }}" data-luxe-film data-src="{{ 'guillo-luxe-stone-fit.mp4' | asset_url }}" aria-label="Close views of the Stone Luxe Chino from waist to shoes"></video>

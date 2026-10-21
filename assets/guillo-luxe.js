@@ -131,6 +131,17 @@
     const colour=root.querySelector('.guillo-pdp__style')?.textContent.trim()||'';
     const sticky=root.querySelector('[data-luxe-sticky-size]');
     if(sticky)sticky.textContent=` · ${colour} · ${variant?size:'Choose size'}`;
+    const measure = root.querySelector('[data-luxe-inseam]');
+    if (measure) {
+      const idx = (fitData.sizes || []).findIndex(label => norm(label) === norm(size));
+      const inseam = fitData.inside?.[idx];
+      const lengths = (fitData.inside || []).map(Number).filter(value => value > 0);
+      if (variant && inseam) measure.textContent = `${inseam} cm inside leg in size ${size} · compare with a pair you own.`;
+      else if (lengths.length) {
+        const low = Math.min(...lengths), high = Math.max(...lengths);
+        measure.textContent = `${low === high ? low : low + '–' + high} cm inside leg, depending on size.`;
+      }
+    }
     const hint=root.querySelector('[data-size-hint]');
     if(variant&&hint) {
       const isPreorder=!!mainForm.querySelector('input:checked[data-preorder="true"]');
@@ -145,10 +156,22 @@
   root.querySelectorAll('[data-luxe-choose-size]').forEach(button=>button.addEventListener('click',chooseSize));
   mainForm?.addEventListener('change',()=>queueMicrotask(()=>{updateBuy();updateLook?.();}));
   const details=root.querySelector('[data-luxe-details]');
+  const sizeStoryVisual = () => {
+    const media = details?.querySelector('[data-luxe-detail-view]:not([hidden]) :is(video,img)');
+    if (!media) return;
+    const width = media.videoWidth || media.naturalWidth || Number(media.getAttribute('width'));
+    const height = media.videoHeight || media.naturalHeight || Number(media.getAttribute('height'));
+    if (width && height) details.querySelector('.luxe-story__visual').style.setProperty('--luxe-media-ratio', String(width / height));
+  };
+  details?.querySelectorAll('img,video').forEach(media => {
+    media.addEventListener(media.tagName === 'VIDEO' ? 'loadedmetadata' : 'load', sizeStoryVisual);
+  });
+  sizeStoryVisual();
   details?.querySelectorAll('[data-luxe-detail]').forEach(button=>button.addEventListener('click',()=>{
     const mode=button.dataset.luxeDetail;
     details.querySelectorAll('[data-luxe-detail]').forEach(control=>control.setAttribute('aria-pressed',String(control===button)));
     details.querySelectorAll('[data-luxe-detail-view]').forEach(view=>view.hidden=view.dataset.luxeDetailView!==mode);
+    sizeStoryVisual();
     updateFilm();
   }));
 

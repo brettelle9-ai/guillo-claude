@@ -3,7 +3,7 @@
   email signup form.
 {% endcomment %}
 
-<section class="guillo-newsletter g-pad" aria-labelledby="GuilloNewsletterHeading-{{ section.id }}">
+<section class="guillo-newsletter g-pad"{% if product.handle == 'the-luxe-chino-stone' or product.template_suffix == 'aw26_luxe-chino_claude_' %} style="--luxe-glass-scene:url('{{ 'guillo-summer-mood.jpg' | asset_url }}')"{% endif %} aria-labelledby="GuilloNewsletterHeading-{{ section.id }}">
   <div class="guillo-newsletter__inner">
     <div class="guillo-newsletter__copy">
       {%- if section.settings.eyebrow != blank -%}<span class="g-eyebrow guillo-newsletter__eyebrow">{{ section.settings.eyebrow | escape }}</span>{%- endif -%}
