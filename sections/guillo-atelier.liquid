@@ -1,12 +1,11 @@
 {{ 'guillo-atelier.css' | asset_url | stylesheet_tag }}
 {%- assign signature = section.settings.signature_product -%}
 <guillo-atelier class="ga">
-  {%- assign trust_reviews = shop.metafields.judgeme.reviews_grid.value -%}
   <section class="ga-trust" aria-label="Guillo customer care">
     <div class="ga-trust__track">
       {%- for repeat in (1..2) -%}
       <div class="ga-trust__group"{% if repeat == 2 %} aria-hidden="true"{% endif %}>
-        {%- if trust_reviews.number_of_reviews > 0 -%}<span>Rated {{ trust_reviews.average_rating }}/5 · {{ trust_reviews.number_of_reviews }} customer reviews</span>{%- endif -%}
+        <span>Build your wardrobe — 3+ pieces, 20% off</span>
         <span>{{ section.settings.trust_returns | escape }}</span>
         <span>{{ section.settings.trust_shipping | escape }}</span>
       </div>
