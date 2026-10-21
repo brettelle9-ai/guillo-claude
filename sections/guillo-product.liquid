@@ -952,8 +952,8 @@
             </div>
           {%- endfor -%}
         </div>
-      {%- endif -%}
         {%- endif -%}
+      {%- endif -%}
     </div>
   </div>
 
@@ -1423,7 +1423,7 @@
         'scroll',
         () => {
           const mainBuy = root.querySelector('.guillo-pdp__panel [data-atc]');
-          const on = root.classList.contains('guillo-pdp--stone') && mainBuy ? mainBuy.getBoundingClientRect().bottom < (document.querySelector('#header-component')?.getBoundingClientRect().bottom || 80) : window.scrollY > 640;
+          const on = (root.classList.contains('guillo-pdp--stone') || document.body.classList.contains('guillo-capri-page')) && mainBuy ? mainBuy.getBoundingClientRect().bottom < (document.querySelector('#header-component')?.getBoundingClientRect().bottom || 80) : window.scrollY > 640;
           if (on !== shown) {
             shown = on;
             sticky.hidden = !on;
