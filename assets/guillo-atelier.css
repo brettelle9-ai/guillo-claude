@@ -15,3 +15,6 @@
 @media(prefers-reduced-motion:reduce){.ga *,.ga *::before,.ga *::after{transition:none!important;animation:none!important;transform:none!important;clip-path:none!important}.ga-signature__guide{display:none}}
 
 .ga-outfit__add[hidden]{display:none}
+/* Retain contrast against Horizon's generic summary hover and focus rules. */
+.ga .ga-outfit__shop>summary,.ga .ga-outfit__shop>summary:hover,.ga .ga-outfit__shop>summary:focus-visible{color:#fff!important}
+.ga .ga-outfit__include input{appearance:auto;accent-color:#fff;color-scheme:light}
