@@ -353,3 +353,55 @@ body:has(.guillo-pdp--stone) .guillo-newsletter :is(.guillo-newsletter__eyebrow,
 .luxe-fit-profile+.luxe-buy-voices{margin-top:24px;padding-top:0;border-top:0}
 body:has(.guillo-pdp--stone) .guillo-pdp__desc-wrap{margin-bottom:0}
 @media(min-width:990px){body:has(.guillo-pdp--stone) .guillo-pdp__titlerow{margin-bottom:24px}body:has(.guillo-pdp--stone) .guillo-pdp__rule{margin-block:24px}}
+
+/* A full-width wardrobe rail replaces the fixed outfit builder. */
+.luxe-wardrobe{padding:64px 4vw 42px;background:#fff;color:#15212a;scroll-margin-top:105px;overflow:hidden}
+.luxe-wardrobe__head{display:flex;align-items:end;justify-content:space-between;gap:32px;margin-bottom:36px}
+.luxe-wardrobe .luxe-kicker{color:#64717a;margin-bottom:13px}
+.luxe-wardrobe h2{font:400 clamp(37px,4.5vw,64px)/1.08 var(--g-display);letter-spacing:-.02em;margin:0 0 15px;color:#15212a}
+.luxe-wardrobe__intro{font:400 14px/1.7 var(--g-sans);color:#586670;margin:0}
+.luxe-wardrobe__nav{flex-shrink:0;text-align:right}
+.luxe-wardrobe__nav p{font:400 12px/1.6 var(--g-sans);color:#586670;margin:0 0 20px}
+.luxe-wardrobe__nav>div{display:flex;gap:8px;justify-content:flex-end}
+.luxe-wardrobe__nav button{width:46px;height:46px;display:grid;place-items:center;border:1px solid #9eabb4;background:transparent;color:#15212a;cursor:pointer;transition:background .3s,color .3s}
+.luxe-wardrobe__nav button:hover{background:#15212a;color:#fff}
+.luxe-wardrobe__nav button:disabled{opacity:.3;cursor:default;background:transparent;color:#15212a}
+.luxe-wardrobe__nav svg{width:24px;height:24px}
+.luxe-wardrobe__track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 56px)/3.25);gap:28px;align-items:start;overflow-x:auto;scroll-snap-type:x proximity;overscroll-behavior-x:contain;scrollbar-width:none;padding-bottom:9px}
+.luxe-wardrobe__track::-webkit-scrollbar{display:none}
+.luxe-wardrobe__card{min-width:0;scroll-snap-align:start;transition-delay:var(--wardrobe-delay,0ms)!important}
+.luxe-wardrobe__image{position:relative;display:block;aspect-ratio:3/4;overflow:hidden;background:#e7eaec}
+.luxe-wardrobe__image img{width:100%;height:100%;object-fit:cover;object-position:50% 25%;display:block;transition:opacity .65s ease,transform 1.1s cubic-bezier(.2,.6,.2,1)}
+.luxe-wardrobe__image .luxe-wardrobe__alternate{position:absolute;inset:0;opacity:0}
+.luxe-wardrobe__caption{display:flex;justify-content:space-between;align-items:start;gap:14px;margin:19px 0 17px;font:400 14px/1.5 var(--g-sans)}
+.luxe-wardrobe__caption a{color:#15212a;text-decoration:none;max-width:75%}
+.luxe-wardrobe__caption>span{white-space:nowrap;color:#55636d;font-size:12px}
+.luxe-wardrobe__sizes{display:flex;flex-wrap:wrap;gap:6px;margin-top:15px;min-height:39px}
+.luxe-wardrobe__sizes button{min-width:36px;min-height:38px;padding:8px;border:1px solid #ccd2d6;background:transparent;color:#41525f;font:400 11px/1 var(--g-sans);cursor:pointer;transition:background .25s,color .25s}
+.luxe-wardrobe__sizes button[aria-pressed=true]{background:#15212a;border-color:#15212a;color:#fff}
+.luxe-wardrobe__sizes button:disabled{color:#9ca7af;border-color:#e3e7ea;text-decoration:line-through;cursor:default}
+.luxe-wardrobe__add{display:flex;justify-content:space-between;width:100%;min-height:47px;padding:16px 0 12px;margin-top:12px;border:0;border-bottom:1px solid #a9b3bb;background:transparent;color:#15212a;font:400 11px/1.4 var(--g-sans);letter-spacing:.06em;text-transform:uppercase;text-align:left;cursor:pointer;transition:border-color .3s}
+.luxe-wardrobe__add:hover{border-color:#15212a}
+.luxe-wardrobe__add:disabled{opacity:.5;cursor:wait}
+.luxe-wardrobe__preorder{font:400 11px/1.5 var(--g-sans);color:#586670;margin:0}
+.luxe-wardrobe__preorder a{color:inherit;text-underline-offset:3px}
+.luxe-wardrobe__progress{position:relative;height:2px;background:#dce1e4;margin-top:29px;overflow:hidden}
+.luxe-wardrobe__progress span{position:absolute;inset-block:0;left:0;width:30%;background:#6a7e8c;transition:width .2s}
+.luxe-wardrobe__status{font:400 12px/1.6 var(--g-sans);color:#41525f;min-height:19px;margin:15px 0 0}
+.luxe-wardrobe__card.is-size-prompt .luxe-wardrobe__sizes{outline:1px solid #6a7e8c;outline-offset:5px}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){.luxe-wardrobe__image:hover img{transform:scale(1.035)}.luxe-wardrobe__image:hover .luxe-wardrobe__alternate{opacity:1}}
+@media(max-width:989px){
+ .luxe-wardrobe{padding:40px 20px 25px}
+ .luxe-wardrobe__head{gap:18px;align-items:start;margin-bottom:27px;flex-wrap:wrap}
+ .luxe-wardrobe h2{font-size:40px;max-width:300px}
+ .luxe-wardrobe__intro{font-size:13px}
+ .luxe-wardrobe__nav{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left}
+ .luxe-wardrobe__nav p{margin:0;font-size:12px}
+ .luxe-wardrobe__nav button{width:42px;height:42px}
+ .luxe-wardrobe__track{grid-auto-columns:83%;gap:17px;margin-right:-20px;padding-right:20px}
+ .luxe-wardrobe__caption{font-size:14px;margin-top:17px}
+ .luxe-wardrobe__sizes button{min-width:39px;min-height:40px}
+ .luxe-wardrobe__add{min-height:46px}
+ .luxe-wardrobe__progress{margin-top:23px}
+}
+@media(prefers-reduced-motion:reduce){.luxe-wardrobe__card,.luxe-wardrobe__image img,.luxe-wardrobe__nav button{transition:none!important}}

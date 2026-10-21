@@ -138,7 +138,7 @@
     if(button.dataset.luxeSizeAction==='true'){event.preventDefault();event.stopImmediatePropagation();chooseSize();}
   },true));
   root.querySelectorAll('[data-luxe-choose-size]').forEach(button=>button.addEventListener('click',chooseSize));
-  mainForm?.addEventListener('change',()=>queueMicrotask(()=>{updateBuy();updateLook?.();}));
+  mainForm?.addEventListener('change',()=>queueMicrotask(updateBuy));
   const details=root.querySelector('[data-luxe-details]');
   const sizeStoryVisual = () => {
     const media = details?.querySelector('[data-luxe-detail-view]:not([hidden]) :is(video,img)');
@@ -159,71 +159,69 @@
     updateFilm();
   }));
 
-  const look=root.querySelector('[data-luxe-look]');
-  let updateLook;
-  if(!look||!mainForm){updateBuy();return;}
-  const form=look.querySelector('form'),add=look.querySelector('[data-luxe-look-add]'),status=look.querySelector('[data-luxe-look-status]');
-  const cfg=JSON.parse(look.querySelector('[data-luxe-money]').textContent);
-  const currency=new Intl.NumberFormat(cfg.locale||'en',{style:'currency',currency:cfg.currency||'AUD',maximumFractionDigits:2});
-  const money=cents=>currency.format(cents/100);
-  const picks={shirt:null,polo:null,belt:null};
-  let mode='shirt',busy=false;
-  const selected=()=>{
-    const variant=mainVariant();
-    return [...(variant?[{id:variant.id,price:Number(variant.price_cents||cfg.basePrice)}]:[]),picks[mode],picks.belt].filter(Boolean);
+  updateBuy();
+  const wardrobe = root.querySelector('[data-luxe-wardrobe]');
+  if (!wardrobe) return;
+  const track = wardrobe.querySelector('[data-wardrobe-track]');
+  const cards = Array.from(wardrobe.querySelectorAll('[data-wardrobe-card]'));
+  const prev = wardrobe.querySelector('[data-wardrobe-prev]');
+  const next = wardrobe.querySelector('[data-wardrobe-next]');
+  const progress = wardrobe.querySelector('[data-wardrobe-progress]');
+  const status = wardrobe.querySelector('[data-wardrobe-status]');
+  const cfg = JSON.parse(wardrobe.querySelector('[data-wardrobe-money]').textContent);
+  const currency = new Intl.NumberFormat(cfg.locale || 'en', {style:'currency',currency:cfg.currency || 'AUD',maximumFractionDigits:2});
+  const updateRail = () => {
+    const max = track.scrollWidth - track.clientWidth;
+    prev.disabled = track.scrollLeft <= 2;
+    next.disabled = track.scrollLeft >= max - 2;
+    progress.style.width = `${Math.min(100,track.clientWidth / track.scrollWidth * 100)}%`;
+    progress.style.left = `${track.scrollLeft / track.scrollWidth * 100}%`;
   };
-  updateLook=()=>{
-    const variant=mainVariant(),chosen=selected();
-    const count=chosen.length;
-    let total=chosen.reduce((sum,piece)=>sum+piece.price,0);
-    if(!variant)total+=cfg.basePrice;
-    const discounted=!!variant&&count>=3;
-    const original=look.querySelector('[data-luxe-original]');
-    original.hidden=!discounted;original.textContent=money(total);
-    look.querySelector('[data-luxe-total]').textContent=money(discounted?Math.round(total*.8):total);
-    look.querySelector('[data-luxe-base-label]').textContent=variant?`Size ${mainForm.querySelector('[data-option-value-label]').textContent}`:'Choose your size';
-    look.querySelector('[data-luxe-choose-size]').textContent=variant?'Change size':'Choose size';
-    look.querySelector('[data-luxe-look-hint]').textContent=!variant?'Choose your chino size to complete the selection.':discounted?'20% wardrobe offer included. Final total confirmed in your bag.':`${count} ${count===1?'piece':'pieces'} selected · 3+ pieces unlock 20% off.`;
-    add.disabled=busy;
-    add.textContent=busy?'Adding…':!variant?'Choose chino size':`Add ${count===1?'chino':count+' pieces'} to bag`;
-    look.querySelectorAll('[data-luxe-pick]').forEach(button=>{
-      const pick=picks[button.dataset.luxePick];
-      const active=pick?.id===Number(button.dataset.luxeVariantId);
-      button.setAttribute('aria-pressed',String(active));
-      if(button.dataset.luxePick==='belt')button.textContent=active?'Included':'Add belt';
-    });
-    look.querySelectorAll('[data-luxe-remove]').forEach(button=>button.hidden=!picks[button.dataset.luxeRemove]);
+  const move = direction => {
+    const step = (cards[0]?.getBoundingClientRect().width || track.clientWidth) + parseFloat(getComputedStyle(track).columnGap || 0);
+    track.scrollBy({left:direction * step,behavior:reduced.matches?'instant':'smooth'});
   };
-  look.querySelectorAll('[data-luxe-mode]').forEach(button=>button.addEventListener('click',()=>{
-    mode=button.dataset.luxeMode;
-    look.querySelectorAll('[data-luxe-mode]').forEach(control=>control.setAttribute('aria-pressed',String(control===button)));
-    look.querySelectorAll('[data-luxe-piece]').forEach(piece=>piece.hidden=!['belt',mode].includes(piece.dataset.luxePiece));
-    look.querySelectorAll('[data-luxe-look-scene]').forEach(scene=>{const active=scene.dataset.luxeLookScene===mode;scene.classList.toggle('is-current',active);scene.setAttribute('aria-hidden',String(!active));});
-    look.querySelector('[data-luxe-look-caption]').textContent=mode==='shirt'?'With a shirt.':'With a polo.';
-    look.querySelector('[data-luxe-look-intro]').textContent=mode==='shirt'?'A pinstripe shirt, tucked in. A defined waist. The details do the talking.':'A navy polo, a clean silhouette. A different expression of the same wardrobe.';
-    status.textContent='';updateLook();
-  }));
-  look.querySelectorAll('[data-luxe-pick]').forEach(button=>button.addEventListener('click',()=>{
-    const key=button.dataset.luxePick,id=Number(button.dataset.luxeVariantId);
-    picks[key]=picks[key]?.id===id?null:{id,price:Number(button.dataset.luxePrice)};
-    status.textContent='';updateLook();
-  }));
-  look.querySelectorAll('[data-luxe-remove]').forEach(button=>button.addEventListener('click',()=>{picks[button.dataset.luxeRemove]=null;status.textContent='';updateLook();}));
-  form.addEventListener('submit',async event=>{
-    event.preventDefault();
-    if(busy)return;
-    if(!mainVariant()){chooseSize();return;}
-    busy=true;status.textContent='';updateLook();
-    const items=selected().map(piece=>({id:piece.id,quantity:1}));
-    try {
-      const response=await fetch((window.Shopify?.routes?.root||'/')+'cart/add.js',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({items})});
-      const result=await response.json();
-      if(!response.ok)throw new Error(result.description||'That selection could not be added. Check the sizes and try again.');
-      status.textContent='Added to your bag.';
-      if(window.GuilloCart){try{await window.GuilloCart.refresh();(window.GuilloCart.notifyAdded||window.GuilloCart.open)();}catch{status.textContent='Added to your bag. Open your bag to continue.';}}
-      else location.assign((window.Shopify?.routes?.root||'/')+'cart');
-    } catch(error){status.textContent=error.message||'Could not add those pieces. Please try again.';}
-    finally{busy=false;updateLook();}
+  prev.addEventListener('click',() => move(-1));
+  next.addEventListener('click',() => move(1));
+  track.addEventListener('scroll',updateRail,{passive:true});
+  track.addEventListener('keydown',event => {
+    if (event.target !== track || !['ArrowLeft','ArrowRight'].includes(event.key)) return;
+    event.preventDefault();move(event.key === 'ArrowLeft'?-1:1);
   });
-  updateBuy();updateLook();
+  if ('ResizeObserver' in window) new ResizeObserver(updateRail).observe(track);
+  updateRail();
+  cards.forEach(card => {
+    const sizes = Array.from(card.querySelectorAll('[data-wardrobe-size]'));
+    const add = card.querySelector('[data-wardrobe-add]');
+    let selected = null, busy = false;
+    sizes.forEach(button => button.addEventListener('click',() => {
+      if (busy) return;
+      selected = button;
+      sizes.forEach(size => size.setAttribute('aria-pressed',String(size === button)));
+      card.classList.remove('is-size-prompt');
+      card.querySelector('[data-wardrobe-price]').textContent = currency.format(Number(button.dataset.variantPrice) / 100);
+      add.textContent = 'Add to bag ↗';status.textContent = '';
+    }));
+    add.addEventListener('click',async () => {
+      if (busy) return;
+      if (!selected) {
+        card.classList.add('is-size-prompt');
+        sizes.find(size => !size.disabled)?.focus({preventScroll:true});
+        status.textContent = `Choose a size for ${card.dataset.wardrobeTitle}.`;
+        return;
+      }
+      busy = true;add.disabled = true;add.textContent = 'Adding…';status.textContent = '';
+      try {
+        const response = await fetch((window.Shopify?.routes?.root || '/')+'cart/add.js',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({items:[{id:Number(selected.dataset.variantId),quantity:1}]})});
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.description || 'This size could not be added. Try another size.');
+        status.textContent = `${card.dataset.wardrobeTitle} added to your bag.`;
+        if (window.GuilloCart) {
+          try {await window.GuilloCart.refresh();(window.GuilloCart.notifyAdded || window.GuilloCart.open)();}
+          catch {status.textContent += ' Open your bag to continue.';}
+        } else location.assign((window.Shopify?.routes?.root || '/')+'cart');
+      } catch(error) {status.textContent = error.message || 'Could not add this shirt. Please try again.';}
+      finally {busy = false;add.disabled = false;add.textContent = 'Add to bag ↗';}
+    });
+  });
 })();
