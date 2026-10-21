@@ -17,23 +17,9 @@
   <section class="ga-gallery" aria-label="Shop by category">
     <div class="ga-gallery__grid">{%- for block in section.blocks -%}{% render 'guillo-category-card', block: block %}{%- endfor -%}</div>
   </section>
-  <section class="ga-outfit ga-scene" aria-labelledby="ga-outfit-{{ section.id }}">
-    <div class="ga-outfit__image"><img src="{{ 'guillo-olive-coffee.jpg' | asset_url }}" alt="Guillo white fitted shirt styled with green chinos" width="1200" height="1600" loading="lazy"><span class="ga-outfit__image-label">White / Sage</span></div>
-    <div class="ga-outfit__copy">
-      <p class="ga-kicker">Worn together</p><h2 id="ga-outfit-{{ section.id }}">The olive edit.</h2>
-      <p class="ga-outfit__intro">White Siracusa. Sage Luxe.<br>Two pieces. One complete look.</p>
-      <details class="ga-outfit__shop"><summary>Shop this look <span aria-hidden="true">↗</span></summary>
-        <form data-guillo-outfit action="{{ routes.cart_add_url }}" method="post" data-add-url="{{ routes.cart_add_url }}.js" data-cart-url="{{ routes.cart_url }}">
-          {%- assign look_shirt = all_products['siracusa-short-sleeve-slim-fit-shirt'] -%}
-          {%- assign look_chinos = all_products['the-luxe-chino-sage'] -%}
-          {% render 'guillo-look-item', item: look_shirt, label: 'Siracusa Shirt · White', section_id: section.id %}
-          {% render 'guillo-look-item', item: look_chinos, label: 'Luxe Chinos · Sage', section_id: section.id %}
-          <p class="ga-outfit__status" role="status" aria-live="polite" data-outfit-status>Choose the pieces and sizes you want.</p>
-          <noscript><p>Open either product above to select your size and add it to your bag.</p></noscript>
-          <button class="ga-outfit__add" type="submit" hidden>Add selected pieces <span aria-hidden="true">↗</span></button>
-        </form>
-      </details>
-    </div>
+  <section class="ga-banner ga-scene" aria-labelledby="ga-banner-{{ section.id }}">
+    <img class="ga-banner__image" src="{{ 'guillo-shirt-campaign-wide.jpg' | asset_url }}" width="1920" height="1080" loading="lazy" alt="Guillo fitted blue shirt at the villa colonnade">
+    <div class="ga-banner__copy"><p class="ga-kicker">Guillo shirts</p><h2 id="ga-banner-{{ section.id }}">The shirt collection.</h2><a class="ga-banner__link" href="{{ collections['shirts'].url | default: '/collections/shirts' }}">Shop shirts</a></div>
   </section>
   {%- if signature != blank -%}
   <section class="ga-signature" aria-labelledby="ga-signore-{{ section.id }}">

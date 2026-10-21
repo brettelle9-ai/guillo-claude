@@ -105,3 +105,28 @@ body .g-campaign__heading em{font-family:inherit;font-weight:400;font-style:norm
  body .guillo-story__panel>.g-link{font-size:10px;min-height:44px;display:inline-flex;align-items:center}
  body .guillo-story__img{object-position:58% center!important}
 }
+
+
+/* A single directional curtain reveal closes the page with a dark signup panel. */
+body .guillo-newsletter{position:relative;isolation:isolate;overflow:hidden;padding-block:70px;background:#111b20;color:#fff;border-top:0}
+body .guillo-newsletter__inner{position:relative;z-index:1;gap:6vw}
+body .guillo-newsletter__eyebrow{color:#bac8ce;letter-spacing:.12em}
+body .guillo-newsletter__heading{color:#fff;font-size:clamp(34px,3.7vw,54px);line-height:1.08;max-width:540px}
+body .guillo-newsletter__text{color:#d0dbe0;font-size:13px;line-height:1.65}
+body .guillo-newsletter__label{color:#e2e9ec}
+body .guillo-newsletter__submit{background:#fff;color:#111b20!important;border-color:#fff;transition:background .3s}
+body .guillo-newsletter__submit:hover{background:#dfe8ec;color:#111b20!important}
+body .guillo-newsletter__success{color:#fff}body .guillo-newsletter__error{color:#ffbfb5}
+body .guillo-newsletter__row{gap:8px}
+@media(prefers-reduced-motion:no-preference){
+ .guillo-newsletter.is-sweep-ready:before{content:'';position:absolute;inset:0 -15%;z-index:2;pointer-events:none;background:#fff;box-shadow:-20px 0 45px #07121630;transform:translateX(0) skewX(-12deg)}
+ .guillo-newsletter.is-sweep-revealed:before{animation:g-signup-sweep 1.15s cubic-bezier(.65,0,.2,1) both}
+ .guillo-newsletter.is-sweep-ready.is-sweep-revealed .guillo-newsletter__copy{animation:g-signup-copy .85s .12s cubic-bezier(.2,.7,.2,1) both}
+ .guillo-newsletter.is-sweep-ready.is-sweep-revealed .guillo-newsletter__form{animation:g-signup-form .8s .3s cubic-bezier(.2,.7,.2,1) both}
+ .guillo-newsletter:focus-within:before{display:none}
+}
+@keyframes g-signup-sweep{from{transform:translateX(0) skewX(-12deg)}to{transform:translateX(115%) skewX(-12deg)}}
+@keyframes g-signup-copy{from{transform:translateY(22px)}to{transform:none}}
+@keyframes g-signup-form{from{clip-path:inset(0 100% 0 0);transform:translateY(12px)}to{clip-path:inset(0);transform:none}}
+@media(max-width:749px){body .guillo-newsletter{padding-block:44px}body .guillo-newsletter__inner{gap:24px}body .guillo-newsletter__heading{font-size:36px;max-width:330px}}
+@media(prefers-reduced-motion:reduce){.guillo-newsletter:before{display:none!important}.guillo-newsletter__copy,.guillo-newsletter__form{animation:none!important;transform:none!important;clip-path:none!important}}

@@ -16,17 +16,15 @@
 .ga-card__image:after{content:'';position:absolute;inset:60% 0 0;background:linear-gradient(transparent,#06101480);pointer-events:none}
 .ga-category__caption{position:absolute;inset:auto 0 0;z-index:1;padding:26px 14px;display:flex;justify-content:center;text-align:center;color:#fff}
 .ga .ga-category__caption h3{font:500 clamp(18px,2vw,26px)/1.2 var(--g-sans);letter-spacing:.04em;text-transform:uppercase;color:#fff}
-.ga-outfit{display:grid;grid-template-columns:1.1fr 1fr;min-height:660px;background:#152125;color:#fff;position:relative;isolation:isolate}
-.ga-outfit__image{position:relative;overflow:hidden;min-height:660px}
-.ga-outfit__image>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
-.ga-outfit__image-label{position:absolute;bottom:28px;left:28px;text-transform:uppercase;font-size:11px;letter-spacing:.1em;padding:10px 14px;background:#111416a6}
-.ga-outfit__copy{padding:55px 5vw;align-self:center;position:relative;z-index:1}
-.ga-outfit h2{font-size:clamp(50px,6vw,92px);line-height:1;margin:22px 0}
-.ga-outfit__intro{font-size:15px;line-height:1.65;color:#d2dce0}
-.ga-outfit__shop{margin-top:38px;border-block:1px solid #ffffff50}.ga-outfit__shop summary{display:flex;justify-content:space-between;align-items:center;min-height:64px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;list-style:none;cursor:pointer}.ga-outfit__shop summary::-webkit-details-marker{display:none}.ga-outfit__shop summary>span{font-size:24px;transition:transform .4s}.ga-outfit__shop[open] summary>span{transform:rotate(90deg)}.ga-outfit__item{border:0;border-top:1px solid #ffffff30;padding:22px 0;margin:0;display:grid;grid-template-columns:80px minmax(0,1fr);gap:20px}.ga-outfit__thumb img{display:block;width:80px;height:106px;object-fit:cover}.ga-outfit__item-copy>a{display:block;font-size:16px;font-weight:500}.ga-outfit__item-copy>span{display:block;font-size:13px;color:#c3cdd1;margin-top:6px}.ga-outfit__include{display:flex;align-items:center;gap:9px;font-size:12px;margin:13px 0;color:#dce3e6}.ga-outfit input{accent-color:white;width:16px;height:16px}.ga-outfit select{display:block;min-height:44px;width:100%;border:1px solid #ffffff60;background:#fff;color:#111416;font-size:13px;padding:8px 12px;border-radius:0}.ga-outfit__status{font-size:13px;line-height:1.6;padding:8px 0 18px;color:#d4dde1}.ga-outfit__status.is-error{color:#ffc3b8}.ga-outfit__add{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:54px;border:1px solid white;background:white;color:#111416;padding:14px 18px;font-size:11px!important;font-weight:600!important;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-bottom:24px}.ga-outfit__add:disabled{opacity:.6;cursor:wait}
-.ga-outfit__add[hidden]{display:none}
-.ga .ga-outfit__shop>summary,.ga .ga-outfit__shop>summary:hover,.ga .ga-outfit__shop>summary:focus-visible{color:#fff!important}
-.ga .ga-outfit__include input{appearance:auto;accent-color:#fff;color-scheme:light}
+/* A short campaign band breaks the category pairs before the black Signore story. */
+.ga-banner{position:relative;isolation:isolate;overflow:hidden;height:clamp(300px,29vw,420px);background:#111b20;color:#fff}
+.ga-banner__image{display:block;width:100%;height:100%;object-fit:cover;object-position:center 64%}
+.ga-banner:after{content:'';position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,transparent 25%,#09151a66 52%,#09151ac7);pointer-events:none}
+.ga-banner__copy{position:absolute;z-index:1;inset:0 5% 0 50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px}
+.ga .ga-banner h2{font-size:clamp(32px,3.4vw,50px);line-height:1.05;color:#fff}
+.ga-banner .ga-kicker{font-size:10px;color:#e3e9eb;letter-spacing:.13em}
+.ga .ga-banner__link,.ga .ga-banner__link:hover{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 28px;margin-top:5px;border:1px solid #fff;color:#fff!important;font:500 10px/1.3 var(--g-sans);letter-spacing:.08em;text-transform:uppercase;transition:background .3s,color .3s}
+.ga .ga-banner__link:hover{background:#fff;color:#111b20!important}.ga-banner__link:focus-visible{outline:2px solid #fff;outline-offset:5px}
 .ga-signature{position:relative;background:#0c0e0f;color:#fff}
 .ga-signature__stage{display:grid;grid-template-columns:.9fr 1.1fr;gap:7vw;padding:55px 6vw;align-items:center;isolation:isolate}
 .ga-signature__copy h2{font-size:clamp(46px,5.8vw,86px);line-height:1;margin:20px 0 32px}
@@ -59,20 +57,17 @@
 }
 @media(prefers-reduced-motion:no-preference){
  .ga.has-scroll-motion .ga-category img{transform:translateY(calc((1 - var(--ga-open,1))*-10px)) scale(calc(1 + (1 - var(--ga-open,1))*.1));will-change:transform}
- .ga.has-scroll-motion :is(.ga-heading h2,.ga-outfit h2){clip-path:inset(0 0 calc((1 - var(--heading-in,1))*100%));transform:translateY(calc((1 - var(--heading-in,1))*24px))}
- .ga.has-scroll-motion .ga-outfit__image{clip-path:inset(calc((1 - var(--scene-in,1))*14%) calc((1 - var(--scene-in,1))*9%));will-change:clip-path}
- .ga.has-scroll-motion .ga-outfit__image>img{transform:scale(calc(1 + (1 - var(--scene-in,1))*.12));will-change:transform}
+ .ga.has-scroll-motion :is(.ga-heading h2,.ga-banner h2){clip-path:inset(0 0 calc((1 - var(--heading-in,1))*100%));transform:translateY(calc((1 - var(--heading-in,1))*24px))}
+ .ga.has-scroll-motion .ga-banner__image{transform:scale(calc(1 + (1 - var(--scene-in,1))*.06));will-change:transform}
 }
-@media(max-width:989px){.ga-outfit{min-height:600px}.ga-outfit__image{min-height:600px}.ga-outfit__copy{padding:44px 4vw}.ga-signature__stage{gap:4vw}}
+@media(max-width:989px){.ga-signature__stage{gap:4vw}}
 @media(max-width:749px){
  .ga-heading{display:block;margin-bottom:24px}.ga-heading .ga-kicker{margin-bottom:10px}.ga-heading h2{font-size:40px}
  .ga-gallery__grid{gap:2px}.ga-card__image{aspect-ratio:3/4;max-height:none}
  .ga-category__caption{padding:17px 8px}.ga .ga-category__caption h3{font-size:14px;letter-spacing:.045em}
- .ga-outfit{grid-template-columns:1fr;min-height:0}.ga-outfit__image{grid-area:1/1;min-height:540px;height:75svh;max-height:680px}
- .ga-outfit__image-label{top:22px;left:22px;bottom:auto}.ga-outfit__copy{grid-area:1/1;align-self:end;padding:110px 22px 24px;background:linear-gradient(transparent,#10191be8 40%,#10191b)}
- .ga-outfit h2{font-size:52px;margin:12px 0 14px}.ga-outfit__intro{font-size:13px}.ga-outfit__shop{margin-top:20px}.ga-outfit__shop summary{min-height:52px}
- .ga-outfit:has(.ga-outfit__shop[open]) .ga-outfit__copy{grid-area:2/1;padding-top:28px;background:#152125}
- .ga-outfit:has(.ga-outfit__shop[open]) .ga-outfit__image{height:58svh;min-height:360px}
+ .ga-banner{height:250px}.ga-banner__image{object-position:32% center}
+ .ga-banner__copy{inset:0 14px 0 48%;gap:12px}.ga .ga-banner h2{font-size:28px}.ga-banner .ga-kicker{font-size:8px}
+ .ga .ga-banner__link{font-size:9px;padding:9px 18px}
  .ga-signature__stage{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr) auto auto;gap:16px;padding:28px 22px}
  .ga-signature__copy{display:contents}.ga-signature__copy>.ga-kicker{display:none}
  .ga-signature__copy h2{grid-area:1/1;font-size:44px;line-height:1;margin:0}
