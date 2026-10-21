@@ -11,7 +11,6 @@
 {%- liquid
   assign grid = shop.metafields.judgeme.reviews_grid.value
   assign store_rating = grid.average_rating
-  assign store_count = grid.number_of_reviews
   assign to_show = section.settings.quotes_to_show | default: 3
   assign min_rating = section.settings.min_rating | default: 4
 
@@ -106,11 +105,10 @@
 
 <section class="guillo-quotes g-pad">
   <div class="g-container">
-    {%- if store_count != blank and store_count > 0 -%}
+    {%- if store_rating != blank and store_rating > 0 -%}
       <div class="guillo-quotes__lead">
         <span class="guillo-quotes__lead-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
         <span class="guillo-quotes__lead-score">{{ store_rating }}</span>
-        <span class="guillo-quotes__lead-count">from {{ store_count }} reviews</span>
       </div>
     {%- endif -%}
 
@@ -154,11 +152,6 @@
     color: var(--g-ink);
   }
   .guillo-quotes__lead-score { font: 500 30px/1 var(--g-serif); color: var(--g-ink); }
-  .guillo-quotes__lead-count {
-    font: 300 12px/1 var(--g-sans);
-    letter-spacing: 0.06em;
-    color: var(--g-whisper);
-  }
   .guillo-quotes__title {
     font: 500 14px/1.4 var(--g-serif);
     color: var(--g-ink);
