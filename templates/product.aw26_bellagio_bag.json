@@ -1,24 +1,8 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
       "type": "guillo-product",
       "blocks": {
-        "feat1": {
-          "type": "feature",
-          "settings": {
-            "label": "Genuine leather",
-            "icon": "shield"
-          }
-        },
         "feat2": {
           "type": "feature",
           "settings": {
@@ -44,14 +28,14 @@
           "type": "tab",
           "settings": {
             "title": "Care",
-            "content": "<p>Full grain leather, hand finished. It darkens and softens with use rather than wearing out.</p><p>Spot clean with a damp cloth and air dry. Keep it out of prolonged direct sunlight.</p>"
+            "content": "<p>Follow the care instructions supplied with your piece. Contact Guillo if you need help.</p>"
           }
         },
         "tab2": {
           "type": "tab",
           "settings": {
             "title": "Details",
-            "content": "<p>Built to be carried, not kept for best. Made to travel with the rest of the edit.</p><p>Designed in Brisbane.</p>"
+            "content": "<p>A weekend bag with a structured profile and room for the essentials.</p>"
           }
         },
         "tab3": {
@@ -73,7 +57,6 @@
         }
       },
       "block_order": [
-        "feat1",
         "feat2",
         "feat3",
         "feat4",
@@ -83,7 +66,7 @@
         "tab4"
       ],
       "settings": {
-        "short_description": "Full grain leather, hand finished and built to be carried. It darkens and softens with use rather than wearing out.",
+        "short_description": "A weekend bag with a structured profile and room for the essentials.",
         "fit_guide_link": "shopify://pages/fit-guide",
         "size_guide_page": "shopify://pages/fit-guide",
         "trust_line": "Same-day dispatch · 44-day returns and exchanges",
@@ -107,7 +90,7 @@
           "the-bellagio-passport-holder"
         ],
         "heading": "The matching set",
-        "wardrobe_note": "Build your wardrobe. Three pieces or more, 20% off automatically.",
+        "wardrobe_note": "Chosen to wear together.",
         "wardrobe_link": "",
         "collection": "",
         "products_to_show": 8
@@ -159,33 +142,33 @@
         "cl1": {
           "type": "callout_left",
           "settings": {
-            "title": "Genuine leather",
-            "text": "Full grain leather, hand finished, built to be carried rather than kept for best.",
-            "spec": "Ages with use"
+            "title": "The silhouette",
+            "text": "A weekend bag with a structured profile and room for the essentials.",
+            "spec": ""
           }
         },
         "cl2": {
           "type": "callout_left",
           "settings": {
-            "title": "Built for travel",
-            "text": "Designed to carry the essentials, with dimensions listed in the product details.",
-            "spec": "Check your carry-on limits"
+            "title": "The waist",
+            "text": "See the waistband and fastening in the product views.",
+            "spec": ""
           }
         },
         "cr1": {
           "type": "callout_right",
           "settings": {
-            "title": "Care",
-            "text": "Spot clean with a damp cloth and air dry. Keep it out of prolonged direct sunlight.",
-            "spec": "Darkens, does not dry out"
+            "title": "The full view",
+            "text": "Explore the front, side and back views.",
+            "spec": ""
           }
         },
         "cr2": {
           "type": "callout_right",
           "settings": {
-            "title": "Pairs with",
-            "text": "The rest of the travel edit. Pack a chino and a polo and you are ready.",
-            "spec": "The Travel Edit"
+            "title": "Choose your size",
+            "text": "Compare your measurements with the size guide.",
+            "spec": ""
           }
         }
       },
@@ -196,9 +179,11 @@
         "cr2"
       ],
       "settings": {
-        "heading": "Leather made to travel.",
-        "image_alt": "The Bellagio Weekender, full grain leather",
-        "image_position": "center 74%"
+        "heading": "The shape, considered.",
+        "image_alt": "",
+        "image_position": "center 25%",
+        "use_product_image": true,
+        "image": ""
       }
     },
     "reviews": {
@@ -273,9 +258,9 @@
         "anchor": "",
         "eyebrow": "Questions",
         "heading": "Before you order.",
-        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
+        "text": "For sizing or order questions, contact Guillo.",
         "link_label": "Ask a question",
-        "link": "",
+        "link": "shopify://pages/contact",
         "open_first": false
       }
     }

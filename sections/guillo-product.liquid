@@ -108,12 +108,17 @@
     assign stone_test = true
   endif
 
-  assign short_desc = product.metafields.custom.short_description
+  assign short_desc = section.settings.short_description
+  if product.tags contains 'garment:polo'
+    assign short_desc = product.metafields.custom.short_description | default: section.settings.short_description
+  endif
   if short_desc == blank
     assign short_desc = section.settings.short_description
   endif
   if short_desc == blank
-    assign short_desc = product.description | strip_html | truncatewords: 32
+    if product.tags contains 'garment:polo'
+      assign short_desc = product.description | strip_html | truncatewords: 32
+    endif
   endif
   if stone_test
     assign short_desc = ''
@@ -286,10 +291,10 @@
     <div class="guillo-pdp__panel">
       <div class="guillo-pdp__titlerow">
         <h1 class="guillo-pdp__title">
-          {{ group_title }}
-          {%- if style_name != blank -%}
+          {%- if product.tags contains 'garment:shirt' and style_name != blank -%}{%- if style_name == 'Milano' -%}Milano Pinstripe Shirt{%- else -%}{{ style_name }} Shirt{%- endif -%}{%- else -%}{{ group_title }}{%- endif -%}
+          {%- unless product.tags contains 'garment:shirt' -%}{%- if style_name != blank -%}
             <span class="guillo-pdp__style">{{ style_name }}</span>
-          {%- endif -%}
+          {%- endif -%}{%- endunless -%}
         </h1>
         <span class="guillo-pdp__price" data-price>{{ current_variant.price | money_with_currency }}</span>
       </div>

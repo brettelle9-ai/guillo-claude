@@ -27,14 +27,14 @@
     "story": {
       "type": "guillo-story",
       "settings": {
-        "eyebrow": "Brisbane, 2024",
-        "statement": "I wanted clothes that followed the body properly. More character. More Mediterranean influence. Nothing loud or overdone.",
-        "text": "Guillo started in Brisbane in 2024, from a frustration with menswear that fitted badly or looked like everything else. This is our answer.",
+        "eyebrow": "The Guillo point of view",
+        "statement": "A closer fit. A more distinctive way to dress.",
+        "text": "Mediterranean influence, shaped for the way you want to present yourself. Fitted shirts, considered trousers and the details that bring a wardrobe together.",
         "link_label": "Our story",
         "link": "shopify://pages/about-us",
-        "image": "shopify://shop_images/rn-image_picker_lib_temp_1d477c80-339f-47c0-8a5b-d360e9e34c2b.jpg",
-        "image_alt": "Man seated wearing a navy blazer and brown Signore Chino",
-        "image_position": "center 22%",
+        "image": "",
+        "image_alt": "Guillo blue shirt and brown trousers styled with a navy jacket",
+        "image_position": "center 35%",
         "flip": false
       }
     },
@@ -77,7 +77,7 @@
             "collection": "t-shirts",
             "heading": "Tees",
             "product": "",
-            "fallback_asset": "guillo-off-duty.jpg"
+            "fallback_asset": ""
           }
         }
       },

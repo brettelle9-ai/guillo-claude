@@ -1,0 +1,17 @@
+{%- if item != blank -%}
+<fieldset class="ga-outfit__item" data-outfit-item>
+  <legend class="visually-hidden">{{ label | default: item.title | escape }}</legend>
+  <a href="{{ item.url }}" class="ga-outfit__thumb">{{ item.featured_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: item.title }}</a>
+  <div class="ga-outfit__item-copy">
+    <a href="{{ item.url }}">{{ label | default: item.title | escape }}</a><span>{{ item.price | money }}</span>
+    <label class="ga-outfit__include"><input type="checkbox" data-outfit-include> Include this piece</label>
+    <label class="visually-hidden" for="OutfitSize-{{ section_id }}-{{ item.id }}">Choose {{ label | default: item.title | escape }} size</label>
+    <select id="OutfitSize-{{ section_id }}-{{ item.id }}" data-outfit-size>
+      <option value="">Choose a size</option>
+      {%- for variant in item.variants -%}
+        <option value="{{ variant.id }}" {% unless variant.available %}disabled{% endunless %}>{{ variant.title | escape }}{% unless variant.available %} — sold out{% endunless %}</option>
+      {%- endfor -%}
+    </select>
+  </div>
+</fieldset>
+{%- endif -%}

@@ -24,11 +24,13 @@
       {%- endfor -%}
     </div>
 
+    {%- assign anatomy_image = section.settings.image -%}
+    {%- if section.settings.use_product_image -%}{%- assign anatomy_image = product.images[1] | default: product.featured_image -%}{%- endif -%}
     <div class="guillo-anatomy__media">
       {% render 'guillo-img',
-        image: section.settings.image,
+        image: anatomy_image,
         fallback: 'guillo-brown-01.jpg',
-        alt: section.settings.image_alt,
+        alt: product.title,
         class: 'guillo-anatomy__img',
         sizes: '(min-width: 990px) 30vw, 100vw',
         position: section.settings.image_position
@@ -164,6 +166,7 @@
 {
   "name": "Guillo product anatomy",
   "settings": [
+    { "type": "checkbox", "id": "use_product_image", "label": "Use this product’s image", "default": false },
     { "type": "textarea", "id": "heading", "label": "Heading", "default": "A new standard of muscle fit chinos." },
     { "type": "image_picker", "id": "image", "label": "Centre image" },
     { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "The Luxe Chino in Chocolate, leg and taper" },

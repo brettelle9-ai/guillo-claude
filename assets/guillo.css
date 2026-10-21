@@ -26,13 +26,13 @@
   --g-dark-body: #A9ABB1;
 
   /* Type */
-  --g-sans: 'Jost', system-ui, -apple-system, sans-serif;
-  --g-serif: 'EB Garamond', Georgia, serif;
+  --g-sans: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+  --g-serif: var(--g-sans);
 
   /* Point Horizon's font variables at the brand faces */
   --font-body--family: var(--g-sans);
   --font-body--style: normal;
-  --font-body--weight: 300;
+  --font-body--weight: 400;
   --font-subheading--family: var(--g-sans);
   --font-subheading--style: normal;
   --font-subheading--weight: 500;

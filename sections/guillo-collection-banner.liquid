@@ -26,7 +26,13 @@
       <div>
         <h1 class="guillo-cbanner__title">{{ collection.title }}</h1>
         {%- if collection.description != blank -%}
-          <div class="guillo-cbanner__desc">{{ collection.description }}</div>
+          <div class="guillo-cbanner__desc">{%- case collection.handle -%}
+            {%- when 'shirts' -%}<p>Fitted through the chest and arms. A defined waist. Short sleeves, long sleeves and grandad collars.</p>
+            {%- when 'chinos', 'pants' -%}<p>Find your line. The slim Luxe cut or the classic Signore silhouette.</p>
+            {%- when 't-shirts' -%}<p>Close through the shoulders. Clean through the body. Explore the Guillo tees.</p>
+            {%- when 'polos' -%}{{ collection.description }}
+            {%- else -%}<p>Explore the collection. Choose your shape, colour and fit.</p>
+          {%- endcase -%}</div>
         {%- endif -%}
       </div>
       <div class="guillo-cbanner__count">{{ collection.products_count }} pieces</div>

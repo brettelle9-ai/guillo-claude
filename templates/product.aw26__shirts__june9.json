@@ -1,38 +1,8 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
       "type": "guillo-product",
       "blocks": {
-        "feat1": {
-          "type": "feature",
-          "settings": {
-            "label": "Comfort stretch",
-            "icon": "stretch"
-          }
-        },
-        "feat2": {
-          "type": "feature",
-          "settings": {
-            "label": "Breathable",
-            "icon": "breathable"
-          }
-        },
-        "feat3": {
-          "type": "feature",
-          "settings": {
-            "label": "Quick dry",
-            "icon": "quick_dry"
-          }
-        },
         "feat4": {
           "type": "feature",
           "settings": {
@@ -44,14 +14,14 @@
           "type": "tab",
           "settings": {
             "title": "Fit & Care",
-            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+            "content": "<p>Fitted through the chest and arms, with a defined waist. Wear it open at the collar or buttoned.</p><p>Compare the measurements in the size guide before choosing. Follow the care label supplied with your piece.</p>"
           }
         },
         "tab2": {
           "type": "tab",
           "settings": {
             "title": "Details",
-            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+            "content": "<p>Fitted through the chest and arms, with a defined waist. Wear it open at the collar or buttoned.</p><p>See the product photographs for the collar, fastening and silhouette.</p>"
           }
         },
         "tab3": {
@@ -84,10 +54,10 @@
             "show_fit_profile": true,
             "fit_profile_heading": "Fit Profile",
             "fit_profile_left": "Baggy",
-            "fit_profile_center": "Tailored Stretch",
+            "fit_profile_center": "Fitted",
             "fit_profile_right": "Restrictive",
             "fit_profile_position": 50,
-            "fit_profile_note": "The perfect middle ground — slim enough to look sharp, with enough stretch to move freely.",
+            "fit_profile_note": "Fitted through the shoulders and arms, tapering through the body.",
             "show_fit_image": true,
             "measure_heading": "How To Measure",
             "measurement_image": "shopify://shop_images/Generated_with_Kive.ai_-_high-end_e-commerce_product_photography__perfectly_symmetrical_flat-lay__invisible_ghost_mannequin_style._Clean_white_seamless_background_with_a_soft__natural.png",
@@ -101,11 +71,11 @@
             "show_fit_notes": true,
             "fit_notes_heading": "Fit Notes",
             "note1_title": "Between sizes?",
-            "note1_text": "Choose the larger size for a more comfortable fit, or size down if you prefer a sharper look — the stretch fabric adapts either way.",
+            "note1_text": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
             "note2_title": "Prefer a sharper fit?",
-            "note2_text": "tick with your usual chest size — the stretch will keep it comfortable without losing the tailored look.",
+            "note2_text": "Compare your chest measurement to the chart and consider your preferred fit.",
             "note3_title": "Slim or muscular build?",
-            "note3_text": "The tailored cut works across both — slim builds get a clean, fitted look without excess fabric, while the stretch accommodates broader shoulders and chest.",
+            "note3_text": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
             "show_sit": false,
             "sit_heading": "How They Sit",
             "sit1_title": "Short Legs",
@@ -127,9 +97,6 @@
         }
       },
       "block_order": [
-        "feat1",
-        "feat2",
-        "feat3",
         "feat4",
         "tab1",
         "tab2",
@@ -148,7 +115,7 @@
         "interest_hint": "Choose the size you would take.",
         "interest_panel_title": "Register your interest in size",
         "interest_panel_sub": "One letter, the morning it opens. Nothing else.",
-        "short_description": "Fitted through the chest and tapered at the waist, with enough stretch to move in. Lightweight and breathable.",
+        "short_description": "Fitted through the chest and arms, with a defined waist. Wear it open at the collar or buttoned.",
         "fit_guide_link": "shopify://pages/fit-guide",
         "size_guide_page": "shopify://pages/fit-guide",
         "trust_line": "Same-day dispatch · 44-day returns and exchanges",
@@ -176,7 +143,7 @@
           "the-luxe-chino-black"
         ],
         "heading": "Wear it with",
-        "wardrobe_note": "Build your wardrobe — three pieces or more, 20% off automatically.",
+        "wardrobe_note": "Chosen to wear together.",
         "wardrobe_link": "",
         "collection": "",
         "products_to_show": 8
@@ -228,33 +195,33 @@
         "cl1": {
           "type": "callout_left",
           "settings": {
-            "title": "Athletic fit",
-            "text": "Fitted through the chest and tapered at the waist, so it never hangs straight.",
-            "spec": "Tapered through the body"
+            "title": "Defined shoulders",
+            "text": "Fitted through the chest and arms.",
+            "spec": ""
           }
         },
         "cl2": {
           "type": "callout_left",
           "settings": {
-            "title": "It stretches",
-            "text": "A stretch weave that moves with you through meetings, dinners and everything after.",
-            "spec": "Size up if between sizes"
+            "title": "A closer waist",
+            "text": "A shaped line through the body.",
+            "spec": ""
           }
         },
         "cr1": {
           "type": "callout_right",
           "settings": {
-            "title": "Lightweight and breathable",
-            "text": "Light enough to wear through the heat of the day without wilting.",
-            "spec": "Sizes S to XXL"
+            "title": "Open at the collar",
+            "text": "Wear the collar open for a more relaxed look.",
+            "spec": ""
           }
         },
         "cr2": {
           "type": "callout_right",
           "settings": {
-            "title": "Holds its shape",
-            "text": "No pulling across the shoulders, no creasing. Sits clean tucked or untucked.",
-            "spec": "Wrinkle resistant finish"
+            "title": "Tucked or untucked",
+            "text": "See both ways of wearing it in the product views.",
+            "spec": ""
           }
         }
       },
@@ -265,10 +232,11 @@
         "cr2"
       ],
       "settings": {
-        "heading": "An athletic fit shirt that still tapers.",
-        "image": "shopify://shop_images/Generated_with_Kive.ai_-_no_model-_close_up_of_the_shirt_material_in_a_luxury_way__short_sleeve_shirt.png",
-        "image_alt": "The Luxe Chino in Chocolate, leg and taper",
-        "image_position": "center 74%"
+        "heading": "The shape, considered.",
+        "image": "",
+        "image_alt": "",
+        "image_position": "center 25%",
+        "use_product_image": true
       }
     },
     "reviews": {
@@ -291,21 +259,14 @@
           "type": "faq",
           "settings": {
             "question": "How does it fit?",
-            "answer": "<p>Slim through the body with room through the shoulders and arms, tapering to a clean hem that works tucked or untucked. If you are between sizes, size up. The stretch adapts either way.</p>"
-          }
-        },
-        "q2": {
-          "type": "faq",
-          "settings": {
-            "question": "What is the fabric?",
-            "answer": "<p>A stretch cotton blend with a soft handle and a wrinkle resistant finish. It holds its shape from morning to night without ironing.</p>"
+            "answer": "<p>Fitted through the chest and arms, with a defined waist. Wear it open at the collar or buttoned.</p><p>Use the size guide to compare measurements before choosing.</p>"
           }
         },
         "q3": {
           "type": "faq",
           "settings": {
             "question": "Is it comfortable for all day wear?",
-            "answer": "<p>Yes. The stretch weave moves with you through meetings, dinners and everything after. No pulling across the shoulders, no creasing.</p>"
+            "answer": "<p>Fitted through the chest and arms, with a defined waist. Wear it open at the collar or buttoned.</p><p>Use the size guide to compare measurements before choosing.</p>"
           }
         },
         "q4": {
@@ -332,7 +293,6 @@
       },
       "block_order": [
         "q1",
-        "q2",
         "q3",
         "q4",
         "q5",
@@ -343,9 +303,9 @@
         "anchor": "",
         "eyebrow": "Questions",
         "heading": "Before you order.",
-        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
+        "text": "For sizing or order questions, contact Guillo.",
         "link_label": "Ask a question",
-        "link": "",
+        "link": "shopify://pages/contact",
         "open_first": false
       }
     }

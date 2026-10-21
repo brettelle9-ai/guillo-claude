@@ -1,31 +1,8 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
       "type": "guillo-product",
       "blocks": {
-        "feat1": {
-          "type": "feature",
-          "settings": {
-            "label": "Comfort stretch",
-            "icon": "stretch"
-          }
-        },
-        "feat2": {
-          "type": "feature",
-          "settings": {
-            "label": "Breathable",
-            "icon": "breathable"
-          }
-        },
         "feat3": {
           "type": "feature",
           "settings": {
@@ -44,14 +21,14 @@
           "type": "tab",
           "settings": {
             "title": "Fit & Care",
-            "content": "<p>Classic with a hint of slim. Sits at the natural waist with a straight leg and a single clean break at the ankle. Room through the seat and thigh, never tight.</p><p>True to size. Take your usual waist. If you want a slimmer leg, size down.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+            "content": "<p>A classic cut with a little more room through the leg. Side-tab adjustment keeps the waist clean.</p><p>Compare the measurements in the size guide before choosing. Follow the care label supplied with your piece.</p>"
           }
         },
         "tab2": {
           "type": "tab",
           "settings": {
             "title": "Details",
-            "content": "<p>Structured stretch twill with a smooth face and natural drape, finished to resist wrinkles. It holds its line through a long day and recovers on the hanger.</p><p>Side fastening on the hip, no front zip, so the front stays clean under an untucked shirt. Designed in Brisbane.</p>"
+            "content": "<p>A classic cut with a little more room through the leg. Side-tab adjustment keeps the waist clean.</p>"
           }
         },
         "tab3": {
@@ -118,7 +95,7 @@
             "conversion_table": "Waist (Guillo)|EU|UK|US|Australia\n28\"|44|28|28|28\n30\"|46|30|30|30\n32\"|48|32|32|32\n34\"|50|34|34|34\n36\"|52|36|36|36",
             "show_reco": true,
             "reco_title": "Prefer a more tapered fit?",
-            "reco_text": "The Luxe Chino offers a stretch, tapered-leg cut.",
+            "reco_text": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
             "reco_link_label": "Discover the Luxe Chino",
             "reco_link_url": "shopify://products/the-luxe-chino-stone",
             "help_title": "Still unsure?",
@@ -127,8 +104,6 @@
         }
       },
       "block_order": [
-        "feat1",
-        "feat2",
         "feat3",
         "feat4",
         "tab1",
@@ -138,7 +113,7 @@
         "sizeguide"
       ],
       "settings": {
-        "short_description": "Classic with a hint of slim. A straight leg from a natural waist, with a side fastening that keeps the front clean under an untucked shirt.",
+        "short_description": "A classic cut with a little more room through the leg. Side-tab adjustment keeps the waist clean.",
         "fit_guide_link": "shopify://pages/fit-guide",
         "size_guide_page": "shopify://pages/fit-guide",
         "trust_line": "Same-day dispatch · 44-day returns and exchanges",
@@ -165,7 +140,7 @@
           "the-portofino-polo-red"
         ],
         "heading": "Wear it with",
-        "wardrobe_note": "Build your wardrobe. Three pieces or more, 20% off automatically.",
+        "wardrobe_note": "Chosen to wear together.",
         "wardrobe_link": "",
         "collection": "",
         "products_to_show": 6
@@ -217,33 +192,33 @@
         "cl1": {
           "type": "callout_left",
           "settings": {
-            "title": "Classic, hint of slim",
-            "text": "Sits at the natural waist with a straight leg line and a single clean break at the ankle.",
-            "spec": "True to size"
+            "title": "The silhouette",
+            "text": "A classic cut with a little more room through the leg. Side-tab adjustment keeps the waist clean.",
+            "spec": ""
           }
         },
         "cl2": {
           "type": "callout_left",
           "settings": {
-            "title": "Side fastening",
-            "text": "No front zip, so the front stays clean under an untucked shirt.",
-            "spec": "Sizes 28 to 40"
+            "title": "The waist",
+            "text": "See the waistband and fastening in the product views.",
+            "spec": ""
           }
         },
         "cr1": {
           "type": "callout_right",
           "settings": {
-            "title": "Structured twill",
-            "text": "Sharp enough for the office, easy enough for the weekend.",
-            "spec": "Comfortable stretch"
+            "title": "The full view",
+            "text": "Explore the front, side and back views.",
+            "spec": ""
           }
         },
         "cr2": {
           "type": "callout_right",
           "settings": {
-            "title": "Holds its line",
-            "text": "The structure keeps its shape through long days while the stretch keeps it comfortable.",
-            "spec": "Wrinkle resistant finish"
+            "title": "Choose your size",
+            "text": "Compare your measurements with the size guide.",
+            "spec": ""
           }
         }
       },
@@ -254,10 +229,11 @@
         "cr2"
       ],
       "settings": {
-        "heading": "The Signore, the dressier line in the wardrobe.",
-        "image": "shopify://shop_images/0S0A3047.jpg",
-        "image_alt": "The Signore Chino, leg line and break",
-        "image_position": "center 74%"
+        "heading": "The shape, considered.",
+        "image": "",
+        "image_alt": "",
+        "image_position": "center 25%",
+        "use_product_image": true
       }
     },
     "reviews": {
@@ -283,25 +259,18 @@
             "answer": "<p>A clean classic fit with a hint of slim. The Signore sits at the natural waist with a straight leg line and a single clean break at the ankle. True to size.</p>"
           }
         },
-        "q2": {
-          "type": "faq",
-          "settings": {
-            "question": "What is the fabric?",
-            "answer": "<p>A structured twill with comfortable stretch. Sharp enough for the office, easy enough for the weekend.</p>"
-          }
-        },
         "q3": {
           "type": "faq",
           "settings": {
             "question": "Are they comfortable for all day wear?",
-            "answer": "<p>Yes. The structure keeps its line through long days while the stretch keeps it comfortable.</p>"
+            "answer": "<p>A classic cut with a little more room through the leg. Side-tab adjustment keeps the waist clean.</p><p>Use the size guide to compare measurements before choosing.</p>"
           }
         },
         "q4": {
           "type": "faq",
           "settings": {
             "question": "What should I pair them with?",
-            "answer": "<p>A knitted polo and loafers for dinner. A crisp shirt for the office. The Signore is the dressier line in the Guillo wardrobe.</p>"
+            "answer": "<p>A classic cut with a little more room through the leg. Side-tab adjustment keeps the waist clean.</p><p>Use the size guide to compare measurements before choosing.</p>"
           }
         },
         "q5": {
@@ -321,7 +290,6 @@
       },
       "block_order": [
         "q1",
-        "q2",
         "q3",
         "q4",
         "q5",
@@ -332,9 +300,9 @@
         "anchor": "",
         "eyebrow": "Questions",
         "heading": "Before you order.",
-        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
+        "text": "For sizing or order questions, contact Guillo.",
         "link_label": "Ask a question",
-        "link": "",
+        "link": "shopify://pages/contact",
         "open_first": false
       }
     }

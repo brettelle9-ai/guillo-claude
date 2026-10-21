@@ -1,137 +1,105 @@
 if (!customElements.get('guillo-atelier')) {
   customElements.define('guillo-atelier', class extends HTMLElement {
     connectedCallback() {
-      this.cleanup = new AbortController();
-      const signal = this.cleanup.signal;
-      this.motion = matchMedia('(prefers-reduced-motion: reduce)');
-      this.hero = document.querySelector('guillo-campaign');
-      this.header = document.querySelector('#header-component');
-      this.categories = [...this.querySelectorAll('.ga-category')];
-      this.drift = [...this.querySelectorAll('.ga-drift')].filter(el => !el.closest('.ga-category'));
-      this.lowerReveals = [...document.querySelectorAll('.guillo-story__panel,.guillo-story__media,.guillo-newsletter__inner,.guillo-quotes__cell,.guillo-footer__col')];
-      this.lowerReveals.forEach(el => el.classList.add('ga-reveal'));
-      this.reveals = [...this.querySelectorAll('.ga-reveal:not(.ga-category)'), ...this.lowerReveals];
-      this.story = this.querySelector('.ga-signature');
-      this.stage = this.querySelector('.ga-signature__stage');
-      this.frames = [...this.querySelectorAll('[data-view]')];
-      this.chapters = [...this.querySelectorAll('[data-chapter]')];
-      this.viewButtons = [...this.querySelectorAll('[data-view-button]')];
-      this.classList.toggle('has-story-controls', this.frames.length > 0);
-      this.querySelectorAll('.ga-view-controls').forEach(el => el.hidden = false);
-      const clamp = value => Math.min(1, Math.max(0, value));
-      const setView = index => {
-        if (index === this.activeView) return;
-        this.activeView = index;
-        this.frames.forEach((el, i) => el.classList.toggle('is-current', i === index));
-        this.chapters.forEach((el, i) => {
-          el.classList.toggle('is-current', i === index);
-          el.setAttribute('aria-hidden', String(i !== index));
-        });
-        this.viewButtons.forEach((el, i) => el.setAttribute('aria-pressed', String(i === index)));
-        if (this.story) this.story.dataset.currentView = String(index);
+      this.abort = new AbortController();
+      const signal = this.abort.signal;
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+      const desktop = matchMedia('(min-width: 750px) and (min-height: 650px)');
+      const hero = document.querySelector('guillo-campaign');
+      const header = document.querySelector('#header-component');
+      const cards = [...this.querySelectorAll('.ga-category')];
+      const scenes = [...this.querySelectorAll('.ga-scene')];
+      const story = this.querySelector('.ga-signature');
+      const stage = this.querySelector('.ga-signature__stage');
+      const frames = [...this.querySelectorAll('[data-view]')];
+      const chapters = [...this.querySelectorAll('[data-chapter]')];
+      const controls = [...this.querySelectorAll('[data-view-button]')];
+      const clamp = n => Math.max(0, Math.min(1, n));
+      let current = -1, manual, manualY = 0;
+      const setView = n => {
+        if (n === current) return;
+        current = n;
+        frames.forEach((el,i) => {el.classList.toggle('is-current',i===n);el.setAttribute('aria-hidden',String(i!==n));});
+        chapters.forEach((el,i) => {el.classList.toggle('is-current',i===n);el.setAttribute('aria-hidden',String(i!==n));});
+        controls.forEach((el,i) => el.setAttribute('aria-pressed',String(i===n)));
+        if (story) story.dataset.currentView = n;
       };
-      setView(0);
-      const renderScroll = () => {
-        this.frame = 0;
-        const viewport = innerHeight;
-        const headerHeight = Math.ceil(this.header?.getBoundingClientRect().height || 80);
-        this.style.setProperty('--ga-header', `${headerHeight}px`);
-        if (this.hero) {
-          const heroBox = this.hero.getBoundingClientRect();
-          document.body.classList.toggle('guillo-past-hero', heroBox.bottom < headerHeight + 20);
-          if (!this.motion.matches) this.hero.style.setProperty('--campaign-exit', clamp(-heroBox.top / (heroBox.height * .85)).toFixed(4));
+      const render = () => {
+        this.raf = 0;
+        const vh = innerHeight;
+        const hh = Math.ceil(header?.getBoundingClientRect().height || 80);
+        this.style.setProperty('--ga-header',`${hh}px`);
+        if (hero) {
+          const box = hero.getBoundingClientRect();
+          document.body.classList.toggle('guillo-past-hero',box.bottom < hh+20);
+          if (!reduced.matches) hero.style.setProperty('--campaign-exit',clamp(-box.top/(box.height*.9)).toFixed(4));
         }
-        if (!this.motion.matches) {
-          this.categories.forEach(card => {
-            const image = card.querySelector('.ga-card__image');
-            const box = image.getBoundingClientRect();
-            if (box.bottom > -100 && box.top < viewport + 200) {
-              const open = clamp((viewport * .96 - box.top) / (viewport * .76));
-              card.style.setProperty('--ga-open', open.toFixed(4));
-            }
-          });
-          this.drift.forEach(el => {
-            const box = el.getBoundingClientRect();
-            if (box.bottom > -80 && box.top < viewport + 80) {
-              const position = clamp((viewport - box.top) / (viewport + box.height));
-              el.style.setProperty('--ga-image-y', `${(28 - position * 56).toFixed(2)}px`);
-            }
-          });
-          if (this.story && this.classList.contains('has-story-motion')) {
-            const box = this.story.getBoundingClientRect();
-            const travel = Math.max(1, box.height - this.stage.offsetHeight);
-            const progress = clamp((headerHeight - box.top) / travel);
-            this.story.style.setProperty('--ga-story-progress', progress.toFixed(4));
-            if (this.manualView !== undefined && Math.abs(scrollY - this.manualScrollY) > 24) this.manualView = undefined;
-            setView(this.manualView ?? Math.min(this.frames.length - 1, Math.floor(progress * this.frames.length)));
-          }
+        if (reduced.matches) return;
+        cards.forEach(card => {
+          const box = card.querySelector('.ga-card__image').getBoundingClientRect();
+          if (box.bottom > -100 && box.top < vh+200) card.style.setProperty('--ga-open',clamp((vh*.98-box.top)/(vh*.72)).toFixed(4));
+        });
+        scenes.forEach(scene => {
+          const box = scene.getBoundingClientRect();
+          if (box.bottom > -100 && box.top < vh+200) scene.style.setProperty('--scene-in',clamp((vh*.98-box.top)/(vh*.68)).toFixed(4));
+        });
+        if (story && desktop.matches && frames.length === 3) {
+          const box = story.getBoundingClientRect();
+          const progress = clamp((hh-box.top)/Math.max(1,box.height-stage.offsetHeight));
+          story.style.setProperty('--ga-story-progress',progress.toFixed(4));
+          if (manual !== undefined && Math.abs(scrollY-manualY)>24) manual=undefined;
+          setView(manual ?? Math.min(2,Math.floor(progress*3)));
         }
-        this.reveals.forEach(el => {
-          if (this.motion.matches || el.getBoundingClientRect().top < viewport * .94) {
-            el.classList.remove('is-awaiting'); el.classList.add('is-visible');
-          }
-        });
       };
-      const schedule = () => {
-        if (!this.frame) this.frame = requestAnimationFrame(renderScroll);
-      };
-      const setMotion = () => {
-        const enabled = !this.motion.matches;
-        this.classList.toggle('has-scroll-motion', enabled);
-        this.classList.toggle('has-story-motion', enabled && this.frames.length === 3);
-        this.hero?.classList.toggle('has-exit-motion', enabled);
-        this.reveals.forEach(el => {
-          if (!enabled) el.classList.remove('is-awaiting');
-          else if (!el.classList.contains('is-visible') && el.getBoundingClientRect().top > innerHeight) el.classList.add('is-awaiting');
-        });
+      const schedule = () => {if (!this.raf) this.raf=requestAnimationFrame(render);};
+      const motion = () => {
+        this.classList.toggle('has-scroll-motion',!reduced.matches);
+        this.classList.toggle('has-story-motion',!reduced.matches && desktop.matches && frames.length===3);
+        hero?.classList.toggle('has-exit-motion',!reduced.matches);
         schedule();
       };
-      window.addEventListener('scroll', schedule, {passive:true, signal});
-      window.addEventListener('resize', schedule, {passive:true, signal});
-      this.motion.addEventListener('change', setMotion, {signal});
-      this.addEventListener('click', event => {
-        const button = event.target.closest('[data-view-button]');
-        if (!button) return;
-        this.manualView = Number(button.dataset.viewButton);
-        this.manualScrollY = scrollY;
-        setView(this.manualView);
-      }, {signal});
-      this.video = this.querySelector('.ga-day video');
-      this.scene = this.querySelector('.ga-day__scene');
-      this.toggle = this.querySelector('.ga-film-control');
-      this.userPaused = false;
-      this.inView = false;
-      const syncVideo = () => {
-        if (!this.video) return;
-        const allowed = this.inView && !this.motion.matches && !this.userPaused && !document.hidden && !navigator.connection?.saveData;
-        if (!allowed) { this.video.pause(); return; }
-        if (!this.video.src) this.video.src = this.video.dataset.src;
-        this.video.muted = true;
-        this.video.play().then(() => {
-          this.scene.classList.add('is-playing'); this.toggle.hidden = false;
-        }).catch(() => {});
-      };
-      this.toggle?.addEventListener('click', () => {
-        this.userPaused = !this.userPaused;
-        this.toggle.innerHTML = this.userPaused ? 'Play film <span aria-hidden="true">▷</span>' : 'Pause film <span aria-hidden="true">Ⅱ</span>';
-        this.toggle.setAttribute('aria-label', this.userPaused ? 'Play outfit film' : 'Pause outfit film');
-        syncVideo();
-      }, {signal});
-      document.addEventListener('visibilitychange', syncVideo, {signal});
-      this.motion.addEventListener('change', syncVideo, {signal});
-      if ('IntersectionObserver' in window && this.scene) {
-        this.filmObserver = new IntersectionObserver(entries => {
-          this.inView = entries[0].isIntersecting; syncVideo();
-        }, {threshold: .15});
-        this.filmObserver.observe(this.scene);
+      controls.forEach(button => button.addEventListener('click',() => {manual=Number(button.dataset.viewButton);manualY=scrollY;setView(manual);},{signal}));
+      window.addEventListener('scroll',schedule,{passive:true,signal});
+      window.addEventListener('resize',schedule,{passive:true,signal});
+      reduced.addEventListener('change',motion,{signal});
+      desktop.addEventListener('change',motion,{signal});
+      setView(0);motion();
+      const form=this.querySelector('[data-guillo-outfit]');
+      if (form) {
+        const items=[...form.querySelectorAll('[data-outfit-item]')];
+        const status=form.querySelector('[data-outfit-status]');
+        const button=form.querySelector('button[type="submit"]');
+        button.hidden=false;
+        form.addEventListener('change',event => {
+          if (event.target.matches('[data-outfit-size]')) event.target.closest('[data-outfit-item]').querySelector('[data-outfit-include]').checked=Boolean(event.target.value);
+          status.classList.remove('is-error');status.textContent='Choose the pieces and sizes you want.';
+        },{signal});
+        form.addEventListener('submit',async event => {
+          event.preventDefault();
+          if (button.disabled) return;
+          const chosen=items.filter(el=>el.querySelector('[data-outfit-include]').checked);
+          const missing=chosen.find(el=>!el.querySelector('[data-outfit-size]').value);
+          if (!chosen.length || missing) {
+            status.classList.add('is-error');status.textContent=missing?'Choose a size for each selected piece.':'Select at least one piece and choose its size.';
+            if (missing) missing.querySelector('select').focus();
+            return;
+          }
+          button.disabled=true;status.textContent='Adding your selected pieces…';
+          try {
+            const response=await fetch(form.dataset.addUrl,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({items:chosen.map(el=>({id:Number(el.querySelector('select').value),quantity:1}))})});
+            const result=await response.json();
+            if (!response.ok) throw new Error(result.description || 'Unable to add these pieces. Please check availability and try again.');
+            status.classList.remove('is-error');status.textContent='Your selected pieces are in the bag.';
+            if (window.GuilloCart) {
+              try {await window.GuilloCart.refresh(true);window.GuilloCart.notifyAdded({});}
+              catch {location.assign(form.dataset.cartUrl);}
+            }
+            else location.assign(form.dataset.cartUrl);
+          } catch(error) {status.classList.add('is-error');status.textContent=error.message;}
+          finally {button.disabled=false;}
+        },{signal});
       }
-      setMotion();
     }
-    disconnectedCallback() {
-      this.cleanup?.abort(); cancelAnimationFrame(this.frame); this.filmObserver?.disconnect(); this.video?.pause();
-      this.hero?.classList.remove('has-exit-motion');
-      this.lowerReveals?.forEach(el => el.classList.remove('ga-reveal','is-awaiting','is-visible'));
-      document.body.classList.remove('guillo-past-hero');
-    }
+    disconnectedCallback() {this.abort?.abort();cancelAnimationFrame(this.raf);document.body.classList.remove('guillo-past-hero');}
   });
 }

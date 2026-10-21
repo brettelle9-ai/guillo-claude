@@ -5,32 +5,11 @@
     "header_announcements_9jGBFp": {
       "type": "guillo-announcement",
       "blocks": {
-        "msg11": {
-          "type": "message",
-          "settings": {
-            "text": "Win the summer wardrobe. Eleven pieces, $1,500, drawn 2 November.",
-            "text_mobile": "Win $1,500 of summer. Enter the draw.",
-            "url": "/pages/summer-wardrobe",
-            "accent": true,
-            "only_countries": "AU",
-            "not_countries": ""
-          }
-        },
         "msg1": {
           "type": "message",
           "settings": {
             "text": "Free 44-day returns and exchanges across Australia and New Zealand",
             "text_mobile": "Free 44-day returns AU & NZ",
-            "accent": false,
-            "only_countries": "",
-            "not_countries": "GB,SG"
-          }
-        },
-        "msg2": {
-          "type": "message",
-          "settings": {
-            "text": "Build your wardrobe. Three pieces or more, 20% off.",
-            "text_mobile": "Three pieces or more, 20% off",
             "accent": false,
             "only_countries": "",
             "not_countries": "GB,SG"
@@ -118,9 +97,7 @@
         }
       },
       "block_order": [
-        "msg11",
         "msg1",
-        "msg2",
         "msg3",
         "msg4",
         "msg5",

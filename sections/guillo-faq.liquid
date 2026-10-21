@@ -14,7 +14,7 @@
         <p class="guillo-faq__text">{{ section.settings.text }}</p>
       {%- endif -%}
       {%- if section.settings.link_label != blank -%}
-        <a href="{{ section.settings.link }}" class="g-link">{{ section.settings.link_label }}</a>
+        <a href="{{ section.settings.link | default: '/pages/contact' }}" class="g-link">{{ section.settings.link_label }}</a>
       {%- endif -%}
     </div>
     <div class="guillo-faq__list">

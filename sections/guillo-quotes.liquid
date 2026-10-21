@@ -51,6 +51,9 @@
         continue
       endif
       assign body_dc = body | downcase
+      if body_dc contains 'payday' or body_dc contains 'not widely known'
+        continue
+      endif
       assign hit = false
       for w in words
         assign ws = w | strip
@@ -129,6 +132,7 @@
         </div>
       {%- endfor -%}
     </div>
+    <a class="g-link guillo-quotes__all" href="/pages/testimonials">Read customer reviews ↗</a>
   </div>
 </section>
 

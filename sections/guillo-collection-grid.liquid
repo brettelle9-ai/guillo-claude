@@ -74,12 +74,12 @@
   {%- paginate collection.products by per_page -%}
     <div class="guillo-cgrid__products">
       <div class="guillo-cgrid__grid" style="--cgrid-cols: {{ section.settings.desktop_columns | default: 4 }}">
-        {%- for product in collection.products limit: 4 -%}
+        {%- for product in collection.products limit: 6 -%}
           {% render 'guillo-product-card', product: product, show_quick: section.settings.show_quick_add %}
         {%- endfor -%}
       </div>
 
-      {%- if section.settings.show_break and collection.products.size > 4 and paginate.current_page == 1 -%}
+      {%- if section.settings.show_break and collection.products.size > 6 and paginate.current_page == 1 -%}
         <div class="guillo-cgrid__break">
           <div class="guillo-cgrid__break-panel">
             <span class="guillo-cgrid__break-eyebrow">{{ section.settings.break_eyebrow }}</span>
@@ -90,8 +90,9 @@
             {%- endif -%}
           </div>
           <div class="guillo-cgrid__break-media">
+            {%- assign break_image = section.settings.break_image | default: collection.products.first.featured_image -%}
             {% render 'guillo-img',
-              image: section.settings.break_image,
+              image: break_image,
               fallback: 'guillo-brown-03.jpg',
               alt: section.settings.break_heading,
               class: 'guillo-cgrid__break-img',
@@ -102,9 +103,9 @@
         </div>
       {%- endif -%}
 
-      {%- if collection.products.size > 4 -%}
+      {%- if collection.products.size > 6 -%}
         <div class="guillo-cgrid__grid">
-          {%- for product in collection.products offset: 4 -%}
+          {%- for product in collection.products offset: 6 -%}
             {% render 'guillo-product-card', product: product, show_quick: section.settings.show_quick_add %}
           {%- endfor -%}
         </div>

@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -336,7 +327,7 @@
         "heading": "Before you order.",
         "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
         "link_label": "Ask a question",
-        "link": "",
+        "link": "shopify://pages/contact",
         "open_first": false
       }
     }

@@ -9,22 +9,7 @@
   endif
 -%}
 {{ 'guillo-campaign.css' | asset_url | stylesheet_tag }}
-<style>
-  @font-face {
-    font-family: 'Guillo Campaign';
-    src: url({{ 'guillo-campaign-roman.woff' | asset_url }}) format('woff');
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'Guillo Campaign';
-    src: url({{ 'guillo-campaign-italic.woff' | asset_url }}) format('woff');
-    font-style: italic;
-    font-weight: 400;
-    font-display: swap;
-  }
-</style>
+
 <guillo-campaign class="g-campaign" data-motion-enabled="{{ section.settings.enable_video }}">
   <div class="g-campaign__copy">
     {%- if section.settings.eyebrow != blank -%}

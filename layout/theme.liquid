@@ -58,6 +58,8 @@
     {%- render 'color-schemes' -%}
     {%- render 'guillo-fonts' -%}
     {{ 'guillo.css' | asset_url | stylesheet_tag }}
+    {{ 'guillo-modern.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'guillo-modern.js' | asset_url }}" defer></script>
     <script src="{{ 'guillo-menu-hover.js' | asset_url }}" defer></script>
 
     {% if request.design_mode %}

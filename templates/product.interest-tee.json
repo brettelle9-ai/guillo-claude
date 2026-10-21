@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -19,39 +10,18 @@
             "icon": "breathable"
           }
         },
-        "feat2": {
-          "type": "feature",
-          "settings": {
-            "label": "High stretch",
-            "icon": "stretch"
-          }
-        },
-        "feat3": {
-          "type": "feature",
-          "settings": {
-            "label": "Quick dry",
-            "icon": "quick_dry"
-          }
-        },
-        "feat4": {
-          "type": "feature",
-          "settings": {
-            "label": "Non iron",
-            "icon": "no_iron"
-          }
-        },
         "tab1": {
           "type": "tab",
           "settings": {
             "title": "Fit & Care",
-            "content": "<p><strong>Nothing is for sale on this page.</strong> Pick the size you would take and leave an email — no card, no charge, no obligation. The sizes registered are the sizes we cut, and a run only happens if enough people ask for it.</p><p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+            "content": "<p>A close fit through the shoulders and body, with a clean hem.</p><p>Compare the measurements in the size guide before choosing. Follow the care label supplied with your piece.</p>"
           }
         },
         "tab2": {
           "type": "tab",
           "settings": {
             "title": "Details",
-            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+            "content": "<p>A close fit through the shoulders and body, with a clean hem.</p>"
           }
         },
         "tab3": {
@@ -87,7 +57,7 @@
             "fit_profile_center": "Regular",
             "fit_profile_right": "Relaxed",
             "fit_profile_position": 15,
-            "fit_profile_note": "The perfect middle ground — slim enough to look sharp, with enough stretch to move freely.",
+            "fit_profile_note": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
             "show_fit_image": true,
             "measure_heading": "How To Measure",
             "measurement_image": "shopify://shop_images/classico-raglan-off-white-dark-hanger_031d9a64-85bb-4082-a5b5-9050d8bff4a5.png",
@@ -103,7 +73,7 @@
             "note1_title": "Between sizes?",
             "note1_text": "Size up for a more relaxed feel. The slim cut means the larger size still looks clean and intentional rather than loose.",
             "note2_title": "Prefer a sharper fit?",
-            "note2_text": "True to size gives a closer fit. The cotton has enough give to stay comfortable without stretching out.",
+            "note2_text": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
             "note3_title": "Slim or muscular build?",
             "note3_text": "The raglan construction accommodates broader shoulders naturally without pulling at the seam. True-to-size works for most athletic builds.",
             "show_sit": false,
@@ -128,9 +98,6 @@
       },
       "block_order": [
         "feat1",
-        "feat2",
-        "feat3",
-        "feat4",
         "tab1",
         "tab2",
         "tab3",
@@ -138,7 +105,7 @@
         "sizeguide"
       ],
       "settings": {
-        "short_description": "Slim through the body with high stretch and a clean hem. Lightweight, quick drying and non-iron — the ease of a gym top, cut for everywhere but the gym.",
+        "short_description": "A close fit through the shoulders and body, with a clean hem.",
         "fit_guide_link": "shopify://pages/fit-guide",
         "size_guide_page": "shopify://pages/fit-guide",
         "trust_line": "No payment · No obligation · One letter if it gets made",
@@ -174,7 +141,7 @@
           "the-signore-chino-latte"
         ],
         "heading": "Wear it with",
-        "wardrobe_note": "Build your wardrobe — three pieces or more, 20% off automatically.",
+        "wardrobe_note": "Chosen to wear together.",
         "wardrobe_link": "",
         "collection": "",
         "products_to_show": 8
@@ -226,33 +193,33 @@
         "cl1": {
           "type": "callout_left",
           "settings": {
-            "title": "Athletic fit",
-            "text": "Slim through the body with fitted shoulders and a clean hem.",
-            "spec": "Cut close, not tight"
+            "title": "The silhouette",
+            "text": "A close fit through the shoulders and body, with a clean hem.",
+            "spec": ""
           }
         },
         "cl2": {
           "type": "callout_left",
           "settings": {
-            "title": "Sizing",
-            "text": "True to size gives a closer fit. Size up for a more relaxed feel.",
-            "spec": "Sizes S to XXL"
+            "title": "The waist",
+            "text": "See the waistband and fastening in the product views.",
+            "spec": ""
           }
         },
         "cr1": {
           "type": "callout_right",
           "settings": {
-            "title": "Cotton",
-            "text": "Enough give to stay comfortable without stretching out.",
-            "spec": "Soft against the skin"
+            "title": "The full view",
+            "text": "Explore the front, side and back views.",
+            "spec": ""
           }
         },
         "cr2": {
           "type": "callout_right",
           "settings": {
-            "title": "Layering",
-            "text": "Sits under a shirt or jacket without adding bulk.",
-            "spec": "Clean under a layer"
+            "title": "Choose your size",
+            "text": "Compare your measurements with the size guide.",
+            "spec": ""
           }
         }
       },
@@ -263,10 +230,11 @@
         "cr2"
       ],
       "settings": {
-        "heading": "A tee that keeps its shape.",
-        "image": "shopify://shop_images/042A2954_29c91a7f-4451-4e4d-8c4c-8c7a34f3d9b0.jpg",
-        "image_alt": "The Luxe Chino in Chocolate, leg and taper",
-        "image_position": "center 14%"
+        "heading": "The shape, considered.",
+        "image": "",
+        "image_alt": "",
+        "image_position": "center 25%",
+        "use_product_image": true
       }
     },
     "reviews": {
@@ -290,13 +258,6 @@
           "settings": {
             "question": "How does it fit?",
             "answer": "<p>Slim through the body with fitted shoulders and a clean hem. True to size gives a closer fit. Size up for a more relaxed feel.</p>"
-          }
-        },
-        "q2": {
-          "type": "faq",
-          "settings": {
-            "question": "What is the fabric?",
-            "answer": "<p>Cotton with enough give to stay comfortable without stretching out. It sits clean and keeps its shape.</p>"
           }
         },
         "q3": {
@@ -330,7 +291,6 @@
       },
       "block_order": [
         "q1",
-        "q2",
         "q3",
         "q4",
         "q5",
@@ -341,9 +301,9 @@
         "anchor": "",
         "eyebrow": "Questions",
         "heading": "Before you order.",
-        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
+        "text": "For sizing or order questions, contact Guillo.",
         "link_label": "Ask a question",
-        "link": "",
+        "link": "shopify://pages/contact",
         "open_first": false
       }
     }

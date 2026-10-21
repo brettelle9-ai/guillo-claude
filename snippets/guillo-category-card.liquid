@@ -1,6 +1,6 @@
 {%- liquid
   assign category = block.settings.collection
-  assign representative = block.settings.product
+  assign representative = block.settings.product | default: category.products.first
   assign category_image = block.settings.image | default: representative.featured_image
   if category_image == blank and block.settings.fallback_asset == blank
     assign category_image = category.image

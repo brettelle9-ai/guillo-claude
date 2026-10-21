@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -16,14 +7,14 @@
           "type": "tab",
           "settings": {
             "title": "Fit & Care",
-            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+            "content": "<p>A considered silhouette. Explore the available sizes and views below.</p><p>Compare the measurements in the size guide before choosing. Follow the care label supplied with your piece.</p>"
           }
         },
         "tab2": {
           "type": "tab",
           "settings": {
             "title": "Details",
-            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+            "content": "<p>A considered silhouette. Explore the available sizes and views below.</p>"
           }
         },
         "tab3": {
@@ -41,13 +32,6 @@
             "title": "Exchanges & Returns",
             "content_intl": "<p>44-day returns and exchanges. Return postage is paid by you. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
             "content": "<p>Free exchanges and returns within 44 days across Australia and New Zealand. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>"
-          }
-        },
-        "feat1": {
-          "type": "feature",
-          "settings": {
-            "label": "Genuine leather",
-            "icon": "shield"
           }
         },
         "feat2": {
@@ -73,7 +57,6 @@
         }
       },
       "block_order": [
-        "feat1",
         "feat2",
         "feat3",
         "feat4",
@@ -83,7 +66,7 @@
         "tab4"
       ],
       "settings": {
-        "short_description": "Cut for men who carry size through the chest, shoulders and thighs, in fabrics that move and recover.",
+        "short_description": "A considered silhouette. Explore the available sizes and views below.",
         "fit_guide_link": "shopify://pages/fit-guide",
         "size_guide_page": "shopify://pages/fit-guide",
         "trust_line": "Same-day dispatch · 44-day returns and exchanges",
@@ -138,33 +121,33 @@
         "cl1": {
           "type": "callout_left",
           "settings": {
-            "title": "Genuine leather",
-            "text": "Full grain leather, hand finished, built to be carried rather than kept for best.",
-            "spec": "Ages with use"
+            "title": "The silhouette",
+            "text": "A considered silhouette. Explore the available sizes and views below.",
+            "spec": ""
           }
         },
         "cl2": {
           "type": "callout_left",
           "settings": {
-            "title": "Built for travel",
-            "text": "Designed to carry the essentials, with dimensions listed in the product details.",
-            "spec": "Check your carry-on limits"
+            "title": "The waist",
+            "text": "See the waistband and fastening in the product views.",
+            "spec": ""
           }
         },
         "cr1": {
           "type": "callout_right",
           "settings": {
-            "title": "Care",
-            "text": "Spot clean with a damp cloth and air dry. Keep it out of prolonged direct sunlight.",
-            "spec": "Darkens, does not dry out"
+            "title": "The full view",
+            "text": "Explore the front, side and back views.",
+            "spec": ""
           }
         },
         "cr2": {
           "type": "callout_right",
           "settings": {
-            "title": "Pairs with",
-            "text": "The rest of the travel edit. Pack a chino and a polo and you are ready.",
-            "spec": "The Travel Edit"
+            "title": "Choose your size",
+            "text": "Compare your measurements with the size guide.",
+            "spec": ""
           }
         }
       },
@@ -175,8 +158,11 @@
         "cr2"
       ],
       "settings": {
-        "heading": "Leather made to travel.",
-        "image_position": "center 74%"
+        "heading": "The shape, considered.",
+        "image_position": "center 25%",
+        "use_product_image": true,
+        "image": "",
+        "image_alt": ""
       }
     },
     "reviews": {
@@ -244,7 +230,8 @@
         "layout": "split",
         "eyebrow": "Questions",
         "heading": "Before you order.",
-        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time."
+        "text": "For sizing or order questions, contact Guillo.",
+        "link": "shopify://pages/contact"
       }
     },
     "wear": {
@@ -256,7 +243,8 @@
           "bellagio-leather-weekender-duffel-bag",
           "the-bellagio-wash-bag",
           "the-bellagio-passport-holder"
-        ]
+        ],
+        "wardrobe_note": "Chosen to wear together."
       }
     }
   },

@@ -1,38 +1,8 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
       "type": "guillo-product",
       "blocks": {
-        "feat1": {
-          "type": "feature",
-          "settings": {
-            "label": "Comfort stretch",
-            "icon": "stretch"
-          }
-        },
-        "feat2": {
-          "type": "feature",
-          "settings": {
-            "label": "Breathable",
-            "icon": "breathable"
-          }
-        },
-        "feat3": {
-          "type": "feature",
-          "settings": {
-            "label": "Quick dry",
-            "icon": "quick_dry"
-          }
-        },
         "feat4": {
           "type": "feature",
           "settings": {
@@ -44,14 +14,14 @@
           "type": "tab",
           "settings": {
             "title": "Fit & Care",
-            "content": "<p>Slim and tailored, with room drafted through the seat and thigh, then a clean taper from knee to ankle. A sharp line that holds all day.</p><p>If you train and sit between sizes, take the smaller waist. The stretch twill gives one to two centimetres within the first week of wear, so there is no need to size up for the leg.</p><p>Machine wash cold, hang to dry, no ironing.</p>"
+            "content": "<p>A tailored short with a clean line above the knee. Choose your preferred length and size.</p><p>Compare the measurements in the size guide before choosing. Follow the care label supplied with your piece.</p>"
           }
         },
         "tab2": {
           "type": "tab",
           "settings": {
             "title": "Details",
-            "content": "<p>Cotton twill blended with elastane, finished to resist wrinkles. A smooth face, natural drape, and a fabric that recovers instead of holding the knee you were sitting in.</p><p>Seams are reinforced at every stress point. Metal hardware rather than coated plastic. Two rear welt pockets, two slanted side pockets, and a hidden coin pocket at the waistband.</p><p>Designed in Brisbane. 97% cotton, 3% elastane.</p>"
+            "content": "<p>A tailored short with a clean line above the knee. Choose your preferred length and size.</p>"
           }
         },
         "tab3": {
@@ -87,11 +57,11 @@
             "fit_profile_center": "Tailored Fit",
             "fit_profile_right": "Restrictive",
             "fit_profile_position": 50,
-            "fit_profile_note": "A tailored shorts fit with stretch fabric that sits slim and moves with you.",
+            "fit_profile_note": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
             "show_fit_image": true,
             "measure_heading": "How It Fits",
             "measurement_image_url": "",
-            "fit_callouts": "True-to-size waist|18\n7\" inseam sits on the quad|40\nStretch fabric moves with you|65\nLightweight and breathable|85",
+            "fit_callouts": "Tailored waist|18\nClean line through the thigh|40\nChoose your preferred length|65\nHem above the knee|85",
             "chart_heading": "Size Chart",
             "show_unit_toggle": true,
             "default_unit": "cm",
@@ -100,9 +70,9 @@
             "show_fit_notes": true,
             "fit_notes_heading": "Fit Notes",
             "note1_title": "Between sizes?",
-            "note1_text": "We recommend sizing down for a better fit through the leg — the stretch fabric will accommodate.",
+            "note1_text": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
             "note2_title": "Bigger legs?",
-            "note2_text": "These are built for it. The stretch sits slim and moves with you without feeling tight.",
+            "note2_text": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
             "note3_title": "Prefer more room?",
             "note3_text": "Size up for a more relaxed fit through the thigh.",
             "show_sit": false,
@@ -110,9 +80,9 @@
             "sit1_title": "Slim Legs",
             "sit1_text": "Sits clean and slim on leaner builds for a sharp, tailored look.",
             "sit2_title": "Athletic Legs",
-            "sit2_text": "Stretch fabric accommodates bigger legs comfortably while still sitting slim.",
+            "sit2_text": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
             "sit3_title": "Larger Legs",
-            "sit3_text": "Great for bigger legs — the stretch gives room where you need it without losing shape.",
+            "sit3_text": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
             "conversion_heading": "International Size Conversion",
             "conversion_table": "",
             "show_reco": true,
@@ -126,9 +96,6 @@
         }
       },
       "block_order": [
-        "feat1",
-        "feat2",
-        "feat3",
         "feat4",
         "tab1",
         "tab2",
@@ -148,7 +115,7 @@
         "interest_panel_title": "Register your interest in size",
         "interest_panel_sub": "One letter, the morning it opens. Nothing else.",
         "show_short_description": true,
-        "short_description": "Tailored through the seat and thigh with a seven inch inseam that sits on the quad. Lightweight stretch twill that breathes.",
+        "short_description": "A tailored short with a clean line above the knee. Choose your preferred length and size.",
         "fit_guide_link": "shopify://pages/fit-guide",
         "size_guide_page": "shopify://pages/fit-guide",
         "trust_line": "Same-day dispatch · 44-day returns and exchanges",
@@ -176,7 +143,7 @@
           "siracusa-short-sleeve-slim-fit-shirt"
         ],
         "heading": "Wear it with",
-        "wardrobe_note": "Build your wardrobe — three pieces or more, 20% off automatically.",
+        "wardrobe_note": "Chosen to wear together.",
         "wardrobe_link": "",
         "collection": "",
         "products_to_show": 8
@@ -228,33 +195,33 @@
         "cl1": {
           "type": "callout_left",
           "settings": {
-            "title": "Tailored through the seat and thigh",
-            "text": "A 7 inch inseam that sits on the quad.",
-            "spec": "7 inch inseam"
+            "title": "The silhouette",
+            "text": "A tailored short with a clean line above the knee. Choose your preferred length and size.",
+            "spec": ""
           }
         },
         "cl2": {
           "type": "callout_left",
           "settings": {
-            "title": "Sizing",
-            "text": "If you are between sizes, size down. The stretch will accommodate.",
-            "spec": "Sizes 28 to 36"
+            "title": "The waist",
+            "text": "See the waistband and fastening in the product views.",
+            "spec": ""
           }
         },
         "cr1": {
           "type": "callout_right",
           "settings": {
-            "title": "Lightweight stretch twill",
-            "text": "Breathes, recovers its shape and keeps a tailored line through the day.",
-            "spec": "Built for the heat"
+            "title": "The full view",
+            "text": "Explore the front, side and back views.",
+            "spec": ""
           }
         },
         "cr2": {
           "type": "callout_right",
           "settings": {
-            "title": "Wear it with",
-            "text": "A polo and loafers for lunch, a linen shirt by the water.",
-            "spec": "From promenade to table"
+            "title": "Choose your size",
+            "text": "Compare your measurements with the size guide.",
+            "spec": ""
           }
         }
       },
@@ -265,10 +232,11 @@
         "cr2"
       ],
       "settings": {
-        "heading": "The Capri, tailored for long summer days.",
-        "image": "shopify://shop_images/Generated_Image_February_25_2026_-_9_01PM_jpg.jpg",
-        "image_alt": "The Luxe Chino in Chocolate, leg and taper",
-        "image_position": "center 54%"
+        "heading": "The shape, considered.",
+        "image": "",
+        "image_alt": "",
+        "image_position": "center 25%",
+        "use_product_image": true
       }
     },
     "reviews": {
@@ -291,28 +259,21 @@
           "type": "faq",
           "settings": {
             "question": "How do they fit?",
-            "answer": "<p>Tailored through the seat and thigh with a 7 inch inseam that sits on the quad. If you are between sizes, size down. The stretch will accommodate.</p>"
-          }
-        },
-        "q2": {
-          "type": "faq",
-          "settings": {
-            "question": "What is the fabric?",
-            "answer": "<p>A lightweight stretch twill that breathes, recovers its shape and keeps a tailored line through the day.</p>"
+            "answer": "<p>A tailored short with a clean line above the knee. Choose your preferred length and size.</p><p>Use the size guide to compare measurements before choosing.</p>"
           }
         },
         "q3": {
           "type": "faq",
           "settings": {
             "question": "Are they comfortable for all day wear?",
-            "answer": "<p>Yes. Built for long summer days, the stretch moves with you from the promenade to the table.</p>"
+            "answer": "<p>A tailored short with a clean line above the knee. Choose your preferred length and size.</p><p>Use the size guide to compare measurements before choosing.</p>"
           }
         },
         "q4": {
           "type": "faq",
           "settings": {
             "question": "What should I pair them with?",
-            "answer": "<p>A polo and loafers for lunch. A linen shirt by the water. A tee and clean sneakers on the weekend.</p>"
+            "answer": "<p>A tailored short with a clean line above the knee. Choose your preferred length and size.</p><p>Use the size guide to compare measurements before choosing.</p>"
           }
         },
         "q5": {
@@ -332,7 +293,6 @@
       },
       "block_order": [
         "q1",
-        "q2",
         "q3",
         "q4",
         "q5",
@@ -343,9 +303,9 @@
         "anchor": "",
         "eyebrow": "Questions",
         "heading": "Before you order.",
-        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
+        "text": "For sizing or order questions, contact Guillo.",
         "link_label": "Ask a question",
-        "link": "",
+        "link": "shopify://pages/contact",
         "open_first": false
       }
     }
