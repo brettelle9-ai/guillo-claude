@@ -45,10 +45,6 @@
       <video data-film="secondary" data-src="{{ secondary_film | escape }}" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
     {%- endif -%}
   </div>
-  <button class="g-campaign__motion" type="button" aria-label="Pause background films" hidden>
-    <svg class="g-campaign__pause" width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M3 2h2.5v10H3zm5.5 0H11v10H8.5z"/></svg>
-    <svg class="g-campaign__play" width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="m4 2 8 5-8 5z"/></svg>
-  </button>
 </guillo-campaign>
 <script src="{{ 'guillo-campaign.js' | asset_url }}" defer></script>
 

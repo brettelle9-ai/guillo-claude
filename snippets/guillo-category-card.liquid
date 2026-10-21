@@ -12,14 +12,14 @@
   <a class="ga-category__link" href="{{ category.url }}" aria-label="Shop {{ title | escape }}">
     <div class="ga-card__image ga-drift">
       {%- if category_image != blank -%}
-        {{ category_image | image_url: width: 1400 | image_tag: widths: '390, 600, 900, 1100, 1400', sizes: '(min-width: 990px) 44vw, 100vw', loading: 'lazy', alt: title }}
+        {{ category_image | image_url: width: 1400 | image_tag: widths: '390, 600, 900, 1100, 1400', sizes: '50vw', loading: 'lazy', alt: title }}
       {%- elsif block.settings.fallback_asset != blank -%}
         <img src="{{ block.settings.fallback_asset | asset_url }}" alt="{{ title | escape }}" width="900" height="1600" loading="lazy">
       {%- else -%}
         {{ 'collection-apparel-1' | placeholder_svg_tag }}
       {%- endif -%}
     </div>
-    <div class="ga-category__caption"><h3>{{ title | escape }}</h3><span aria-hidden="true">↗</span></div>
+    <div class="ga-category__caption"><h3>{{ title | escape }}</h3></div>
   </a>
 </article>
 {%- endif -%}

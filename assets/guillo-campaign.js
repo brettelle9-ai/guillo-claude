@@ -4,23 +4,14 @@ if (!customElements.get('guillo-campaign')) {
       if (this.mounted) return;
       this.mounted = true;
       this.films = [...this.querySelectorAll('video')];
-      this.button = this.querySelector('.g-campaign__motion');
-      if (!this.films.length || !this.button) return;
+      if (!this.films.length) return;
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
       this.wide = matchMedia('(min-width: 990px)');
       const connection = navigator.connection;
       this.saveData = connection && (connection.saveData || /^(slow-2g|2g)$/.test(connection.effectiveType || ''));
       this.inView = true;
-      this.manuallyPaused = false;
       this.started = false;
-      this.onToggle = () => {
-        this.manuallyPaused = !this.manuallyPaused;
-        this.classList.toggle('is-paused', this.manuallyPaused);
-        this.button.setAttribute('aria-label', this.manuallyPaused ? 'Play background films' : 'Pause background films');
-        this.updatePlayback();
-      };
       this.onChange = () => this.updatePlayback();
-      this.button.addEventListener('click', this.onToggle);
       this.motion.addEventListener('change', this.onChange);
       this.wide.addEventListener('change', this.onChange);
       document.addEventListener('visibilitychange', this.onChange);
@@ -42,7 +33,7 @@ if (!customElements.get('guillo-campaign')) {
       else window.addEventListener('load', this.onLoad, { once: true });
     }
     updatePlayback() {
-      const allowed = this.started && this.inView && !document.hidden && !this.motion.matches && !this.saveData && !this.manuallyPaused;
+      const allowed = this.started && this.inView && !document.hidden && !this.motion.matches && !this.saveData;
       this.films.forEach(film => {
         const visible = film.dataset.film === 'primary' || this.wide.matches;
         if (!allowed || !visible) {
@@ -54,19 +45,16 @@ if (!customElements.get('guillo-campaign')) {
           film.src = film.dataset.src;
           film.addEventListener('playing', () => {
             film.classList.add('is-ready');
-            this.button.hidden = false;
           });
         }
         const playback = film.play();
         if (playback && playback.catch) playback.catch(() => {});
       });
-      if (this.motion.matches || this.saveData) this.button.hidden = true;
     }
     disconnectedCallback() {
       this.mounted = false;
       this.films?.forEach(film => film.pause());
       this.observer?.disconnect();
-      this.button?.removeEventListener('click', this.onToggle);
       this.motion?.removeEventListener('change', this.onChange);
       this.wide?.removeEventListener('change', this.onChange);
       document.removeEventListener('visibilitychange', this.onChange);

@@ -24,6 +24,7 @@ if (!customElements.get('guillo-atelier')) {
         chapters.forEach((el,i) => {el.classList.toggle('is-current',i===n);el.setAttribute('aria-hidden',String(i!==n));});
         controls.forEach((el,i) => el.setAttribute('aria-pressed',String(i===n)));
         if (story) story.dataset.currentView = n;
+        this.updateSignorePlayback?.();
       };
       const render = () => {
         this.raf = 0;
@@ -73,19 +74,29 @@ if (!customElements.get('guillo-atelier')) {
       window.addEventListener('resize',schedule,{passive:true,signal});
       reduced.addEventListener('change',motion,{signal});
       immersive.addEventListener('change',motion,{signal});
-      setView(0);motion();
-      const trust=this.querySelector('.ga-trust');
-      const pause=trust?.querySelector('.ga-trust__pause');
-      if (pause) {
-        pause.hidden=reduced.matches;
-        pause.addEventListener('click',()=>{
-          const paused=trust.classList.toggle('is-paused');
-          pause.setAttribute('aria-pressed',String(paused));
-          pause.setAttribute('aria-label',paused?'Play customer care banner':'Pause customer care banner');
-          pause.textContent=paused?'Play':'Pause';
-        },{signal});
-        reduced.addEventListener('change',()=>{pause.hidden=reduced.matches;},{signal});
+      const film=this.querySelector('[data-signore-film]');
+      this.signoreInView=false;
+      const connection=navigator.connection;
+      const saveData=connection?.saveData || /^(slow-2g|2g)$/.test(connection?.effectiveType || '');
+      this.updateSignorePlayback=()=>{
+        if (!film) return;
+        const allowed=this.signoreInView && current===0 && !reduced.matches && !saveData && !document.hidden;
+        if (!allowed) {film.pause();return;}
+        if (!film.getAttribute('src')) {film.muted=true;film.src=film.dataset.src;}
+        const playing=film.play();
+        playing?.catch(()=>{});
+      };
+      if (film && stage) {
+        film.addEventListener('playing',()=>film.classList.add('is-ready'),{signal});
+        this.signoreObserver=new IntersectionObserver(entries=>{
+          this.signoreInView=entries[0].isIntersecting;
+          this.updateSignorePlayback();
+        },{threshold:.15});
+        this.signoreObserver.observe(stage);
+        document.addEventListener('visibilitychange',this.updateSignorePlayback,{signal});
+        reduced.addEventListener('change',this.updateSignorePlayback,{signal});
       }
+      setView(0);motion();
       const form=this.querySelector('[data-guillo-outfit]');
       if (form) {
         const items=[...form.querySelectorAll('[data-outfit-item]')];
@@ -122,6 +133,6 @@ if (!customElements.get('guillo-atelier')) {
         },{signal});
       }
     }
-    disconnectedCallback() {this.abort?.abort();cancelAnimationFrame(this.raf);document.body.classList.remove('guillo-past-hero');}
+    disconnectedCallback() {this.abort?.abort();this.signoreObserver?.disconnect();this.querySelector('[data-signore-film]')?.pause();cancelAnimationFrame(this.raf);document.body.classList.remove('guillo-past-hero');}
   });
 }

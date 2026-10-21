@@ -12,11 +12,9 @@
       </div>
       {%- endfor -%}
     </div>
-    <button class="ga-trust__pause" type="button" aria-label="Pause customer care banner" aria-pressed="false" hidden>Pause</button>
   </section>
 
-  <section class="ga-gallery" aria-labelledby="ga-selection-{{ section.id }}">
-    <header class="ga-heading"><p class="ga-kicker">The wardrobe</p><h2 id="ga-selection-{{ section.id }}">The collections.</h2></header>
+  <section class="ga-gallery" aria-label="Shop by category">
     <div class="ga-gallery__grid">{%- for block in section.blocks -%}{% render 'guillo-category-card', block: block %}{%- endfor -%}</div>
   </section>
   <section class="ga-outfit ga-scene" aria-labelledby="ga-outfit-{{ section.id }}">
@@ -50,7 +48,16 @@
         <p class="ga-signature__guide">Scroll to explore <span aria-hidden="true">↓</span></p>
       </div>
       <div class="ga-signature__visual"><div class="ga-signature__photos">
-        {%- for img in signature.images limit: 3 -%}<div class="ga-signature__frame{% if forloop.first %} is-current{% endif %}" data-view="{{ forloop.index0 }}">{{ img | image_url: width: 1200 | image_tag: widths: '480, 750, 1000, 1200', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: 'The Signore in Latte' }}</div>{%- endfor -%}
+        {%- for img in signature.images limit: 3 -%}
+        <div class="ga-signature__frame{% if forloop.first %} ga-signature__frame--film is-current{% endif %}" data-view="{{ forloop.index0 }}">
+          {%- if forloop.first -%}
+            <img src="{{ 'guillo-signore-raised-foot.jpg' | asset_url }}" width="720" height="1280" loading="lazy" alt="Signore trousers worn with one foot raised beside the pool">
+            <video data-signore-film data-src="{{ 'guillo-signore-raised-foot.mp4' | asset_url }}" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
+          {%- else -%}
+            {{ img | image_url: width: 1200 | image_tag: widths: '480, 750, 1000, 1200', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: 'The Signore in Latte' }}
+          {%- endif -%}
+        </div>
+        {%- endfor -%}
       </div><div class="ga-signature__steps" aria-label="Explore the Signore views"><button type="button" data-view-button="0" aria-pressed="true">Silhouette</button><button type="button" data-view-button="1" aria-pressed="false">Waist</button><button type="button" data-view-button="2" aria-pressed="false">Full view</button></div></div>
     </div>
   </section>{%- endif -%}
