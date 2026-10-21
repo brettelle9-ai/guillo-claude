@@ -10,6 +10,7 @@ body:has(.guillo-pdp--stone) :is(.guillo-newsletter,.guillo-footer){background:#
 body:has(.guillo-pdp--stone) .guillo-newsletter{border-top:1px solid #ffffff26}
 body:has(.guillo-pdp--stone) .guillo-pdp__crumb-wrap{padding-block:18px 0}
 body:has(.guillo-pdp--stone) .guillo-pdp__layout{grid-template-columns:minmax(0,1.2fr) minmax(380px,.8fr);gap:4vw;padding:22px 4vw 0}
+body:has(.guillo-pdp--stone) .guillo-pdp__gallery-wrap{display:block;min-width:0}
 body:has(.guillo-pdp--stone) .guillo-pdp__gallery{gap:3px}
 body:has(.guillo-pdp--stone) .guillo-pdp__panel{padding:20px 0 36px;top:100px}
 body:has(.guillo-pdp--stone) .guillo-pdp__title{font:400 clamp(32px,3.3vw,48px)/1.05 var(--g-display);letter-spacing:-.025em}
