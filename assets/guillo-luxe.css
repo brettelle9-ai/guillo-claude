@@ -316,9 +316,11 @@ body:has(.guillo-pdp--stone) .guillo-footer :is(.guillo-footer__copyright,.guill
 .luxe-fit-profile__track{position:relative;height:1px;background:linear-gradient(90deg,#74869250,#c5d1d980,#74869250);margin:0 4px}
 .luxe-fit-profile__track>span{position:absolute;left:var(--fit-position);top:-4px;width:3px;height:9px;transform:translateX(-50%);background:#f4f6f7}
 .luxe-fit-profile__labels{display:flex;justify-content:space-between;font:400 11px/1.5 var(--g-sans);color:#a5b3bc;margin-top:12px}
-.luxe-product-notes{display:grid;grid-template-columns:1fr 1fr;gap:25px 28px;list-style:none;padding:0;margin:28px 0 30px}
-.luxe-product-notes li{display:flex;align-items:center;gap:15px;padding:0;font:400 12px/1.5 var(--g-sans);letter-spacing:.065em;text-transform:uppercase;color:#c3c9cd}
-.luxe-product-notes svg{width:32px;height:32px;flex-shrink:0;color:#adb6bd}
+.luxe-benefits{padding:52px 5vw;background:#fff;color:#657078}
+.luxe-benefits+.luxe-mood{margin-top:0}
+.luxe-product-notes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:30px;list-style:none;padding:0;margin:0 auto;max-width:1280px}
+.luxe-product-notes li{display:flex;align-items:center;gap:15px;padding:0;font:400 12px/1.5 var(--g-sans);letter-spacing:.065em;text-transform:uppercase;color:#657078}
+.luxe-product-notes svg{width:32px;height:32px;flex-shrink:0;color:#6b757c}
 /* Use the actual media ratio, without a surrounding letterbox. */
 .luxe-story__visual{--luxe-media-height:510px;width:min(100%,calc(var(--luxe-media-height) * var(--luxe-media-ratio,.5625)));height:auto;aspect-ratio:var(--luxe-media-ratio,.5625);max-height:none;max-width:none;background:transparent}
 .luxe-detail-view video{object-fit:cover;background:transparent}
@@ -338,7 +340,8 @@ body:has(.guillo-pdp--stone) input.guillo-newsletter__input{background:#ffffff80
  .luxe-story__visual{--luxe-media-height:430px;height:auto;width:min(100%,calc(var(--luxe-media-height) * var(--luxe-media-ratio,.5625)));max-width:none}
  .luxe-fit-profile{margin-top:30px}
  .luxe-fit-profile__head{font-size:12px}
- .luxe-product-notes{gap:24px 18px;margin-block:26px 28px}
+ .luxe-benefits{padding:35px 22px}
+ .luxe-product-notes{grid-template-columns:1fr 1fr;gap:28px 18px;margin:0}
  .luxe-product-notes li{gap:12px;font-size:11px;letter-spacing:.055em}
  .luxe-product-notes svg{width:30px;height:30px}
  body:has(.guillo-pdp--stone) .guillo-newsletter{padding-block:25px}

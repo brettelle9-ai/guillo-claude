@@ -374,7 +374,6 @@
           <button type="button" class="guillo-pdp__desc-more" data-desc-toggle hidden>Read more</button>
         </div>
       {%- endif -%}
-      {%- if stone_test -%}{% render 'guillo-luxe-product-notes' %}{%- endif -%}
       <div class="guillo-pdp__rule"></div>
 
 
@@ -960,6 +959,9 @@
       gets a band of its own. Lives in snippets/guillo-stone-band.liquid so it
       can be edited without touching this file.
     {%- endcomment -%}
+    <section class="luxe-benefits" aria-label="The Luxe Chino benefits">
+      {% render 'guillo-luxe-product-notes' %}
+    </section>
     {% render 'guillo-luxe-story', product: product, section: section %}
     {% render 'guillo-luxe-look', product: product, section: section, style_name: style_name %}
   {%- endif -%}
