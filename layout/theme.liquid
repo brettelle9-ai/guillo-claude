@@ -59,6 +59,10 @@
     {%- render 'guillo-fonts' -%}
     {{ 'guillo.css' | asset_url | stylesheet_tag }}
     {{ 'guillo-modern.css' | asset_url | stylesheet_tag }}
+    {%- if product.tags contains 'garment:short' or template.suffix contains 'shorts' -%}
+      {{ 'guillo-capri.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'guillo-capri.js' | asset_url }}" defer></script>
+    {%- endif -%}
     <script src="{{ 'guillo-modern.js' | asset_url }}" defer></script>
     <script src="{{ 'guillo-menu-hover.js' | asset_url }}" defer></script>
 
@@ -69,7 +73,7 @@
     {{ content_for_header }}
   </head>
 
-  <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
+  <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}{% if product.tags contains 'garment:short' or template.suffix contains 'shorts' %} guillo-capri-page{% endif %}">
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
     <div id="header-group">
       {% sections 'header-group' %}

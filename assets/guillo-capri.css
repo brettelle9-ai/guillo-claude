@@ -1,0 +1,113 @@
+/* Capri product pages: image-led white layout, scoped to shorts only. */
+body.guillo-capri-page{--g-paper:#fff;--g-canvas:#f3f3f3;--g-ink:#151b1e;--g-line:#e4e5e6;background:#fff;color:#151b1e}
+.guillo-capri-page .guillo-pdp{background:#fff}
+.guillo-capri-page .guillo-pdp__crumb-wrap{padding:17px 3vw;font-size:10px}
+.guillo-capri-page .guillo-pdp__layout{grid-template-columns:minmax(0,60fr) minmax(330px,40fr);gap:0;padding:0;max-width:1800px;margin:auto}
+.guillo-capri-page .guillo-pdp__gallery-wrap{display:block;min-width:0;position:relative}
+.guillo-capri-page .guillo-pdp__gallery{gap:2px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.guillo-capri-page .guillo-pdp__frame{aspect-ratio:3/4;min-width:0}
+.guillo-capri-page .guillo-pdp__media{object-position:center center}
+.guillo-capri-page .guillo-pdp__panel{padding:30px clamp(25px,4vw,72px) 40px;top:90px;min-width:0}
+.guillo-capri-page .guillo-pdp__titlerow{display:block;margin-bottom:10px}
+.guillo-capri-page .guillo-pdp__title{font:500 clamp(18px,1.45vw,23px)/1.35 var(--g-sans);letter-spacing:.025em;text-transform:uppercase}
+.guillo-capri-page .guillo-pdp__style{display:inline;font:400 12px/1.4 var(--g-sans);letter-spacing:.04em;color:#606568;margin-left:9px}
+.guillo-capri-page .guillo-pdp__price{display:block;font-size:15px;margin-top:12px}
+.guillo-capri-page .guillo-pdp__rating{margin:0 0 18px;gap:8px;text-decoration:none;width:fit-content}
+.guillo-capri-page .guillo-pdp__stars{letter-spacing:.12em}
+.guillo-capri-page .guillo-pdp__desc{font-size:12px;line-height:1.7;color:#54595c}
+.guillo-capri-page .guillo-pdp__desc-wrap{margin:0 0 22px}
+.guillo-capri-page .guillo-pdp__rule{display:none}
+.guillo-capri-page .guillo-pdp__field{margin-bottom:21px}
+.guillo-capri-page .guillo-pdp__field-label{font-size:12px;margin-bottom:12px}
+.guillo-capri-page .guillo-pdp__colours{gap:12px;padding:4px 4px 6px}
+.guillo-capri-page .guillo-pdp__colour-frame{width:45px;height:57px;outline-color:#e0e2e3}
+.guillo-capri-page .guillo-pdp__colour--on .guillo-pdp__colour-frame{outline:1px solid #151b1e;outline-offset:3px}
+.guillo-capri-page .guillo-pdp__colour-name{font-size:9px;letter-spacing:0;padding-top:9px;color:#656a6d}
+.guillo-capri-page .guillo-pdp__leg-switch{gap:8px}
+.guillo-capri-page .guillo-pdp__leg-opt{min-width:61px;padding:11px 19px;border:1px solid #dedfe0;font-size:12px}
+.guillo-capri-page .guillo-pdp__leg-opt.is-current{background:#171c1f;color:#fff;border-color:#171c1f}
+.guillo-capri-page .guillo-pdp__size-links{gap:12px}
+.guillo-capri-page .guillo-pdp__size-guide{font-size:10px;letter-spacing:0;text-transform:none}
+.guillo-capri-page .guillo-pdp__sizes{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:7px}
+.guillo-capri-page .guillo-pdp__size span{height:44px;border:1px solid #dedfe0;font-size:12px;background:#fff;color:#202629}
+.guillo-capri-page .guillo-pdp__size input:checked+span{background:#171c1f;color:#fff;border-color:#171c1f}
+.guillo-capri-page .guillo-pdp__size--gone span{background:#f4f4f4;color:#929597}
+.guillo-capri-page .guillo-pdp__size-tag{font-size:7px;letter-spacing:0}
+.guillo-capri-page .guillo-pdp__size-hint{font-size:10px;margin:12px 0}
+.guillo-capri-page .guillo-pdp__atc{min-height:54px;background:#151b1e;color:#fff;border:1px solid #151b1e;font-size:11px;letter-spacing:.08em;transition:background .25s ease,transform .25s ease}
+.guillo-capri-page .guillo-pdp__atc:disabled{background:#303639;color:#fff;opacity:.65}
+.guillo-capri-page .guillo-pdp__atc:hover:not(:disabled){background:#343e44}
+.guillo-capri-page .guillo-pdp__trust{font-size:9px;line-height:1.6;letter-spacing:.015em;padding:14px 0 20px}
+.guillo-capri-page .guillo-pdp__features{gap:12px;padding:4px 0 24px}
+.guillo-capri-page .guillo-pdp__feature{font-size:9px;letter-spacing:.025em}
+.guillo-capri-page .guillo-pdp__tabs{margin:0}
+.guillo-capri-page .gstone-acc__item{border-top:1px solid #e4e5e6}
+.guillo-capri-page .gstone-acc__item:last-child{border-bottom:1px solid #e4e5e6}
+.guillo-capri-page .gstone-acc__btn{display:flex;align-items:center;justify-content:space-between;width:100%;margin:0;padding:19px 0;border:0;font:500 11px/1.4 var(--g-sans);letter-spacing:.035em;text-transform:uppercase;color:#202629}
+.guillo-capri-page .gstone-acc__btn.is-open{border:0;color:#202629}
+.guillo-capri-page .gstone-acc__panel{padding:0 0 20px;font-size:12px;line-height:1.8}
+.guillo-capri-page .guillo-pdp__sticky{background:#fff;color:#171c1f}
+.guillo-capri-page .guillo-pdp__sticky-title{font-size:12px}
+.guillo-capri-page .capri-gallery-controls{display:none}
+.guillo-capri-page .capri-film{display:grid;grid-template-columns:1fr 1fr;align-items:center;background:#f3f4f4;padding:55px max(5vw,24px);gap:7vw;margin-top:32px}
+.guillo-capri-page .capri-film__copy h2{font:400 clamp(36px,4vw,59px)/1.08 var(--g-display);max-width:380px;margin:0 auto}
+.guillo-capri-page .capri-film .guillo-pdp__video{margin:0;max-width:340px;width:100%;justify-self:center}
+.guillo-capri-page .capri-film .guillo-pdp__video-frame{aspect-ratio:var(--video-ratio);background:transparent}
+.guillo-capri-page .guillo-wear{background:#fff;padding:62px 0 55px}
+.guillo-capri-page .guillo-wear__head{padding-bottom:25px}
+.guillo-capri-page .guillo-wear__heading{font:500 20px/1.3 var(--g-sans);letter-spacing:.03em}
+.guillo-capri-page .guillo-wear__scroller{gap:18px;scroll-snap-type:x proximity}
+.guillo-capri-page .guillo-wear__cell{flex:0 0 23%}
+.guillo-capri-page .g-card__title{font:500 12px/1.4 var(--g-sans);letter-spacing:0}
+.guillo-capri-page .guillo-trust{background:#f5f5f5}
+.guillo-capri-page .guillo-trust__card{padding-block:32px}
+.guillo-capri-page .guillo-anatomy{background:#fff;padding:64px 5vw;border:0}
+.guillo-capri-page .guillo-anatomy__grid{grid-template-columns:1fr 1fr;gap:0 6vw;max-width:1250px}
+.guillo-capri-page .guillo-anatomy__media{grid-column:1;grid-row:1/3;aspect-ratio:3/4}
+.guillo-capri-page .guillo-anatomy__side{grid-column:2;justify-content:center}
+.guillo-capri-page .guillo-anatomy__heading{font:400 clamp(34px,3.5vw,48px)/1.1 var(--g-display);margin:0 0 30px}
+.guillo-capri-page .guillo-anatomy__callout{margin:0 0 25px!important;display:block}
+.guillo-capri-page .guillo-anatomy__callout-copy{width:auto;flex:auto;padding:0}
+.guillo-capri-page .guillo-anatomy__callout-title{font-size:11px;letter-spacing:.06em;margin-bottom:9px}
+.guillo-capri-page .guillo-anatomy__callout-text{font-size:13px;line-height:1.7;max-width:370px}
+.guillo-capri-page .guillo-anatomy__tick,.guillo-capri-page .guillo-anatomy__line,.guillo-capri-page .guillo-anatomy__point{display:none}
+.guillo-capri-page .guillo-faq{background:#f6f6f6}
+.guillo-capri-page .guillo-reviews{background:#fff}
+.guillo-capri-page :is(button,a,input):focus-visible{outline:2px solid #405b6a;outline-offset:4px}
+@media(min-width:990px){.guillo-capri-page .guillo-pdp__gallery .guillo-pdp__frame{display:block}.guillo-capri-page .guillo-pdp__gallery--single{grid-template-columns:repeat(2,minmax(0,1fr))}.guillo-capri-page .guillo-pdp__gallery--single .guillo-pdp__frame{grid-column:auto}}
+@media(max-width:989px){
+.guillo-capri-page .guillo-pdp__crumb-wrap{padding:11px 20px;font-size:9px}
+.guillo-capri-page .guillo-pdp__layout{display:flex;padding:0;gap:0}
+.guillo-capri-page .guillo-pdp__gallery-wrap{order:0;width:100%;margin:0}
+.guillo-capri-page .guillo-pdp__gallery{display:flex;gap:0}
+.guillo-capri-page .guillo-pdp__frame{flex:0 0 100%;aspect-ratio:4/5}
+.guillo-capri-page .guillo-pdp__panel{display:contents;padding:0;position:static}
+.guillo-capri-page .guillo-pdp__panel>*{order:2;padding-inline:20px}
+.guillo-capri-page .guillo-pdp__titlerow{order:1;padding-top:21px;padding-bottom:0;margin-bottom:10px}
+.guillo-capri-page .guillo-pdp__title{font-size:19px;letter-spacing:.025em}
+.guillo-capri-page .guillo-pdp__price{font-size:14px;margin-top:9px}
+.guillo-capri-page .guillo-pdp__rating{padding-bottom:0;margin:0 0 15px;width:auto}
+.guillo-capri-page .guillo-pdp__desc{padding:0;font-size:12px}
+.guillo-capri-page .guillo-pdp__desc-wrap{margin-bottom:23px}
+.guillo-capri-page .guillo-pdp__field{margin-bottom:21px}
+.guillo-capri-page .guillo-pdp__sizes{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.guillo-capri-page .guillo-pdp__size span{height:47px}
+.guillo-capri-page .guillo-pdp__features{margin:0 20px;padding:0 0 22px;gap:12px}
+.guillo-capri-page .guillo-pdp__tabs{padding-inline:20px}
+.guillo-capri-page .capri-gallery-controls{display:flex;position:absolute;right:16px;bottom:18px;gap:7px;z-index:2}
+.guillo-capri-page .capri-gallery-controls button{width:36px;height:36px;background:rgb(255 255 255/.94);color:#1a2226;border:1px solid #e2e3e3;border-radius:50%;font-size:18px;cursor:pointer;display:grid;place-items:center}
+.guillo-capri-page .capri-gallery-controls button:disabled{opacity:.4}
+.guillo-capri-page .capri-film{padding:34px 20px;gap:24px;margin-top:25px}
+.guillo-capri-page .capri-film__copy h2{font-size:clamp(26px,6vw,39px)}
+.guillo-capri-page .guillo-wear{padding:40px 0}
+.guillo-capri-page .guillo-wear__head{padding-inline:20px}
+.guillo-capri-page .guillo-wear__scroller{padding-inline:20px;gap:12px}
+.guillo-capri-page .guillo-wear__cell{flex-basis:68%}
+.guillo-capri-page .guillo-anatomy{padding:38px 20px}
+.guillo-capri-page .guillo-anatomy__grid{display:grid;grid-template-columns:1fr;gap:0}
+.guillo-capri-page .guillo-anatomy__media{grid-column:1;grid-row:1;aspect-ratio:4/5;margin-bottom:30px}
+.guillo-capri-page .guillo-anatomy__side{grid-column:1;grid-row:auto}
+.guillo-capri-page .guillo-anatomy__heading{font-size:35px;margin-bottom:25px}
+.guillo-capri-page .guillo-anatomy__callout{margin-bottom:22px!important}
+}
+@media(prefers-reduced-motion:reduce){.guillo-capri-page *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}

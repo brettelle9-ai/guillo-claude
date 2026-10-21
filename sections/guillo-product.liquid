@@ -108,6 +108,10 @@
   # the Luxe Chino template. Every style is scoped to .guillo-pdp--stone so
   # no other product page can be touched.
   # ---------------------------------------------------------------------
+  assign capri_page = false
+  if product.tags contains 'garment:short' or template.suffix contains 'shorts'
+    assign capri_page = true
+  endif
   assign stone_test = false
   if product.handle == 'the-luxe-chino-stone' or product.template_suffix == 'aw26_luxe-chino_claude_'
     assign stone_test = true
@@ -338,7 +342,7 @@
 
 
       {%- if rating != blank and rating_count != blank and rating_count > 0 -%}
-        {%- if stone_test -%}
+        {%- if stone_test or capri_page -%}
           {%- comment -%}
             On the stone page the rating is a plain anchor to the reviews
             section further down (its id is set in guillo-pdp-reviews). Native
@@ -857,7 +861,7 @@
         </div>
       {%- endif -%}
       {%- endcapture -%}
-      {%- unless stone_test -%}{{ gstone_video }}{%- endunless -%}
+      {%- unless stone_test or capri_page -%}{{ gstone_video }}{%- endunless -%}
 
       {%- unless stone_test -%}{{ gstone_features }}{%- endunless -%}
 
@@ -880,7 +884,8 @@
       {%- endif -%}
 
       {%- assign tab_blocks = section.blocks | where: 'type', 'tab' -%}
-      {%- if tab_blocks.size > 0 and stone_test -%}
+      {%- if tab_blocks.size > 0 -%}
+        {%- if stone_test or capri_page -%}
         {%- comment -%}
           Stone test: each title sits directly above its own panel as a full
           width row, instead of the shared tab bar. Same data attributes, so
@@ -914,7 +919,7 @@
             </div>
           {%- endfor -%}
         </div>
-      {%- elsif tab_blocks.size > 0 -%}
+      {%- else -%}
         <div class="guillo-pdp__tabs" data-tabs>
           <div class="guillo-pdp__tabbar" role="tablist">
             {%- for block in tab_blocks -%}
@@ -948,8 +953,16 @@
           {%- endfor -%}
         </div>
       {%- endif -%}
+        {%- endif -%}
     </div>
   </div>
+
+  {%- if capri_page and section.settings.show_video_tile -%}
+    <section class="capri-film" aria-label="{{ section.settings.video_caption | escape }}">
+      <div class="capri-film__copy"><h2>{{ section.settings.video_caption }}</h2></div>
+      {{ gstone_video }}
+    </section>
+  {%- endif -%}
 
   {%- if stone_test -%}
     {%- comment -%}
@@ -1350,6 +1363,7 @@
       };
 
       gallery.addEventListener('pointerdown', (e) => {
+        if (document.body.classList.contains('guillo-capri-page') && window.innerWidth >= 990) return;
         if (e.pointerType === 'mouse' && e.button !== 0) return;
         dragging = true;
         startX = e.clientX;
