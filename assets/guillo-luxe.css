@@ -298,6 +298,11 @@ body:has(.guillo-pdp--stone) .guillo-faq__item summary{color:#15212a}
 body:has(.guillo-pdp--stone) :is(.guillo-faq__answer,.guillo-faq__text){color:#52616c}
 body:has(.guillo-pdp--stone) .guillo-faq :is(.g-eyebrow,.g-link){color:#52616c}
 body:has(.guillo-pdp--stone) .guillo-newsletter{background:linear-gradient(125deg,#fff 30%,#edf2f5 100%);border-top:1px solid #15212a1f}
+body:has(.guillo-pdp--stone) .guillo-newsletter :is(.guillo-newsletter__heading,.guillo-newsletter__label,.guillo-newsletter__success){color:#15212a}
+body:has(.guillo-pdp--stone) .guillo-newsletter :is(.guillo-newsletter__eyebrow,.guillo-newsletter__text){color:#52616c}
+body:has(.guillo-pdp--stone) .guillo-newsletter__submit{background:#13212c;border-color:#13212c;color:#fff!important}
+body:has(.guillo-pdp--stone) .guillo-newsletter__submit:hover{background:#233a4b;color:#fff!important}
+body:has(.guillo-pdp--stone) .guillo-newsletter__error{color:#9c2222}
 body:has(.guillo-pdp--stone) .guillo-footer{background:#0b1b2b;color:#b8c5d0}
 body:has(.guillo-pdp--stone) .guillo-footer :is(.guillo-footer__tagline,.guillo-footer__links a){color:#b8c5d0}
 body:has(.guillo-pdp--stone) .guillo-footer__col-title{color:#f3f6f8}
