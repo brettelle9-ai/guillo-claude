@@ -26,8 +26,9 @@
   --g-dark-body: #A9ABB1;
 
   /* Type */
-  --g-sans: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
-  --g-serif: var(--g-sans);
+  --g-sans: 'Manrope', 'Helvetica Neue', Arial, sans-serif;
+  --g-display: 'Forum', Georgia, serif;
+  --g-serif: var(--g-display);
 
   /* Point Horizon's font variables at the brand faces */
   --font-body--family: var(--g-sans);
@@ -38,10 +39,10 @@
   --font-subheading--weight: 500;
   --font-heading--family: var(--g-serif);
   --font-heading--style: normal;
-  --font-heading--weight: 500;
+  --font-heading--weight: 400;
   --font-accent--family: var(--g-serif);
-  --font-accent--style: italic;
-  --font-accent--weight: 500;
+  --font-accent--style: normal;
+  --font-accent--weight: 400;
 }
 
 body {

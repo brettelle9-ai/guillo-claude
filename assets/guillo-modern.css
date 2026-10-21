@@ -1,12 +1,12 @@
 /* Shared visual language for homepage, collections and product pages. */
-:root{--g-sans:'Inter Tight','Helvetica Neue',Arial,sans-serif;--g-serif:var(--g-sans);--g-muted:#555d62;--g-faint:#616a70;--g-whisper:#687278;--g-off:#f4f5f6;--font-body--weight:400;--font-heading--family:var(--g-sans)}
+:root{--g-sans:'Manrope','Helvetica Neue',Arial,sans-serif;--g-display:'Forum',Georgia,serif;--g-serif:var(--g-display);--g-muted:#555d62;--g-faint:#616a70;--g-whisper:#687278;--g-off:#f4f5f6;--font-body--weight:400;--font-heading--family:var(--g-display);--font-heading--weight:400}
 body{font-family:var(--g-sans);font-weight:400;background:#fff;color:#111416}
 #header-component .menu-list__link,#header-component .menu-list__link-title{font-family:var(--g-sans);font-size:11px;letter-spacing:.09em;font-weight:500}
 #header-component .header__row{background:#111b20e8!important;backdrop-filter:blur(16px)}
 #header-component .menu-list__link{position:relative}#header-component .menu-list__link:after{content:'';position:absolute;bottom:15px;left:0;right:0;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s}#header-component .menu-list__link:hover:after{transform:scaleX(1)}
 body .g-campaign{--campaign-ink:#fff;background:#0e1213;grid-template-columns:1.05fr 1fr 1fr}
-body .g-campaign__heading{font:500 clamp(52px,5.8vw,100px)/.97 var(--g-sans);letter-spacing:-.065em}
-body .g-campaign__heading em{font-style:normal;font-weight:500;margin-top:0}
+body .g-campaign__heading{font:400 clamp(52px,5.8vw,100px)/1.04 var(--g-display);letter-spacing:-.015em}
+body .g-campaign__heading em{font-style:normal;font-weight:400;margin-top:0}
 body .g-campaign__eyebrow{font-size:11px;letter-spacing:.13em;color:#bac6cb}
 body .g-campaign__description{font-size:15px;line-height:1.65;font-weight:400;color:#d6dfe3;max-width:310px}
 body .g-campaign__actions a{font-size:11px;letter-spacing:.07em;min-height:48px}
@@ -80,3 +80,9 @@ body .guillo-footer__links a{min-height:36px;display:inline-flex;align-items:cen
 @media(max-width:989px){body .guillo-cgrid .guillo-cgrid__grid{grid-template-columns:repeat(2,minmax(0,1fr))}body .guillo-story{grid-template-columns:1fr}body .guillo-story__media{min-height:90vw}}
 @media(max-width:749px){body .g-campaign{display:block}body .g-campaign__heading{font-size:clamp(49px,13vw,78px)}body .g-campaign__copy{padding:0 24px 32px}body .g-campaign__description{font-size:14px;max-width:290px}body .g-campaign__eyebrow{font-size:10px}body .g-campaign__media:after{background:linear-gradient(180deg,#0d141759,transparent 25%,#0d141710 36%,#0d1415df 80%,#0d1415f2)}body .guillo-cbanner{padding-block:30px 24px}body .guillo-cbanner__title{font-size:40px}body .guillo-cbanner__desc{font-size:14px}body .guillo-cgrid__products{padding:16px 16px 45px}body .guillo-cgrid .guillo-cgrid__grid{gap:25px 12px}body .g-card__title{font-size:15px}body .g-card__price{font-size:12px}body .g-card__row{display:block}body .g-card__title{max-width:100%;display:block;margin-bottom:5px}body .g-card__style{font-size:11px}body .guillo-cgrid__toolbar{top:72px}body .guillo-cgrid__toolbar-inner{gap:18px;height:60px}body .guillo-cgrid__break{margin:30px -16px}body .guillo-cgrid__break-panel{padding:40px 24px}body .guillo-pdp__title{font-size:28px}body .guillo-pdp__price{font-size:15px}body .guillo-story__panel{padding:45px 24px}body .guillo-story__statement{font-size:35px}body .guillo-quotes{padding-block:45px}body .guillo-quotes__grid{grid-template-columns:1fr;gap:10px}body .guillo-quotes__cell+.guillo-quotes__cell{border-top:1px solid #dce1e4;padding-top:25px}body .guillo-faq__heading{font-size:35px}}
 @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}body [data-g-reveal],body [data-g-reveal] img{clip-path:none!important;translate:none!important}body .g-card__img,body .g-card__quick,body .menu-list__link:after{transition:none!important}}
+
+/* Approved Forum + Manrope pairing: display type stays upright at its native weight. */
+body :is(h1,h2,h3,.g-h,.guillo-story__statement,.guillo-cbanner__title,.guillo-pdp__title,.guillo-newsletter__heading,.guillo-cgrid__break-heading,.guillo-cgrid__seo-title,.guillo-anatomy__heading,.guillo-faq__heading,.g-card__title){font-family:var(--g-display);font-weight:400;font-style:normal;font-synthesis:none;letter-spacing:-.015em}
+body .g-card__title{font-size:20px;line-height:1.2}
+body .g-campaign__heading em{font-family:inherit;font-weight:400;font-style:normal}
+@media(max-width:749px){body .g-campaign__heading{font-size:clamp(48px,12.8vw,76px);line-height:1.06}body .g-card__title{font-size:18px}}
