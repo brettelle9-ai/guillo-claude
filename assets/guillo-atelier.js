@@ -4,11 +4,12 @@ if (!customElements.get('guillo-atelier')) {
       this.abort = new AbortController();
       const signal = this.abort.signal;
       const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-      const desktop = matchMedia('(min-width: 750px) and (min-height: 650px)');
+      const immersive = matchMedia('(min-height: 600px)');
       const hero = document.querySelector('guillo-campaign');
       const header = document.querySelector('#header-component');
       const cards = [...this.querySelectorAll('.ga-category')];
       const scenes = [...this.querySelectorAll('.ga-scene')];
+      const headings = [...this.querySelectorAll('.ga-heading h2,.ga-outfit h2')];
       const story = this.querySelector('.ga-signature');
       const stage = this.querySelector('.ga-signature__stage');
       const frames = [...this.querySelectorAll('[data-view]')];
@@ -27,7 +28,7 @@ if (!customElements.get('guillo-atelier')) {
       const render = () => {
         this.raf = 0;
         const vh = innerHeight;
-        const hh = Math.ceil(header?.getBoundingClientRect().height || 80);
+        const hh = Math.min(Math.ceil(header?.getBoundingClientRect().height || 80),Math.round(vh*.2));
         this.style.setProperty('--ga-header',`${hh}px`);
         if (hero) {
           const box = hero.getBoundingClientRect();
@@ -35,35 +36,56 @@ if (!customElements.get('guillo-atelier')) {
           if (!reduced.matches) hero.style.setProperty('--campaign-exit',clamp(-box.top/(box.height*.9)).toFixed(4));
         }
         if (reduced.matches) return;
+        headings.forEach(el => {
+          const box=el.getBoundingClientRect();
+          if (box.bottom>0 && box.top<vh) el.style.setProperty('--heading-in',clamp((vh*.98-box.top)/(vh*.22)).toFixed(4));
+        });
         cards.forEach(card => {
           const box = card.querySelector('.ga-card__image').getBoundingClientRect();
-          if (box.bottom > -100 && box.top < vh+200) card.style.setProperty('--ga-open',clamp((vh*.98-box.top)/(vh*.72)).toFixed(4));
+          if (box.bottom > -100 && box.top < vh+200) card.style.setProperty('--ga-open',clamp((vh*.96-box.top)/(vh*.5)).toFixed(4));
         });
         scenes.forEach(scene => {
           const box = scene.getBoundingClientRect();
           if (box.bottom > -100 && box.top < vh+200) scene.style.setProperty('--scene-in',clamp((vh*.98-box.top)/(vh*.68)).toFixed(4));
         });
-        if (story && desktop.matches && frames.length === 3) {
+        if (story && immersive.matches && frames.length === 3) {
           const box = story.getBoundingClientRect();
           const progress = clamp((hh-box.top)/Math.max(1,box.height-stage.offsetHeight));
           story.style.setProperty('--ga-story-progress',progress.toFixed(4));
           if (manual !== undefined && Math.abs(scrollY-manualY)>24) manual=undefined;
-          setView(manual ?? Math.min(2,Math.floor(progress*3)));
+          const view = manual ?? (progress<.36?0:progress<.72?1:2);
+          setView(view);
+          frames.forEach((frame,i) => {
+            const open=manual!==undefined?Number(i<=manual):i===0?1:clamp((progress-(i===1?.18:.54))/.3);
+            frame.style.setProperty('--frame-open',open.toFixed(4));
+          });
         }
       };
       const schedule = () => {if (!this.raf) this.raf=requestAnimationFrame(render);};
       const motion = () => {
         this.classList.toggle('has-scroll-motion',!reduced.matches);
-        this.classList.toggle('has-story-motion',!reduced.matches && desktop.matches && frames.length===3);
+        this.classList.toggle('has-story-motion',!reduced.matches && immersive.matches && frames.length===3);
         hero?.classList.toggle('has-exit-motion',!reduced.matches);
         schedule();
       };
-      controls.forEach(button => button.addEventListener('click',() => {manual=Number(button.dataset.viewButton);manualY=scrollY;setView(manual);},{signal}));
+      controls.forEach(button => button.addEventListener('click',() => {manual=Number(button.dataset.viewButton);manualY=scrollY;setView(manual);schedule();},{signal}));
       window.addEventListener('scroll',schedule,{passive:true,signal});
       window.addEventListener('resize',schedule,{passive:true,signal});
       reduced.addEventListener('change',motion,{signal});
-      desktop.addEventListener('change',motion,{signal});
+      immersive.addEventListener('change',motion,{signal});
       setView(0);motion();
+      const trust=this.querySelector('.ga-trust');
+      const pause=trust?.querySelector('.ga-trust__pause');
+      if (pause) {
+        pause.hidden=reduced.matches;
+        pause.addEventListener('click',()=>{
+          const paused=trust.classList.toggle('is-paused');
+          pause.setAttribute('aria-pressed',String(paused));
+          pause.setAttribute('aria-label',paused?'Play customer care banner':'Pause customer care banner');
+          pause.textContent=paused?'Play':'Pause';
+        },{signal});
+        reduced.addEventListener('change',()=>{pause.hidden=reduced.matches;},{signal});
+      }
       const form=this.querySelector('[data-guillo-outfit]');
       if (form) {
         const items=[...form.querySelectorAll('[data-outfit-item]')];

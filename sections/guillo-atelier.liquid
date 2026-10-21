@@ -1,31 +1,29 @@
 {{ 'guillo-atelier.css' | asset_url | stylesheet_tag }}
 {%- assign signature = section.settings.signature_product -%}
-{%- assign fitted_shirt = all_products['milano-pinstripe-shirt'] -%}
-{%- assign luxe = all_products['the-luxe-chino-stone'] -%}
 <guillo-atelier class="ga">
-  <section class="ga-gallery" aria-labelledby="ga-selection-{{ section.id }}">
-    <header class="ga-heading"><p class="ga-kicker">The wardrobe</p><h2 id="ga-selection-{{ section.id }}">Find your line.</h2></header>
-    <div class="ga-gallery__grid">{%- for block in section.blocks -%}{% render 'guillo-category-card', block: block %}{%- endfor -%}</div>
-  </section>
-  <section class="ga-fit" aria-labelledby="ga-fit-{{ section.id }}">
-    <header class="ga-heading"><p class="ga-kicker">The Guillo silhouette</p><h2 id="ga-fit-{{ section.id }}">A closer look at the cut.</h2></header>
-    <div class="ga-fit__grid">
-      {%- assign fit_products = 'milano-pinstripe-shirt,the-luxe-chino-stone,the-signore-chino-latte' | split: ',' -%}
-      {%- assign fit_names = 'The fitted shirt|The Luxe cut|The Signore cut' | split: '|' -%}
-      {%- assign fit_notes = 'Defined through the chest and arms. Shaped at the waist.|A slim line through the leg.|A classic silhouette. An adjustable side-tab waist.' | split: '|' -%}
-      {%- for handle in fit_products -%}{%- assign piece = all_products[handle] -%}{%- if piece != blank -%}
-      <a class="ga-fit__piece ga-scene" href="{{ piece.url }}">
-        <div class="ga-fit__photo">{{ piece.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '390, 600, 900', sizes: '(min-width: 750px) 30vw, 100vw', alt: fit_names[forloop.index0] }}<span class="ga-fit__trace" aria-hidden="true"></span></div>
-        <h3>{{ fit_names[forloop.index0] }}</h3><p>{{ fit_notes[forloop.index0] }}</p><span class="ga-fit__action">Explore the fit ↗</span>
-      </a>{%- endif -%}{%- endfor -%}
+  {%- assign trust_reviews = shop.metafields.judgeme.reviews_grid.value -%}
+  <section class="ga-trust" aria-label="Guillo customer care">
+    <div class="ga-trust__track">
+      {%- for repeat in (1..2) -%}
+      <div class="ga-trust__group"{% if repeat == 2 %} aria-hidden="true"{% endif %}>
+        {%- if trust_reviews.number_of_reviews > 0 -%}<span>Rated {{ trust_reviews.average_rating }}/5 · {{ trust_reviews.number_of_reviews }} customer reviews</span>{%- endif -%}
+        <span>{{ section.settings.trust_returns | escape }}</span>
+        <span>{{ section.settings.trust_shipping | escape }}</span>
+      </div>
+      {%- endfor -%}
     </div>
-    <a class="ga-link" href="/pages/fit-guide">Compare the fits <span aria-hidden="true">↗</span></a>
+    <button class="ga-trust__pause" type="button" aria-label="Pause customer care banner" aria-pressed="false" hidden>Pause</button>
+  </section>
+
+  <section class="ga-gallery" aria-labelledby="ga-selection-{{ section.id }}">
+    <header class="ga-heading"><p class="ga-kicker">The wardrobe</p><h2 id="ga-selection-{{ section.id }}">The collections.</h2></header>
+    <div class="ga-gallery__grid">{%- for block in section.blocks -%}{% render 'guillo-category-card', block: block %}{%- endfor -%}</div>
   </section>
   <section class="ga-outfit ga-scene" aria-labelledby="ga-outfit-{{ section.id }}">
     <div class="ga-outfit__image"><img src="{{ 'guillo-olive-coffee.jpg' | asset_url }}" alt="Guillo white fitted shirt styled with green chinos" width="1200" height="1600" loading="lazy"><span class="ga-outfit__image-label">White / Sage</span></div>
     <div class="ga-outfit__copy">
-      <p class="ga-kicker">The olive edit</p><h2 id="ga-outfit-{{ section.id }}">Put it<br>together.</h2>
-      <p class="ga-outfit__intro">A white shirt. Sage chinos.<br>A combination worth coming back to.</p>
+      <p class="ga-kicker">Worn together</p><h2 id="ga-outfit-{{ section.id }}">The olive edit.</h2>
+      <p class="ga-outfit__intro">White Siracusa. Sage Luxe.<br>Two pieces. One complete look.</p>
       <details class="ga-outfit__shop"><summary>Shop this look <span aria-hidden="true">↗</span></summary>
         <form data-guillo-outfit action="{{ routes.cart_add_url }}" method="post" data-add-url="{{ routes.cart_add_url }}.js" data-cart-url="{{ routes.cart_url }}">
           {%- assign look_shirt = all_products['siracusa-short-sleeve-slim-fit-shirt'] -%}
@@ -49,18 +47,11 @@
           <div class="ga-signature__chapter" data-chapter="2"><h3>The complete line.</h3><p>Defined at the waist. Considered all the way down.</p></div>
         </div>
         <div class="ga-signature__shopping"><a class="ga-link" href="{{ signature.url }}">Shop the Signore <span aria-hidden="true">↗</span></a><span>{{ signature.price | money }} / Latte</span></div>
-        <p class="ga-signature__guide">Continue to explore <span aria-hidden="true">↓</span></p>
+        <p class="ga-signature__guide">Scroll to explore <span aria-hidden="true">↓</span></p>
       </div>
       <div class="ga-signature__visual"><div class="ga-signature__photos">
         {%- for img in signature.images limit: 3 -%}<div class="ga-signature__frame{% if forloop.first %} is-current{% endif %}" data-view="{{ forloop.index0 }}">{{ img | image_url: width: 1200 | image_tag: widths: '480, 750, 1000, 1200', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: 'The Signore in Latte' }}</div>{%- endfor -%}
       </div><div class="ga-signature__steps" aria-label="Explore the Signore views"><button type="button" data-view-button="0" aria-pressed="true">Silhouette</button><button type="button" data-view-button="1" aria-pressed="false">Waist</button><button type="button" data-view-button="2" aria-pressed="false">Full view</button></div></div>
-    </div>
-    <div class="ga-signature__mobile">
-      <header><p class="ga-kicker">The Guillo cut</p><h2>The Signore.</h2><p>Follow the silhouette.</p></header>
-      {%- assign story_titles = 'The silhouette.|The waist.|The complete line.' | split: '|' -%}
-      {%- assign story_copy = 'A classic cut with a little more room through the leg.|Adjust the side tabs. Keep the front clean.|Defined at the waist. Considered all the way down.' | split: '|' -%}
-      {%- for img in signature.images limit: 3 -%}<article class="ga-signature__moment ga-scene"><div>{{ img | image_url: width: 900 | image_tag: widths: '390, 600, 900', sizes: '100vw', loading: 'lazy', alt: 'The Signore in Latte' }}</div><h3>{{ story_titles[forloop.index0] }}</h3><p>{{ story_copy[forloop.index0] }}</p></article>{%- endfor -%}
-      <a class="ga-link" href="{{ signature.url }}">Shop the Signore · {{ signature.price | money }} <span aria-hidden="true">↗</span></a>
     </div>
   </section>{%- endif -%}
 </guillo-atelier>
@@ -69,6 +60,8 @@
 {
   "name": "Guillo editorial wardrobe",
   "settings": [
+    {"type":"text","id":"trust_returns","label":"Trust banner returns message","default":"44-day free returns & exchanges · AU & NZ"},
+    {"type":"text","id":"trust_shipping","label":"Trust banner shipping message","default":"Free express shipping over $200"},
     {
       "type": "product",
       "id": "signature_product",

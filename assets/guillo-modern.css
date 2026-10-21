@@ -86,3 +86,22 @@ body :is(h1,h2,h3,.g-h,.guillo-story__statement,.guillo-cbanner__title,.guillo-p
 body .g-card__title{font-size:20px;line-height:1.2}
 body .g-campaign__heading em{font-family:inherit;font-weight:400;font-style:normal}
 @media(max-width:749px){body .g-campaign__heading{font-size:clamp(48px,12.8vw,76px);line-height:1.06}body .g-card__title{font-size:18px}}
+
+/* Keep the lower mobile page concise after the campaign and shopping stories. */
+@media(max-width:749px){
+ body .guillo-quotes{padding-block:30px}
+ body .guillo-quotes__lead{padding-bottom:18px;gap:9px}
+ body .guillo-quotes__cell{padding:8px 0}
+ body .guillo-quotes__cell:not(:first-child){display:none}
+ body .guillo-quotes__stars{margin-bottom:14px}
+ body .guillo-quotes__quote{font-size:15px;line-height:1.6;margin-bottom:18px}
+ body .guillo-quotes__all{margin-top:16px}
+ body .guillo-story{grid-template-columns:40% 60%;min-height:380px}
+ body .guillo-story__media{grid-column:1;grid-row:1;min-height:0}
+ body .guillo-story__panel{grid-column:2;grid-row:1;padding:30px 18px}
+ body .guillo-story__eyebrow{font-size:9px;letter-spacing:.08em;margin-bottom:16px}
+ body .guillo-story__statement{font-size:29px;line-height:1.08;margin-bottom:18px}
+ body .guillo-story__text{font-size:12px;line-height:1.65;margin-bottom:18px}
+ body .guillo-story__panel>.g-link{font-size:10px;min-height:44px;display:inline-flex;align-items:center}
+ body .guillo-story__img{object-position:58% center!important}
+}
