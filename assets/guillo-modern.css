@@ -107,7 +107,7 @@ body .g-campaign__heading em{font-family:inherit;font-weight:400;font-style:norm
 }
 
 
-/* A single directional curtain reveal closes the page with a dark signup panel. */
+/* Understated signup motion: a short rise and a staggered dissolve. */
 body .guillo-newsletter{position:relative;isolation:isolate;overflow:hidden;padding-block:70px;background:#111b20;color:#fff;border-top:0}
 body .guillo-newsletter__inner{position:relative;z-index:1;gap:6vw}
 body .guillo-newsletter__eyebrow{color:#bac8ce;letter-spacing:.12em}
@@ -119,17 +119,17 @@ body .guillo-newsletter__submit:hover{background:#dfe8ec;color:#111b20!important
 body .guillo-newsletter__success{color:#fff}body .guillo-newsletter__error{color:#ffbfb5}
 body .guillo-newsletter__row{gap:8px}
 @media(prefers-reduced-motion:no-preference){
- .guillo-newsletter.is-sweep-ready:before{content:'';position:absolute;inset:0 -15%;z-index:2;pointer-events:none;background:#fff;box-shadow:-20px 0 45px #07121630;transform:translateX(0) skewX(-12deg)}
- .guillo-newsletter.is-sweep-revealed:before{animation:g-signup-sweep 1.15s cubic-bezier(.65,0,.2,1) both}
- .guillo-newsletter.is-sweep-ready.is-sweep-revealed .guillo-newsletter__copy{animation:g-signup-copy .85s .12s cubic-bezier(.2,.7,.2,1) both}
- .guillo-newsletter.is-sweep-ready.is-sweep-revealed .guillo-newsletter__form{animation:g-signup-form .8s .3s cubic-bezier(.2,.7,.2,1) both}
- .guillo-newsletter:focus-within:before{display:none}
+ .guillo-newsletter.is-signup-ready .guillo-newsletter__eyebrow,
+ .guillo-newsletter.is-signup-ready .guillo-newsletter__heading,
+ .guillo-newsletter.is-signup-ready .guillo-newsletter__text{opacity:0;transform:translateY(12px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform 1.1s cubic-bezier(.2,.6,.2,1)}
+ .guillo-newsletter.is-signup-ready .guillo-newsletter__heading{transition-delay:.09s}
+ .guillo-newsletter.is-signup-ready .guillo-newsletter__text{transition-delay:.18s}
+ .guillo-newsletter.is-signup-ready .guillo-newsletter__form{opacity:.65;transform:translateY(6px);transition:opacity 1s .22s ease,transform 1.1s .22s cubic-bezier(.2,.6,.2,1)}
+ .guillo-newsletter.is-signup-revealed :is(.guillo-newsletter__eyebrow,.guillo-newsletter__heading,.guillo-newsletter__text,.guillo-newsletter__form),
+ .guillo-newsletter:focus-within :is(.guillo-newsletter__eyebrow,.guillo-newsletter__heading,.guillo-newsletter__text,.guillo-newsletter__form){opacity:1;transform:none}
 }
-@keyframes g-signup-sweep{from{transform:translateX(0) skewX(-12deg)}to{transform:translateX(115%) skewX(-12deg)}}
-@keyframes g-signup-copy{from{transform:translateY(22px)}to{transform:none}}
-@keyframes g-signup-form{from{clip-path:inset(0 100% 0 0);transform:translateY(12px)}to{clip-path:inset(0);transform:none}}
 @media(max-width:749px){body .guillo-newsletter{padding-block:44px}body .guillo-newsletter__inner{gap:24px}body .guillo-newsletter__heading{font-size:36px;max-width:330px}}
-@media(prefers-reduced-motion:reduce){.guillo-newsletter:before{display:none!important}.guillo-newsletter__copy,.guillo-newsletter__form{animation:none!important;transform:none!important;clip-path:none!important}}
+@media(prefers-reduced-motion:reduce){.guillo-newsletter :is(.guillo-newsletter__eyebrow,.guillo-newsletter__heading,.guillo-newsletter__text,.guillo-newsletter__form){transition:none!important;opacity:1!important;transform:none!important}}
 
 /* Footer links and care information stay readable against the black background. */
 body .guillo-footer__tagline{color:#b4c1c7}

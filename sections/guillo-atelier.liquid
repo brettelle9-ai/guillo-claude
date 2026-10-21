@@ -18,8 +18,8 @@
     <div class="ga-gallery__grid">{%- for block in section.blocks -%}{% render 'guillo-category-card', block: block %}{%- endfor -%}</div>
   </section>
   <section class="ga-banner ga-scene" aria-labelledby="ga-banner-{{ section.id }}">
-    <img class="ga-banner__image" src="{{ 'guillo-shirt-campaign-wide.jpg' | asset_url }}" width="1920" height="1080" loading="lazy" alt="Guillo fitted blue shirt at the villa colonnade">
-    <div class="ga-banner__copy"><p class="ga-kicker">Guillo shirts</p><h2 id="ga-banner-{{ section.id }}">The shirt collection.</h2><a class="ga-banner__link" href="{{ collections['shirts'].url | default: '/collections/shirts' }}">Shop shirts</a></div>
+    <img class="ga-banner__image" src="{{ 'guillo-summer-mood.jpg' | asset_url }}" width="2172" height="724" loading="lazy" alt="Mediterranean sea and sunlit coastal terrace">
+    <div class="ga-banner__copy"><h2 id="ga-banner-{{ section.id }}">The summer edit.</h2><a class="ga-banner__link" href="{{ collections['summer-preview'].url | default: '/collections/summer-preview' }}">Explore summer</a></div>
   </section>
   {%- if signature != blank -%}
   <section class="ga-signature" aria-labelledby="ga-signore-{{ section.id }}">

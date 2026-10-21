@@ -3,7 +3,7 @@
   const media = matchMedia('(prefers-reduced-motion: reduce)');
   let elements = [], raf = 0;
   const revealSignup = el => {
-    el.classList.add('is-sweep-revealed');
+    el.classList.add('is-signup-revealed');
     signupObserver?.unobserve(el);
   };
   const signupObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
@@ -13,10 +13,10 @@
   }, {threshold:[0,.15],rootMargin:'0px 0px -5% 0px'}) : null;
   const armSignups = () => {
     document.querySelectorAll('.guillo-newsletter').forEach(el => {
-      if (el.classList.contains('is-sweep-ready')) return;
+      if (el.classList.contains('is-signup-ready')) return;
       if (media.matches || !signupObserver) {revealSignup(el);return;}
       signupObserver.observe(el);
-      el.classList.add('is-sweep-ready');
+      el.classList.add('is-signup-ready');
       el.addEventListener('focusin',()=>revealSignup(el),{once:true});
     });
   };

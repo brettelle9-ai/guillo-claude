@@ -125,6 +125,7 @@
     </div>
   {%- endpaginate -%}
 
+  {%- unless collection.handle == 'summer-preview' -%}
   {%- if section.settings.seo_title_1 != blank or section.settings.seo_title_2 != blank -%}
     <div class="guillo-cgrid__seo g-pad">
       <div class="g-container guillo-cgrid__seo-grid">
@@ -139,6 +140,7 @@
       </div>
     </div>
   {%- endif -%}
+  {%- endunless -%}
 </div>
 
 {% stylesheet %}
