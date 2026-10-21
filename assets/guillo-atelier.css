@@ -19,7 +19,7 @@
 /* A short campaign band breaks the category pairs before the black Signore story. */
 .ga-banner{position:relative;isolation:isolate;overflow:hidden;height:clamp(300px,29vw,420px);background:#111b20;color:#fff}
 .ga-banner__image{display:block;width:100%;height:100%;object-fit:cover;object-position:center 64%}
-.ga-banner:after{content:'';position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,transparent 25%,#09151a66 52%,#09151ac7);pointer-events:none}
+.ga-banner:after{content:'';position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,transparent 18%,#09151aab 48%,#09151ae0);pointer-events:none}
 .ga-banner__copy{position:absolute;z-index:1;inset:0 5% 0 50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px}
 .ga .ga-banner h2{font-size:clamp(32px,3.4vw,50px);line-height:1.05;color:#fff}
 .ga-banner .ga-kicker{font-size:10px;color:#e3e9eb;letter-spacing:.13em}

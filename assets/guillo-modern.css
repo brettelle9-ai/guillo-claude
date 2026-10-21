@@ -130,3 +130,9 @@ body .guillo-newsletter__row{gap:8px}
 @keyframes g-signup-form{from{clip-path:inset(0 100% 0 0);transform:translateY(12px)}to{clip-path:inset(0);transform:none}}
 @media(max-width:749px){body .guillo-newsletter{padding-block:44px}body .guillo-newsletter__inner{gap:24px}body .guillo-newsletter__heading{font-size:36px;max-width:330px}}
 @media(prefers-reduced-motion:reduce){.guillo-newsletter:before{display:none!important}.guillo-newsletter__copy,.guillo-newsletter__form{animation:none!important;transform:none!important;clip-path:none!important}}
+
+/* Footer links and care information stay readable against the black background. */
+body .guillo-footer__tagline{color:#b4c1c7}
+body .guillo-footer__links a{color:#c6d1d6}
+body .guillo-footer__links a:hover,body .guillo-footer__links a:focus-visible{color:#fff}
+body .guillo-footer__copyright,body .guillo-footer__payment-chip{color:#aab9c0}
