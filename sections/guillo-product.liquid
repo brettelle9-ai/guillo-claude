@@ -280,7 +280,7 @@
               | image_url: width: 1400
               | image_tag: class: 'guillo-pdp__media', widths: '500, 700, 900, 1200, 1400', sizes: '(min-width: 990px) 33vw, 100vw', alt: pdp_img_alt, loading: media_loading
             }}
-            {%- if stone_test -%}<span class="luxe-zoom__mark" aria-hidden="true">+</span></button>{%- endif -%}
+            {%- if stone_test -%}</button>{%- endif -%}
             {%- if media.alt contains '#note:' -%}
               <span class="guillo-pdp__note">{{ media.alt | split: '#note:' | last }}</span>
             {%- endif -%}
