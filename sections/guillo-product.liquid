@@ -303,7 +303,6 @@
           ></span>
         </div>
       {%- endif -%}
-      {%- if stone_test and media_count > 3 -%}<button type="button" class="luxe-gallery-more luxe-text-link" data-luxe-gallery-more aria-expanded="false">View all photographs <span aria-hidden="true">+</span></button>{%- endif -%}
     </div>
 
     <div class="guillo-pdp__panel">
@@ -718,15 +717,29 @@
       {% endform %}
       {%- if stone_test -%}
         <div class="luxe-assurance"><span>{{ ret_line }}</span><a href="#LuxeLook-{{ section.id }}">Complete the look <span aria-hidden="true">↗</span></a></div>
-        {%- for luxe_review in gr_reviews -%}
-          {%- assign luxe_quote = luxe_review.body_html | default: luxe_review.body | strip_html | strip -%}
-          {%- assign luxe_quote_lower = luxe_quote | downcase -%}
-          {%- if luxe_quote_lower contains 'material' or luxe_quote_lower contains 'fabric' or luxe_quote_lower contains 'stretch' -%}{%- continue -%}{%- endif -%}
-          {%- if luxe_review.verified_buyer and luxe_quote.size <= 140 and luxe_quote_lower contains 'fit' -%}
-            <figure class="luxe-buy-quote"><blockquote>{{ luxe_quote | escape }}</blockquote><figcaption>{{ luxe_review.reviewer_name | default: luxe_review.reviewer.name | escape }} · Verified purchase</figcaption></figure>
-            {%- break -%}
-          {%- endif -%}
-        {%- endfor -%}
+        {%- assign luxe_quote_authors = 'Ken C.|Nath W|Nathan|Ben|Steve' | split: '|' -%}
+        {%- assign luxe_quote_count = 0 -%}
+        {%- capture luxe_quote_slides -%}
+          {%- for quote_author in luxe_quote_authors -%}
+            {%- for luxe_review in gr_reviews -%}
+              {%- assign luxe_author = luxe_review.reviewer_name | default: luxe_review.reviewer.name -%}
+              {%- assign luxe_quote = luxe_review.body_html | default: luxe_review.body | strip_html | strip -%}
+              {%- assign luxe_quote_lower = luxe_quote | downcase -%}
+              {%- if luxe_quote_lower contains 'material' or luxe_quote_lower contains 'fabric' or luxe_quote_lower contains 'stretch' -%}{%- continue -%}{%- endif -%}
+              {%- if luxe_author == quote_author and luxe_review.verified_buyer and luxe_quote.size >= 20 and luxe_quote.size <= 170 -%}
+                <figure class="luxe-buy-quote{% if luxe_quote_count == 0 %} is-current{% endif %}" data-luxe-quote aria-hidden="{% if luxe_quote_count == 0 %}false{% else %}true{% endif %}"><blockquote>{{ luxe_quote | escape }}</blockquote><figcaption>{{ luxe_author | escape }} · Verified purchase</figcaption></figure>
+                {%- assign luxe_quote_count = luxe_quote_count | plus: 1 -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- if luxe_quote_count > 0 -%}
+          <div class="luxe-buy-voices" data-luxe-quotes role="region" aria-label="Customer reviews" aria-roledescription="carousel">
+            <div class="luxe-buy-voices__slides" aria-live="off">{{ luxe_quote_slides }}</div>
+            {%- if luxe_quote_count > 1 -%}<div class="luxe-buy-voices__controls"><div class="luxe-buy-voices__dots" role="group" aria-label="Choose a review">{%- for i in (1..luxe_quote_count) -%}<button type="button" data-luxe-quote-dot="{{ forloop.index0 }}" aria-label="Show review from {{ luxe_quote_authors[forloop.index0] | escape }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"></button>{%- endfor -%}</div><button class="luxe-buy-voices__pause" type="button" data-luxe-quotes-pause aria-label="Pause rotating reviews"><span aria-hidden="true">Ⅱ</span></button></div>{%- endif -%}
+          </div>
+        {%- endif -%}
         {%- if product.metafields.custom.model_height != blank and product.metafields.custom.model_size != blank -%}<p class="luxe-model">Model: {{ product.metafields.custom.model_height | escape }} · wears {{ product.metafields.custom.model_size | escape }}</p>{%- endif -%}
       {%- endif -%}
 

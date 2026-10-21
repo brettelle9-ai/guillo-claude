@@ -6,13 +6,6 @@
   root.dataset.luxeReady = 'true';
   const mainForm = root.querySelector('#GuilloProductForm');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const galleryMore = root.querySelector('[data-luxe-gallery-more]');
-  galleryMore?.addEventListener('click', () => {
-    const gallery = root.querySelector('[data-gallery]');
-    const open = gallery.classList.toggle('is-expanded');
-    galleryMore.setAttribute('aria-expanded', String(open));
-    galleryMore.textContent = open ? 'Show fewer photographs −' : 'View all photographs +';
-  });
   root.querySelector('[data-luxe-size-guide]')?.addEventListener('click', () => root.querySelector('[data-open-size-guide]')?.click());
 
   // Native dialog provides focus containment and Escape without a second modal framework.
@@ -50,29 +43,57 @@
   }
 
   const film = root.querySelector('[data-luxe-film]');
-  const filmToggle = root.querySelector('[data-luxe-film-toggle]');
-  if (film && filmToggle) {
-    let onScreen = false, userPaused = false, explicitlyPlaying = false;
-    const label = () => {filmToggle.textContent=film.paused?'Play film':'Pause film';filmToggle.setAttribute('aria-label',film.paused?'Play the Luxe Chino film':'Pause the Luxe Chino film');};
-    const play = () => {
-      if (!film.getAttribute('src')) film.src=film.dataset.src;
-      film.play().then(label).catch(label);
+  let updateFilm = () => {};
+  if (film) {
+    let onScreen = false;
+    updateFilm = () => {
+      const selected = !film.closest('[data-luxe-detail-view]')?.hidden;
+      if (onScreen && selected && !document.hidden && !reduced.matches && !navigator.connection?.saveData) {
+        if (!film.getAttribute('src')) film.src = film.dataset.src;
+        film.play().catch(() => {});
+      } else film.pause();
     };
-    const updateFilm = () => {
-      if (onScreen && !document.hidden && !userPaused && (explicitlyPlaying || (!reduced.matches && !navigator.connection?.saveData))) play();
-      else {film.pause();label();}
-    };
-    if ('IntersectionObserver' in window) new IntersectionObserver(entries=>{
-      onScreen=entries[0].isIntersecting && entries[0].intersectionRatio>=.65;
+    if ('IntersectionObserver' in window) new IntersectionObserver(entries => {
+      onScreen = entries[0].isIntersecting && entries[0].intersectionRatio >= .65;
       updateFilm();
-    },{threshold:[0,.65]}).observe(film);
-    filmToggle.addEventListener('click',()=>{
-      if (film.paused) {userPaused=false;explicitlyPlaying=true;play();}
-      else {userPaused=true;explicitlyPlaying=false;film.pause();label();}
-    });
-    document.addEventListener('visibilitychange',updateFilm);
-    reduced.addEventListener('change',()=>{explicitlyPlaying=false;updateFilm();});
-    film.addEventListener('play',label);film.addEventListener('pause',label);
+    }, {threshold:[0,.65]}).observe(film);
+    document.addEventListener('visibilitychange', updateFilm);
+    reduced.addEventListener('change', updateFilm);
+  }
+
+  // Quiet crossfade between five real customer quotes; the layout never jumps.
+  const voices = root.querySelector('[data-luxe-quotes]');
+  if (voices) {
+    const slides = Array.from(voices.querySelectorAll('[data-luxe-quote]'));
+    const dots = Array.from(voices.querySelectorAll('[data-luxe-quote-dot]'));
+    const pause = voices.querySelector('[data-luxe-quotes-pause]');
+    let index = 0, timer, visible = false, hovering = false, focused = false, paused = reduced.matches;
+    const stop = () => {clearTimeout(timer);timer = undefined;};
+    const schedule = () => {
+      stop();
+      if (slides.length > 1 && visible && !paused && !hovering && !focused && !document.hidden) timer = setTimeout(() => {show(index + 1);schedule();}, 7000);
+    };
+    const show = next => {
+      index = (next + slides.length) % slides.length;
+      slides.forEach((slide,i) => {slide.classList.toggle('is-current',i === index);slide.setAttribute('aria-hidden',String(i !== index));});
+      dots.forEach((dot,i) => dot.setAttribute('aria-pressed',String(i === index)));
+    };
+    const labelPause = () => {
+      if (!pause) return;
+      pause.setAttribute('aria-label',paused?'Play rotating reviews':'Pause rotating reviews');
+      pause.querySelector('span').textContent = paused?'▷':'Ⅱ';
+    };
+    dots.forEach((dot,i) => dot.addEventListener('click',() => {show(i);schedule();}));
+    pause?.addEventListener('click',() => {paused = !paused;labelPause();schedule();});
+    voices.addEventListener('mouseenter',() => {hovering = true;stop();});
+    voices.addEventListener('mouseleave',() => {hovering = false;schedule();});
+    voices.addEventListener('focusin',() => {focused = true;stop();});
+    voices.addEventListener('focusout',event => {if (!voices.contains(event.relatedTarget)) {focused = false;schedule();}});
+    document.addEventListener('visibilitychange',schedule);
+    reduced.addEventListener('change',() => {paused = reduced.matches;labelPause();schedule();});
+    if ('IntersectionObserver' in window) new IntersectionObserver(entries => {visible = entries[0].isIntersecting;schedule();},{threshold:0}).observe(voices);
+    else {visible = true;schedule();}
+    labelPause();
   }
 
   // An active size action guides the shopper; it never chooses a variant for them.
@@ -128,8 +149,7 @@
     const mode=button.dataset.luxeDetail;
     details.querySelectorAll('[data-luxe-detail]').forEach(control=>control.setAttribute('aria-pressed',String(control===button)));
     details.querySelectorAll('[data-luxe-detail-view]').forEach(view=>view.hidden=view.dataset.luxeDetailView!==mode);
-    if(mode!=='motion')film?.pause();
-    else if(film&&film.paused&&!reduced.matches&&!navigator.connection?.saveData)filmToggle?.click();
+    updateFilm();
   }));
 
   const look=root.querySelector('[data-luxe-look]');

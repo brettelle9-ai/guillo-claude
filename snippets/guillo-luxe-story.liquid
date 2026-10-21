@@ -16,7 +16,6 @@
     <div class="luxe-detail-view" data-luxe-detail-view="motion" id="LuxeDetailMotion-{{ section.id }}">
       {%- if is_stone -%}
         <video class="luxe-story__film" muted loop playsinline preload="none" poster="{{ 'guillo-luxe-stone-fit.jpg' | asset_url }}" data-luxe-film data-src="{{ 'guillo-luxe-stone-fit.mp4' | asset_url }}" aria-label="Close views of the Stone Luxe Chino from waist to shoes"></video>
-        <button class="luxe-story__play" type="button" data-luxe-film-toggle aria-label="Play the Luxe Chino film">Play film</button>
       {%- else -%}
         {{ product.featured_image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 42vw, 100vw', alt: product.title }}
       {%- endif -%}
