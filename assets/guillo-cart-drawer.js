@@ -876,6 +876,8 @@
     window.addEventListener('submit', function (e) {
       var form = e.target;
       if (!form.matches || !form.matches('form[action*="/cart/add"]')) return;
+      // The outfit selector validates multiple sizes and submits its own JSON batch.
+      if (form.matches('[data-guillo-outfit]')) return;
       e.preventDefault();
       e.stopImmediatePropagation(); // prevent the theme's own AJAX/redirect
 

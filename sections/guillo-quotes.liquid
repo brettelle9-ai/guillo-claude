@@ -51,7 +51,7 @@
         continue
       endif
       assign body_dc = body | downcase
-      if body_dc contains 'payday' or body_dc contains 'not widely known'
+      if body_dc contains 'payday' or body_dc contains 'not widely known' or body_dc contains 'fabric' or body_dc contains 'stretch' or body_dc contains 'material'
         continue
       endif
       assign hit = false
@@ -83,6 +83,10 @@
         endif
         assign body = r.body_html | default: r.body | strip_html | strip
         if body == blank
+          continue
+        endif
+        assign body_dc = body | downcase
+        if body_dc contains 'fabric' or body_dc contains 'stretch' or body_dc contains 'material' or body_dc contains 'payday' or body_dc contains 'not widely known'
           continue
         endif
         capture key
