@@ -3,6 +3,17 @@
     "main": {
       "type": "guillo-product",
       "blocks": {
+        "product_film": {
+          "type": "product_film",
+          "settings": {
+            "show_video_tile": true,
+            "video_position": "center center",
+            "video_ratio": "9 / 16",
+            "video_fit": "cover",
+            "video_caption": "Watch the fit in motion",
+            "use_original_luxe_film": true
+          }
+        },
         "feat4": {
           "type": "feature",
           "settings": {
@@ -97,6 +108,7 @@
         }
       },
       "block_order": [
+        "product_film",
         "feat4",
         "tab1",
         "tab2",

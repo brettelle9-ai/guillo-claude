@@ -1,5 +1,6 @@
 /* Luxe-only enhancement. Native product form, colour links and size guide remain authoritative. */
 (() => {
+  const initialise = () => {
   'use strict';
   const root = document.querySelector('.guillo-pdp--stone');
   if (!root || root.dataset.luxeReady) return;
@@ -224,4 +225,7 @@
       finally {busy = false;add.disabled = false;add.textContent = 'Add to bag ↗';}
     });
   });
+  };
+  initialise();
+  document.addEventListener('shopify:section:load', initialise);
 })();

@@ -1,6 +1,8 @@
 (() => {
+  const initialise = () => {
   const root = document.querySelector('.guillo-capri-page [data-guillo-pdp]');
-  if (!root) return;
+  if (!root || root.dataset.capriReady) return;
+  root.dataset.capriReady = 'true';
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const gallery = root.querySelector('[data-gallery]');
   if (gallery && gallery.children.length > 1) {
@@ -39,4 +41,7 @@
     observer.observe(film);
     document.addEventListener('visibilitychange', () => {if (document.hidden) film.pause();});
   }
+  };
+  initialise();
+  document.addEventListener('shopify:section:load', initialise);
 })();

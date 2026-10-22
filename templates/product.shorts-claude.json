@@ -3,6 +3,18 @@
     "main": {
       "type": "guillo-product",
       "blocks": {
+        "product_film": {
+          "type": "product_film",
+          "settings": {
+            "show_video_tile": true,
+            "video": "shopify://files/videos/copy_6257A5BD-7CE9-4C2F-8547-0243DE7C813A.MOV",
+            "video_position": "center center",
+            "video_ratio": "9 / 16",
+            "video_fit": "cover",
+            "video_caption": "Watch the fit in motion",
+            "use_original_luxe_film": true
+          }
+        },
         "capri_stretch": {
           "type": "feature",
           "settings": {
@@ -50,7 +62,7 @@
           "settings": {
             "title": "Shipping",
             "country_shipping": true,
-            "content_intl": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Singapore: 4 to 6 days. Free standard shipping over S$250.</li><li>United Kingdom: 5 to 8 days. Free standard shipping over \u00a365.</li><li>Europe: 6 to 9 days.</li></ul><p>Every international order ships DDP. Duties and import taxes are calculated and paid at checkout, so nothing is owed on arrival.</p>",
+            "content_intl": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Singapore: 4 to 6 days. Free standard shipping over S$250.</li><li>United Kingdom: 5 to 8 days. Free standard shipping over £65.</li><li>Europe: 6 to 9 days.</li></ul><p>Every international order ships DDP. Duties and import taxes are calculated and paid at checkout, so nothing is owed on arrival.</p>",
             "content": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Australia: 2 to 4 days. Free standard shipping over $100, free express over $200.</li><li>New Zealand: 2 to 4 days. Free priority express over NZ$160.</li></ul><p>Tracked door to door on every order.</p>"
           }
         },
@@ -117,6 +129,7 @@
         }
       },
       "block_order": [
+        "product_film",
         "capri_stretch",
         "capri_breathable",
         "capri_lightweight",
@@ -142,7 +155,7 @@
         "short_description": "A tailored short with a clean line above the knee. Choose your preferred length and size.",
         "fit_guide_link": "shopify://pages/fit-guide",
         "size_guide_page": "shopify://pages/fit-guide",
-        "trust_line": "Same-day dispatch \u00b7 44-day returns and exchanges",
+        "trust_line": "Same-day dispatch · 44-day returns and exchanges",
         "open_first_tab": false,
         "show_pair": true,
         "show_video_tile": true,

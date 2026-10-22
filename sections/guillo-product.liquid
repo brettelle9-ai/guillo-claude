@@ -11,6 +11,11 @@
 
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
+  assign film_block = section.blocks | where: 'type', 'product_film' | first
+  assign film_settings = section.settings
+  if film_block != blank
+    assign film_settings = film_block.settings
+  endif
 
   # ---- reviews rolled up across the product family ----
   # Judge.me stores its payload per product, so a colourway with one review
@@ -791,7 +796,7 @@
       {%- endif -%}
       {%- endcapture -%}
       {%- capture gstone_video -%}
-      {%- if section.settings.show_video_tile -%}
+      {%- if film_settings.show_video_tile -%}
         {%- comment -%}
           Poster + centre play button. The poster falls back to the product's
           own second image so each product shows itself, never another
@@ -804,11 +809,11 @@
             first frame (so the tile previews the actual video, not a product
             photo), then the product's own imagery when there is no video.
           endcomment
-          assign poster_image = section.settings.video_poster
-          if poster_image == blank and section.settings.video != blank
-            assign poster_image = section.settings.video.preview_image
+          assign poster_image = film_settings.video_poster
+          if poster_image == blank and film_settings.video != blank
+            assign poster_image = film_settings.video.preview_image
           endif
-          if poster_image == blank and section.settings.video_poster_asset == blank
+          if poster_image == blank and film_settings.video_poster_asset == blank
             assign poster_image = product.media[1].preview_image | default: product.featured_image
           endif
         -%}
@@ -819,38 +824,40 @@
         {%- endcomment -%}
         <div
           class="guillo-pdp__video"
+          {% unless capri_page %}{{ film_block.shopify_attributes }}{% endunless %}
           style="
-            --video-pos: {{ section.settings.video_position | default: 'center center' }};
-            --video-ratio: {{ section.settings.video_ratio | default: '1 / 1' }};
-            --video-fit: {{ section.settings.video_fit | default: 'cover' }};
+            --video-pos: {{ film_settings.video_position | default: 'center center' }};
+            --video-ratio: {{ film_settings.video_ratio | default: '1 / 1' }};
+            --video-fit: {{ film_settings.video_fit | default: 'cover' }};
           "
-          {% if section.settings.video != blank %}data-video-tile{% endif %}
+          {% if film_settings.video != blank %}data-video-tile{% endif %}
         >
           <div class="guillo-pdp__video-frame">
-            {%- if section.settings.video != blank -%}
+            {%- if film_settings.video != blank -%}
               {%- comment -%}
                 No native controls: the browser's control bar is not wanted, so
                 the video is driven entirely by the centre play icon and a
                 click-to-pause on the video itself. video_tag supplies the
                 video's own first frame as the poster.
               {%- endcomment -%}
+              {%- assign film_poster_url = poster_image | image_url: width: 900 -%}
               {{
-                section.settings.video
-                | video_tag: controls: false, muted: true, preload: 'metadata', image_size: '900x', class: 'guillo-pdp__video-media'
+                film_settings.video
+                | video_tag: controls: false, muted: true, preload: 'metadata', image_size: '900x', poster: film_poster_url, class: 'guillo-pdp__video-media'
               }}
               <button
                 type="button"
                 class="guillo-pdp__video-play"
                 data-video-play
-                aria-label="{{ section.settings.video_caption | default: 'Play video' | escape }}"
+                aria-label="{{ film_settings.video_caption | default: 'Play video' | escape }}"
               >
                 <span aria-hidden="true"></span>
               </button>
             {%- else -%}
               {% render 'guillo-img',
                 image: poster_image,
-                fallback: section.settings.video_poster_asset,
-                alt: section.settings.video_caption,
+                fallback: film_settings.video_poster_asset,
+                alt: film_settings.video_caption,
                 class: 'guillo-pdp__video-media',
                 sizes: '440px',
                 position: 'center 34%'
@@ -959,9 +966,9 @@
     </div>
   </div>
 
-  {%- if capri_page and section.settings.show_video_tile -%}
-    <section class="capri-film" aria-label="{{ section.settings.video_caption | escape }}">
-      <div class="capri-film__copy"><h2>{{ section.settings.video_caption }}</h2></div>
+  {%- if capri_page and film_settings.show_video_tile -%}
+    <section class="capri-film" {{ film_block.shopify_attributes }} aria-label="{{ film_settings.video_caption | escape }}">
+      <div class="capri-film__copy"><h2>{{ film_settings.video_caption }}</h2></div>
       {{ gstone_video }}
     </section>
   {%- endif -%}
@@ -976,7 +983,7 @@
     <section class="luxe-benefits" aria-label="The Luxe Chino benefits">
       {% render 'guillo-luxe-product-notes' %}
     </section>
-    {% render 'guillo-luxe-story', product: product, section: section %}
+    {% render 'guillo-luxe-story', product: product, section: section, film_block: film_block, film_settings: film_settings %}
     {% render 'guillo-luxe-look', product: product, section: section, style_name: style_name %}
   {%- endif -%}
 
@@ -2445,7 +2452,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Pre-order sells now and ships later. Register interest does not sell at all — the size is a demand signal and the email joins your Klaviyo list."
+      "content": "Pre-order sells now and ships later. Register interest does not sell at all \u2014 the size is a demand signal and the email joins your Klaviyo list."
     },
     {
       "type": "select",
@@ -2455,15 +2462,15 @@
       "options": [
         {
           "value": "normal",
-          "label": "Normal — in stock"
+          "label": "Normal \u2014 in stock"
         },
         {
           "value": "preorder",
-          "label": "Pre-order — buy now, ships later"
+          "label": "Pre-order \u2014 buy now, ships later"
         },
         {
           "value": "interest",
-          "label": "Register interest — not for sale yet"
+          "label": "Register interest \u2014 not for sale yet"
         }
       ]
     },
@@ -2539,7 +2546,7 @@
       "type": "textarea",
       "id": "short_description",
       "label": "Short description",
-      "info": "Leave blank to use the product’s own description."
+      "info": "Leave blank to use the product\u2019s own description."
     },
     {
       "type": "url",
@@ -2561,7 +2568,7 @@
       "type": "text",
       "id": "trust_line",
       "label": "Trust line",
-      "default": "Same-day dispatch · Free returns for 44 days"
+      "default": "Same-day dispatch \u00b7 Free returns for 44 days"
     },
     {
       "type": "checkbox",
@@ -2585,6 +2592,10 @@
       "content": "Fit video tile"
     },
     {
+      "type": "paragraph",
+      "content": "If this template has a Product film block, select that block in the left-hand panel to change its video and display settings. The settings below are used by older templates without that block."
+    },
+    {
       "type": "checkbox",
       "id": "show_video_tile",
       "label": "Show fit video tile",
@@ -2600,7 +2611,7 @@
       "id": "video_position",
       "label": "Video focal point",
       "default": "center center",
-      "info": "Two values only, e.g. “center 20%” — first left→right, second top→bottom. A third value is invalid and is ignored."
+      "info": "Two values only, e.g. \u201ccenter 20%\u201d \u2014 first left\u2192right, second top\u2192bottom. A third value is invalid and is ignored."
     },
     {
       "type": "select",
@@ -2636,7 +2647,7 @@
       "id": "video_fit",
       "label": "Video crop",
       "default": "cover",
-      "info": "“Fill the tile” crops to the focal point. “Show the whole frame” never crops.",
+      "info": "\u201cFill the tile\u201d crops to the focal point. \u201cShow the whole frame\u201d never crops.",
       "options": [
         {
           "value": "cover",
@@ -2705,6 +2716,98 @@
     }
   ],
   "blocks": [
+    {
+      "type": "product_film",
+      "name": "Product film",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Choose or upload a video from Shopify Files. These controls apply to the film on this product template. Products sharing this template share these settings."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_video_tile",
+          "label": "Show fit video tile",
+          "default": false
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "text",
+          "id": "video_position",
+          "label": "Video focal point",
+          "default": "center center",
+          "info": "Two values only, e.g. \u201ccenter 20%\u201d \u2014 first left\u2192right, second top\u2192bottom. A third value is invalid and is ignored."
+        },
+        {
+          "type": "select",
+          "id": "video_ratio",
+          "label": "Video shape",
+          "default": "1 / 1",
+          "info": "A portrait video in a square tile loses the top and bottom. Give it a taller shape to keep the whole figure.",
+          "options": [
+            {
+              "value": "1 / 1",
+              "label": "Square"
+            },
+            {
+              "value": "4 / 5",
+              "label": "Portrait 4:5"
+            },
+            {
+              "value": "3 / 4",
+              "label": "Portrait 3:4"
+            },
+            {
+              "value": "9 / 16",
+              "label": "Tall 9:16"
+            },
+            {
+              "value": "16 / 9",
+              "label": "Wide 16:9"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "video_fit",
+          "label": "Video crop",
+          "default": "cover",
+          "info": "\u201cFill the tile\u201d crops to the focal point. \u201cShow the whole frame\u201d never crops.",
+          "options": [
+            {
+              "value": "cover",
+              "label": "Fill the tile"
+            },
+            {
+              "value": "contain",
+              "label": "Show the whole frame"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "video_poster",
+          "label": "Poster image"
+        },
+        {
+          "type": "text",
+          "id": "video_caption",
+          "label": "Caption",
+          "default": "Watch the fit in motion"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_original_luxe_film",
+          "label": "Use original Luxe Chino film when no video is selected",
+          "default": true
+        }
+      ]
+    },
     {
       "type": "guillo_find_your_size",
       "name": "Guillo Find Your Size",
@@ -2849,7 +2952,7 @@
         {
           "type": "header",
           "content": "Size Chart",
-          "info": "One row per line, columns separated by | , first line = header. TOPS e.g. Size|Chest|Shoulder|Length|Sleeve  ·  BOTTOMS e.g. Size|Waist|Inside Leg"
+          "info": "One row per line, columns separated by | , first line = header. TOPS e.g. Size|Chest|Shoulder|Length|Sleeve  \u00b7  BOTTOMS e.g. Size|Waist|Inside Leg"
         },
         {
           "type": "text",
