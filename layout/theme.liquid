@@ -66,6 +66,10 @@
     {%- if request.page_type == 'product' -%}
       {{ 'guillo-purchase-motion.css' | asset_url | stylesheet_tag }}
     {%- endif -%}
+    {%- if request.page_type == 'index' or request.page_type == 'product' -%}
+      {{ 'guillo-interaction-details.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'guillo-interaction-details.js' | asset_url }}" defer></script>
+    {%- endif -%}
     <script src="{{ 'guillo-modern.js' | asset_url }}" defer></script>
     <script src="{{ 'guillo-menu-hover.js' | asset_url }}" defer></script>
 

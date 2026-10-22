@@ -1,0 +1,73 @@
+/* Campaign primary link: sculpted surface, with native link behaviour. */
+.g-campaign .g-campaign__actions a.g-campaign__sculpted{
+  position:relative;isolation:isolate;overflow:hidden;justify-content:center;
+  min-width:190px;min-height:58px;max-width:100%;padding:18px 28px;
+  border:1px solid #62717c;border-radius:9px;color:#fff;text-decoration:none;
+  background:linear-gradient(165deg,#4a5c69 0%,#1e2d38 27%,#101a23 60%,#243746 100%);
+  box-shadow:inset 0 2px 1px #ffffff46,inset 0 -3px 2px #00000095,0 12px 24px #00000030;
+  transform:perspective(600px) rotateX(var(--sculpt-rx,0deg)) rotateY(var(--sculpt-ry,0deg));
+  transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .4s,border-color .4s;
+}
+.g-campaign .g-campaign__sculpted::before{
+  content:'';position:absolute;inset:-80%;pointer-events:none;z-index:-1;
+  background:radial-gradient(ellipse at var(--sculpt-x,50%) var(--sculpt-y,25%),#ffffff55,transparent 38%);
+}
+.g-campaign .g-campaign__sculpted span{position:relative;pointer-events:none}
+.g-campaign .g-campaign__actions a.g-campaign__sculpted:hover{border-color:#8a9ba7;text-decoration:none}
+.g-campaign .g-campaign__actions a.g-campaign__sculpted:active{
+  transform:perspective(600px) rotateX(4deg) translateY(2px) scale(.975);
+  box-shadow:inset 0 2px 8px #00000070,0 5px 12px #00000035;
+}
+.g-campaign .g-campaign__actions a.g-campaign__sculpted:focus-visible{outline:2px solid #e3eef5;outline-offset:5px}
+/* Product First Access: smoky glass with light moving beneath the surface.
+   Scope wins over the earlier Luxe-specific pale glass treatment. */
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup]{
+  position:relative;isolation:isolate;overflow:hidden;background:#0b1e2d;color:#fff;
+  padding-block:54px;border-top:0;
+}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup]::before{
+  content:'';position:absolute;inset:0;z-index:-1;
+  background-image:linear-gradient(145deg,#0c2035b3,#081520d9),var(--luxe-glass-scene);
+  background-position:center;background-size:cover;filter:none;
+}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__inner{
+  display:grid;grid-template-columns:1fr;gap:30px;width:100%;max-width:640px;
+  padding:42px 38px;background:#0c1b28ba;border:1px solid #a8bfcc55;
+  box-shadow:0 20px 60px #00000035,inset 0 1px #ffffff20;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);overflow:hidden;
+}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__inner::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(240px circle at var(--glass-x,50%) var(--glass-y,80%),#a7d4ec45,transparent 72%);
+  opacity:var(--glass-light,.25);transition:opacity .65s ease;
+}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__inner:focus-within::before{opacity:.85}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] :is(.guillo-newsletter__copy,.guillo-newsletter__form){position:relative;z-index:1}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__heading{
+  color:#fff;font-family:var(--g-display);font-weight:400;font-size:clamp(36px,4vw,52px);letter-spacing:-.015em;margin:0 0 14px;
+}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] :is(.guillo-newsletter__text,.guillo-newsletter__eyebrow){color:#cbd5dc}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] :is(.guillo-newsletter__label,.guillo-newsletter__success){color:#e3eaf0}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__row{gap:12px;border-bottom:1px solid #dce6ee90}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] input.guillo-newsletter__input{
+  padding:0;background:transparent!important;border:0;color:#fff;min-height:54px;height:54px;
+}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] input.guillo-newsletter__input::placeholder{color:#bac8d2}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__submit{
+  background:transparent;border:0;color:#fff!important;min-width:110px;padding:0 4px;min-height:54px;
+}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__submit:hover{background:#ffffff0d;color:#fff!important}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__submit span{display:none}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__error{color:#ffc8c8}
+body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] :is(input,button):focus-visible{outline:2px solid #b6d8ec;outline-offset:4px}
+@media(max-width:749px){
+  .g-campaign .g-campaign__actions a.g-campaign__sculpted{min-width:166px;min-height:56px;padding:16px 22px}
+  body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup]{padding:32px 20px}
+  body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__inner{padding:30px 22px;gap:24px}
+  body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] input.guillo-newsletter__input{font-size:16px}
+  body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__submit{min-width:82px;font-size:10px;letter-spacing:.04em}
+}
+@media(prefers-reduced-motion:reduce){
+  .g-campaign .g-campaign__actions a.g-campaign__sculpted{transform:none!important;transition:none}
+  body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__inner::before{background:radial-gradient(240px circle at 50% 70%,#a7d4ec30,transparent 72%);opacity:1;transition:none}
+}
