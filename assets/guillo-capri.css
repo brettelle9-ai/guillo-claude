@@ -20,7 +20,7 @@ body.guillo-capri-page{--g-paper:#fff;--g-canvas:#f3f3f3;--g-ink:#151b1e;--g-lin
 .guillo-capri-page .guillo-pdp__field{margin-bottom:21px}
 .guillo-capri-page .guillo-pdp__field-label{font-size:12px;margin-bottom:12px}
 .guillo-capri-page .guillo-pdp__colours{gap:12px;padding:4px 4px 6px}
-.guillo-capri-page .guillo-pdp__colour-frame{width:45px;height:57px;outline-color:#e0e2e3}
+.guillo-capri-page .guillo-pdp__colour-frame{width:45px;height:45px;outline-color:#e0e2e3}
 .guillo-capri-page .guillo-pdp__colour--on .guillo-pdp__colour-frame{outline:1px solid #151b1e;outline-offset:3px}
 .guillo-capri-page .guillo-pdp__colour-name{font-size:9px;letter-spacing:0;padding-top:9px;color:#656a6d}
 .guillo-capri-page .guillo-pdp__leg-switch{gap:8px}

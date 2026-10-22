@@ -21,7 +21,7 @@ body:has(.guillo-pdp--stone) .guillo-pdp__desc{font:400 14px/1.7 var(--g-sans);c
 body:has(.guillo-pdp--stone) .guillo-pdp__desc-wrap{margin:0 0 18px}
 body:has(.guillo-pdp--stone) .guillo-pdp__rule{margin-block:19px}
 body:has(.guillo-pdp--stone) .guillo-pdp__field{margin-bottom:24px}
-body:has(.guillo-pdp--stone) .guillo-pdp__colour-frame{width:60px;height:76px}
+body:has(.guillo-pdp--stone) .guillo-pdp__colour-frame{width:60px;height:60px}
 body:has(.guillo-pdp--stone) .guillo-pdp__colour-name{color:#c2c8ca}
 body:has(.guillo-pdp--stone) .guillo-pdp__field-label{color:#c4c9cb}
 body:has(.guillo-pdp--stone) .guillo-pdp__sizes{grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
@@ -103,7 +103,7 @@ body:has(.guillo-pdp--stone) :is(button,a,input,select):focus-visible{outline:2p
  body:has(.guillo-pdp--stone) .guillo-pdp__field{margin-bottom:20px}
  body:has(.guillo-pdp--stone) .guillo-pdp__sizes{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px}
  body:has(.guillo-pdp--stone) .guillo-pdp__size span{height:47px}
- body:has(.guillo-pdp--stone) .guillo-pdp__colour-frame{width:56px;height:70px}
+ body:has(.guillo-pdp--stone) .guillo-pdp__colour-frame{width:56px;height:56px}
  body:has(.guillo-pdp--stone) .guillo-pdp__colours{gap:13px}
  body:has(.guillo-pdp--stone) .guillo-pdp__form{margin-bottom:0}
  .luxe-assurance{padding-top:14px!important;font-size:10px;flex-wrap:wrap}
