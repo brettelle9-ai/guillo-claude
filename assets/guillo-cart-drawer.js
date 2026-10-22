@@ -237,13 +237,16 @@
 
   function btnAdded(btn) {
     if (!btn) return;
-    btn.classList.add('gcart-btn-rel');
+    window.clearTimeout(btn.__guilloAddedTimer);
+    var previous = btn.querySelector('.gcart-btn-added');
+    if (previous) previous.remove();
+    btn.classList.add('gcart-btn-rel', 'is-added');
     var o = document.createElement('span');
     o.className = 'gcart-btn-added';
     o.setAttribute('aria-hidden', 'true');
     o.innerHTML = CHECK_SVG + '<span>' + escapeHtml(CFG.toastText || 'Added to bag') + '</span>';
     btn.appendChild(o);
-    setTimeout(function () { o.remove(); }, 2000);
+    btn.__guilloAddedTimer = setTimeout(function () { o.remove(); btn.classList.remove('is-added'); }, 2000);
   }
 
   // Central confirmation: toast always; fly when we have an image + source,
@@ -881,8 +884,31 @@
       e.preventDefault();
       e.stopImmediatePropagation(); // prevent the theme's own AJAX/redirect
 
-      var btn = form.querySelector('[type="submit"], button:not([type])');
-      if (btn) btn.classList.add('is-loading');
+      if (form.dataset.guilloSubmitting === 'true') return;
+      form.dataset.guilloSubmitting = 'true';
+      var btn = e.submitter && e.submitter.form === form
+        ? e.submitter : form.querySelector('[type="submit"], button:not([type])');
+      var feedbackBtns = btn && btn.matches('[data-atc]')
+        ? Array.prototype.filter.call(form.elements, function (el) { return el.matches && el.matches('[data-atc]'); })
+        : (btn ? [btn] : []);
+      var previousDisabled = feedbackBtns.map(function (button) { return button.disabled; });
+      feedbackBtns.forEach(function (button) {
+        window.clearTimeout(button.__guilloAddedTimer);
+        var previousAdded = button.querySelector('.gcart-btn-added');
+        if (previousAdded) previousAdded.remove();
+        button.classList.remove('is-added');
+        button.classList.add('is-loading');
+        button.setAttribute('aria-busy', 'true');
+        button.disabled = true;
+      });
+      function finishButtonFeedback() {
+        delete form.dataset.guilloSubmitting;
+        feedbackBtns.forEach(function (button, index) {
+          button.classList.remove('is-loading');
+          button.removeAttribute('aria-busy');
+          button.disabled = previousDisabled[index];
+        });
+      }
       // Do not wait for the network to start moving: open now, fill in after.
       if (!CFG.quietAdd) { openDrawer(true); drawer.classList.add('is-loading'); }
 
@@ -893,12 +919,12 @@
       })
         .then(function (r) { return r.json(); })
         .then(function (item) {
-          if (btn) btn.classList.remove('is-loading');
+          finishButtonFeedback();
           var failed = !item || !item.key; // /cart/add.js errors have no line key
+          if (!failed) feedbackBtns.forEach(btnAdded);
           if (CFG.quietAdd && !failed) {
             refresh(true).then(function () {
               confirmQuiet({ img: item.image, fromEl: btn });
-              btnAdded(btn);
             });
           } else if (!failed && showAdded(item)) {
             settle();
@@ -906,7 +932,7 @@
             refresh(false);
           }
         })
-        .catch(function () { if (btn) btn.classList.remove('is-loading'); refresh(false); });
+        .catch(function () { finishButtonFeedback(); refresh(false); });
     }, true);
   }
 

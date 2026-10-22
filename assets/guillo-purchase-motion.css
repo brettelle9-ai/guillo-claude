@@ -1,0 +1,35 @@
+/* Restrained purchase feedback. Confirmation comes from the cart response. */
+.guillo-pdp button.guillo-pdp__atc{
+  position:relative;isolation:isolate;overflow:hidden;
+  transition:background-color .45s ease,color .45s ease,border-color .45s ease,transform .38s cubic-bezier(.22,1,.36,1),box-shadow .45s ease;
+}
+.guillo-pdp button.guillo-pdp__atc::before{
+  content:"";position:absolute;inset:-40% -15%;pointer-events:none;z-index:1;
+  background:linear-gradient(110deg,transparent 28%,currentColor 50%,transparent 72%);
+  opacity:.09;transform:translateX(-140%);
+}
+@media(hover:hover) and (pointer:fine){
+  .guillo-pdp button.guillo-pdp__atc:not(:disabled):not(.is-loading):hover{transform:translateY(-1px);box-shadow:0 5px 15px rgb(0 0 0/.07)}
+  .guillo-pdp button.guillo-pdp__atc:not(:disabled):not(.is-loading):hover::before{transform:translateX(140%);transition:transform 1.05s cubic-bezier(.22,1,.36,1)}
+}
+.guillo-pdp button.guillo-pdp__atc:not(:disabled):focus-visible::before{transform:translateX(140%);transition:transform 1.05s cubic-bezier(.22,1,.36,1)}
+.guillo-pdp button.guillo-pdp__atc:not(:disabled):active{transform:translateY(1px) scale(.988);transition-duration:.16s;box-shadow:none}
+.guillo-pdp__atc [data-atc-label]{display:inline-block;transition:opacity .28s ease,transform .4s cubic-bezier(.22,1,.36,1)}
+.guillo-pdp button.guillo-pdp__atc.is-loading{cursor:progress;opacity:1}
+.guillo-pdp__atc.is-loading [data-atc-label]{opacity:.38;transform:translateY(-1px)}
+.guillo-pdp button.guillo-pdp__atc::after{content:"";position:absolute;bottom:0;left:0;width:32%;height:2px;background:currentColor;opacity:0;pointer-events:none}
+.guillo-pdp button.guillo-pdp__atc.is-loading::after{opacity:.65;animation:guillo-purchase-loading 1.4s cubic-bezier(.45,0,.3,1) infinite}
+.guillo-pdp__atc.is-added [data-atc-label]{opacity:0;transform:translateY(-5px)}
+.guillo-pdp__atc .gcart-btn-added{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;gap:10px;background:inherit;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;pointer-events:none;animation:guillo-purchase-confirm 2s cubic-bezier(.22,1,.36,1) both}
+.guillo-pdp__atc .gcart-btn-added svg{width:14px;height:12px;overflow:visible}
+.guillo-pdp__atc .gcart-btn-added path{stroke-dasharray:18;stroke-dashoffset:18;animation:guillo-purchase-check .55s .12s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes guillo-purchase-loading{from{transform:translateX(-110%)}to{transform:translateX(420%)}}
+@keyframes guillo-purchase-confirm{0%{opacity:0;transform:translateY(7px)}18%,84%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-4px)}}
+@keyframes guillo-purchase-check{to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){
+  .guillo-pdp button.guillo-pdp__atc,.guillo-pdp__atc [data-atc-label]{transition:none!important;transform:none!important}
+  .guillo-pdp button.guillo-pdp__atc::before{display:none}
+  .guillo-pdp button.guillo-pdp__atc.is-loading::after{animation:none;transform:none;width:100%;opacity:.35}
+  .guillo-pdp__atc .gcart-btn-added{animation:none}
+  .guillo-pdp__atc .gcart-btn-added path{animation:none;stroke-dashoffset:0}
+}
