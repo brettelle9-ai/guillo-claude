@@ -24,12 +24,12 @@
     {%- if section.settings.description != blank -%}
       <p class="g-campaign__description">{{ section.settings.description | escape }}</p>
     {%- endif -%}
-    <div class="g-campaign__actions">
+    <div class="g-campaign__actions g-campaign__actions--sculpted">
       {%- if section.settings.primary_label != blank and section.settings.primary_link != blank -%}
         <a href="{{ section.settings.primary_link }}" class="g-campaign__sculpted" data-guillo-sculpted><span>{{ section.settings.primary_label | escape }}</span></a>
       {%- endif -%}
       {%- if section.settings.secondary_label != blank and section.settings.secondary_link != blank -%}
-        <a href="{{ section.settings.secondary_link }}">{{ section.settings.secondary_label | escape }}</a>
+        <a href="{{ section.settings.secondary_link }}" class="g-campaign__sculpted g-campaign__sculpted--steel" data-guillo-sculpted><span>{{ section.settings.secondary_label | escape }}</span></a>
       {%- endif -%}
     </div>
   </div>
