@@ -3,24 +3,24 @@
   position:relative;isolation:isolate;overflow:hidden;
   transition:background-color .65s ease,color .65s ease,border-color .65s ease,transform .38s cubic-bezier(.22,1,.36,1),box-shadow .45s ease;
 }
-/* A tonal gradient fades in on hover; the label stays still. */
+/* A distinct tonal gradient rises from the bottom; the label stays still. */
 .guillo-pdp button.guillo-pdp__atc::before{
   content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:linear-gradient(110deg,#192830 0%,#304550 50%,#192830 100%);
-  background-size:180% 100%;background-position:0% 50%;opacity:0;
-  transition:opacity .65s ease,background-position 1.4s cubic-bezier(.22,1,.36,1);
+  background:linear-gradient(to top,#526b79 0%,#354d5c 52%,#22333e 100%);
+  opacity:0;transform:translateY(102%);
+  transition:transform .85s cubic-bezier(.22,1,.36,1),opacity .3s ease;
 }
 body:has(.guillo-pdp--stone) .guillo-pdp button.guillo-pdp__atc::before{
-  background-image:linear-gradient(110deg,#eef1f2 0%,#d2dce1 50%,#eef1f2 100%);
+  background-image:linear-gradient(to top,#a5b8c4 0%,#d6dfe5 52%,#f1f3f4 100%);
 }
 .guillo-pdp__atc [data-atc-label]{position:relative;z-index:2}
 @media(hover:hover) and (pointer:fine){
   .guillo-pdp button.guillo-pdp__atc:not(:disabled):not(.is-loading):not(.is-added):hover::before{
-    opacity:1;background-position:100% 50%;
+    opacity:1;transform:translateY(0);
   }
 }
 .guillo-pdp button.guillo-pdp__atc:not(:disabled):not(.is-loading):not(.is-added):focus-visible::before{
-  opacity:1;background-position:100% 50%;
+  opacity:1;transform:translateY(0);
 }
 .guillo-pdp button.guillo-pdp__atc:not(:disabled):active{transform:translateY(1px) scale(.988);transition-duration:.16s;box-shadow:none}
 .guillo-pdp__atc [data-atc-label]{display:inline-block;transition:opacity .28s ease,transform .4s cubic-bezier(.22,1,.36,1)}
@@ -37,7 +37,7 @@ body:has(.guillo-pdp--stone) .guillo-pdp button.guillo-pdp__atc::before{
 @keyframes guillo-purchase-check{to{stroke-dashoffset:0}}
 @media(prefers-reduced-motion:reduce){
   .guillo-pdp button.guillo-pdp__atc,.guillo-pdp__atc [data-atc-label]{transition:none!important;transform:none!important}
-  .guillo-pdp button.guillo-pdp__atc::before{transition:none!important;background-position:50% 50%!important}
+  .guillo-pdp button.guillo-pdp__atc::before{transition:none!important;transform:none!important}
   .guillo-pdp button.guillo-pdp__atc.is-loading::after{animation:none;transform:none;width:100%;opacity:.35}
   .guillo-pdp__atc .gcart-btn-added{animation:none}
   .guillo-pdp__atc .gcart-btn-added path{animation:none;stroke-dashoffset:0}
