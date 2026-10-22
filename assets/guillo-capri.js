@@ -1,5 +1,5 @@
 (() => {
-  const initialise = () => {
+  const initialise = (event) => {
   const root = document.querySelector('.guillo-capri-page [data-guillo-pdp]');
   if (!root || root.dataset.capriReady) return;
   root.dataset.capriReady = 'true';
@@ -30,6 +30,12 @@
   }
   // Only play the shorts film while its section is visible.
   const film = root.querySelector('.capri-film video');
+  if (film && event?.type === 'shopify:section:load') {
+    const playButton = film.closest('[data-video-tile]')?.querySelector('[data-video-play]');
+    playButton?.addEventListener('click', () => film.play().catch(() => {}));
+    film.addEventListener('play', () => { if (playButton) playButton.hidden = true; });
+    film.addEventListener('pause', () => { if (playButton) playButton.hidden = false; });
+  }
   if (film && !reduce.matches) {
     film.muted = true;
     film.loop = true;
