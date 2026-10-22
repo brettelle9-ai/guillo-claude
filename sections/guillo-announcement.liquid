@@ -1,5 +1,5 @@
 {% comment %}
-  Black utility bar above the header: one message at a time, sliding across,
+  Utility bar above the header: one message at a time, sliding across,
   at every width. Showing them all in a row ran them off the edge of the bar
   on desktop, so the rotation that was once a phone-only behaviour is now how
   the bar works everywhere.
@@ -18,7 +18,25 @@
   guillo-announce__msg class so the rotation still drives it.
 {% endcomment %}
 
-<div class="guillo-announce">
+{%- liquid
+  assign bar_background = '#f1f3f4'
+  assign bar_text = '#14232c'
+  case section.settings.bar_palette
+    when 'slate'
+      assign bar_background = '#506576'
+      assign bar_text = '#ffffff'
+    when 'olive'
+      assign bar_background = '#505b50'
+      assign bar_text = '#ffffff'
+    when 'dark'
+      assign bar_background = '#111b20'
+      assign bar_text = '#ecedeb'
+    when 'custom'
+      assign bar_background = section.settings.bar_background | default: '#f1f3f4'
+      assign bar_text = section.settings.bar_text | default: '#14232c'
+  endcase
+-%}
+<div class="guillo-announce" style="--guillo-ann-background:{{ bar_background }};--guillo-ann-text:{{ bar_text }};">
   {%- liquid
     assign cc = localization.country.iso_code | default: ''
     assign shown = ''
@@ -47,6 +65,7 @@
     <span aria-hidden="true">&#8249;</span>
   </button>
   <div class="guillo-announce__messages" data-ann-track>
+    {%- assign first_visible = true -%}
     {%- for block in section.blocks -%}
       {%- capture block_key -%},{{ block.id }},{%- endcapture -%}
       {%- unless shown contains block_key -%}{%- continue -%}{%- endunless -%}
@@ -60,16 +79,17 @@
       {%- endcapture -%}
       {%- if block.settings.url != blank -%}
         <a
-          class="guillo-announce__msg guillo-announce__msg--link{% if block.settings.accent %} guillo-announce__msg--accent{% endif %}"
+          class="guillo-announce__msg guillo-announce__msg--link{% if first_visible %} is-current{% endif %}{% if block.settings.accent %} guillo-announce__msg--accent{% endif %}"
           href="{{ block.settings.url }}"
           {{ block.shopify_attributes }}
         >{{ msg_body }}</a>
       {%- else -%}
         <span
-          class="guillo-announce__msg{% if block.settings.accent %} guillo-announce__msg--accent{% endif %}"
+          class="guillo-announce__msg{% if first_visible %} is-current{% endif %}{% if block.settings.accent %} guillo-announce__msg--accent{% endif %}"
           {{ block.shopify_attributes }}
         >{{ msg_body }}</span>
       {%- endif -%}
+      {%- assign first_visible = false -%}
     {%- endfor -%}
   </div>
   <button type="button" class="guillo-announce__nav" data-ann-next aria-label="Next announcement">
@@ -85,9 +105,9 @@
     gap: 0;
     height: 32px;
     padding: 0 8px;
-    background: #111b20;
+    background: var(--guillo-ann-background, #f1f3f4);
     border-bottom: 0;
-    color: #ECEDEB;
+    color: var(--guillo-ann-text, #14232c);
     font: 500 10px/1 var(--g-sans);
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -127,9 +147,7 @@
 
   .guillo-announce__short { display: none; }
 
-  /* A linked message keeps the bar's type and colour and underlines the words
-     themselves, not the full width of the bar. The colour reset has to come
-     before the accent rule below, or it cancels the bronze. */
+  /* Linked and accented messages keep the selected palette's contrast. */
   .guillo-announce__msg--link {
     color: inherit;
     text-decoration: underline;
@@ -137,7 +155,7 @@
     text-decoration-thickness: 1px;
   }
   .guillo-announce__msg--link:hover { text-decoration-thickness: 2px; }
-  .guillo-announce__msg--accent { color: #ECEDEB; }
+  .guillo-announce__msg--accent { color: inherit; }
 
   /* Nothing sits beside anything now, so the pipes have no job. */
   .guillo-announce__sep { display: none; }
@@ -247,6 +265,47 @@
     ]
   },
   "settings": [
+    {
+      "type": "select",
+      "id": "bar_palette",
+      "label": "Colour palette",
+      "options": [
+        {
+          "value": "pearl",
+          "label": "Silver white / ink"
+        },
+        {
+          "value": "slate",
+          "label": "Slate blue / white"
+        },
+        {
+          "value": "olive",
+          "label": "Muted olive / white"
+        },
+        {
+          "value": "dark",
+          "label": "Original dark"
+        },
+        {
+          "value": "custom",
+          "label": "Custom colours"
+        }
+      ],
+      "default": "pearl",
+      "info": "Compare colours against the dark header. Custom colour fields apply when Custom colours is selected."
+    },
+    {
+      "type": "color",
+      "id": "bar_background",
+      "label": "Custom background",
+      "default": "#f1f3f4"
+    },
+    {
+      "type": "color",
+      "id": "bar_text",
+      "label": "Custom text",
+      "default": "#14232c"
+    },
     {
       "type": "range",
       "id": "rotate_seconds",
