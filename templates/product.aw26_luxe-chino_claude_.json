@@ -168,7 +168,7 @@
     "reviews": {
       "type": "guillo-pdp-reviews",
       "settings": {
-        "heading": "The fit, according to you.",
+        "heading": "Customer reviews",
         "write_link": "",
         "all_link": "",
         "fit_marker": 50,
