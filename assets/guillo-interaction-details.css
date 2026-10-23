@@ -79,14 +79,13 @@ body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] :is(input,bu
   .g-campaign .g-campaign__actions a.g-campaign__sculpted{transform:none!important;transition:none}
   body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__inner::before{background:radial-gradient(240px circle at 50% 70%,#a7d4ec30,transparent 72%);opacity:1;transition:none}
 }
-/* Cinematic smoked-glass homepage buttons. The poster remains beneath the
-   moving film, and the crop is editable separately for each category. */
+/* Cinematic category buttons: clear labels above the film and a drawn arrow. */
 .g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic{
-  display:flex;align-items:center;justify-content:center;height:94px;min-height:94px;
-  padding:10px 14px;border:1px solid #c5d1d15c;border-radius:8px;background:#111a20;
-  color:#fff;isolation:isolate;transform:none;
-  box-shadow:inset 0 0 0 6px #0b131b99,inset 0 1px 0 #ffffff70,0 8px 24px #0003;
-  transition:border-color .5s,box-shadow .5s,transform .4s;
+  display:flex;align-items:flex-end;justify-content:flex-end;height:124px;min-height:124px;
+  padding:14px 16px;border:1px solid #dbe6e6a6;border-radius:8px;background:#111a20;
+  color:#fff;isolation:isolate;transform:none;cursor:pointer;
+  box-shadow:inset 0 0 0 1px #ffffff26,0 8px 24px #0003;
+  transition:border-color .4s,box-shadow .4s,transform .3s;
 }
 .g-campaign .g-campaign__cinematic .g-campaign__button-film{
   position:absolute;inset:0;width:100%;height:100%;max-width:none;display:block;
@@ -94,22 +93,62 @@ body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] :is(input,bu
   pointer-events:none;transition:transform 1.5s cubic-bezier(.2,.6,.3,1);
 }
 .g-campaign .g-campaign__sculpted.g-campaign__cinematic::before{
-  inset:0;z-index:-2;background:linear-gradient(0deg,#05090dd9,#05090d1a 90%);
+  inset:0;z-index:-2;background:linear-gradient(0deg,#05090dcc, #05090d26 58%,transparent);
 }
 .g-campaign .g-campaign__cinematic::after{
   content:'';position:absolute;inset:0;pointer-events:none;z-index:-1;
-  background:linear-gradient(165deg,#ffffff2b,transparent 45%,#ffffff0a);
+  background:linear-gradient(165deg,#ffffff18,transparent 45%);
 }
 .g-campaign .g-campaign__cinematic span{
-  color:#fff;text-shadow:0 1px 10px #000;letter-spacing:.1em;
+  position:relative;z-index:1;display:block;padding:0 0 12px;
+  color:#fff;-webkit-text-fill-color:#fff;opacity:1;
+  font:600 12px/1.3 var(--g-sans,sans-serif);letter-spacing:.065em;
+  text-align:right;white-space:nowrap;text-shadow:0 1px 3px #000,0 2px 10px #0009;
+}
+.g-campaign .g-campaign__cinematic span::before{
+  content:'';position:absolute;left:0;right:0;bottom:3px;height:1px;background:currentColor;
+  transform-origin:left;pointer-events:none;
+}
+.g-campaign .g-campaign__cinematic span::after{
+  content:'';position:absolute;right:0;bottom:0;width:7px;height:7px;
+  border-top:1px solid currentColor;border-right:1px solid currentColor;
+  transform:rotate(45deg);pointer-events:none;
+}
+@media(min-width:990px){
+  .g-campaign .g-campaign__copy{padding-inline:clamp(24px,2.8vw,54px) clamp(20px,2.4vw,46px)}
+  .g-campaign .g-campaign__actions--sculpted{max-width:480px}
+}
+@media(prefers-reduced-motion:no-preference){
+  .g-campaign .g-campaign__cinematic span::before{animation:g-button-line 5s cubic-bezier(.2,.65,.3,1) infinite}
+  .g-campaign .g-campaign__cinematic span::after{animation:g-button-arrow 5s ease infinite}
+}
+@keyframes g-button-line{
+  0%{transform:scaleX(0);opacity:0}
+  8%{opacity:1}
+  32%,88%{transform:scaleX(1);opacity:1}
+  100%{transform:scaleX(1);opacity:0}
+}
+@keyframes g-button-arrow{
+  0%,26%{opacity:0;transform:translateX(-4px) rotate(45deg)}
+  38%,88%{opacity:1;transform:translateX(0) rotate(45deg)}
+  100%{opacity:0;transform:translateX(0) rotate(45deg)}
 }
 @media(hover:hover) and (pointer:fine){
-  .g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic:hover{border-color:#ffffffa0;box-shadow:inset 0 0 0 6px #0b131b80,inset 0 1px 0 #ffffff80,0 10px 30px #0005}
+  .g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic:hover{
+    border-color:#fff;box-shadow:inset 0 0 0 1px #ffffff60,0 10px 30px #0005;transform:translateY(-2px);
+  }
   .g-campaign .g-campaign__cinematic:hover .g-campaign__button-film{transform:scale(1.045)}
 }
 .g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic:active{transform:scale(.985)}
 @media(max-width:749px){
-  .g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic{height:88px;min-height:88px;padding:10px}
+  .g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic{
+    height:96px;min-height:96px;padding:12px;border-color:#e5eeeecc;
+    box-shadow:inset 0 0 0 1px #ffffff26,0 5px 16px #0003;
+  }
+  .g-campaign .g-campaign__sculpted.g-campaign__cinematic::before{
+    background:linear-gradient(0deg,#05090db3, #05090d0d 60%,transparent);
+  }
+  .g-campaign .g-campaign__cinematic span{font-size:12px;font-weight:600;letter-spacing:.045em}
 }
 @media(prefers-reduced-motion:reduce){
   .g-campaign .g-campaign__cinematic .g-campaign__button-film{transition:none;transform:none}
