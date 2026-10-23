@@ -79,3 +79,38 @@ body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] :is(input,bu
   .g-campaign .g-campaign__actions a.g-campaign__sculpted{transform:none!important;transition:none}
   body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] .guillo-newsletter__inner::before{background:radial-gradient(240px circle at 50% 70%,#a7d4ec30,transparent 72%);opacity:1;transition:none}
 }
+/* Cinematic smoked-glass homepage buttons. The poster remains beneath the
+   moving film, and the crop is editable separately for each category. */
+.g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic{
+  display:flex;align-items:center;justify-content:center;height:94px;min-height:94px;
+  padding:10px 14px;border:1px solid #c5d1d15c;border-radius:8px;background:#111a20;
+  color:#fff;isolation:isolate;transform:none;
+  box-shadow:inset 0 0 0 6px #0b131b99,inset 0 1px 0 #ffffff70,0 8px 24px #0003;
+  transition:border-color .5s,box-shadow .5s,transform .4s;
+}
+.g-campaign .g-campaign__cinematic .g-campaign__button-film{
+  position:absolute;inset:0;width:100%;height:100%;max-width:none;display:block;
+  object-fit:cover;object-position:50% var(--button-crop,28%);z-index:-3;
+  pointer-events:none;transition:transform 1.5s cubic-bezier(.2,.6,.3,1);
+}
+.g-campaign .g-campaign__sculpted.g-campaign__cinematic::before{
+  inset:0;z-index:-2;background:linear-gradient(0deg,#05090dd9,#05090d1a 90%);
+}
+.g-campaign .g-campaign__cinematic::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:-1;
+  background:linear-gradient(165deg,#ffffff2b,transparent 45%,#ffffff0a);
+}
+.g-campaign .g-campaign__cinematic span{
+  color:#fff;text-shadow:0 1px 10px #000;letter-spacing:.1em;
+}
+@media(hover:hover) and (pointer:fine){
+  .g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic:hover{border-color:#ffffffa0;box-shadow:inset 0 0 0 6px #0b131b80,inset 0 1px 0 #ffffff80,0 10px 30px #0005}
+  .g-campaign .g-campaign__cinematic:hover .g-campaign__button-film{transform:scale(1.045)}
+}
+.g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic:active{transform:scale(.985)}
+@media(max-width:749px){
+  .g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic{height:88px;min-height:88px;padding:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .g-campaign .g-campaign__cinematic .g-campaign__button-film{transition:none;transform:none}
+}

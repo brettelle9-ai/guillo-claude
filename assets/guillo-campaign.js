@@ -5,6 +5,10 @@ if (!customElements.get('guillo-campaign')) {
       this.mounted = true;
       this.films = [...this.querySelectorAll('video')];
       if (!this.films.length) return;
+      this.films.forEach(film => {
+        film.muted = true;
+        film.addEventListener('playing', () => film.classList.add('is-ready'));
+      });
       this.motion = matchMedia('(prefers-reduced-motion: reduce)');
       this.wide = matchMedia('(min-width: 990px)');
       const connection = navigator.connection;
@@ -35,17 +39,14 @@ if (!customElements.get('guillo-campaign')) {
     updatePlayback() {
       const allowed = this.started && this.inView && !document.hidden && !this.motion.matches && !this.saveData;
       this.films.forEach(film => {
-        const visible = film.dataset.film === 'primary' || this.wide.matches;
+        const visible = !film.dataset.film || film.dataset.film === 'primary' || this.wide.matches;
         if (!allowed || !visible) {
           film.pause();
           return;
         }
-        if (!film.getAttribute('src')) {
+        if (!film.getAttribute('src') && film.dataset.src) {
           film.muted = true;
           film.src = film.dataset.src;
-          film.addEventListener('playing', () => {
-            film.classList.add('is-ready');
-          });
         }
         const playback = film.play();
         if (playback && playback.catch) playback.catch(() => {});

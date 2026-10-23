@@ -26,23 +26,37 @@
     {%- endif -%}
     <div class="g-campaign__actions g-campaign__actions--sculpted">
       {%- if section.settings.primary_label != blank and section.settings.primary_link != blank -%}
-        <a href="{{ section.settings.primary_link }}" class="g-campaign__sculpted" data-guillo-sculpted><span>{{ section.settings.primary_label | escape }}</span></a>
+        <a href="{{ section.settings.primary_link }}" class="g-campaign__sculpted g-campaign__cinematic" style="--button-crop:{{ section.settings.shirts_button_crop | default: 28 }}%">
+          {%- if section.settings.shirts_button_video != blank -%}
+            {{ section.settings.shirts_button_video | video_tag: class: 'g-campaign__button-film', image_size: '720x', autoplay: false, loop: true, muted: true, controls: false, playsinline: true, preload: 'none', tabindex: '-1', aria-hidden: 'true' }}
+          {%- else -%}
+            <video class="g-campaign__button-film" data-src="{{ 'guillo-button-shirts.mp4' | asset_url }}" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
+          {%- endif -%}
+          <span>{{ section.settings.primary_label | escape }}</span>
+        </a>
       {%- endif -%}
       {%- if section.settings.secondary_label != blank and section.settings.secondary_link != blank -%}
-        <a href="{{ section.settings.secondary_link }}" class="g-campaign__sculpted g-campaign__sculpted--steel" data-guillo-sculpted><span>{{ section.settings.secondary_label | escape }}</span></a>
+        <a href="{{ section.settings.secondary_link }}" class="g-campaign__sculpted g-campaign__cinematic" style="--button-crop:{{ section.settings.chinos_button_crop | default: 28 }}%">
+          {%- if section.settings.chinos_button_video != blank -%}
+            {{ section.settings.chinos_button_video | video_tag: class: 'g-campaign__button-film', image_size: '720x', autoplay: false, loop: true, muted: true, controls: false, playsinline: true, preload: 'none', tabindex: '-1', aria-hidden: 'true' }}
+          {%- else -%}
+            <video class="g-campaign__button-film" data-src="{{ 'guillo-button-chinos.mp4' | asset_url }}" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
+          {%- endif -%}
+          <span>{{ section.settings.secondary_label | escape }}</span>
+        </a>
       {%- endif -%}
     </div>
   </div>
   <div class="g-campaign__media g-campaign__media--primary">
     <img src="{{ 'guillo-campaign-primary.jpg' | asset_url }}" alt="Guillo fitted white shirt styled with chinos at a villa" width="720" height="1280" loading="eager" fetchpriority="high">
     {%- if section.settings.enable_video and primary_film != blank -%}
-      <video data-film="primary" data-src="{{ primary_film | escape }}" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
+      <video poster="{{ 'guillo-campaign-primary.jpg' | asset_url }}" data-film="primary" data-src="{{ primary_film | escape }}" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
     {%- endif -%}
   </div>
   <div class="g-campaign__media g-campaign__media--secondary" aria-hidden="true">
     <img src="{{ 'guillo-campaign-secondary.jpg' | asset_url }}" alt="" width="720" height="1280" loading="eager">
     {%- if section.settings.enable_video and secondary_film != blank -%}
-      <video data-film="secondary" data-src="{{ secondary_film | escape }}" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
+      <video poster="{{ 'guillo-campaign-secondary.jpg' | asset_url }}" data-film="secondary" data-src="{{ secondary_film | escape }}" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
     {%- endif -%}
   </div>
 </guillo-campaign>
@@ -60,6 +74,11 @@
     { "type": "url", "id": "primary_link", "label": "First link" },
     { "type": "text", "id": "secondary_label", "label": "Second link label", "default": "Shop chinos" },
     { "type": "url", "id": "secondary_link", "label": "Second link" },
+    { "type": "header", "content": "Cinematic buttons" },
+    { "type": "video", "id": "shirts_button_video", "label": "Shirts button video", "info": "Leave empty to use the supplied pinstripe film." },
+    { "type": "range", "id": "shirts_button_crop", "label": "Shirts vertical crop", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 28, "info": "Lower values show further up the video." },
+    { "type": "video", "id": "chinos_button_video", "label": "Chinos button video", "info": "Leave empty to use the supplied cream chino film." },
+    { "type": "range", "id": "chinos_button_crop", "label": "Chinos vertical crop", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 28, "info": "Lower values show further up the video." },
     { "type": "checkbox", "id": "enable_video", "label": "Play campaign films", "default": true },
     { "type": "url", "id": "primary_video_url", "label": "Primary MP4 URL", "info": "Optional. Paste the MP4 link from Shopify Content → Files." },
     { "type": "url", "id": "secondary_video_url", "label": "Second MP4 URL", "info": "Optional. Paste the second MP4 link. This film appears on wide desktop screens." }
