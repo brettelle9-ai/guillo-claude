@@ -143,12 +143,13 @@ body .guillo-newsletter.guillo-newsletter--glass[data-glass-signup] :is(input,bu
 @media(max-width:749px){
   .g-campaign .g-campaign__actions a.g-campaign__sculpted.g-campaign__cinematic{
     height:96px;min-height:96px;padding:12px;border-color:#e5eeeecc;
+    align-items:center;justify-content:center;
     box-shadow:inset 0 0 0 1px #ffffff26,0 5px 16px #0003;
   }
   .g-campaign .g-campaign__sculpted.g-campaign__cinematic::before{
     background:linear-gradient(0deg,#05090db3, #05090d0d 60%,transparent);
   }
-  .g-campaign .g-campaign__cinematic span{font-size:12px;font-weight:600;letter-spacing:.045em}
+  .g-campaign .g-campaign__cinematic span{font-size:12px;font-weight:600;letter-spacing:.045em;text-align:center;transform:translateY(8px)}
 }
 @media(prefers-reduced-motion:reduce){
   .g-campaign .g-campaign__cinematic .g-campaign__button-film{transition:none;transform:none}
