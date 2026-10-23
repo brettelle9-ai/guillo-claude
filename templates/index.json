@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -11,38 +20,15 @@
         "primary_link": "shopify://collections/shirts",
         "secondary_label": "Shop chinos",
         "secondary_link": "shopify://collections/chinos",
-        "enable_video": true
-      }
-    },
-    "quotes": {
-      "type": "guillo-quotes",
-      "settings": {
-        "quotes_to_show": 3,
-        "min_rating": 4,
-        "theme_fit": "fit, fits, fitted, size, waist, thigh, leg, stretch, comfortable, comfy, cut, tailored, fabric, material",
-        "theme_look": "look, looks, compliment, style, stylish, smart, sharp, design, colour, color, handsome, classy",
-        "theme_service": "service, delivery, shipping, arrived, fast, quick, speedy, support, exchange, return, refund, website, easy, customer, communication, helpful"
-      }
-    },
-    "story": {
-      "type": "guillo-story",
-      "settings": {
-        "eyebrow": "The Guillo point of view",
-        "statement": "A closer fit. A more distinctive way to dress.",
-        "text": "Mediterranean influence, shaped for the way you want to present yourself. Fitted shirts, considered trousers and the details that bring a wardrobe together.",
-        "link_label": "Our story",
-        "link": "shopify://pages/about-us",
-        "image": "",
-        "image_alt": "Guillo blue shirt and brown trousers styled with a navy jacket",
-        "image_position": "center 35%",
-        "flip": false
+        "shirts_button_crop": 28,
+        "chinos_button_crop": 28,
+        "enable_video": true,
+        "primary_video_url": "",
+        "secondary_video_url": ""
       }
     },
     "wardrobe": {
       "type": "guillo-atelier",
-      "settings": {
-        "signature_product": "the-signore-chino-latte"
-      },
       "blocks": {
         "shirts": {
           "type": "category",
@@ -86,7 +72,37 @@
         "chinos",
         "polos",
         "tees"
-      ]
+      ],
+      "settings": {
+        "trust_returns": "44-day free returns & exchanges · AU & NZ",
+        "trust_shipping": "Free express shipping over $200",
+        "signature_product": "the-signore-chino-latte",
+        "signature_colour": "Latte"
+      }
+    },
+    "quotes": {
+      "type": "guillo-quotes",
+      "settings": {
+        "quotes_to_show": 3,
+        "min_rating": 4,
+        "theme_fit": "fit, fits, fitted, size, waist, thigh, leg, stretch, comfortable, comfy, cut, tailored, fabric, material",
+        "theme_look": "look, looks, compliment, style, stylish, smart, sharp, design, colour, color, handsome, classy",
+        "theme_service": "service, delivery, shipping, arrived, fast, quick, speedy, support, exchange, return, refund, website, easy, customer, communication, helpful"
+      }
+    },
+    "story": {
+      "type": "guillo-story",
+      "settings": {
+        "eyebrow": "The Guillo point of view",
+        "statement": "A closer fit. A more distinctive way to dress.",
+        "text": "Mediterranean influence, shaped for the way you want to present yourself. Fitted shirts, considered trousers and the details that bring a wardrobe together.",
+        "link_label": "Our story",
+        "link": "shopify://pages/about-us",
+        "image": "shopify://shop_images/20260906_103147_1.jpg",
+        "image_alt": "Guillo blue shirt and brown trousers styled with a navy jacket",
+        "image_position": "center 37%",
+        "flip": false
+      }
     }
   },
   "order": [
