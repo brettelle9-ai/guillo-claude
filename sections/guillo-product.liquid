@@ -939,10 +939,7 @@
               endif
               unless tab_cc == 'AU' or tab_cc == 'NZ'
                 if block.settings.content_intl != blank
-                  assign tab_content = block.settings.content
-              if bellagio_page and block.settings.title == 'Details'
-                assign tab_content = product.description
-              endif_intl
+                  assign tab_content = block.settings.content_intl
                 endif
               endunless
             -%}
@@ -990,10 +987,7 @@
               endif
               unless tab_cc == 'AU' or tab_cc == 'NZ'
                 if block.settings.content_intl != blank
-                  assign tab_content = block.settings.content
-              if bellagio_page and block.settings.title == 'Details'
-                assign tab_content = product.description
-              endif_intl
+                  assign tab_content = block.settings.content_intl
                 endif
               endunless
             -%}
