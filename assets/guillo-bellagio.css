@@ -52,7 +52,9 @@
 .guillo-pdp--bellagio .bellagio-features__item{font-size:11px;gap:12px}
 @media(max-width:749px){.guillo-pdp--bellagio .bellagio-features__list{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 22px}.guillo-pdp--bellagio .bellagio-features__item{font-size:12px}}
 
-.guillo-pdp--bellagio .bellagio-features__divider{display:block;width:100%;height:0;padding:0;margin:26px 0 0;border:0;border-top:1px solid var(--g-line)}
 .bellagio-features__icon{transition:transform .55s cubic-bezier(.22,1,.36,1),color .55s ease}
 @media(hover:hover) and (pointer:fine){.bellagio-features__item:hover .bellagio-features__icon{transform:translateY(-2px);color:var(--g-bronze,var(--g-ink))}}
 @media(prefers-reduced-motion:reduce){.bellagio-features__icon{transition:none}.bellagio-features__item:hover .bellagio-features__icon{transform:none}}
+
+/* Keep the space above feature icons free of dividers, including the tabs' baseline. */
+.guillo-pdp--bellagio .guillo-pdp__tabbar{border-bottom:0}
