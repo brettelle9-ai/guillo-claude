@@ -28,7 +28,6 @@
 {%- if is_weekender or is_wash or is_passport -%}
 {%- case section.settings.part -%}
 {%- when 'story' -%}
-{%- if is_weekender -%}{% render 'guillo-bellagio-features' %}{%- endif -%}
 <section class="bellagio-story" aria-label="{{ product.title | escape }} details">
   <div class="bellagio-story__inner">
     {%- if story_image != blank -%}
