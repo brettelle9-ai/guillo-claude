@@ -1,5 +1,12 @@
 <rte-formatter>
-  {{ page.content }}
+  {%- if page.handle == 'shipping' or page.handle == 'shipping-1' -%}
+    {% render 'guillo-shipping-panel' %}
+    <p>Delivery times are estimates. Available services and the final shipping charge are shown at checkout.</p>
+    <p>For pre-orders, check the dispatch information on the product page.</p>
+    <p>Questions about delivery? Email <a href="mailto:support@guilloclothing.com">support@guilloclothing.com</a>.</p>
+  {%- else -%}
+    {{ page.content }}
+  {%- endif -%}
 </rte-formatter>
 
 {% schema %}
