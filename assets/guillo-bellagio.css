@@ -1,5 +1,5 @@
 /* Bellagio only: product-first buying panel, warm editorial detail and optional accessories. */
-.guillo-pdp--bellagio .guillo-pdp__title{font-family:var(--g-display,var(--g-serif));font-weight:400;font-size:clamp(32px,3.2vw,48px);line-height:1.08;letter-spacing:-.02em}
+.guillo-pdp--bellagio .guillo-pdp__title{font:500 clamp(18px,1.45vw,23px)/1.35 var(--g-sans);letter-spacing:.025em;text-transform:uppercase}
 .guillo-pdp--bellagio .bellagio-individual{font:400 11px/1.7 var(--g-sans);letter-spacing:.05em;color:var(--g-muted);margin:16px 0 24px}
 .guillo-pdp--bellagio .guillo-pdp__desc{font-size:15px;line-height:1.85}
 .guillo-pdp--bellagio .guillo-pdp__tab-panel{line-height:1.85}
