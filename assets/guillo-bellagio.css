@@ -37,3 +37,11 @@
 .bellagio-questions details p{font:400 13px/1.9 var(--g-sans);color:var(--g-muted);max-width:620px;margin:16px 0 0}
 @media(max-width:749px){.bellagio-story,.bellagio-pairings,.bellagio-questions{padding:50px 20px}.bellagio-story__inner,.bellagio-questions__inner{grid-template-columns:1fr;gap:32px}.bellagio-story__image{aspect-ratio:1/1}.bellagio-pairings__grid{gap:32px;grid-template-columns:1fr}.bellagio-companion__image img{aspect-ratio:4/3}.bellagio-companion__text{min-height:0}.bellagio-companion__add{width:100%}.guillo-pdp--bellagio .guillo-pdp__desc{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.bellagio-companion__image img{transition:none;transform:none}}
+/* Quiet product-feature strip between the buying area and the editorial story. */
+.bellagio-features{padding:44px 40px 48px;background:var(--g-paper);color:var(--g-ink)}
+.bellagio-features__list{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:32px;max-width:1320px;margin:0 auto;padding:0;list-style:none}
+.bellagio-features__item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;font:400 12px/1.65 var(--g-sans);letter-spacing:.025em}
+.bellagio-features__item span{max-width:145px}
+.bellagio-features__icon{display:block;flex-shrink:0;width:28px;height:28px}
+@media(min-width:750px) and (max-width:1050px){.bellagio-features__list{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:32px}}
+@media(max-width:749px){.bellagio-features{padding:32px 20px 38px}.bellagio-features__list{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 24px}.bellagio-features__item{gap:12px}}
