@@ -17,10 +17,16 @@
 >
 
 {%- liquid
+  assign seo_description = page_description
+  if request.page_type == 'page'
+    if page.handle == 'shipping' or page.handle == 'shipping-1'
+      assign seo_description = 'Guillo ships from Australia. View delivery estimates, shipping rates and free-delivery thresholds for your destination. Final shipping charges are shown at checkout.'
+    endif
+  endif
   assign og_title = page_title | default: shop.name
   assign og_url = canonical_url | default: request.origin
   assign og_type = 'website'
-  assign og_description = page_description | default: shop.description | default: shop.name
+  assign og_description = seo_description | default: shop.description | default: shop.name
 
   if request.page_type == 'product'
     assign og_type = 'product'
@@ -113,9 +119,9 @@
   href="{{ canonical_url }}"
 >
 
-{% if page_description %}
+{% if seo_description %}
   <meta
     name="description"
-    content="{{ page_description | escape }}"
+    content="{{ seo_description | escape }}"
   >
 {% endif %}
