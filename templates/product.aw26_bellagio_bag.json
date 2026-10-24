@@ -3,39 +3,18 @@
     "main": {
       "type": "guillo-product",
       "blocks": {
-        "feat2": {
-          "type": "feature",
-          "settings": {
-            "label": "Hand finished",
-            "icon": "dot"
-          }
-        },
-        "feat3": {
-          "type": "feature",
-          "settings": {
-            "label": "Ages with use",
-            "icon": "refresh"
-          }
-        },
-        "feat4": {
-          "type": "feature",
-          "settings": {
-            "label": "Made to travel",
-            "icon": "truck"
-          }
-        },
         "tab1": {
           "type": "tab",
           "settings": {
             "title": "Care",
-            "content": "<p>Follow the care instructions supplied with your piece. Contact Guillo if you need help.</p>"
+            "content": "<p>Follow the care instructions supplied with your item. Avoid soaking the leather or prolonged direct sunlight. Contact Guillo before using a cleaner or treatment if you are unsure.</p>"
           }
         },
         "tab2": {
           "type": "tab",
           "settings": {
             "title": "Details",
-            "content": "<p>A weekend bag with a structured profile and room for the essentials.</p>"
+            "content": ""
           }
         },
         "tab3": {
@@ -43,7 +22,7 @@
           "settings": {
             "title": "Shipping",
             "country_shipping": true,
-            "content_intl": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Singapore: 4 to 6 days. Free standard shipping over S$250.</li><li>United Kingdom: 5 to 8 days. Free standard shipping over £65.</li><li>Europe: 6 to 9 days.</li></ul><p>Every international order ships DDP. Duties and import taxes are calculated and paid at checkout, so nothing is owed on arrival.</p>",
+            "content_intl": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Singapore: 4 to 6 days. Free standard shipping over S$250.</li><li>United Kingdom: 5 to 8 days. Free standard shipping over \u00a365.</li><li>Europe: 6 to 9 days.</li></ul><p>Every international order ships DDP. Duties and import taxes are calculated and paid at checkout, so nothing is owed on arrival.</p>",
             "content": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Australia: 2 to 4 days. Free standard shipping over $100, free express over $200.</li><li>New Zealand: 2 to 4 days. Free priority express over NZ$160.</li></ul><p>Tracked door to door on every order.</p>"
           }
         },
@@ -51,145 +30,49 @@
           "type": "tab",
           "settings": {
             "title": "Exchanges & Returns",
-            "content_intl": "<p>44-day returns and exchanges. Return postage is paid by you. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
-            "content": "<p>Free exchanges and returns within 44 days across Australia and New Zealand. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>"
+            "content_intl": "<p>44-day returns and exchanges. International return postage is paid by the customer. Please return the item in its original condition.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
+            "content": "<p>Free returns and exchanges within 44 days for orders in Australia and New Zealand. Please return the item in its original condition.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>"
           }
         }
       },
       "block_order": [
-        "feat2",
-        "feat3",
-        "feat4",
         "tab1",
         "tab2",
         "tab3",
         "tab4"
       ],
       "settings": {
-        "short_description": "A weekend bag with a structured profile and room for the essentials.",
-        "fit_guide_link": "shopify://pages/fit-guide",
-        "size_guide_page": "shopify://pages/fit-guide",
-        "trust_line": "Same-day dispatch · 44-day returns and exchanges",
+        "short_description": "",
+        "fit_guide_link": "",
+        "size_guide_page": "",
+        "trust_line": "Sold individually \u00b7 Matching accessories available separately",
         "open_first_tab": false,
-        "show_pair": true,
-        "show_video_tile": true,
+        "show_pair": false,
+        "show_video_tile": false,
         "video": "shopify://files/videos/copy_0B0889A7-52A1-4972-A97D-A97AF11BEF08 2.MOV",
         "video_position": "center center",
         "video_ratio": "1 / 1",
         "video_fit": "cover",
         "video_poster_asset": "",
-        "video_caption": "Watch the fit in motion"
+        "video_caption": "The Bellagio in detail"
       }
     },
-    "wear": {
-      "type": "guillo-wear-with",
+    "story": {
+      "type": "guillo-bellagio",
       "settings": {
-        "products": [
-          "bellagio-leather-weekender-duffel-bag",
-          "the-bellagio-wash-bag",
-          "the-bellagio-passport-holder"
-        ],
-        "heading": "The matching set",
-        "wardrobe_note": "Chosen to wear together.",
-        "wardrobe_link": "",
-        "collection": "",
-        "products_to_show": 8
+        "part": "story"
       }
     },
-    "trust": {
-      "type": "guillo-trust",
-      "blocks": {
-        "card1": {
-          "type": "card",
-          "settings": {
-            "icon": "truck",
-            "title": "Fast, tracked shipping",
-            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order."
-          }
-        },
-        "card2": {
-          "type": "card",
-          "settings": {
-            "icon": "refresh",
-            "title": "Easy 44 day returns",
-            "text_intl": "44-day returns and exchanges. Return postage is paid by you. Size swaps ship same day.",
-            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
-          }
-        },
-        "card3": {
-          "type": "card",
-          "settings": {
-            "icon": "shield",
-            "title": "Duties and taxes covered",
-            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship."
-          }
-        }
-      },
-      "block_order": [
-        "card1",
-        "card2",
-        "card3"
-      ],
+    "accessories": {
+      "type": "guillo-bellagio",
       "settings": {
-        "show_press": true,
-        "press_logo_alt": "7NEWS",
-        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
-      }
-    },
-    "anatomy": {
-      "type": "guillo-anatomy",
-      "blocks": {
-        "cl1": {
-          "type": "callout_left",
-          "settings": {
-            "title": "The silhouette",
-            "text": "A weekend bag with a structured profile and room for the essentials.",
-            "spec": ""
-          }
-        },
-        "cl2": {
-          "type": "callout_left",
-          "settings": {
-            "title": "The waist",
-            "text": "See the waistband and fastening in the product views.",
-            "spec": ""
-          }
-        },
-        "cr1": {
-          "type": "callout_right",
-          "settings": {
-            "title": "The full view",
-            "text": "Explore the front, side and back views.",
-            "spec": ""
-          }
-        },
-        "cr2": {
-          "type": "callout_right",
-          "settings": {
-            "title": "Choose your size",
-            "text": "Compare your measurements with the size guide.",
-            "spec": ""
-          }
-        }
-      },
-      "block_order": [
-        "cl1",
-        "cl2",
-        "cr1",
-        "cr2"
-      ],
-      "settings": {
-        "heading": "The shape, considered.",
-        "image_alt": "",
-        "image_position": "center 25%",
-        "use_product_image": true,
-        "image": ""
+        "part": "accessories"
       }
     },
     "reviews": {
       "type": "guillo-pdp-reviews",
       "settings": {
-        "heading": "Worn, washed, reported back.",
+        "heading": "Customer reviews",
         "write_link": "",
         "all_link": "",
         "fit_marker": 50,
@@ -199,78 +82,18 @@
         "reviews_visible": 3
       }
     },
-    "faq": {
-      "type": "guillo-faq",
-      "blocks": {
-        "q1": {
-          "type": "faq",
-          "settings": {
-            "question": "What fits inside?",
-            "answer": "<p>It is designed to carry the essentials. Dimensions are listed in the product details above.</p>"
-          }
-        },
-        "q2": {
-          "type": "faq",
-          "settings": {
-            "question": "How do I care for it?",
-            "answer": "<p>Spot clean with a damp cloth and air dry. Keep it away from prolonged direct sunlight.</p>"
-          }
-        },
-        "q3": {
-          "type": "faq",
-          "settings": {
-            "question": "Can I travel with it?",
-            "answer": "<p>It is built with travel in mind. Check your airline's carry on limits against the dimensions in the product details.</p>"
-          }
-        },
-        "q4": {
-          "type": "faq",
-          "settings": {
-            "question": "What should I pair it with?",
-            "answer": "<p>The rest of the travel edit. Pack the Luxe Chino and a polo and you are ready.</p>"
-          }
-        },
-        "q5": {
-          "type": "faq",
-          "settings": {
-            "question": "What is your return policy?",
-            "answer": "<p>Complimentary returns &amp; exchanges within 44 days for AU/NZ orders. International orders: 44-day returns and exchanges, return shipping paid by the customer. All returns via our self-service portal, no emails, no waiting.</p>"
-          }
-        },
-        "q6": {
-          "type": "faq",
-          "settings": {
-            "question": "When will it arrive?",
-            "answer": "<p>All orders dispatched within 24 hours. Standard delivery to Australia in 2 to 8 business days. Express in 1 to 4. International shipping available to Singapore, UK, US and Europe.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "q1",
-        "q2",
-        "q3",
-        "q4",
-        "q5",
-        "q6"
-      ],
+    "questions": {
+      "type": "guillo-bellagio",
       "settings": {
-        "layout": "split",
-        "anchor": "",
-        "eyebrow": "Questions",
-        "heading": "Before you order.",
-        "text": "For sizing or order questions, contact Guillo.",
-        "link_label": "Ask a question",
-        "link": "shopify://pages/contact",
-        "open_first": false
+        "part": "questions"
       }
     }
   },
   "order": [
     "main",
-    "wear",
-    "trust",
-    "anatomy",
+    "story",
+    "accessories",
     "reviews",
-    "faq"
+    "questions"
   ]
 }

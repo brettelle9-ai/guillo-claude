@@ -10,6 +10,10 @@
 {% endcomment %}
 
 {%- liquid
+  assign bellagio_page = false
+  if product.handle == 'bellagio-leather-weekender-duffel-bag' or product.handle == 'the-bellagio-wash-bag' or product.handle == 'the-bellagio-passport-holder'
+    assign bellagio_page = true
+  endif
   assign current_variant = product.selected_or_first_available_variant
   assign film_block = section.blocks | where: 'type', 'product_film' | first
   assign film_settings = section.settings
@@ -48,6 +52,10 @@
   endif
   if gr_products == blank
     assign gr_products = product.metafields.custom.colour_group.value
+  endif
+
+  if bellagio_page
+    assign gr_products = blank
   endif
 
   assign gr_reviews = '' | split: ''
@@ -170,6 +178,22 @@
     endfor
   endif
 
+  # Bellagio pieces are individual products, not styles of a bundled set.
+  if bellagio_page
+    assign group = blank
+    assign colour_group = blank
+    assign group_title = product.title
+    assign style_name = ''
+    case product.handle
+      when 'bellagio-leather-weekender-duffel-bag'
+        assign short_desc = 'A genuine-leather weekender with a dedicated 16-inch laptop sleeve, organised pockets and a trolley sleeve. Carry it by hand, over your shoulder or on your suitcase.'
+      when 'the-bellagio-wash-bag'
+        assign short_desc = 'Keep your grooming essentials together in genuine leather, with a full zip opening and a wipe-clean lining.'
+      when 'the-bellagio-passport-holder'
+        assign short_desc = 'Your passport and cards, together in a slim genuine-leather holder that slips into a jacket pocket.'
+    endcase
+  endif
+
   assign size_option = null
   assign colour_option = null
   for option in product.options_with_values
@@ -193,12 +217,13 @@
     assign size_tag_label = section.settings.interest_size_tag | default: 'Register'
   endif
 -%}
+{%- if bellagio_page -%}{{ 'guillo-bellagio.css' | asset_url | stylesheet_tag }}{%- endif -%}
 {%- if stone_test -%}
   {{ 'guillo-luxe.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'guillo-luxe.js' | asset_url }}" defer></script>
 {%- endif -%}
 <section
-  class="guillo-pdp guillo-pdp--{{ avail_mode }}{% if stone_test %} guillo-pdp--stone{% endif %}"
+  class="guillo-pdp guillo-pdp--{{ avail_mode }}{% if bellagio_page %} guillo-pdp--bellagio{% endif %}{% if stone_test %} guillo-pdp--stone{% endif %}"
   data-guillo-pdp
   data-avail-mode="{{ avail_mode }}"
   data-interest-cta="{{ section.settings.interest_cta | default: 'Register your interest' | escape }}"
@@ -325,6 +350,10 @@
         <span class="guillo-pdp__price" data-price>{{ current_variant.price | money_with_currency }}</span>
       </div>
 
+      {%- if bellagio_page -%}
+        <p class="bellagio-individual">Sold individually · Matching accessories available below</p>
+      {%- endif -%}
+
       {%- if avail_mode != 'normal' -%}
         <div class="guillo-pdp__avail guillo-pdp__avail--{{ avail_mode }}">
           {%- if section.settings.avail_eyebrow != blank -%}
@@ -376,7 +405,7 @@
         <div class="guillo-pdp__desc-wrap" data-desc>
           <p class="guillo-pdp__desc" data-desc-text>
             {{ short_desc }}
-            {%- if section.settings.fit_guide_link != blank %}
+            {%- if section.settings.fit_guide_link != blank and bellagio_page == false %}
               <a href="{{ section.settings.fit_guide_link }}">Learn more.</a>
             {%- endif -%}
           </p>
@@ -660,12 +689,12 @@
           data-product-image="{{ product.featured_image | image_url: width: 400 }}"
           data-product-price="{{ product.price | money }}"
         >
-          <button type="button" class="guillo-pdp__notify-back" data-notify-close>&larr; Back to sizes</button>
+          <button type="button" class="guillo-pdp__notify-back" data-notify-close>&larr; {% if bellagio_page %}Back to product{% else %}Back to sizes{% endif %}</button>
           <p class="guillo-pdp__notify-title">
             {%- if avail_mode == 'interest' -%}
               {{ section.settings.interest_panel_title | default: 'Register your interest in size' }} <span data-notify-size-label></span>
             {%- else -%}
-              Notify me when size <span data-notify-size-label></span> is back in stock
+              {% if bellagio_page %}Notify me when this item is back in stock{% else %}Notify me when size <span data-notify-size-label></span> is back in stock{% endif %}
             {%- endif -%}
           </p>
           <p class="guillo-pdp__notify-sub">
@@ -714,7 +743,7 @@
           with no pair discount, so the section setting is only an override to
           hide it.
         {%- endcomment -%}
-        {%- if section.settings.show_pair and stone_test == false -%}
+        {%- if section.settings.show_pair and stone_test == false and bellagio_page == false -%}
           {% render 'guillo-pair-builder', product: product %}
         {%- endif -%}
 
@@ -870,13 +899,13 @@
         </div>
       {%- endif -%}
       {%- endcapture -%}
-      {%- unless stone_test or capri_page -%}{{ gstone_video }}{%- endunless -%}
+      {%- unless stone_test or capri_page or bellagio_page -%}{{ gstone_video }}{%- endunless -%}
 
-      {%- unless stone_test -%}{{ gstone_features }}{%- endunless -%}
+      {%- unless stone_test or bellagio_page -%}{{ gstone_features }}{%- endunless -%}
 
 
 
-      {%- if fys_block -%}
+      {%- if fys_block and bellagio_page == false -%}
         <div class="guillo-pdp__sizeguide" {{ fys_block.shopify_attributes }}>
           {% render 'guillo-find-your-size',
             settings: fys_block.settings,
@@ -905,9 +934,15 @@
             {%- liquid
               assign tab_cc = localization.country.iso_code | default: 'ZZ'
               assign tab_content = block.settings.content
+              if bellagio_page and block.settings.title == 'Details'
+                assign tab_content = product.description
+              endif
               unless tab_cc == 'AU' or tab_cc == 'NZ'
                 if block.settings.content_intl != blank
-                  assign tab_content = block.settings.content_intl
+                  assign tab_content = block.settings.content
+              if bellagio_page and block.settings.title == 'Details'
+                assign tab_content = product.description
+              endif_intl
                 endif
               endunless
             -%}
@@ -950,9 +985,15 @@
               # separate wording for every other market.
               assign tab_cc = localization.country.iso_code | default: 'ZZ'
               assign tab_content = block.settings.content
+              if bellagio_page and block.settings.title == 'Details'
+                assign tab_content = product.description
+              endif
               unless tab_cc == 'AU' or tab_cc == 'NZ'
                 if block.settings.content_intl != blank
-                  assign tab_content = block.settings.content_intl
+                  assign tab_content = block.settings.content
+              if bellagio_page and block.settings.title == 'Details'
+                assign tab_content = product.description
+              endif_intl
                 endif
               endunless
             -%}

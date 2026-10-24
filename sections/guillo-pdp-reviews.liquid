@@ -45,6 +45,10 @@
     assign gr_products = product.metafields.custom.colour_group.value
   endif
 
+  if product.handle == 'bellagio-leather-weekender-duffel-bag' or product.handle == 'the-bellagio-wash-bag' or product.handle == 'the-bellagio-passport-holder'
+    assign gr_products = blank
+  endif
+
   assign gr_reviews = '' | split: ''
   assign gr_count = 0
   assign gr_weighted = 0

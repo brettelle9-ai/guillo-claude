@@ -1,0 +1,39 @@
+/* Bellagio only: product-first buying panel, warm editorial detail and optional accessories. */
+.guillo-pdp--bellagio .guillo-pdp__title{font-family:var(--g-display,var(--g-serif));font-weight:400;font-size:clamp(32px,3.2vw,48px);line-height:1.08;letter-spacing:-.02em}
+.guillo-pdp--bellagio .bellagio-individual{font:400 11px/1.7 var(--g-sans);letter-spacing:.05em;color:var(--g-muted);margin:16px 0 24px}
+.guillo-pdp--bellagio .guillo-pdp__desc{font-size:15px;line-height:1.85}
+.guillo-pdp--bellagio .guillo-pdp__tab-panel{line-height:1.85}
+.guillo-pdp--bellagio .guillo-pdp__tab-panel h3{font-size:16px;font-weight:500;margin:24px 0 10px}
+.guillo-pdp--bellagio .guillo-pdp__tabs{margin-top:30px}
+.bellagio-story{background:#eeece7;color:#172026;padding:90px 40px}
+.bellagio-story__inner{max-width:1320px;margin:auto;display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(36px,7vw,100px);align-items:center}
+.bellagio-story__image{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+.bellagio-kicker{display:block;font:400 11px/1.6 var(--g-sans);text-transform:uppercase;letter-spacing:.18em;margin:0 0 20px}
+.bellagio-heading{font:400 clamp(32px,4vw,52px)/1.1 var(--g-display,var(--g-serif));letter-spacing:-.02em;margin:0 0 24px;max-width:560px}
+.bellagio-story__intro{font:400 15px/1.9 var(--g-sans);margin:0 0 30px;max-width:480px}
+.bellagio-detail{padding:20px 0;border-top:1px solid #17202626}
+.bellagio-detail h3{font:500 14px/1.5 var(--g-sans);margin:0 0 7px}
+.bellagio-detail p{font:400 13px/1.85 var(--g-sans);margin:0;color:#434b4f;max-width:470px}
+.bellagio-pairings{padding:88px 40px;background:var(--g-paper);color:var(--g-ink)}
+.bellagio-pairings__inner,.bellagio-questions__inner{max-width:1320px;margin:auto}
+.bellagio-pairings__intro{font:400 14px/1.8 var(--g-sans);color:var(--g-muted);margin:0 0 36px}
+.bellagio-pairings__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px;max-width:1040px}
+.bellagio-companion{min-width:0}
+.bellagio-companion__image{display:block;overflow:hidden;background:#eeece7}
+.bellagio-companion__image img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .8s ease}
+.bellagio-companion__image:hover img{transform:scale(1.025)}
+.bellagio-companion__head{display:flex;justify-content:space-between;gap:15px;margin:22px 0 10px;align-items:baseline}
+.bellagio-companion__head h3{font:400 clamp(20px,2vw,27px)/1.2 var(--g-display,var(--g-serif));margin:0}
+.bellagio-companion a{color:inherit}
+.bellagio-companion__head a{text-decoration:none}
+.bellagio-companion__price{white-space:nowrap;font:400 13px/1.6 var(--g-sans)}
+.bellagio-companion__text{font:400 13px/1.8 var(--g-sans);color:var(--g-muted);margin:0 0 20px;min-height:47px}
+.bellagio-companion__add{background:var(--g-ink);color:var(--g-paper);border:1px solid var(--g-ink);padding:14px 22px;min-height:48px;font:400 11px/1.5 var(--g-sans);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:background .3s}
+.bellagio-companion__add:hover{background:#34434c}
+.bellagio-questions{padding:70px 40px 90px;background:var(--g-paper);color:var(--g-ink);border-top:1px solid var(--g-line)}
+.bellagio-questions__inner{display:grid;grid-template-columns:1fr 1.4fr;gap:60px}
+.bellagio-questions details{border-bottom:1px solid var(--g-line);padding:20px 0}
+.bellagio-questions summary{cursor:pointer;font:400 14px/1.6 var(--g-sans)}
+.bellagio-questions details p{font:400 13px/1.9 var(--g-sans);color:var(--g-muted);max-width:620px;margin:16px 0 0}
+@media(max-width:749px){.bellagio-story,.bellagio-pairings,.bellagio-questions{padding:50px 20px}.bellagio-story__inner,.bellagio-questions__inner{grid-template-columns:1fr;gap:32px}.bellagio-story__image{aspect-ratio:1/1}.bellagio-pairings__grid{gap:32px;grid-template-columns:1fr}.bellagio-companion__image img{aspect-ratio:4/3}.bellagio-companion__text{min-height:0}.bellagio-companion__add{width:100%}.guillo-pdp--bellagio .guillo-pdp__desc{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.bellagio-companion__image img{transition:none;transform:none}}

@@ -1,0 +1,129 @@
+{%- liquid
+  assign is_weekender = false
+  assign is_wash = false
+  assign is_passport = false
+  case product.handle
+    when 'bellagio-leather-weekender-duffel-bag'
+      assign is_weekender = true
+      assign story_heading = section.settings.weekender_heading
+      assign story_intro = 'The bag you reach for when a suitcase is more than you need. Genuine leather, a structured silhouette and a place for the things you want close.'
+      assign detail_titles = 'Take your work with you.|Move through the terminal.|Keep the small things in order.' | split: '|'
+      assign detail_texts = 'A dedicated sleeve for a laptop up to 16 inches keeps your device separate from the main compartment.|Slide the trolley sleeve over your suitcase handle, or switch between the top handles and adjustable shoulder strap.|Internal zip and slip pockets, side pockets and a back zip pocket keep valuables and travel documents within reach.' | split: '|'
+    when 'the-bellagio-wash-bag'
+      assign is_wash = true
+      assign story_heading = section.settings.wash_heading
+      assign story_intro = 'Keep the daily routine together. A genuine-leather wash bag in Dark Coffee, made for the bathroom counter and the inside of your weekender.'
+      assign detail_titles = 'A place for the daily essentials.|Open it. Find it.|Made for the inside, too.' | split: '|'
+      assign detail_texts = 'The roomy interior holds your grooming essentials together, rather than scattered through your luggage.|A full zip closure gives you access to the contents and keeps them contained when packed.|The wipe-clean lining makes cleaning the interior straightforward. Keep the leather exterior dry.' | split: '|'
+    when 'the-bellagio-passport-holder'
+      assign is_passport = true
+      assign story_heading = section.settings.passport_heading
+      assign story_intro = 'Passport and cards, ready to hand. Genuine leather in Dark Coffee, with a slim profile that sits neatly inside a jacket pocket.'
+      assign detail_titles = 'Your documents, together.|Less to carry.|A considered finishing touch.' | split: '|'
+      assign detail_texts = 'Keep your passport and cards in one holder, ready for the next part of the journey.|The slim, lightweight profile fits into a jacket pocket without the bulk of a separate travel organiser.|The Dark Coffee leather complements the Bellagio Wash Bag. Both accessories are available individually.' | split: '|'
+  endcase
+  assign related_handles = 'bellagio-leather-weekender-duffel-bag,the-bellagio-wash-bag,the-bellagio-passport-holder' | split: ','
+  assign story_image = section.settings.image | default: product.images[2] | default: product.featured_image
+-%}
+{%- if is_weekender or is_wash or is_passport -%}
+{%- case section.settings.part -%}
+{%- when 'story' -%}
+<section class="bellagio-story" aria-label="{{ product.title | escape }} details">
+  <div class="bellagio-story__inner">
+    {%- if story_image != blank -%}
+      {{ story_image | image_url: width: 1500 | image_tag: class: 'bellagio-story__image', loading: 'lazy', widths: '400, 600, 900, 1200, 1500', sizes: '(min-width: 750px) 50vw, 100vw', alt: product.title }}
+    {%- endif -%}
+    <div>
+      <span class="bellagio-kicker">{{ section.settings.eyebrow | escape }}</span>
+      <h2 class="bellagio-heading">{{ story_heading | escape }}</h2>
+      <p class="bellagio-story__intro">{{ story_intro }}</p>
+      {%- for title in detail_titles -%}
+        <div class="bellagio-detail"><h3>{{ title }}</h3><p>{{ detail_texts[forloop.index0] }}</p></div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- when 'accessories' -%}
+<section class="bellagio-pairings" aria-label="Optional matching Bellagio products">
+  <div class="bellagio-pairings__inner">
+    <span class="bellagio-kicker">{{ section.settings.pairings_eyebrow | escape }}</span>
+    <h2 class="bellagio-heading">{{ section.settings.pairings_heading | escape }}</h2>
+    <p class="bellagio-pairings__intro">{{ section.settings.pairings_text | escape }}</p>
+    <div class="bellagio-pairings__grid">
+      {%- for handle in related_handles -%}
+        {%- assign companion = all_products[handle] -%}
+        {%- if companion != blank and companion.id != product.id -%}
+          {%- assign companion_variant = companion.selected_or_first_available_variant -%}
+          <article class="bellagio-companion">
+            <a class="bellagio-companion__image" href="{{ companion.url }}" aria-label="View {{ companion.title | escape }}">
+              {%- if companion.featured_image != blank -%}
+                {{ companion.featured_image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '360, 540, 750, 1000', sizes: '(min-width: 750px) 45vw, 100vw', alt: companion.title }}
+              {%- endif -%}
+            </a>
+            <div class="bellagio-companion__head"><h3><a href="{{ companion.url }}">{{ companion.title | escape }}</a></h3><span class="bellagio-companion__price">{{ companion_variant.price | money_with_currency }}</span></div>
+            <p class="bellagio-companion__text">
+              {%- case handle -%}
+                {%- when 'the-bellagio-wash-bag' -%}Genuine leather, a full zip opening and a wipe-clean lining for your grooming essentials.
+                {%- when 'the-bellagio-passport-holder' -%}Keep your passport and cards together in a slim genuine-leather holder.
+                {%- else -%}A genuine-leather weekender with a 16-inch laptop sleeve, organised pockets and a trolley sleeve.
+              {%- endcase -%}
+            </p>
+            {%- if companion.available and companion.has_only_default_variant -%}
+              {%- capture form_id -%}BellagioCompanion-{{ section.id }}-{{ companion.id }}{%- endcapture -%}
+              {%- form 'product', companion, id: form_id -%}
+                <input type="hidden" name="id" value="{{ companion_variant.id }}">
+                <input type="hidden" name="quantity" value="1">
+                <button class="bellagio-companion__add" type="submit">Add {{ companion.title | remove: 'The Bellagio ' | escape }} to bag</button>
+              {%- endform -%}
+            {%- else -%}
+              <a class="g-link" href="{{ companion.url }}">{% if companion.available %}Choose options{% else %}View availability{% endif %}</a>
+            {%- endif -%}
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- when 'questions' -%}
+<section class="bellagio-questions" aria-label="Bellagio product questions">
+  <div class="bellagio-questions__inner">
+    <div><span class="bellagio-kicker">The details</span><h2 class="bellagio-heading">{{ section.settings.questions_heading | escape }}</h2><a class="g-link" href="{{ pages.contact.url | default: '/pages/contact' }}">Ask us a question</a></div>
+    <div>
+      <details><summary>What is included?</summary><p>{{ product.title | escape }} is sold individually. The price shown is for this item only. The other Bellagio products are optional additions, each with its own price and add-to-bag button above.</p></details>
+      {%- if is_weekender -%}
+        <details><summary>What can I carry in it?</summary><p>The main compartment has room for your travel essentials, with a dedicated sleeve for a laptop up to 16 inches. Internal zip and slip pockets, side pockets and a rear zip pocket keep smaller items organised.</p></details>
+        <details><summary>How can I carry it?</summary><p>Use the top handles, the adjustable shoulder strap, or the trolley sleeve to attach it to your suitcase handle.</p></details>
+        <details><summary>Can I use it as airline carry-on?</summary><p>Check your airline's current size and weight limits before you travel. The 60 × 40 × 40 cm figure in the product details is the package size, not a confirmed measurement of the bag. Contact us if you need the bag's measurements for a particular airline.</p></details>
+      {%- elsif is_wash -%}
+        <details><summary>What is the lining like?</summary><p>The interior has a wipe-clean lining, with a full zip closure to keep grooming essentials together. Avoid getting the leather exterior wet.</p></details>
+        <details><summary>What colour is it?</summary><p>Dark Coffee. The Bellagio Passport Holder is also available in Dark Coffee and is sold separately.</p></details>
+      {%- else -%}
+        <details><summary>What does it hold?</summary><p>Your passport and cards. The slim, lightweight profile is designed to slip into a jacket pocket.</p></details>
+        <details><summary>What colour is it?</summary><p>Dark Coffee. The matching Bellagio Wash Bag is available separately.</p></details>
+      {%- endif -%}
+      <details><summary>What is it made from?</summary><p>Genuine leather. See the product details above for the features of this individual piece.</p></details>
+      <details><summary>How should I care for the leather?</summary><p>Follow the care instructions supplied with your item. Avoid soaking the leather or leaving it in prolonged direct sunlight. Contact Guillo before using a cleaner or treatment if you are unsure.</p></details>
+      <details><summary>Where can I check delivery and returns?</summary><p>The Shipping and Exchanges &amp; Returns panels above show the information for your location. You can also visit our <a href="{{ pages.shipping.url | default: '/policies/shipping-policy' }}">shipping information</a> or <a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}">returns policy</a>.</p></details>
+    </div>
+  </div>
+</section>
+{%- endcase -%}
+{%- endif -%}
+{% schema %}
+{
+  "name": "Bellagio product story",
+  "settings": [
+    {"type":"select","id":"part","label":"Section","options":[{"value":"story","label":"Product story"},{"value":"accessories","label":"Matching accessories"},{"value":"questions","label":"Product questions"}],"default":"story"},
+    {"type":"text","id":"eyebrow","label":"Story eyebrow","default":"The Bellagio"},
+    {"type":"image_picker","id":"image","label":"Story image","info":"Leave empty to use this product's own third image."},
+    {"type":"text","id":"weekender_heading","label":"Weekender heading","default":"For the days away."},
+    {"type":"text","id":"wash_heading","label":"Wash bag heading","default":"Your routine, ready to go."},
+    {"type":"text","id":"passport_heading","label":"Passport holder heading","default":"Keep the journey together."},
+    {"type":"text","id":"pairings_eyebrow","label":"Accessories eyebrow","default":"The finishing pieces"},
+    {"type":"text","id":"pairings_heading","label":"Accessories heading","default":"Made to go with it."},
+    {"type":"text","id":"pairings_text","label":"Accessories text","default":"Choose the pieces you need. Each is sold separately."},
+    {"type":"text","id":"questions_heading","label":"Questions heading","default":"Before you go."}
+  ],
+  "presets":[{"name":"Bellagio product story"}]
+}
+{% endschema %}
