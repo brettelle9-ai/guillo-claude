@@ -63,7 +63,6 @@
 .guillo-pdp--bellagio .guillo-pdp__titlerow{margin-bottom:12px}
 .guillo-pdp--bellagio .guillo-pdp__desc-wrap{position:relative;margin:8px 0 12px}
 .guillo-pdp--bellagio .guillo-pdp__desc{font-size:13px;line-height:1.75;color:rgba(23,32,38,.65)}
-.guillo-pdp--bellagio .guillo-pdp__desc-wrap:not(.is-clamped) .guillo-pdp__desc{display:inline}
 .guillo-pdp--bellagio .guillo-pdp__desc-more{display:inline-block;margin:0 0 0 6px;padding:0;border:0;background:transparent;color:rgba(23,32,38,.75);font:400 11px/1.75 var(--g-sans);text-decoration:underline;text-underline-offset:3px}
 .guillo-pdp--bellagio .guillo-pdp__desc-wrap.is-clamped .guillo-pdp__desc-more{position:absolute;right:0;bottom:0;margin:0;padding-left:18px;background:linear-gradient(90deg,transparent,var(--g-paper) 18px)}
 .guillo-pdp--bellagio .guillo-pdp__desc-more[hidden]{display:none}
