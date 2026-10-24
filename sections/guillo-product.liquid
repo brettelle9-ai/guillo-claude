@@ -350,9 +350,6 @@
         <span class="guillo-pdp__price" data-price>{{ current_variant.price | money_with_currency }}</span>
       </div>
 
-      {%- if bellagio_page -%}
-        <p class="bellagio-individual">Sold individually · Matching accessories available below</p>
-      {%- endif -%}
 
       {%- if avail_mode != 'normal' -%}
         <div class="guillo-pdp__avail guillo-pdp__avail--{{ avail_mode }}">
@@ -402,14 +399,14 @@
           short description never gets a pointless toggle, and with no JS the
           full text simply shows.
         {%- endcomment -%}
-        <div class="guillo-pdp__desc-wrap"{% unless bellagio_page %} data-desc{% endunless %}>
-          <p class="guillo-pdp__desc" data-desc-text>
+        <div class="guillo-pdp__desc-wrap" data-desc>
+          <p class="guillo-pdp__desc" id="GuilloShortDescription-{{ section.id }}" data-desc-text>
             {{ short_desc }}
             {%- if section.settings.fit_guide_link != blank and bellagio_page == false %}
               <a href="{{ section.settings.fit_guide_link }}">Learn more.</a>
             {%- endif -%}
           </p>
-          <button type="button" class="guillo-pdp__desc-more" data-desc-toggle hidden>Read more</button>
+          <button type="button" class="guillo-pdp__desc-more" data-desc-toggle aria-expanded="false" aria-controls="GuilloShortDescription-{{ section.id }}" hidden>Read more</button>
         </div>
       {%- endif -%}
       <div class="guillo-pdp__rule"></div>
@@ -1309,10 +1306,12 @@
         descWrap.classList.toggle('is-clamped', overflows);
         descToggle.hidden = !overflows;
         descToggle.textContent = 'Read more';
+        descToggle.setAttribute('aria-expanded', 'false');
       };
       descToggle.addEventListener('click', () => {
         const clamped = descWrap.classList.toggle('is-clamped');
         descToggle.textContent = clamped ? 'Read more' : 'Read less';
+        descToggle.setAttribute('aria-expanded', String(!clamped));
       });
       measure();
       window.addEventListener('resize', measure);
