@@ -402,7 +402,7 @@
           short description never gets a pointless toggle, and with no JS the
           full text simply shows.
         {%- endcomment -%}
-        <div class="guillo-pdp__desc-wrap" data-desc>
+        <div class="guillo-pdp__desc-wrap"{% unless bellagio_page %} data-desc{% endunless %}>
           <p class="guillo-pdp__desc" data-desc-text>
             {{ short_desc }}
             {%- if section.settings.fit_guide_link != blank and bellagio_page == false %}
