@@ -47,7 +47,12 @@
 @media(max-width:749px){.bellagio-features{padding:32px 20px 38px}.bellagio-features__list{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 24px}.bellagio-features__item{gap:12px}}
 
 /* Features sit within the purchase panel, immediately after the detail tabs. */
-.guillo-pdp--bellagio .bellagio-features{padding:30px 0 0;margin-top:26px;border-top:1px solid var(--g-line);background:transparent}
+.guillo-pdp--bellagio .bellagio-features{padding:30px 0 0;margin-top:0;border-top:0;background:transparent}
 .guillo-pdp--bellagio .bellagio-features__list{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 18px}
 .guillo-pdp--bellagio .bellagio-features__item{font-size:11px;gap:12px}
 @media(max-width:749px){.guillo-pdp--bellagio .bellagio-features__list{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 22px}.guillo-pdp--bellagio .bellagio-features__item{font-size:12px}}
+
+.guillo-pdp--bellagio .bellagio-features__divider{display:block;width:100%;height:0;padding:0;margin:26px 0 0;border:0;border-top:1px solid var(--g-line)}
+.bellagio-features__icon{transition:transform .55s cubic-bezier(.22,1,.36,1),color .55s ease}
+@media(hover:hover) and (pointer:fine){.bellagio-features__item:hover .bellagio-features__icon{transform:translateY(-2px);color:var(--g-bronze,var(--g-ink))}}
+@media(prefers-reduced-motion:reduce){.bellagio-features__icon{transition:none}.bellagio-features__item:hover .bellagio-features__icon{transform:none}}

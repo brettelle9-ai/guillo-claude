@@ -1,6 +1,7 @@
 {%- comment -%}Weekender features verified against its product description.{%- endcomment -%}
 {%- assign feature_labels = 'Genuine leather|16-inch laptop sleeve|Suitcase trolley sleeve|Adjustable shoulder strap|Organised inner pockets|Rear zip pocket' | split: '|' -%}
-<div class="bellagio-features">
+<hr class="bellagio-features__divider">
+<div class="bellagio-features" data-bellagio-features>
   <ul class="bellagio-features__list" aria-label="Bellagio Weekender features">
     {%- for label in feature_labels -%}
       <li class="bellagio-features__item">
@@ -19,3 +20,5 @@
     {%- endfor -%}
   </ul>
 </div>
+
+<script src="{{ 'guillo-bellagio-features.js' | asset_url }}" defer></script>
