@@ -134,6 +134,7 @@
         "featured_products": [
           "milano-pinstripe-shirt",
           "the-luxe-chino-stone",
+          "the-classico-raglan-tee-blue",
           "firenze-chevron-shirt",
           "the-signore-chino-latte",
           "the-portofino-polo-black",
@@ -141,7 +142,7 @@
           "amalfi-short-sleeve-shirt",
           "siracusa-short-sleeve-slim-fit-shirt"
         ],
-        "card_media_default": "auto",
+        "card_media_default": "image",
         "campaign_one_heading": "A certain presence.",
         "campaign_one_button": "Shop the collection",
         "campaign_one_link": "shopify://collections/new-arrivals",
