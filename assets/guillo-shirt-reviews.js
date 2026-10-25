@@ -45,7 +45,7 @@
       if (!response.ok) throw new Error('Reviews unavailable');
       const data = await response.json();
       if (!Array.isArray(data.reviews)) throw new Error('Invalid reviews response');
-      collected.push(...data.reviews.filter(r => r.status === 'Published' && !r.is_store).map(r => ({...r, shirtName:product.name})));
+      collected.push(...data.reviews.filter(r => ['Published', 'Featured'].includes(r.status) && !r.is_store).map(r => ({...r, shirtName:product.name})));
       if (!data.has_more || !data.reviews.length) return collected;
     }
   }
