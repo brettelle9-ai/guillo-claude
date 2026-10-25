@@ -19,6 +19,7 @@
  elsif key == 'classico-tees'
   assign pool = collections['t-shirts'].products
  endif
+ assign printed_handles = 'firenze-chevron-shirt,milano-pinstripe-shirt,amalfi-short-sleeve-shirt,como-short-sleeve-shirt,the-santorini-grandad-collar'
  assign group = product.metafields.custom.product_group.value
  capture group_images
   for img in group.custom_images.value
@@ -54,6 +55,58 @@
      endif
     endfor
    endif
+   # Card and quick-add swatches use colour chips for solid garments.
+   # Main product selectors render separate snippets and keep their existing imagery.
+   assign solid = false
+   if key == 'capri-shorts' or key contains 'polos'
+    assign solid = true
+   elsif key == 'shirts'
+    unless printed_handles contains sibling.handle
+     assign solid = true
+    endunless
+   endif
+   assign colour = sibling.metafields.custom.colour_name.value | downcase
+   for tag in sibling.tags
+    if tag contains 'colour:'
+     assign colour = tag | remove: 'colour:' | downcase | strip
+     break
+    endif
+   endfor
+   assign swatch = blank
+   for member in group.products.value
+    if member.id == sibling.id
+     assign swatch = group.swatch_colours.value[forloop.index0]
+     break
+    endif
+   endfor
+   if swatch == blank
+    case colour
+     when 'black'
+      assign swatch = '#1b1b1d'
+     when 'white'
+      assign swatch = '#faf9f6'
+     when 'navy'
+      assign swatch = '#202b41'
+     when 'blue'
+      assign swatch = '#9ebacb'
+     when 'red'
+      assign swatch = '#8b2938'
+     when 'grey', 'gray'
+      assign swatch = '#a3a5a6'
+     when 'stone'
+      assign swatch = '#d7ccb5'
+     when 'olive'
+      assign swatch = '#7b8062'
+     when 'reef'
+      assign swatch = '#9abbb9'
+    endcase
+   endif
+   if solid and swatch == blank
+    assign solid = false
+   endif
+   if solid and colour != blank
+    assign name = colour | capitalize
+   endif
    assign x = 58
    assign y = 61
    assign zoom = 9
@@ -84,7 +137,7 @@
    assign left = x | times: zoom | minus: 50
    assign top = y | times: height | divided_by: 100.0 | minus: 50
   -%}
-  <a class="g-family-option{% if sibling.id == product.id %} is-current{% endif %}" href="{{ sibling.url }}" {% if quick %}data-gq-sibling="{{ sibling.handle }}"{% else %}data-gc-quick-handle="{{ sibling.handle }}"{% endif %} aria-label="{{ sibling.title | escape }} — {{ name | escape }}{% if key == 'capri-shorts' %}{% if sibling.handle contains '5in' %} · 5 inch{% else %} · 7 inch{% endif %}{% endif %}" title="{{ name | escape }}" {% if sibling.id == product.id %}aria-current="true"{% endif %}><span style="--swatch-width:{{ width }}%;--swatch-left:-{{ left }}%;--swatch-top:-{{ top }}%;{% if zoom == 1 %}--swatch-fit:cover{% endif %}"><img src="{{ image_url }}" alt="{{ name | escape }}" width="60" height="60" loading="lazy"></span></a>
+  <a class="g-family-option{% if sibling.id == product.id %} is-current{% endif %}" href="{{ sibling.url }}" {% if quick %}data-gq-sibling="{{ sibling.handle }}"{% else %}data-gc-quick-handle="{{ sibling.handle }}"{% endif %} aria-label="{{ sibling.title | escape }} — {{ name | escape }}{% if key == 'capri-shorts' %}{% if sibling.handle contains '5in' %} · 5 inch{% else %} · 7 inch{% endif %}{% endif %}" title="{{ name | escape }}" {% if sibling.id == product.id %}aria-current="true"{% endif %}><span {% if solid %}data-solid-swatch="{{ colour | escape }}" style="background:{{ swatch | escape }}"{% else %}style="--swatch-width:{{ width }}%;--swatch-left:-{{ left }}%;--swatch-top:-{{ top }}%;{% if zoom == 1 %}--swatch-fit:cover{% endif %}"{% endif %}>{% unless solid %}<img src="{{ image_url }}" alt="{{ name | escape }}" width="60" height="60" loading="lazy">{% endunless %}</span></a>
  {%- endif -%}
 {%- endfor -%}
 </div>
