@@ -23,7 +23,18 @@
   elsif product.tags contains 'short-sleeve'
     assign style = 'Short sleeve'
   endif
-  if product.tags contains 'fit:muscle'
+  if product.tags contains 'garment:shirt'
+    assign fit = 'Athletic fit'
+  elsif product.handle contains 'luxe-chino'
+    assign fit = 'Tailored fit'
+  elsif product.handle contains 'signore-chino'
+    assign fit = 'Classic fit, subtly slim'
+  elsif product.handle contains 'capri-chino-short'
+    assign fit = 'Stretch & lightweight'
+  elsif product.handle contains 'portofino'
+    assign fit = 'English knit'
+    assign style = '100% cotton'
+  elsif product.tags contains 'fit:muscle'
     assign fit = 'Muscle fit'
   elsif product.tags contains 'fit:slim'
     assign fit = 'Slim fit'
@@ -55,8 +66,8 @@
   <div class="gc-card__details">
     <div class="gc-card__title-row"><h2><a href="{{ editorial_url }}">{{ product.title | remove_first: 'The ' | escape }}</a></h2></div>
     {% render 'guillo-family-options', product: product %}
-    <p class="gc-card__subtitle">{{ fit }}{% if fit != blank and style != blank %} · {% endif %}{{ style }}{% if colour != blank %} · {{ colour | capitalize }}{% endif %}</p>
-    {%- if rating != blank and rating > 0 -%}<span class="gc-card__rating" aria-label="Rated {{ rating }} out of five">{{ rating | round: 1 }} <span aria-hidden="true">★★★★★</span></span>{%- endif -%}
+    <p class="gc-card__subtitle">{{ fit }}{% if fit != blank and style != blank %} · {% endif %}{{ style }}{% if colour != blank %}{% if fit != blank or style != blank %} · {% endif %}{{ colour | capitalize }}{% endif %}</p>
+    {%- if rating != blank and rating > 0 -%}<span class="gc-card__rating" aria-label="Rated {{ rating }} out of five">{{ rating | round: 2 }} <span aria-hidden="true">★★★★★</span></span>{%- endif -%}
     <div class="gc-card__bottom"><span>{{ product.price | money }}</span><button type="button" class="gc-card__quick" data-gc-quick="{{ product.id }}" aria-label="Choose a size for {{ product.title | escape }}" aria-haspopup="dialog"><span class="gc-card__quick-icon">+</span><span class="gc-card__quick-label">Quick Add</span></button></div>
   </div>
   <template data-gc-quick-template="{{ product.id }}">{% render 'guillo-quick-product', product: product %}</template>

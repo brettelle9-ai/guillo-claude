@@ -13,7 +13,7 @@
     {% else %}
       {%- for link in links -%}
         {%- capture child_id -%}{{ panel_id }}-{{ forloop.index }}{%- endcapture -%}
-        <li>{%- if link.links.size > 0 -%}<button type="button" data-gc-menu-go="{{ child_id }}">{{ link.title | escape }}<span aria-hidden="true">›</span></button>{%- else -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endif -%}</li>
+        <li>{%- if link.links.size > 0 -%}<div class="gc-menu__category-row"><a href="{{ link.url }}">{{ link.title | escape }}</a><button type="button" data-gc-menu-go="{{ child_id }}" aria-label="Show {{ link.title | escape }} categories"><span aria-hidden="true">›</span></button></div>{%- else -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endif -%}</li>
       {%- endfor -%}
       {%- if parent_url != blank -%}<li><a href="{{ parent_url }}">Shop all {{ title | downcase | escape }}</a></li>{%- endif -%}
     {% endif %}

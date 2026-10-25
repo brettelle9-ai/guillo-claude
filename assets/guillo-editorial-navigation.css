@@ -80,3 +80,5 @@
 
 .gc-header__search input:focus{outline:none}
 .gc-header__search:focus-within{border-bottom-color:#252525}
+
+.gc-menu__category-row{display:flex;align-items:center}.gc-menu__category-row>a{flex:1}.gc-menu__links .gc-menu__category-row>button{width:44px;flex:none;justify-content:center}

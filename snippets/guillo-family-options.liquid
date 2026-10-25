@@ -58,7 +58,7 @@
    # Card and quick-add swatches use colour chips for solid garments.
    # Main product selectors render separate snippets and keep their existing imagery.
    assign solid = false
-   if key == 'capri-shorts' or key contains 'polos'
+   if key == 'capri-shorts' or key == 'signore-chinos' or key contains 'polos'
     assign solid = true
    elsif key == 'shirts'
     unless printed_handles contains sibling.handle
@@ -85,7 +85,11 @@
       assign swatch = '#1b1b1d'
      when 'white'
       assign swatch = '#faf9f6'
-     when 'navy'
+     when 'latte'
+      assign swatch = '#d6c4a7'
+     when 'mocha'
+      assign swatch = '#76604e'
+     when 'midnight', 'navy'
       assign swatch = '#202b41'
      when 'blue'
       assign swatch = '#9ebacb'

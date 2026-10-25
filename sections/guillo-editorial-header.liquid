@@ -7,7 +7,7 @@
     <nav class="gc-header__desktop-nav" aria-label="Main navigation">
       {%- for link in preview_menu.links limit: 6 -%}
         {%- capture child_id -%}root-{{ forloop.index }}{%- endcapture -%}
-        {%- if link.links.size > 0 -%}<button type="button" data-gc-mega-trigger="{{ child_id }}" aria-controls="GCMega-{{ child_id }}" aria-expanded="false">{{ link.title | escape }}</button>{%- else -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endif -%}
+        {%- if link.links.size > 0 -%}<a href="{{ link.url }}" data-gc-mega-trigger="{{ child_id }}" aria-controls="GCMega-{{ child_id }}" aria-expanded="false">{{ link.title | escape }}</a>{%- else -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endif -%}
       {%- endfor -%}
     </nav>
     <div class="gc-header__actions"><a class="gc-header__account" href="{{ routes.account_url }}">Account</a><a class="gc-icon-button" href="{{ routes.cart_url }}" aria-label="Open shopping bag"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M5 8h14l1 13H4zM9 8V6a3 3 0 0 1 6 0v2"/></svg></a></div>
