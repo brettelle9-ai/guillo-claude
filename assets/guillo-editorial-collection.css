@@ -1,7 +1,7 @@
 /* Alternate collection only; the original shirts template and navigation are unchanged. */
 .gc-collection-preview{--gc-ink:#172126;--gc-muted:#75797c;--gc-paper:#fff;--gc-line:#e8e8e6;--gc-sticky-offset:136px;background:#fff;color:var(--gc-ink)}
 .gc-collection-preview #header-group .header-section{display:none!important}
-.gc-collection-preview #header-group{position:sticky;top:0;z-index:40;background:#fff}
+.gc-collection-preview #header-group{display:block!important;position:sticky;top:0;z-index:40;background:#fff}
 .gc-collection-preview :is(.gc-header,.gc-collection,.gc-dialog){font-family:var(--g-sans);font-weight:400}
 .gc-collection-preview .gc-header{background:#fff;color:var(--gc-ink);border-bottom:1px solid var(--gc-line)}
 .gc-header__row{height:78px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 28px;gap:26px}
