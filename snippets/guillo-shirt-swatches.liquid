@@ -2,6 +2,40 @@
 {%- assign family_handles = family_handles | strip | split: ',' -%}
 <div class="ge-shirt-family"><p>Style: <span>{{ product.title | remove_first: 'The ' }}</span></p><div class="ge-shirt-swatches" aria-label="Shirt styles">
 {%- for handle in family_handles -%}{%- assign sibling = all_products[handle] -%}{%- if sibling != blank -%}
-<a href="{{ sibling.url }}{% if editorial %}?view=firenze-editorial{% endif %}" class="ge-shirt-swatch{% if sibling.id == product.id %} is-current{% endif %}" {% if sibling.id == product.id %}aria-current="page"{% endif %} aria-label="{{ sibling.title | escape }}" title="{{ sibling.title | escape }}"><span>{{ sibling.featured_image | image_url: width: 300 | image_tag: loading: 'lazy', alt: sibling.title }}</span><small>{{ sibling.title | remove_first: 'The ' | remove: ' Grandad Collar' | remove: ' Long Sleeve' | escape }}</small></a>
+{%- liquid
+  assign swatch_image = sibling.metafields.custom.fabric_swatch.value | default: sibling.featured_image
+  assign focal_x = 61
+  assign focal_y = 60
+  assign zoom = 9
+  case sibling.handle
+    when 'firenze-chevron-shirt'
+      assign focal_x = 58
+      assign focal_y = 61
+    when 'milano-pinstripe-shirt'
+      assign focal_x = 51
+      assign focal_y = 68
+      assign zoom = 14
+    when 'amalfi-short-sleeve-shirt'
+      assign focal_x = 46
+      assign focal_y = 64
+      assign zoom = 12
+    when 'como-short-sleeve-shirt'
+      assign focal_x = 61
+      assign focal_y = 59
+    when 'the-santorini-grandad-collar'
+      assign focal_x = 60
+      assign focal_y = 64
+  endcase
+  if sibling.metafields.custom.fabric_swatch.value != blank
+    assign zoom = 1
+    assign focal_x = 50
+    assign focal_y = 50
+  endif
+  assign swatch_width = zoom | times: 100
+  assign swatch_height = swatch_image.height | times: 1.0 | divided_by: swatch_image.width | times: swatch_width
+  assign swatch_left = focal_x | times: zoom | minus: 50
+  assign swatch_top = focal_y | times: swatch_height | divided_by: 100.0 | minus: 50
+-%}
+<a href="{{ sibling.url }}{% if editorial %}?view=firenze-editorial{% endif %}" class="ge-shirt-swatch{% if sibling.id == product.id %} is-current{% endif %}" {% if sibling.id == product.id %}aria-current="page"{% endif %} aria-label="{{ sibling.title | escape }}" title="{{ sibling.title | escape }}"><span style="--fabric-width:{{ swatch_width }}%;--fabric-left:-{{ swatch_left }}%;--fabric-top:-{{ swatch_top }}%">{{ swatch_image | image_url: width: 1800 | image_tag: loading: 'lazy', alt: sibling.title }}</span><small>{{ sibling.title | remove_first: 'The ' | remove: ' Grandad Collar' | remove: ' Long Sleeve' | escape }}</small></a>
 {%- endif -%}{%- endfor -%}</div></div>
-<style>.ge-shirt-family{margin:25px 0 30px;font:400 12px/1.5 var(--g-sans);color:inherit}.ge-shirt-family>p{margin:0 0 14px}.ge-shirt-family>p>span{color:#777}.ge-shirt-swatches{display:flex;flex-wrap:wrap;gap:14px}.ge-shirt-swatch{display:flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none!important;color:inherit!important}.ge-shirt-swatch>span{display:block;position:relative;width:38px;height:38px;overflow:hidden;border-radius:50%;outline:1px solid #d7d7d7;outline-offset:3px}.ge-shirt-swatch.is-current>span{outline-color:#292929}.ge-shirt-swatch img{position:absolute;width:300%;height:300%;max-width:none;left:-100%;top:-90%;object-fit:cover;object-position:50% 45%}.ge-shirt-swatch small{font:400 10px/1.4 var(--g-sans)}.ge-shirt-swatch:focus-visible{outline:2px solid #657989;outline-offset:5px}</style>
+<style>.ge-shirt-family{margin:25px 0 30px;font:400 12px/1.5 var(--g-sans);color:inherit}.ge-shirt-family>p{margin:0 0 14px}.ge-shirt-family>p>span{color:#777}.ge-shirt-swatches{display:flex;flex-wrap:wrap;gap:14px}.ge-shirt-swatch{display:flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none!important;color:inherit!important}.ge-shirt-swatch>span{display:block;position:relative;width:46px;height:46px;overflow:hidden;border-radius:2px;outline:1px solid #d7d7d7;outline-offset:3px}.ge-shirt-swatch.is-current>span{outline-color:#292929}.ge-shirt-swatch img{position:absolute;width:var(--fabric-width);height:auto;max-width:none;left:var(--fabric-left);top:var(--fabric-top)}.ge-shirt-swatch small{font:400 10px/1.4 var(--g-sans)}.ge-shirt-swatch:focus-visible{outline:2px solid #657989;outline-offset:5px}</style>

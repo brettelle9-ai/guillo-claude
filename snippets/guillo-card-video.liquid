@@ -1,0 +1,19 @@
+{%- liquid
+  assign card_video = product.media | where: 'media_type', 'video' | first
+  assign card_film = blank
+  if card_video == blank
+    case product.handle
+      when 'milano-pinstripe-shirt'
+        assign card_film = 'guillo-button-shirts.mp4'
+      when 'the-luxe-chino-stone'
+        assign card_film = 'guillo-luxe-stone-film.mp4'
+      when 'the-signore-chino-latte'
+        assign card_film = 'guillo-signore-raised-foot.mp4'
+    endcase
+  endif
+-%}
+{%- if card_video != blank or card_film != blank -%}
+  <video class="gc-card__video" data-guillo-card-video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" poster="{{ product.featured_image | image_url: width: 750 }}">
+    {%- if card_video != blank -%}{%- for source in card_video.sources -%}{%- if source.format == 'mp4' -%}<source data-src="{{ source.url }}" type="video/mp4">{%- break -%}{%- endif -%}{%- endfor -%}{%- else -%}<source data-src="{{ card_film | asset_url }}" type="video/mp4">{%- endif -%}
+  </video>
+{%- endif -%}

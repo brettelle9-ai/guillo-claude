@@ -2,7 +2,7 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const start = () => {
-    const root = document.querySelector('[data-gc-collection], [data-ge-product]');
+    const root = document.querySelector('[data-gc-collection], [data-ge-product], [data-gh-home]');
     if (!root || root.dataset.mounted) return;
     root.dataset.mounted = 'true';
     const headerGroup = document.getElementById('header-group');

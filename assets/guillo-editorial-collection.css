@@ -112,3 +112,5 @@
 .gc-menu:open::backdrop{animation:gc-menu-backdrop .62s ease both}
 @keyframes gc-menu-backdrop{from{background-color:transparent;backdrop-filter:blur(0)}to{background-color:#0a171b66;backdrop-filter:blur(2px)}}
 @media(prefers-reduced-motion:reduce){.gc-menu:open::backdrop{animation:none}}
+
+.gc-card__photo{position:relative;overflow:hidden}.gc-card__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .4s ease;pointer-events:none}.gc-card__video.is-playing{opacity:1}@media(prefers-reduced-motion:reduce){.gc-card__video{display:none}}

@@ -59,10 +59,11 @@
     {%- render 'guillo-fonts' -%}
     {{ 'guillo.css' | asset_url | stylesheet_tag }}
     {{ 'guillo-modern.css' | asset_url | stylesheet_tag }}
-    {%- if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' -%}
+    {%- if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' or request.page_type == 'index' -%}
       <meta name="robots" content="noindex, follow">
       {{ 'guillo-editorial-collection.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'guillo-editorial-collection.js' | asset_url }}" defer></script>
+      <script src="{{ 'guillo-card-video.js' | asset_url }}" defer></script>
     {%- endif -%}
     {%- if template.suffix == 'firenze-editorial' -%}
       {{ 'guillo-editorial-product.css' | asset_url | stylesheet_tag }}
@@ -89,11 +90,11 @@
     {{ content_for_header }}
   </head>
 
-  <body class="{% if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' %}gc-collection-preview {% if template.suffix == 'firenze-editorial' %}ge-product-preview {% endif %}{% endif %}page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}{% if product.tags contains 'garment:short' or template.suffix contains 'shorts' %} guillo-capri-page{% endif %}">
+  <body class="{% if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' or request.page_type == 'index' %}gc-collection-preview {% if template.suffix == 'firenze-editorial' %}ge-product-preview {% endif %}{% endif %}{% if request.page_type == 'index' %}gh-home-preview {% endif %}page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}{% if product.tags contains 'garment:short' or template.suffix contains 'shorts' %} guillo-capri-page{% endif %}">
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
     <div id="header-group">
       {% sections 'header-group' %}
-      {%- if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' -%}{% section 'guillo-editorial-header' %}{%- endif -%}
+      {%- if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' or request.page_type == 'index' -%}{% section 'guillo-editorial-header' %}{%- endif -%}
     </div>
 
     <script>

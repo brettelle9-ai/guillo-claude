@@ -1,69 +1,80 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "hero": {
-      "type": "guillo-campaign",
+    "editorial_home": {
+      "type": "guillo-editorial-home",
       "settings": {
-        "eyebrow": "Mediterranean menswear",
-        "heading": "A certain",
-        "heading_accent": "presence.",
-        "description": "Fitted shirts, tailored chinos and polos with a Mediterranean influence.",
-        "primary_label": "Shop shirts",
-        "primary_link": "shopify://collections/shirts",
-        "secondary_label": "Shop chinos",
-        "secondary_link": "shopify://collections/chinos",
-        "shirts_button_crop": 28,
-        "chinos_button_crop": 28,
-        "enable_video": true,
-        "primary_video_url": "",
-        "secondary_video_url": ""
-      }
-    },
-    "wardrobe": {
-      "type": "guillo-atelier",
+        "hero_heading": "Signature shirts",
+        "hero_product": "firenze-chevron-shirt",
+        "feature_product": "the-signore-chino-latte",
+        "feature_heading": "The Signore Chino",
+        "feature_text": "A clean front. Side-tab adjusters. A considered fit through the leg. Meet the chino with a different point of view.",
+        "campaign_video": "shopify://files/videos/lv_0_20260914131333.mp4"
+      },
       "blocks": {
         "shirts": {
           "type": "category",
           "settings": {
-            "collection": "shirts",
             "heading": "Shirts",
             "product": "milano-pinstripe-shirt",
-            "fallback_asset": ""
+            "link": "shopify://collections/shirts",
+            "film_asset": "guillo-button-shirts.mp4"
           }
         },
         "chinos": {
           "type": "category",
           "settings": {
-            "collection": "chinos",
             "heading": "Chinos",
             "product": "the-luxe-chino-stone",
-            "fallback_asset": ""
+            "link": "shopify://collections/chinos",
+            "film_asset": "guillo-button-chinos.mp4"
           }
         },
         "polos": {
           "type": "category",
           "settings": {
-            "collection": "polos",
             "heading": "Polos",
             "product": "the-portofino-polo-black",
-            "fallback_asset": ""
+            "link": "shopify://collections/polos"
           }
         },
-        "tees": {
+        "shorts": {
           "type": "category",
           "settings": {
-            "collection": "t-shirts",
-            "heading": "Tees",
-            "product": "",
-            "fallback_asset": ""
+            "heading": "Shorts",
+            "product": "the-capri-chino-short-navy",
+            "link": "shopify://collections/shorts"
+          }
+        },
+        "look_milano": {
+          "type": "look",
+          "settings": {
+            "product": "milano-pinstripe-shirt",
+            "image_asset": "guillo-bone-pool.jpg",
+            "alt": "The Milano pinstripe shirt with cream chinos by the pool"
+          }
+        },
+        "look_luxe": {
+          "type": "look",
+          "settings": {
+            "product": "the-luxe-chino-stone",
+            "image_asset": "guillo-luxe-stone-film.jpg",
+            "alt": "The Luxe Stone Chino styled with a fitted pinstripe shirt"
+          }
+        },
+        "look_signore": {
+          "type": "look",
+          "settings": {
+            "product": "the-signore-chino-latte",
+            "image_asset": "guillo-signore-raised-foot.jpg",
+            "alt": "The Signore Chino in Latte with a fitted white shirt"
+          }
+        },
+        "look_shirt": {
+          "type": "look",
+          "settings": {
+            "product": "siracusa-short-sleeve-slim-fit-shirt",
+            "image_asset": "guillo-brown-01.jpg",
+            "alt": "A fitted white shirt with brown chinos"
           }
         }
       },
@@ -71,44 +82,15 @@
         "shirts",
         "chinos",
         "polos",
-        "tees"
-      ],
-      "settings": {
-        "trust_returns": "44-day free returns & exchanges · AU & NZ",
-        "trust_shipping": "Free express shipping over $200",
-        "signature_product": "the-signore-chino-latte",
-        "signature_colour": "Latte"
-      }
-    },
-    "quotes": {
-      "type": "guillo-quotes",
-      "settings": {
-        "quotes_to_show": 3,
-        "min_rating": 4,
-        "theme_fit": "fit, fits, fitted, size, waist, thigh, leg, stretch, comfortable, comfy, cut, tailored, fabric, material",
-        "theme_look": "look, looks, compliment, style, stylish, smart, sharp, design, colour, color, handsome, classy",
-        "theme_service": "service, delivery, shipping, arrived, fast, quick, speedy, support, exchange, return, refund, website, easy, customer, communication, helpful"
-      }
-    },
-    "story": {
-      "type": "guillo-story",
-      "settings": {
-        "eyebrow": "The Guillo point of view",
-        "statement": "A closer fit. A more distinctive way to dress.",
-        "text": "Mediterranean influence, shaped for the way you want to present yourself. Fitted shirts, considered trousers and the details that bring a wardrobe together.",
-        "link_label": "Our story",
-        "link": "shopify://pages/about-us",
-        "image": "shopify://shop_images/20260906_103147_1.jpg",
-        "image_alt": "Guillo blue shirt and brown trousers styled with a navy jacket",
-        "image_position": "center 37%",
-        "flip": false
-      }
+        "shorts",
+        "look_milano",
+        "look_luxe",
+        "look_signore",
+        "look_shirt"
+      ]
     }
   },
   "order": [
-    "hero",
-    "wardrobe",
-    "quotes",
-    "story"
+    "editorial_home"
   ]
 }
