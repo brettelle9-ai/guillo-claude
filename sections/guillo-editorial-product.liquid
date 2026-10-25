@@ -13,8 +13,9 @@
     <div class="ge-gallery-wrap">
       <div class="ge-gallery" data-ge-gallery aria-label="{{ product.title | escape }} photographs" tabindex="0">
         {%- for media in product.media -%}
+          {%- assign image_loading = 'lazy' -%}{%- if forloop.first -%}{%- assign image_loading = 'eager' -%}{%- endif -%}
           <div class="ge-slide" data-ge-slide>
-            {%- if media.media_type == 'image' -%}<button type="button" data-ge-zoom="{{ forloop.index0 }}" aria-label="Enlarge photograph {{ forloop.index }} of {{ product.title | escape }}">{{ media | image_url: width: 1800 | image_tag: widths: '400, 600, 900, 1200, 1800', sizes: '(min-width: 1000px) 32vw, 100vw', loading: 'eager', alt: media.alt }}</button>
+            {%- if media.media_type == 'image' -%}<button type="button" data-ge-zoom="{{ forloop.index0 }}" aria-label="Enlarge photograph {{ forloop.index }} of {{ product.title | escape }}">{{ media | image_url: width: 1800 | image_tag: widths: '400, 600, 900, 1200, 1800', sizes: '(min-width: 1000px) 32vw, 100vw', loading: image_loading, alt: media.alt }}</button>
             {%- elsif media.media_type == 'video' -%}{{ media | video_tag: controls: true, loop: true, image_size: '1200x' }}{%- else -%}{{ media | media_tag }}{%- endif -%}
           </div>
         {%- endfor -%}
