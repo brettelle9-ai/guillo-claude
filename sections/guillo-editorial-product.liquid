@@ -1,13 +1,9 @@
 {%- liquid
   assign rating = product.metafields.reviews.rating.value.rating | plus: 0
   assign rating_count = product.metafields.reviews.rating_count.value | plus: 0
-  assign is_preorder = false
-  if product.tags contains 'pre-order' or product.metafields.theme.preorder.value
-    assign is_preorder = true
-  endif
-  assign preorder_date = product.metafields.custom.preorder_ships_by.value
   assign colour = product.metafields.custom.colour_name.value | default: 'Navy'
 -%}
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
 <section class="ge-product" data-ge-product>
   <div class="ge-main">
     <div class="ge-gallery-wrap">
@@ -15,7 +11,7 @@
         {%- for media in product.media -%}
           {%- assign image_loading = 'lazy' -%}{%- if forloop.first -%}{%- assign image_loading = 'eager' -%}{%- endif -%}
           <div class="ge-slide" data-ge-slide>
-            {%- if media.media_type == 'image' -%}<button type="button" data-ge-zoom="{{ forloop.index0 }}" aria-label="Enlarge photograph {{ forloop.index }} of {{ product.title | escape }}">{{ media | image_url: width: 1800 | image_tag: widths: '400, 600, 900, 1200, 1800', sizes: '(min-width: 1000px) 32vw, 100vw', loading: image_loading, alt: media.alt }}</button>
+            {%- if media.media_type == 'image' -%}<button type="button" data-ge-zoom="{{ forloop.index0 }}" aria-label="Enlarge photograph {{ forloop.index }} of {{ product.title | escape }}">{{ media | image_url: width: 1800 | image_tag: widths: '400, 600, 900, 1200, 1800', sizes: '(min-width: 750px) 43vw, 100vw', loading: image_loading, alt: media.alt }}</button>
             {%- elsif media.media_type == 'video' -%}{{ media | video_tag: controls: true, loop: true, image_size: '1200x' }}{%- else -%}{{ media | media_tag }}{%- endif -%}
           </div>
         {%- endfor -%}
@@ -23,7 +19,7 @@
       <div class="ge-gallery-controls"><button type="button" data-ge-previous aria-label="Previous photograph">‹</button><span data-ge-gallery-count>1 / {{ product.media.size }}</span><button type="button" data-ge-next aria-label="Next photograph">›</button></div>
     </div>
     <div class="ge-info">
-      <div class="ge-title-row"><h1>{{ product.title | remove_first: 'The ' | escape }}</h1>{%- if rating > 0 -%}<a href="#GEReviews" class="ge-rating" aria-label="{{ rating }} out of five, {{ rating_count }} {% if rating_count == 1 %}review{% else %}reviews{% endif %}"><span aria-hidden="true">★★★★★</span>{% if rating_count > 0 %} ({{ rating_count }}){% endif %}</a>{%- endif -%}</div>
+      <div class="ge-title-row"><h1>{{ product.title | remove_first: 'The ' | escape }}</h1>{%- if rating > 0 -%}<a href="#GEReviews" class="ge-rating" aria-label="{{ rating }} out of five, {{ rating_count }} {% if rating_count == 1 %}review{% else %}reviews{% endif %}">{{ rating | round: 1 }} <span aria-hidden="true">★★★★★</span>{% if rating_count > 0 %} ({{ rating_count }}){% endif %}</a>{%- endif -%}</div>
       <p class="ge-subtitle">Short-sleeve chevron shirt in {{ colour | downcase }}</p>
       <p class="ge-price"><span data-ge-price>{{ product.price | money }}</span> {% if product.compare_at_price > product.price %}<s>{{ product.compare_at_price | money }}</s>{% endif %}</p>
       <div class="ge-colour"><p>Colour: {{ colour }}</p><span class="ge-swatch" aria-label="{{ colour }}" style="--swatch:navy"></span></div>
@@ -31,28 +27,35 @@
         <input type="hidden" name="id" value="" data-ge-variant><input type="hidden" name="quantity" value="1">
         <fieldset class="ge-sizes"><legend>Size: <span data-ge-selected>Choose your size</span></legend><div>
           {%- for variant in product.variants -%}
-            {%- assign variant_preorder = is_preorder -%}{%- if variant.metafields.custom.preorder.value -%}{%- assign variant_preorder = true -%}{%- endif -%}
-            <label><input type="radio" name="ge-size" value="{{ variant.id }}" data-ge-option data-price="{{ variant.price | money | escape }}" data-size="{{ variant.title | escape }}" data-preorder="{{ variant_preorder }}" {% unless variant.available %}disabled{% endunless %}><span>{{ variant.title | escape }}</span></label>
+
+            <label><input type="radio" name="ge-size" required value="{{ variant.id }}" data-ge-option data-price="{{ variant.price | money | escape }}" data-size="{{ variant.title | escape }}" {% unless variant.available %}disabled{% endunless %}><span>{{ variant.title | escape }}</span></label>
           {%- endfor -%}
         </div></fieldset>
-        <div class="ge-fitline"><span>Slim fit · Stretch fabric</span><a href="{{ pages['fit-guide'].url | default: '/pages/fit-guide' }}" target="_blank" rel="noopener">Size guide ↗</a></div>
-        <button type="submit" class="ge-add" data-ge-add disabled>{% if product.available %}Choose your size{% else %}Sold out{% endif %}</button>
+        <div class="ge-fitline"><span>{% if product.metafields.custom.model_height != blank and product.metafields.custom.model_size != blank %}Model is {{ product.metafields.custom.model_height }} and wears {{ product.metafields.custom.model_size }}{% else %}Slim fit through the body{% endif %}</span><button type="button" data-ge-panel="sizeguide">Size Guide</button></div>
+        <button type="submit" class="ge-add" data-ge-add {% unless product.available %}disabled{% endunless %}>{% if product.available %}Add to Bag{% else %}Sold out{% endif %}</button>
       {% endform %}
-      <p class="ge-preorder" data-ge-preorder {% unless is_preorder %}hidden{% endunless %}><span aria-hidden="true">◇</span> Pre-order{% if preorder_date != blank %} · Ships by {{ preorder_date }}{% endif %}. {% if preorder_date == blank %}Contact us for the current dispatch date.{% endif %}</p>
-<p class="ge-payment">Secure checkout</p>
-      <div class="ge-accordions">
-        <details><summary>Details</summary><div class="ge-copy">{{ product.description }}</div></details>
-        <details><summary>Fabric &amp; fit</summary><div class="ge-copy"><p>A woven chevron texture in navy, with a slim, tapered body and short sleeves. Stretch fabric gives ease of movement while keeping a defined shape.</p><p>Lightweight, breathable and cool to the touch, with a wrinkle-resistant finish.</p>{% if product.metafields.custom.fabric_composition != blank %}<p>{{ product.metafields.custom.fabric_composition }}</p>{% endif %}</div></details>
-        <details><summary>Care instructions</summary><div class="ge-copy"><p>Machine wash cold. Hang dry. Follow the care label supplied with your shirt.</p></div></details>
-        <details><summary>Delivery &amp; returns</summary><div class="ge-copy">{% if is_preorder %}<p>This shirt is available to pre-order.{% if preorder_date != blank %} Ships by {{ preorder_date }}.{% else %} Contact us for the current dispatch date before ordering.{% endif %} Delivery time begins once your order dispatches.</p><p>Shipping options and charges are shown at checkout.</p>{% else %}{% render 'guillo-shipping-panel' %}{% endif %}<p><a href="{{ shop.shipping_policy.url }}">Shipping policy</a> · <a href="{{ shop.refund_policy.url }}">Returns &amp; exchanges</a></p></div></details>
+      <div class="ge-delivery"><svg width="19" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="m3 7 9-5 9 5v10l-9 5-9-5zM3 7l9 5 9-5M12 12v10M7 4.8l10 5"/></svg><span>Ships from Brisbane<br><button type="button" data-ge-panel="delivery">Delivery to {{ localization.country.name }} · See delivery options</button></span></div>
+      <div class="ge-accordions" aria-label="Product information">
+        <button type="button" data-ge-panel="details">Details<span>›</span></button>
+        <button type="button" data-ge-panel="fabric">Fabric &amp; Fit<span>›</span></button>
+        <button type="button" data-ge-panel="care">Care Instructions<span>›</span></button>
+        <button type="button" data-ge-panel="delivery">Delivery<span>›</span></button>
       </div>
-      <div class="ge-style"><h2>Style it with</h2>{% assign style_handles = 'the-luxe-chino-stone,the-signore-chino-latte' | split: ',' %}{% for handle in style_handles %}{% assign paired = all_products[handle] %}{% if paired != blank %}<a class="ge-style-card" href="{{ paired.url }}">{{ paired.featured_image | image_url: width: 240 | image_tag: loading: 'lazy', alt: paired.title }}<span><strong>{{ paired.title | escape }}</strong><small>{{ paired.price | money }}</small></span><span class="ge-style-plus" aria-label="Choose options">+</span></a>{% endif %}{% endfor %}</div>
+      <div class="ge-style"><h2>Style It With</h2>{% assign style_handles = 'the-luxe-chino-stone,the-signore-chino-latte' | split: ',' %}{% for handle in style_handles %}{% assign paired = all_products[handle] %}{% if paired != blank %}{% render 'guillo-editorial-card', product: paired, image_loading: 'lazy' %}{% endif %}{% endfor %}</div>
       <nav class="ge-breadcrumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / <a href="{{ collections.shirts.url }}?view=shirts-editorial">Shirts</a> / {{ product.title | escape }}</nav>
     </div>
   </div>
-  <div class="ge-related"><h2>More you’ll love</h2><div class="ge-rail">{% for related in collections.shirts.products limit: 9 %}{% unless related.id == product.id %}{% render 'guillo-editorial-card', product: related, image_loading: 'lazy' %}{% endunless %}{% endfor %}</div></div>
+  <div class="ge-related"><div class="ge-rail-heading"><h2>More You’ll Love</h2><div><button type="button" data-ge-rail-previous aria-label="Previous recommendations">‹</button><button type="button" data-ge-rail-next aria-label="Next recommendations">›</button></div></div><div class="ge-rail">{% for related in collections.shirts.products limit: 9 %}{% unless related.id == product.id %}{% render 'guillo-editorial-card', product: related, image_loading: 'lazy' %}{% endunless %}{% endfor %}</div></div>
+  {% capture navy_rail %}{% assign navy_count = 0 %}{% for navy_product in collections.all.products limit: 50 %}{% if navy_product.tags contains 'colour:navy' and navy_product.id != product.id and navy_count < 8 %}{% render 'guillo-editorial-card', product: navy_product, image_loading: 'lazy' %}{% assign navy_count = navy_count | plus: 1 %}{% endif %}{% endfor %}{% endcapture %}
+  {% if navy_count > 0 %}<div class="ge-related"><div class="ge-rail-heading"><h2>More In This Colour</h2><div><button type="button" data-ge-rail-previous aria-label="Previous navy products">‹</button><button type="button" data-ge-rail-next aria-label="Next navy products">›</button></div></div><div class="ge-rail">{{ navy_rail }}</div></div>{% endif %}
   <div id="GEReviews" class="ge-reviews"><h2>Customer reviews</h2><div class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">{{ product.metafields.judgeme.widget }}</div>{% if rating_count > 0 %}<p>{{ rating | round: 1 }} / 5 from {{ rating_count }} {% if rating_count == 1 %}review{% else %}reviews{% endif %}</p>{% endif %}<a href="{{ pages.testimonials.url | default: '/pages/testimonials' }}">Read Guillo customer reviews</a></div>
-  <div class="ge-sticky" data-ge-sticky><button type="button" data-ge-sticky-add>{% if product.available %}Choose your size{% else %}Sold out{% endif %}</button></div>
+  <div class="ge-sticky" data-ge-sticky><button type="button" data-ge-sticky-add>{% if product.available %}Add to Bag{% else %}Sold out{% endif %}</button></div>
+  <dialog class="ge-panel gc-dialog" data-ge-info-dialog aria-labelledby="GEPanelTitle"><header><h2 id="GEPanelTitle" data-ge-panel-title></h2><button type="button" data-gc-close aria-label="Close product information">×</button></header><div class="ge-panel-copy" data-ge-panel-content></div><footer><button type="button" data-ge-panel-purchase>{% if product.available %}Add to Bag{% else %}Sold out{% endif %}</button></footer></dialog>
+  <template data-ge-panel-template="details"><div class="ge-copy">{{ product.description }}</div></template>
+  <template data-ge-panel-template="fabric"><div class="ge-copy"><p>Navy chevron texture woven into a lightweight, breathable fabric with a cool-touch finish.</p><p>Stretch construction, a wrinkle-resistant finish and a slim, tapered shape. Short sleeves and a button-down collar.</p>{% if product.metafields.custom.fabric_composition != blank %}<p>{{ product.metafields.custom.fabric_composition }}</p>{% endif %}</div></template>
+  <template data-ge-panel-template="care"><div class="ge-copy"><p>Machine wash cold. Hang dry.</p><p>Follow the care label supplied with your shirt.</p></div></template>
+  <template data-ge-panel-template="delivery"><div class="ge-copy">{% render 'guillo-shipping-panel' %}<p><a href="{{ shop.shipping_policy.url }}">Full shipping policy</a> · <a href="{{ shop.refund_policy.url }}">Returns &amp; exchanges</a></p></div></template>
+  <template data-ge-panel-template="sizeguide"><div class="ge-copy"><p>The Firenze has a slim cut through the body, with stretch for ease of movement.</p>{% if product.metafields.custom.size_chart != blank %}{{ product.metafields.custom.size_chart }}{% endif %}<p>Compare your measurements with the shirt size chart before choosing.</p><a href="{{ pages['fit-guide'].url | default: '/pages/fit-guide' }}" target="_blank" rel="noopener">Open Guillo’s full size guide ↗</a></div></template>
   <dialog class="gc-quick gc-dialog" aria-label="Choose shirt size" data-ge-quick><button type="button" class="gc-icon-button gc-quick__close" data-gc-close aria-label="Close quick add">×</button><div data-ge-quick-content></div></dialog>
   <dialog class="ge-zoom gc-dialog" aria-label="Product photograph" data-ge-zoom-dialog><button type="button" class="gc-icon-button" data-gc-close aria-label="Close photograph">×</button><img alt="{{ product.title | escape }}" data-ge-zoom-image></dialog>
 </section>

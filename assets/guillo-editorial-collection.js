@@ -87,7 +87,7 @@
         quickContent.querySelectorAll('[data-gc-size]').forEach(button=>button.addEventListener('click',()=>{
           quickContent.querySelectorAll('[data-gc-size]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
           quickContent.querySelector('[data-gc-variant]').value=button.dataset.gcSize;
-          const add=quickContent.querySelector('[type="submit"]');add.disabled=false;add.textContent=card.dataset.tags.split('|').includes('pre-order')?'Pre-order':'Add to bag';
+          const add=quickContent.querySelector('[type="submit"]');add.disabled=false;add.textContent=card.dataset.handle!=='firenze-chevron-shirt'&&card.dataset.tags.split('|').includes('pre-order')?'Pre-order':'Add to bag';
         }));
         show(quick);
       });

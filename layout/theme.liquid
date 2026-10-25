@@ -89,7 +89,7 @@
     {{ content_for_header }}
   </head>
 
-  <body class="{% if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' %}gc-collection-preview {% endif %}page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}{% if product.tags contains 'garment:short' or template.suffix contains 'shorts' %} guillo-capri-page{% endif %}">
+  <body class="{% if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' %}gc-collection-preview {% if template.suffix == 'firenze-editorial' %}ge-product-preview {% endif %}{% endif %}page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}{% if product.tags contains 'garment:short' or template.suffix contains 'shorts' %} guillo-capri-page{% endif %}">
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
     <div id="header-group">
       {% sections 'header-group' %}
