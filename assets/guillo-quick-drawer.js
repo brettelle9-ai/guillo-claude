@@ -21,7 +21,7 @@
     else if(cache.has(handle))body=cache.get(handle).cloneNode(true);
     else{
      if(!content.children.length){const loading=document.createElement('p');loading.className='gq-loading';loading.textContent='Loading…';content.append(loading);}
-     const url=new URL('/products/'+encodeURIComponent(handle),location.origin);url.searchParams.set('view','guillo-quick');const response=await fetch(url);if(!response.ok)throw Error('Unavailable');const doc=new DOMParser().parseFromString(await response.text(),'text/html');body=doc.querySelector('[data-gq-product]');if(!body)throw Error('Unavailable');cache.set(handle,body.cloneNode(true));
+     const url=new URL('/products/'+encodeURIComponent(handle),document.baseURI);url.searchParams.set('view','guillo-quick');const response=await fetch(url);if(!response.ok)throw Error('Unavailable');const doc=new DOMParser().parseFromString(await response.text(),'text/html');body=doc.querySelector('[data-gq-product]');if(!body)throw Error('Unavailable');cache.set(handle,body.cloneNode(true));
     }
     if(number!==request||!dialog.open)return;mount(body,previousSize);
    }catch{if(number!==request)return;const message=document.createElement('p');message.className='gq-loading';message.textContent='We couldn’t load this colour. ';const link=document.createElement('a');link.href='/products/'+encodeURIComponent(handle);link.textContent='Open the product';message.append(link);content.append(message);}

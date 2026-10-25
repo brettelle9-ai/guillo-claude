@@ -79,3 +79,5 @@ body.gc-collection-preview .guillo-footer__payment-chip{color:#d5dbe0;border-col
 .guillo-footer__socials svg{width:19px;height:19px;fill:currentColor}
 
 .ge-review-sort{display:flex;justify-content:flex-end;align-items:center;gap:10px;font:400 11px/1.5 var(--g-sans);margin:15px 0}.ge-review-sort select{border:1px solid #ddd;background:transparent;padding:8px;font:inherit;color:inherit}
+
+.g-family-option>span[style*="--swatch-fit"] img{width:100%!important;height:100%!important;left:0;top:0;object-fit:cover}
