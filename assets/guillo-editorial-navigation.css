@@ -12,7 +12,7 @@
 @media(min-width:1250px){
  .gc-mega{display:grid;grid-template-columns:1fr 1fr;position:absolute;top:100%;left:0;right:0;z-index:3;height:min(600px,72dvh);max-height:calc(100dvh - var(--gc-sticky-offset) - 25px);background:#f7f7f7;color:#252525;font:400 12px/1.6 var(--g-sans);animation:gc-nav-reveal .24s ease both}
  .gc-mega__left{min-width:0;display:flex;flex-direction:column;padding:26px 12px 20px;overflow:auto}
- .gc-mega__columns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;flex:1;align-content:start}
+ .gc-mega__columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;flex:1;align-content:start}
  .gc-mega__heading{display:block;color:#858585;text-decoration:none;margin:0 0 21px;font:400 12px/1.6 var(--g-sans)}
  .gc-mega ul{list-style:none;padding:0;margin:0;display:grid;gap:21px}
  .gc-mega li a{color:#292929;text-decoration:none}
