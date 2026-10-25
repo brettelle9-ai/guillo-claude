@@ -19,7 +19,7 @@
  elsif key == 'classico-tees'
   assign pool = collections['t-shirts'].products
  endif
- assign printed_handles = 'firenze-chevron-shirt,milano-pinstripe-shirt,amalfi-short-sleeve-shirt,como-short-sleeve-shirt,the-santorini-grandad-collar'
+ assign printed_handles = 'ischia-banded-collar-shirt,firenze-chevron-shirt,milano-pinstripe-shirt,amalfi-short-sleeve-shirt,como-short-sleeve-shirt,the-santorini-grandad-collar'
  assign group = product.metafields.custom.product_group.value
  capture group_images
   for img in group.custom_images.value
@@ -105,6 +105,44 @@
       assign swatch = '#9abbb9'
     endcase
    endif
+   # One product-specific palette keeps each garment consistent across cards,
+   # regardless of which legacy metaobject group the surrounding product uses.
+   case sibling.handle
+    when 'the-capri-chino-short-reef'
+     assign swatch = '#a7c6c5'
+    when 'the-capri-chino-short-stone'
+     assign swatch = '#e1dfce'
+    when 'the-capri-chino-short-navy'
+     assign swatch = '#1c2233'
+    when 'the-capri-chino-short-olive-5in'
+     assign swatch = '#69705a'
+    when 'the-capri-chino-short-grey-5in'
+     assign swatch = '#acb0b1'
+    when 'the-portofino-polo-blue'
+     assign swatch = '#234698'
+    when 'the-portofino-polo-red'
+     assign swatch = '#b51b31'
+    when 'the-portofino-polo-black'
+     assign swatch = '#191c22'
+    when 'the-valenti-knit-polo-navy'
+     assign swatch = '#282544'
+    when 'the-signore-chino-latte'
+     assign swatch = '#e0d4bc'
+    when 'the-signore-chino-mocha'
+     assign swatch = '#86624f'
+    when 'the-signore-chino-midnight'
+     assign swatch = '#273244'
+    when 'siracusa-short-sleeve-slim-fit-shirt', 'guillo-fitted-siracusa-long-sleeve-shirt'
+     assign swatch = '#f4f3ef'
+    when 'guillo-rapallo-short-sleeve-shirt', 'rapallo-banded-collar-jersey'
+     assign swatch = '#ca2433'
+    when 'guillo-fitted-vulcano-short-sleeve-shirt', 'vulcano-short-sleeve-slim-fit-shirt-copy', 'vulcano-banded-collar-jersey'
+     assign swatch = '#1e1e22'
+    when 'turin-short-sleeve-shirt'
+     assign swatch = '#dce0e4'
+    when 'turin-banded-collar-jersey'
+     assign swatch = '#e4e2dc'
+   endcase
    if solid and swatch == blank
     assign solid = false
    endif

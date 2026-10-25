@@ -5,14 +5,27 @@
   assign is_top = true
  endif
  if is_top
-  assign complement = collections.chinos.products | concat: collections.shorts.products | concat: collections.jeans.products
+  assign complement = collections.chinos.products
+  if collections.shorts.products != blank
+   assign complement = complement | concat: collections.shorts.products
+  endif
+  if collections.jeans.products != blank
+   assign complement = complement | concat: collections.jeans.products
+  endif
  else
   assign complement = collections.shirts.products | slice: 0, 3
   assign polos = collections.polos.products | slice: 0, 2
   assign tees = collections['t-shirts'].products | slice: 0, 2
-  assign complement = complement | concat: polos | concat: tees
+  if polos != blank
+   assign complement = complement | concat: polos
+  endif
+  if tees != blank
+   assign complement = complement | concat: tees
+  endif
  endif
- assign complement = product.metafields.custom.style_with.value | default: complement
+ if product.metafields.custom.style_with.value != blank
+  assign complement = product.metafields.custom.style_with.value
+ endif
  assign seen = product.id | prepend: '|' | append: '|'
  assign count = 0
 -%}
