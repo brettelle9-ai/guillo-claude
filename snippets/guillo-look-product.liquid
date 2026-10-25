@@ -1,0 +1,6 @@
+{% if product != blank %}
+<a class="gh-look-product" href="{{ product.url }}{% if product.handle == 'firenze-chevron-shirt' %}?view=firenze-editorial{% endif %}">
+  {{ product.featured_image | image_url: width: 500 | image_tag: loading: 'lazy', alt: product.title }}
+  <div><h3>{{ product.title | escape }}</h3>{% for tag in product.tags %}{% if tag contains 'colour:' %}<small>{{ tag | remove: 'colour:' | capitalize | escape }}</small>{% break %}{% endif %}{% endfor %}<p>{{ product.price | money }}</p><span class="gh-link">View product &amp; choose size</span></div>
+</a>
+{% endif %}

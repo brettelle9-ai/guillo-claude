@@ -1,5 +1,9 @@
 {%- liquid
-  assign card_video = product.media | where: 'media_type', 'video' | first
+  assign card_mode = media_override.settings.media_type | default: card_media_default | default: 'auto'
+  assign card_video = media_override.settings.video
+  if card_video == blank
+    assign card_video = product.media | where: 'media_type', 'video' | first
+  endif
   assign card_source = card_video.sources | where: 'format', 'mp4' | sort: 'height' | last
   assign card_film = blank
   if card_video == blank
@@ -13,8 +17,11 @@
     endcase
   endif
 -%}
+{%- unless card_mode == 'image' -%}
 {%- if card_video != blank or card_film != blank -%}
-  <video class="gc-card__video" data-guillo-card-video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" poster="{{ product.featured_image | image_url: width: 750 }}">
+  <video class="gc-card__video" data-guillo-card-video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" poster="{{ card_image | default: product.featured_image | image_url: width: 750 }}">
     {%- if card_video != blank -%}<source data-src="{{ card_source.url }}" type="video/mp4">{%- else -%}<source data-src="{{ card_film | asset_url }}" type="video/mp4">{%- endif -%}
   </video>
 {%- endif -%}
+
+{%- endunless -%}

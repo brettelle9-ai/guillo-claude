@@ -3,7 +3,7 @@
     "editorial_home": {
       "type": "guillo-editorial-home",
       "settings": {
-        "hero_heading": "Signature shirts",
+        "hero_heading": "A Mediterranean state of mind.",
         "hero_product": "firenze-chevron-shirt",
         "feature_product": "the-signore-chino-latte",
         "feature_heading": "The Signore Chino",
@@ -18,7 +18,20 @@
           "the-capri-chino-short-navy",
           "amalfi-short-sleeve-shirt",
           "siracusa-short-sleeve-slim-fit-shirt"
-        ]
+        ],
+        "hero_button": "Explore Guillo",
+        "hero_link": "shopify://collections/all",
+        "hero_media_type": "image",
+        "feature_media_type": "image",
+        "card_media_default": "auto",
+        "campaign_one_heading": "A certain presence.",
+        "campaign_one_button": "Shop the collection",
+        "campaign_one_link": "shopify://collections/all",
+        "campaign_one_media_type": "image",
+        "campaign_two_heading": "Guillo in motion.",
+        "campaign_two_button": "Shop shirts",
+        "campaign_two_link": "/collections/shirts?view=shirts-editorial",
+        "campaign_two_media_type": "video"
       },
       "blocks": {
         "shirts": {
@@ -27,7 +40,8 @@
             "heading": "Shirts",
             "product": "milano-pinstripe-shirt",
             "link": "shopify://collections/shirts",
-            "film_asset": "guillo-button-shirts.mp4"
+            "film_asset": "guillo-button-shirts.mp4",
+            "media_type": "video"
           }
         },
         "chinos": {
@@ -36,7 +50,8 @@
             "heading": "Chinos",
             "product": "the-luxe-chino-stone",
             "link": "shopify://collections/chinos",
-            "film_asset": "guillo-button-chinos.mp4"
+            "film_asset": "guillo-button-chinos.mp4",
+            "media_type": "video"
           }
         },
         "polos": {
@@ -44,7 +59,8 @@
           "settings": {
             "heading": "Polos",
             "product": "the-portofino-polo-black",
-            "link": "shopify://collections/polos"
+            "link": "shopify://collections/polos",
+            "media_type": "image"
           }
         },
         "shorts": {
@@ -52,7 +68,8 @@
           "settings": {
             "heading": "Shorts",
             "product": "the-capri-chino-short-navy",
-            "link": "shopify://collections/shorts"
+            "link": "shopify://collections/shorts",
+            "media_type": "image"
           }
         },
         "look_milano": {
@@ -60,15 +77,23 @@
           "settings": {
             "product": "milano-pinstripe-shirt",
             "image_asset": "guillo-bone-pool.jpg",
-            "alt": "The Milano pinstripe shirt with cream chinos by the pool"
+            "alt": "The Milano pinstripe shirt with cream chinos by the pool",
+            "media_type": "image",
+            "products": [
+              "the-luxe-chino-stone"
+            ]
           }
         },
         "look_luxe": {
           "type": "look",
           "settings": {
-            "product": "the-luxe-chino-stone",
+            "product": "the-capri-chino-short-stone",
             "image_asset": "guillo-luxe-stone-film.jpg",
-            "alt": "The Luxe Stone Chino styled with a fitted pinstripe shirt"
+            "alt": "The Capri Chino Short in Stone with the Milano pinstripe shirt",
+            "media_type": "image",
+            "products": [
+              "milano-pinstripe-shirt"
+            ]
           }
         },
         "look_signore": {
@@ -76,7 +101,11 @@
           "settings": {
             "product": "the-signore-chino-latte",
             "image_asset": "guillo-signore-raised-foot.jpg",
-            "alt": "The Signore Chino in Latte with a fitted white shirt"
+            "alt": "The Signore Chino in Latte with a fitted white shirt",
+            "media_type": "image",
+            "products": [
+              "siracusa-short-sleeve-slim-fit-shirt"
+            ]
           }
         },
         "look_shirt": {
@@ -84,7 +113,8 @@
           "settings": {
             "product": "siracusa-short-sleeve-slim-fit-shirt",
             "image_asset": "guillo-brown-01.jpg",
-            "alt": "A fitted white shirt with brown chinos"
+            "alt": "A fitted white shirt with brown chinos",
+            "media_type": "image"
           }
         }
       },

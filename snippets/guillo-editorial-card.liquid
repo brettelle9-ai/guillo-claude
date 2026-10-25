@@ -1,4 +1,5 @@
 {%- liquid
+  assign card_image = media_override.settings.image | default: product.featured_image
   assign editorial_url = product.url
   if product.handle == 'firenze-chevron-shirt'
     assign editorial_url = product.url | append: '?view=firenze-editorial'
@@ -41,9 +42,9 @@
     endfor
   endcapture
 -%}
-<article class="gc-card" data-gc-card data-name="{{ product.title | escape }}" data-tags="{{ product.tags | join: '|' | escape }}" data-colour="{{ colour | escape }}" data-sizes="{{ size_values | strip | escape }}" data-available-sizes="{{ available_sizes | strip | escape }}" data-handle="{{ product.handle }}" data-available="{{ product.available }}" data-price="{{ product.price }}">
+<article class="gc-card" {{ media_override.shopify_attributes }} data-gc-card data-name="{{ product.title | escape }}" data-tags="{{ product.tags | join: '|' | escape }}" data-colour="{{ colour | escape }}" data-sizes="{{ size_values | strip | escape }}" data-available-sizes="{{ available_sizes | strip | escape }}" data-handle="{{ product.handle }}" data-available="{{ product.available }}" data-price="{{ product.price }}">
   <div class="gc-card__media" data-gc-media>
-    <a href="{{ editorial_url }}" class="gc-card__photo" aria-label="View {{ product.title | escape }}">{{ product.featured_image | image_url: width: 1200 | image_tag: widths: '240, 360, 540, 750, 1000, 1200', sizes: '(min-width: 1000px) 25vw, 50vw', loading: image_loading, alt: product.title }}{% render 'guillo-card-video', product: product %}</a>
+    <a href="{{ editorial_url }}" class="gc-card__photo" aria-label="View {{ product.title | escape }}">{{ card_image | image_url: width: 1200 | image_tag: widths: '240, 360, 540, 750, 1000, 1200', sizes: '(min-width: 1000px) 25vw, 50vw', loading: image_loading, alt: product.title }}{% render 'guillo-card-video', product: product, media_override: media_override, card_media_default: card_media_default, card_image: card_image %}</a>
     {%- if product.images[1] != blank -%}<a href="{{ editorial_url }}" class="gc-card__photo gc-card__photo--second" aria-label="Another view of {{ product.title | escape }}">{{ product.images[1] | image_url: width: 1200 | image_tag: widths: '240, 360, 540, 750, 1000, 1200', sizes: '(min-width: 1000px) 25vw, 50vw', loading: 'lazy', alt: product.title }}</a>{%- endif -%}
     {%- unless product.available -%}<span class="gc-card__badge">Sold out</span>{%- else -%}{%- if product.tags contains 'pre-order' and product.handle != 'firenze-chevron-shirt' -%}<span class="gc-card__badge">Pre-order</span>{%- endif -%}{%- endunless -%}
   </div>

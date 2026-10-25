@@ -1,0 +1,34 @@
+{%- liquid
+  assign media_image = image
+  if media_image == blank and fallback_asset == blank
+    assign media_image = fallback_image
+  endif
+  assign play_video = false
+  if media_type == 'video' or media_type == blank
+    if video != blank or fallback_film != blank
+      assign play_video = true
+    endif
+  endif
+  assign image_loading = 'lazy'
+  if eager
+    assign image_loading = 'eager'
+  endif
+  if image == blank and play_video and video.preview_image != blank
+    assign media_image = video.preview_image
+  endif
+  assign desktop_source = video.sources | where: 'format', 'mp4' | sort: 'height' | last
+  assign mobile_source = mobile_video.sources | where: 'format', 'mp4' | sort: 'height' | last
+-%}
+<div class="g-editorial-media {{ media_class }}">
+  <picture>
+    {% if mobile_image != blank %}<source media="(max-width:767px)" srcset="{{ mobile_image | image_url: width: 1200 }}">{% endif %}
+    {% if media_image != blank %}{{ media_image | image_url: width: 2200 | image_tag: loading: image_loading, widths: '400, 750, 1100, 1600, 2200', sizes: '(min-width:768px) 50vw, 100vw', alt: alt }}{% elsif fallback_asset != blank %}<img src="{{ fallback_asset | asset_url }}" alt="{{ alt | escape }}" loading="{{ image_loading }}" width="1500" height="2000">{% elsif fallback_image != blank %}{{ fallback_image | image_url: width: 1600 | image_tag: loading: image_loading, alt: alt }}{% endif %}
+  </picture>
+  {% if play_video %}
+    {%- capture cover -%}{% if media_image != blank %}{{ media_image | image_url: width: 1200 }}{% elsif fallback_asset != blank %}{{ fallback_asset | asset_url }}{% endif %}{%- endcapture -%}
+    <video class="g-editorial-media__video{% if mobile_source != blank %} g-editorial-media__video--desktop{% endif %}" data-guillo-card-video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" {% if cover != blank %}poster="{{ cover | strip }}"{% endif %}>
+      {% if desktop_source != blank %}<source data-src="{{ desktop_source.url }}" type="video/mp4">{% elsif fallback_film != blank %}<source data-src="{{ fallback_film | asset_url }}" type="video/mp4">{% endif %}
+    </video>
+    {% if mobile_source != blank %}<video class="g-editorial-media__video g-editorial-media__video--mobile" data-guillo-card-video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" {% if mobile_image != blank %}poster="{{ mobile_image | image_url: width: 1000 }}"{% elsif cover != blank %}poster="{{ cover | strip }}"{% endif %}><source data-src="{{ mobile_source.url }}" type="video/mp4"></video>{% endif %}
+  {% endif %}
+</div>
