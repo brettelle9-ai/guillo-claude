@@ -14,8 +14,8 @@
       "settings": {
         "availability_mode": "normal",
         "subtitle": "A tailored short with a clean line above the knee. Choose your preferred length and size.",
-        "fabric_fit": "<p>A tailored short with a clean line above the knee. Choose your preferred length and size.</p>",
-        "care": "<p>Compare the measurements in the size guide before choosing. Follow the care label supplied with your piece.</p>"
+        "fabric_fit": "<p>A lightweight stretch twill that breathes and recovers its shape.</p><p>A tailored short with a clean line above the knee. Choose your preferred length and size.</p>",
+        "care": "<p>Follow the care label supplied with your piece.</p>"
       },
       "blocks": {
         "sizeguide": {

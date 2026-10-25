@@ -13,8 +13,8 @@
       "type": "guillo-editorial-product",
       "settings": {
         "availability_mode": "interest",
-        "fabric_fit": "<p>A considered silhouette. Explore the available sizes and views below.</p>",
-        "care": "<p>Compare the measurements in the size guide before choosing. Follow the care label supplied with your piece.</p>"
+        "fabric_fit": "<p>63% cotton, 32% polyester, 5% elastane. Non-iron and crease resistant.</p><p>Relaxed through the leg with ease from seat to hem. Take your true waist.</p>",
+        "care": "<p>Machine wash cold. Hang dry.</p>"
       },
       "blocks": {
         "sizeguide": {
