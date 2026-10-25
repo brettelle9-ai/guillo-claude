@@ -5,6 +5,14 @@
     const gallery=root.querySelector('[data-ge-gallery]'),slides=[...root.querySelectorAll('[data-ge-slide]')],count=root.querySelector('[data-ge-gallery-count]');
     let current=0;
     const move=step=>{current=Math.max(0,Math.min(slides.length-1,current+step));gallery.scrollTo({left:slides[current].offsetLeft-slides[0].offsetLeft,behavior});};
+    const videoShortcut=root.querySelector('[data-ge-video-shortcut]');
+    videoShortcut?.addEventListener('click',()=>{
+      const index=Number(videoShortcut.dataset.geVideoShortcut),slide=slides[index];if(!slide)return;
+      current=index;gallery.scrollTo({left:slide.offsetLeft-slides[0].offsetLeft,behavior:'instant'});
+      const video=slide.querySelector('video');if(video){video.muted=true;video.play().catch(()=>{});}else slide.querySelector('iframe')?.focus();
+    });
+    const videoObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)entry.target.querySelector('video')?.pause();}),{root:gallery,threshold:.55});
+    root.querySelectorAll('[data-ge-video-slide]').forEach(slide=>videoObserver.observe(slide));
     root.querySelector('[data-ge-next]').addEventListener('click',()=>move(1));root.querySelector('[data-ge-previous]').addEventListener('click',()=>move(-1));
     gallery.addEventListener('scroll',()=>{const step=slides[1]?slides[1].offsetLeft-slides[0].offsetLeft:gallery.clientWidth;current=Math.min(slides.length-1,Math.round(gallery.scrollLeft/step));count.textContent=`${current+1} / ${slides.length}`;},{passive:true});
     gallery.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();move(e.key==='ArrowRight'?1:-1);}});

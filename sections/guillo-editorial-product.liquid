@@ -1,22 +1,39 @@
 {%- liquid
   assign rating = product.metafields.reviews.rating.value.rating | plus: 0
   assign rating_count = product.metafields.reviews.rating_count.value | plus: 0
+  assign fys_block = section.blocks | where: 'type', 'guillo_find_your_size' | first
+  assign video_index = blank
+  assign gallery_count = product.media.size
+  for item in product.media
+    if item.media_type == 'video' or item.media_type == 'external_video'
+      if video_index == blank
+        assign video_index = forloop.index0
+      endif
+    endif
+  endfor
+  assign use_extra_video = false
+  if video_index == blank and section.settings.video != blank
+    assign video_index = product.media.size
+    assign gallery_count = gallery_count | plus: 1
+    assign use_extra_video = true
+  endif
   assign colour = product.metafields.custom.colour_name.value | default: 'Navy'
 -%}
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
 <section class="ge-product" data-ge-product>
   <div class="ge-main">
     <div class="ge-gallery-wrap">
       <div class="ge-gallery" data-ge-gallery aria-label="{{ product.title | escape }} photographs" tabindex="0">
         {%- for media in product.media -%}
           {%- assign image_loading = 'lazy' -%}{%- if forloop.first -%}{%- assign image_loading = 'eager' -%}{%- endif -%}
-          <div class="ge-slide" data-ge-slide>
+          <div class="ge-slide" data-ge-slide{% if media.media_type == 'video' or media.media_type == 'external_video' %} data-ge-video-slide{% endif %}>
             {%- if media.media_type == 'image' -%}<button type="button" data-ge-zoom="{{ forloop.index0 }}" aria-label="Enlarge photograph {{ forloop.index }} of {{ product.title | escape }}">{{ media | image_url: width: 1800 | image_tag: widths: '400, 600, 900, 1200, 1800', sizes: '(min-width: 750px) 43vw, 100vw', loading: image_loading, alt: media.alt }}</button>
-            {%- elsif media.media_type == 'video' -%}{{ media | video_tag: controls: true, loop: true, image_size: '1200x' }}{%- else -%}{{ media | media_tag }}{%- endif -%}
+            {%- elsif media.media_type == 'video' -%}{{ media | video_tag: controls: true, loop: true, muted: true, preload: 'none', image_size: '1200x' }}{%- else -%}{{ media | media_tag }}{%- endif -%}
           </div>
         {%- endfor -%}
+        {%- if use_extra_video -%}<div class="ge-slide ge-slide--video" data-ge-slide data-ge-video-slide>{{ section.settings.video | video_tag: controls: true, loop: true, muted: true, preload: 'none', image_size: '1200x', class: 'ge-product-video' }}</div>{%- endif -%}
       </div>
-      <div class="ge-gallery-controls"><button type="button" data-ge-previous aria-label="Previous photograph">‹</button><span data-ge-gallery-count>1 / {{ product.media.size }}</span><button type="button" data-ge-next aria-label="Next photograph">›</button></div>
+      <div class="ge-gallery-controls"><button type="button" data-ge-previous aria-label="Previous photograph">‹</button><span data-ge-gallery-count>1 / {{ gallery_count }}</span><button type="button" data-ge-next aria-label="Next photograph">›</button></div>
+      {%- if video_index != blank -%}<button type="button" class="ge-video-shortcut" data-ge-video-shortcut="{{ video_index }}" aria-label="View product video"><svg width="25" height="25" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="white"/><path d="m10 7 7 5-7 5z" fill="#454545"/></svg><span>Video</span></button>{%- endif -%}
     </div>
     <div class="ge-info">
       <div class="ge-title-row"><h1>{{ product.title | remove_first: 'The ' | escape }}</h1>{%- if rating > 0 -%}<a href="#GEReviews" class="ge-rating" aria-label="{{ rating }} out of five, {{ rating_count }} {% if rating_count == 1 %}review{% else %}reviews{% endif %}">{{ rating | round: 1 }} <span aria-hidden="true">★★★★★</span>{% if rating_count > 0 %} ({{ rating_count }}){% endif %}</a>{%- endif -%}</div>
@@ -31,7 +48,7 @@
             <label><input type="radio" name="ge-size" required value="{{ variant.id }}" data-ge-option data-price="{{ variant.price | money | escape }}" data-size="{{ variant.title | escape }}" {% unless variant.available %}disabled{% endunless %}><span>{{ variant.title | escape }}</span></label>
           {%- endfor -%}
         </div></fieldset>
-        <div class="ge-fitline"><span>{% if product.metafields.custom.model_height != blank and product.metafields.custom.model_size != blank %}Model is {{ product.metafields.custom.model_height }} and wears {{ product.metafields.custom.model_size }}{% else %}Slim fit through the body{% endif %}</span><button type="button" data-ge-panel="sizeguide">Size Guide</button></div>
+        <div class="ge-fitline"><span>{% if product.metafields.custom.model_height != blank and product.metafields.custom.model_size != blank %}Model is {{ product.metafields.custom.model_height }} and wears {{ product.metafields.custom.model_size }}{% else %}Slim fit through the body{% endif %}</span>{% if fys_block %}<button type="button" data-gfys-open="gfys-modal-{{ fys_block.id }}" aria-haspopup="dialog">Find Your Size</button>{% else %}<button type="button" data-ge-panel="sizeguide">Size Guide</button>{% endif %}</div>
         <button type="submit" class="ge-add" data-ge-add {% unless product.available %}disabled{% endunless %}>{% if product.available %}Add to Bag{% else %}Sold out{% endif %}</button>
       {% endform %}
       <div class="ge-delivery"><svg width="19" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="m3 7 9-5 9 5v10l-9 5-9-5zM3 7l9 5 9-5M12 12v10M7 4.8l10 5"/></svg><span>Ships from Brisbane<br><button type="button" data-ge-panel="delivery">Delivery to {{ localization.country.name }} · See delivery options</button></span></div>
@@ -50,6 +67,7 @@
   {% if navy_count > 0 %}<div class="ge-related"><div class="ge-rail-heading"><h2>More In This Colour</h2><div><button type="button" data-ge-rail-previous aria-label="Previous navy products">‹</button><button type="button" data-ge-rail-next aria-label="Next navy products">›</button></div></div><div class="ge-rail">{{ navy_rail }}</div></div>{% endif %}
   <div id="GEReviews" class="ge-reviews"><h2>Customer reviews</h2><div class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">{{ product.metafields.judgeme.widget }}</div>{% if rating_count > 0 %}<p>{{ rating | round: 1 }} / 5 from {{ rating_count }} {% if rating_count == 1 %}review{% else %}reviews{% endif %}</p>{% endif %}<a href="{{ pages.testimonials.url | default: '/pages/testimonials' }}">Read Guillo customer reviews</a></div>
   <div class="ge-sticky" data-ge-sticky><button type="button" data-ge-sticky-add>{% if product.available %}Add to Bag{% else %}Sold out{% endif %}</button></div>
+  {% if fys_block %}<div class="ge-sizeguide-source">{% render 'guillo-find-your-size', settings: fys_block.settings, unique: fys_block.id, product: product %}</div>{% endif %}
   <dialog class="ge-panel gc-dialog" data-ge-info-dialog aria-labelledby="GEPanelTitle"><header><h2 id="GEPanelTitle" data-ge-panel-title></h2><button type="button" data-gc-close aria-label="Close product information">×</button></header><div class="ge-panel-copy" data-ge-panel-content></div><footer><button type="button" data-ge-panel-purchase>{% if product.available %}Add to Bag{% else %}Sold out{% endif %}</button></footer></dialog>
   <template data-ge-panel-template="details"><div class="ge-copy">{{ product.description }}</div></template>
   <template data-ge-panel-template="fabric"><div class="ge-copy"><p>Navy chevron texture woven into a lightweight, breathable fabric with a cool-touch finish.</p><p>Stretch construction, a wrinkle-resistant finish and a slim, tapered shape. Short sleeves and a button-down collar.</p>{% if product.metafields.custom.fabric_composition != blank %}<p>{{ product.metafields.custom.fabric_composition }}</p>{% endif %}</div></template>
@@ -60,5 +78,401 @@
   <dialog class="ge-zoom gc-dialog" aria-label="Product photograph" data-ge-zoom-dialog><button type="button" class="gc-icon-button" data-gc-close aria-label="Close photograph">×</button><img alt="{{ product.title | escape }}" data-ge-zoom-image></dialog>
 </section>
 {% schema %}
-{"name":"Editorial product","settings":[],"presets":[{"name":"Editorial product"}]}
+{
+  "name": "Editorial product",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Product video"
+    },
+    {
+      "type": "text",
+      "id": "video_caption",
+      "label": "Video caption",
+      "default": "Watch the fit in motion"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "guillo_find_your_size",
+      "name": "Guillo Find Your Size",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Trigger"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Guillo Find Your Size"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icon",
+          "label": "Show ruler icon",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Modal Header"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow label",
+          "default": "Size Guide"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Guillo Find Your Size"
+        },
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Use your body measurements to choose the right Guillo fit."
+        },
+        {
+          "type": "header",
+          "content": "Logo Loader",
+          "info": "Slow pulse while the popup opens. Upload your Guillo logo or paste a URL."
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Loader logo image"
+        },
+        {
+          "type": "text",
+          "id": "logo_url",
+          "label": "or logo image URL"
+        },
+        {
+          "type": "header",
+          "content": "Fit Profile (scale)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_fit_profile",
+          "label": "Show fit profile",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "fit_profile_heading",
+          "label": "Heading",
+          "default": "Fit Profile"
+        },
+        {
+          "type": "text",
+          "id": "fit_profile_left",
+          "label": "Left label",
+          "default": "Relaxed"
+        },
+        {
+          "type": "text",
+          "id": "fit_profile_center",
+          "label": "Centre label (this product)",
+          "default": "Tailored Stretch Fit"
+        },
+        {
+          "type": "text",
+          "id": "fit_profile_right",
+          "label": "Right label",
+          "default": "Skinny"
+        },
+        {
+          "type": "range",
+          "id": "fit_profile_position",
+          "label": "Dot position",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "textarea",
+          "id": "fit_profile_note",
+          "label": "Note",
+          "default": "A modern, tailored fit with ease of movement."
+        },
+        {
+          "type": "header",
+          "content": "How It Fits (image + callouts)",
+          "info": "Upload your product image. Callouts: one per line as  Label|verticalPercent  (0=top, 100=bottom)."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_fit_image",
+          "label": "Show fit image",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "measure_heading",
+          "label": "Heading",
+          "default": "How It Fits"
+        },
+        {
+          "type": "image_picker",
+          "id": "measurement_image",
+          "label": "Fit image"
+        },
+        {
+          "type": "text",
+          "id": "measurement_image_url",
+          "label": "or fit image URL"
+        },
+        {
+          "type": "textarea",
+          "id": "fit_callouts",
+          "label": "Callout labels",
+          "default": "True-to-size waist|18\nRoom through thigh|40\nTapered leg|66\nClean ankle break|90"
+        },
+        {
+          "type": "header",
+          "content": "Size Chart",
+          "info": "One row per line, columns separated by | , first line = header. TOPS e.g. Size|Chest|Shoulder|Length|Sleeve  \u00b7  BOTTOMS e.g. Size|Waist|Inside Leg"
+        },
+        {
+          "type": "text",
+          "id": "chart_heading",
+          "label": "Heading",
+          "default": "Size Chart"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_unit_toggle",
+          "label": "Show CM / IN toggle",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "default_unit",
+          "label": "Default unit",
+          "options": [
+            {
+              "value": "cm",
+              "label": "CM"
+            },
+            {
+              "value": "in",
+              "label": "IN"
+            }
+          ],
+          "default": "cm"
+        },
+        {
+          "type": "textarea",
+          "id": "measurements_cm",
+          "label": "Measurements - CM",
+          "default": "Size|Chest|Shoulder|Length|Sleeve\nXS|92|42|70|62\nS|96|44|72|63\nM|100|46|74|64\nL|106|48|76|65\nXL|112|50|78|66\nXXL|118|52|80|67"
+        },
+        {
+          "type": "textarea",
+          "id": "measurements_in",
+          "label": "Measurements - IN",
+          "default": "Size|Chest|Shoulder|Length|Sleeve\nXS|36.2|16.5|27.6|24.4\nS|37.8|17.3|28.3|24.8\nM|39.4|18.1|29.1|25.2\nL|41.7|18.9|29.9|25.6\nXL|44.1|19.7|30.7|26.0\nXXL|46.5|20.5|31.5|26.4"
+        },
+        {
+          "type": "header",
+          "content": "Fit Notes"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_fit_notes",
+          "label": "Show fit notes",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "fit_notes_heading",
+          "label": "Heading",
+          "default": "Fit Notes"
+        },
+        {
+          "type": "text",
+          "id": "note1_title",
+          "label": "Note 1 - title",
+          "default": "Between sizes?"
+        },
+        {
+          "type": "textarea",
+          "id": "note1_text",
+          "label": "Note 1 - text",
+          "default": "Choose the larger size for more comfort."
+        },
+        {
+          "type": "text",
+          "id": "note2_title",
+          "label": "Note 2 - title",
+          "default": "Prefer a sharper fit?"
+        },
+        {
+          "type": "textarea",
+          "id": "note2_text",
+          "label": "Note 2 - text",
+          "default": "Choose your usual waist size."
+        },
+        {
+          "type": "text",
+          "id": "note3_title",
+          "label": "Note 3 - title",
+          "default": "Bigger thighs?"
+        },
+        {
+          "type": "textarea",
+          "id": "note3_text",
+          "label": "Note 3 - text",
+          "default": "Size up for more room through the upper leg."
+        },
+        {
+          "type": "header",
+          "content": "How They Sit (short / regular / long)",
+          "info": "Best for trousers, chinos and jeans. Upload a small image for each."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sit",
+          "label": "Show 'how they sit'",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "sit_heading",
+          "label": "Heading",
+          "default": "How They Sit"
+        },
+        {
+          "type": "image_picker",
+          "id": "sit1_image",
+          "label": "Short - image"
+        },
+        {
+          "type": "text",
+          "id": "sit1_title",
+          "label": "Short - title",
+          "default": "Short Legs"
+        },
+        {
+          "type": "textarea",
+          "id": "sit1_text",
+          "label": "Short - text",
+          "default": "Sits a touch lower with a slight break for shorter heights."
+        },
+        {
+          "type": "image_picker",
+          "id": "sit2_image",
+          "label": "Regular - image"
+        },
+        {
+          "type": "text",
+          "id": "sit2_title",
+          "label": "Regular - title",
+          "default": "Regular Legs"
+        },
+        {
+          "type": "textarea",
+          "id": "sit2_text",
+          "label": "Regular - text",
+          "default": "Designed to sit cleanly at the ankle for a tailored look."
+        },
+        {
+          "type": "image_picker",
+          "id": "sit3_image",
+          "label": "Long - image"
+        },
+        {
+          "type": "text",
+          "id": "sit3_title",
+          "label": "Long - title",
+          "default": "Long Legs"
+        },
+        {
+          "type": "textarea",
+          "id": "sit3_text",
+          "label": "Long - text",
+          "default": "More break over the shoe for taller builds."
+        },
+        {
+          "type": "header",
+          "content": "International Size Conversion"
+        },
+        {
+          "type": "text",
+          "id": "conversion_heading",
+          "label": "Heading",
+          "default": "International Size Conversion"
+        },
+        {
+          "type": "textarea",
+          "id": "conversion_table",
+          "label": "Conversion table",
+          "default": "Guillo Size|EU|UK|US|Australia|Singapore\nXS|44|34|34|34|XS\nS|46|36|36|36|S\nM|48|38|38|38|M\nL|50|40|40|40|L\nXL|52|42|42|42|XL\nXXL|54|44|44|44|XXL"
+        },
+        {
+          "type": "header",
+          "content": "Recommended Alternative",
+          "info": "Cross-sell a different style when this one runs short or tight."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_reco",
+          "label": "Show recommendation",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "reco_title",
+          "label": "Title",
+          "default": "Too short or too tight?"
+        },
+        {
+          "type": "textarea",
+          "id": "reco_text",
+          "label": "Text",
+          "default": "If these feel snug or short, our roomier cut offers a longer, more relaxed fit."
+        },
+        {
+          "type": "text",
+          "id": "reco_link_label",
+          "label": "Link label",
+          "default": "Discover the alternative"
+        },
+        {
+          "type": "url",
+          "id": "reco_link_url",
+          "label": "Recommended product link"
+        },
+        {
+          "type": "header",
+          "content": "Help Bar"
+        },
+        {
+          "type": "text",
+          "id": "help_title",
+          "label": "Title",
+          "default": "Still unsure?"
+        },
+        {
+          "type": "textarea",
+          "id": "help_text",
+          "label": "Text",
+          "default": "Order your usual size. Easy 44-day returns if the fit isn't right."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial product"
+    }
+  ]
+}
 {% endschema %}

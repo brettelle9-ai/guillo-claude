@@ -1,5 +1,5 @@
 /* Firenze reference layout: half-width, viewport-height carousel and centred buy column. */
-.ge-product-preview{--ge-font:'Jost',var(--g-sans);background:#f8f8f8}
+.ge-product-preview{--ge-font:var(--g-sans);background:#f8f8f8}
 .ge-product-preview #header-group>.shopify-section-group-header-group:not(.header-section){display:none}
 .ge-product-preview #header-group .announcement-bar,.ge-product-preview #header-group [class*="announcement"]{display:none!important}
 .ge-product-preview .gc-header__row{height:72px}
@@ -19,3 +19,19 @@
 @media(min-width:750px) and (max-width:1100px){.ge-info{width:80%}}
 @media(max-width:749px){.ge-product-preview .gc-header__row{height:58px}.ge-main{display:block}.ge-gallery-wrap{position:relative;top:auto;width:100%}.ge-gallery{height:auto;gap:1px}.ge-slide{flex:0 0 100%;height:auto;aspect-ratio:2/3}.ge-slide img{object-position:50% 30%}.ge-gallery-controls>span{top:auto;left:auto;bottom:18px;right:17px;font-size:10px}.ge-gallery-controls>button{display:none}.ge-info{position:static;width:100%;padding:19px 12px 28px}.ge-product .ge-title-row h1{font-size:17px;line-height:1.4}.ge-rating{font-size:10px}.ge-subtitle{font-size:12px;margin:10px 0 8px}.ge-price{font-size:13px;margin:0}.ge-colour{margin:27px 0 29px;padding:0;border:0}.ge-colour p{font-size:12px;margin-bottom:13px}.ge-swatch{width:21px;height:21px}.ge-sizes legend{font-size:12px;margin-bottom:13px}.ge-sizes label span{font-size:12px;min-height:40px}.ge-fitline{font-size:11px;margin:13px 0 24px}.ge-add{font-size:12px;min-height:46px}.ge-delivery{font-size:11px;margin-top:15px}.ge-accordions{margin-top:35px}.ge-accordions>button{font-size:12px;min-height:35px}.ge-style{margin-top:38px}.ge-style>h2{font-size:12px}.ge-style .gc-card{grid-template-columns:84px minmax(0,1fr);min-height:126px}.ge-style .gc-card__media{height:126px}.ge-style .gc-card__title-row h2{font-size:12px}.ge-style .gc-card__subtitle{font-size:11px}.ge-style .gc-card__bottom{font-size:12px}.ge-breadcrumb{font-size:10px}.ge-related{padding-top:32px}.ge-rail-heading{padding:0 14px;margin-bottom:18px}.ge-rail-heading>h2{font-size:20px}.ge-rail-heading>div{gap:12px}.ge-rail-heading button{font-size:18px}.ge-rail{grid-auto-columns:49.5%;gap:2px}.ge-rail .gc-card__details{padding:9px 11px}.ge-rail .gc-card__title-row h2{font-size:12px}.ge-rail .gc-card__subtitle,.ge-rail .gc-card__bottom{font-size:11px}.ge-product{padding-bottom:68px}.ge-sticky{display:block;position:fixed;bottom:0;left:0;right:0;padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:#f8f8f8;z-index:35}.ge-sticky button{min-height:46px;font-size:12px}.ge-sticky[hidden]{display:none!important}.ge-panel{width:100%}.ge-panel>header{padding:20px;min-height:65px}.ge-panel h2{font-size:17px}.ge-panel-copy{padding:24px 20px;height:calc(100dvh - 145px)}.ge-panel footer{padding:16px 20px}.ge-copy{font-size:13px}}
 @media(prefers-reduced-motion:reduce){.ge-panel:open{animation:none}}
+
+/* Match the Luxe Chino type pairing and keep the existing Guillo size guide. */
+.ge-product .ge-title-row h1{font:400 36px/1.1 var(--g-display);letter-spacing:-.025em}
+.ge-rail-heading>h2,.ge-reviews>h2,.ge-panel h2{font-family:var(--g-display);font-weight:400}
+.ge-panel{font-family:var(--g-sans)}
+.ge-sizeguide-source>[data-gfys-root]>.gfys-trigger{display:none}
+.ge-video-shortcut{position:absolute;right:20px;bottom:22px;display:flex;align-items:center;gap:9px;padding:8px 15px 8px 8px;border:0;border-radius:30px;background:#67635f59;backdrop-filter:blur(8px);color:#fff;font:500 16px/1 var(--g-sans);cursor:pointer;z-index:2}
+.ge-video-shortcut svg{flex-shrink:0}
+@media(max-width:749px){
+ .ge-product .ge-title-row h1{font-size:28px}
+ .ge-gallery{height:auto;aspect-ratio:1 / 1.3875}
+ .ge-slide{flex-basis:92.5%;height:100%;aspect-ratio:auto}
+ .ge-video-shortcut{left:15px;right:auto;bottom:17px;font-size:13px;padding:7px 12px 7px 7px;gap:7px}
+ .ge-video-shortcut svg{width:22px;height:22px}
+ .ge-gallery-controls>span{right:calc(7.5% + 17px)}
+}

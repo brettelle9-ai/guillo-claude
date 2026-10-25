@@ -2,7 +2,69 @@
   "sections": {
     "main": {
       "type": "guillo-editorial-product",
-      "settings": {}
+      "settings": {
+        "video": "shopify://files/videos/lv_0_20260914131333.mp4",
+        "video_caption": "Watch the fit in motion"
+      },
+      "blocks": {
+        "firenze_sizeguide": {
+          "type": "guillo_find_your_size",
+          "settings": {
+            "button_text": "Find Your Size",
+            "show_icon": true,
+            "eyebrow": "Size Guide",
+            "heading": "Find Your Size",
+            "subheading": "Use your body measurements to choose the right Guillo fit.",
+            "logo_image": "shopify://shop_images/Black_and_Brown_Stylish_and_Edgy_Black_Friday_Fashion_Sale_Instagram_Post_31.png",
+            "logo_url": "",
+            "show_fit_profile": true,
+            "fit_profile_heading": "Fit Profile",
+            "fit_profile_left": "Baggy",
+            "fit_profile_center": "Fitted",
+            "fit_profile_right": "Restrictive",
+            "fit_profile_position": 50,
+            "fit_profile_note": "Fitted through the shoulders and arms, tapering through the body.",
+            "show_fit_image": true,
+            "measure_heading": "How To Measure",
+            "measurement_image": "shopify://shop_images/Generated_with_Kive.ai_-_high-end_e-commerce_product_photography__perfectly_symmetrical_flat-lay__invisible_ghost_mannequin_style._Clean_white_seamless_background_with_a_soft__natural.png",
+            "measurement_image_url": "",
+            "fit_callouts": "True-to-size chest|18\nFitted through shoulders and arms|40\nTapered through the body|66\nClean shirt hem|90",
+            "chart_heading": "Size Chart",
+            "show_unit_toggle": true,
+            "default_unit": "cm",
+            "measurements_cm": "Size|Chest (cm)|Back Length (cm)\nS|99.1 - 104.1|76.2\nM|104.1 - 109.2|77.5\nL|109.2 - 114.3|78.7\nXL|111.8 - 116.8|81.3\nXXL|116.8 - 121.9|83.8",
+            "measurements_in": "Size|Chest (in)|Back Length (in)\nS|39 - 41|30\nM|41 - 43|30.5\nL|43 - 45|31\nXL|44 - 46|32\nXXL|46 - 48|33",
+            "show_fit_notes": true,
+            "fit_notes_heading": "Fit Notes",
+            "note1_title": "Between sizes?",
+            "note1_text": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
+            "note2_title": "Prefer a sharper fit?",
+            "note2_text": "Compare your chest measurement to the chart and consider your preferred fit.",
+            "note3_title": "Slim or muscular build?",
+            "note3_text": "Compare your measurements with the chart. For help choosing a size, contact Guillo.",
+            "show_sit": false,
+            "sit_heading": "How They Sit",
+            "sit1_title": "Short Legs",
+            "sit1_text": "Sits a touch lower with a slight break for shorter heights.",
+            "sit2_title": "Regular Legs",
+            "sit2_text": "Designed to sit cleanly at the ankle for a tailored look.",
+            "sit3_title": "Long Legs",
+            "sit3_text": "More break over the shoe for taller builds.",
+            "conversion_heading": "",
+            "conversion_table": "",
+            "show_reco": false,
+            "reco_title": "Prefer long sleeves?",
+            "reco_text": "Exactly the same fit but long sleeve.",
+            "reco_link_label": "View Long Sleeve Styles",
+            "reco_link_url": "shopify://products/vulcano-short-sleeve-slim-fit-shirt-copy",
+            "help_title": "Still unsure?",
+            "help_text": "Need help? Message us and we'll recommend your best size"
+          }
+        }
+      },
+      "block_order": [
+        "firenze_sizeguide"
+      ]
     }
   },
   "order": [
