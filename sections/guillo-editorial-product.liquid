@@ -26,6 +26,8 @@
   assign family_candidates = product.metafields.custom.product_group.value.products.value | default: product.metafields.custom.colour_group.value | default: ge_catalog.products
   if family_key == 'shirts'
     assign family_candidates = collections.shirts.products
+  elsif family_key == 'luxe-chinos' or family_key == 'signore-chinos' or family_key == 'portofino-polos' or family_key == 'valenti-polos' or family_key == 'capri-shorts' or family_key == 'torino-jeans' or family_key == 'classico-tees'
+    assign family_candidates = ge_catalog.products
   endif
   for guide in section.blocks
     if guide.type == 'guillo_find_your_size'
