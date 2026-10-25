@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "editorial": {
+      "type": "guillo-editorial-collection",
+      "settings": {
+        "heading": "Signature shirts",
+        "description": "Fitted through the chest and arms, with a defined waist. Discover pinstripes, textured weaves and distinctive prints across short sleeves, long sleeves and grandad collars.",
+        "products_per_page": 48
+      }
+    }
+  },
+  "order": ["editorial"]
+}

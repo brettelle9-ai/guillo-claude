@@ -1,0 +1,24 @@
+{%- assign preview_menu = linklists['guillo-redesign-main'] | default: section.settings.menu -%}
+<div class="gc-header" data-gc-header>
+  <div class="gc-header__row">
+    <button class="gc-icon-button gc-header__menu" type="button" data-gc-menu-open aria-label="Open menu" aria-controls="GCNavigation" aria-expanded="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>Menu</span></button>
+    <a class="gc-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">GUILLO</a>
+    <nav class="gc-header__desktop-nav" aria-label="Main navigation">
+      {%- for link in preview_menu.links limit: 6 -%}
+        {%- capture child_id -%}root-{{ forloop.index }}{%- endcapture -%}
+        {%- if link.links.size > 0 -%}<button type="button" data-gc-menu-start="{{ child_id }}">{{ link.title | escape }}</button>{%- else -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endif -%}
+      {%- endfor -%}
+    </nav>
+    <div class="gc-header__actions"><a class="gc-header__account" href="{{ routes.account_url }}">Account</a><a class="gc-icon-button" href="{{ routes.cart_url }}" aria-label="Open shopping bag"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M5 8h14l1 13H4zM9 8V6a3 3 0 0 1 6 0v2"/></svg></a></div>
+  </div>
+  <form class="gc-header__search" action="{{ routes.search_url }}" method="get" role="search"><input type="hidden" name="type" value="product"><input type="search" name="q" placeholder="Search shirts, chinos and more" aria-label="Search Guillo products" autocomplete="off"><button type="submit" aria-label="Search"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button></form>
+</div>
+<dialog class="gc-menu gc-dialog" id="GCNavigation" aria-label="Guillo navigation" data-gc-menu>
+  <div class="gc-menu__top"><button type="button" class="gc-icon-button" data-gc-menu-back aria-label="Back to previous menu" hidden>‹</button><span data-gc-menu-title>Menu</span><button type="button" class="gc-icon-button" data-gc-close aria-label="Close menu">×</button></div>
+  <form class="gc-menu__search" action="{{ routes.search_url }}" role="search"><input type="hidden" name="type" value="product"><input type="search" name="q" placeholder="Search Guillo" aria-label="Search products from menu"><button type="submit">Search</button></form>
+  <div class="gc-menu__body">{% render 'guillo-editorial-menu-panel', links: preview_menu.links, panel_id: 'root', title: 'Menu' %}</div>
+  <footer class="gc-menu__footer"><a href="{{ routes.account_url }}">Your account</a>{%- form 'localization', id: 'GCMenuLocalization' -%}<label class="gc-visually-hidden" for="GCCountry">Country and currency</label><select name="country_code" id="GCCountry" data-gc-country>{%- for country in localization.available_countries -%}<option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} · {{ country.currency.iso_code }}</option>{%- endfor -%}</select><button type="submit" aria-label="Update country">→</button>{%- endform -%}</footer>
+</dialog>
+{% schema %}
+{"name":"Collection preview header","class":"gc-preview-header-section","settings":[{"type":"link_list","id":"menu","label":"Navigation menu","default":"main-menu"}]}
+{% endschema %}

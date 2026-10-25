@@ -1,0 +1,37 @@
+{%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+<section class="gc-collection" data-gc-collection data-currency="{{ localization.country.currency.iso_code }}">
+  <div class="gc-intro"><h1>{{ section.settings.heading | default: collection.title | escape }}</h1><details class="gc-intro__description"><summary><span>{{ section.settings.description | strip_html | truncatewords: 21 }}</span><span class="gc-intro__more">Read more</span></summary><div>{{ section.settings.description }}</div></details></div>
+  <div class="gc-toolbar" data-gc-toolbar>
+    <div class="gc-toolbar__filters"><button type="button" data-gc-filter-open="all" aria-controls="GCFilterDialog" aria-haspopup="dialog">Filter &amp; sort <span data-gc-active-count></span></button><button type="button" data-gc-filter-open="size" class="gc-desktop">Size</button><button type="button" data-gc-filter-open="colour" class="gc-desktop">Colour</button><button type="button" data-gc-filter-open="style" class="gc-desktop">Style</button></div>
+    <span class="gc-toolbar__count" data-gc-count>{{ collection.products_count }} pieces</span>
+    <div class="gc-density" aria-label="Product grid density"><span class="gc-desktop">View</span><button type="button" data-gc-density="1" aria-label="Large product images" aria-pressed="false"><span class="gc-mobile">1</span><span class="gc-desktop">3</span></button><button type="button" data-gc-density="2" aria-label="Standard product images" aria-pressed="true"><span class="gc-mobile">2</span><span class="gc-desktop">4</span></button><button type="button" data-gc-density="3" aria-label="Compact product images" aria-pressed="false"><span class="gc-mobile">3</span><span class="gc-desktop">6</span></button></div>
+    <form class="gc-sort gc-desktop" action="{{ collection.url }}" method="get"><input type="hidden" name="view" value="shirts-editorial"><label for="GCSort">Sort by</label><select id="GCSort" name="sort_by" data-gc-sort>{%- for option in collection.sort_options -%}<option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>{%- endfor -%}</select><noscript><button type="submit">Apply</button></noscript></form>
+  </div>
+  <div class="gc-active-filters" data-gc-active-filters hidden></div>
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    <div class="gc-grid" data-gc-grid data-density="2">
+      {%- for product in collection.products -%}{%- assign image_loading = 'lazy' -%}{%- if forloop.index <= 4 -%}{%- assign image_loading = 'eager' -%}{%- endif -%}{% render 'guillo-editorial-card', product: product, image_loading: image_loading %}{%- endfor -%}
+    </div>
+    <div class="gc-empty" data-gc-empty hidden><h2>No shirts match those choices.</h2><button type="button" data-gc-clear>Clear filters</button></div>
+    <div class="gc-pagination"><span data-gc-progress>Showing {{ collection.products.size }} of {{ collection.products_count }} pieces</span>{%- if paginate.next -%}<a href="{{ paginate.next.url }}&amp;view=shirts-editorial" data-gc-load-more>Load more</a>{%- endif -%}</div>
+  {%- endpaginate -%}
+  <div class="gc-explore"><span>Explore more</span><a href="{{ collections['signature-long-sleeve'].url | default: '/collections/signature-long-sleeve' }}">Long sleeve shirts</a><a href="{{ collections['grandad-collar'].url | default: '/collections/grandad-collar' }}">Grandad collars</a><a href="{{ collections.chinos.url }}">Chinos</a><a href="{{ pages['fit-guide'].url }}">Find your fit</a></div>
+</section>
+<dialog class="gc-filters gc-dialog" id="GCFilterDialog" aria-labelledby="GCFilterHeading" data-gc-filters>
+  <header class="gc-dialog__top"><h2 id="GCFilterHeading">Filter &amp; sort</h2><button type="button" class="gc-icon-button" data-gc-close aria-label="Close filters">×</button></header>
+  <form data-gc-filter-form>
+    <div class="gc-filters__body">
+      <details open><summary>Sort by</summary><label class="gc-visually-hidden" for="GCFilterSort">Sort products</label><select id="GCFilterSort" name="sort_by">{%- for option in collection.sort_options -%}<option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>{%- endfor -%}</select></details>
+      <details open><summary>Availability</summary><label class="gc-filter-check"><input type="checkbox" name="available" value="true"> In stock only</label></details>
+      <details data-gc-filter-group="size" open><summary>Size</summary><div class="gc-filter-sizes">{%- assign size_list = 'XS,S,M,L,XL,XXL,XXXL' | split: ',' -%}{%- for size in size_list -%}{%- assign size_exists = false -%}{%- for p in collection.products -%}{%- for variant in p.variants -%}{%- if variant.title == size -%}{%- assign size_exists = true -%}{%- endif -%}{%- endfor -%}{%- endfor -%}{%- if size_exists -%}<label><input type="checkbox" name="size" value="{{ size }}"><span>{{ size }}</span></label>{%- endif -%}{%- endfor -%}</div></details>
+      <details data-gc-filter-group="colour" open><summary>Colour</summary><div class="gc-filter-colours">{%- for tag in collection.all_tags -%}{%- if tag contains 'colour:' -%}{%- assign colour = tag | remove: 'colour:' -%}<label class="gc-filter-check"><input type="checkbox" name="colour" value="{{ colour | escape }}"><span class="gc-card__colour" style="--swatch:{{ colour | escape }}"></span>{{ colour | capitalize }}</label>{%- endif -%}{%- endfor -%}</div></details>
+      <details data-gc-filter-group="style" open><summary>Style</summary>{%- assign styles = 'Short sleeve:short-sleeve,Long sleeve:long-sleeve,Grandad collar:grandad-collar,Pinstripe:pinstripe,Chevron:chevron' | split: ',' -%}{%- for style in styles -%}{%- assign pair = style | split: ':' -%}{%- if collection.all_tags contains pair[1] -%}<label class="gc-filter-check"><input type="checkbox" name="style" value="{{ pair[1] }}">{{ pair[0] }}</label>{%- endif -%}{%- endfor -%}</details>
+      <details><summary>Price ({{ localization.country.currency.iso_code }})</summary><div class="gc-filter-price"><label>From<input type="number" name="min" min="0" step="1" inputmode="numeric" placeholder="0"></label><label>To<input type="number" name="max" min="0" step="1" inputmode="numeric" placeholder="Any"></label></div></details>
+    </div>
+    <footer class="gc-filters__footer"><button type="button" data-gc-clear>Clear all</button><button type="submit">Show results <span data-gc-result-count></span></button></footer>
+  </form>
+</dialog>
+<dialog class="gc-quick gc-dialog" aria-label="Choose shirt size" data-gc-quick-dialog><button type="button" class="gc-icon-button gc-quick__close" data-gc-close aria-label="Close quick add">×</button><div data-gc-quick-content></div></dialog>
+{% schema %}
+{"name":"Editorial collection","settings":[{"type":"text","id":"heading","label":"Heading","default":"Signature shirts"},{"type":"textarea","id":"description","label":"Collection description","default":"Fitted through the chest and arms, with a defined waist. Discover pinstripes, textured weaves and distinctive prints across short sleeves, long sleeves and grandad collars."},{"type":"range","id":"products_per_page","label":"Products per page","min":12,"max":48,"step":12,"default":48}],"presets":[{"name":"Editorial collection"}]}
+{% endschema %}
