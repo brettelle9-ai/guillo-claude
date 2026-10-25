@@ -19,7 +19,7 @@
   elsif product.tags contains 'fit:slim'
     assign fit = 'Slim fit'
   endif
-  assign rating = product.metafields.reviews.rating.value.rating
+  assign rating = product.metafields.reviews.rating.value.rating | plus: 0
   capture size_values
     for variant in product.variants
       echo variant.title
