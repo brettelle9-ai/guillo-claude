@@ -40,6 +40,9 @@
     assign fit = 'Slim fit'
   endif
   assign rating = product.metafields.reviews.rating.value.rating | plus: 0
+  capture review_line
+    render 'guillo-product-family-key', product: product
+  endcapture
   capture size_values
     for variant in product.variants
       echo variant.title
@@ -57,7 +60,7 @@
     endfor
   endcapture
 -%}
-<article class="gc-card" {{ media_override.shopify_attributes }} data-gc-card data-name="{{ product.title | escape }}" data-tags="{{ product.tags | join: '|' | escape }}" data-colour="{{ colour | escape }}" data-sizes="{{ size_values | strip | escape }}" data-available-sizes="{{ available_sizes | strip | escape }}" data-handle="{{ product.handle }}" data-available="{{ product.available }}" data-price="{{ product.price }}" data-preorder="{{ is_preorder }}">
+<article class="gc-card" {{ media_override.shopify_attributes }} data-gc-card data-name="{{ product.title | escape }}" data-tags="{{ product.tags | join: '|' | escape }}" data-colour="{{ colour | escape }}" data-sizes="{{ size_values | strip | escape }}" data-available-sizes="{{ available_sizes | strip | escape }}" data-handle="{{ product.handle }}" data-review-line="{{ review_line | strip | escape }}" data-available="{{ product.available }}" data-price="{{ product.price }}" data-preorder="{{ is_preorder }}">
   <div class="gc-card__media" data-gc-media>
     <a href="{{ editorial_url }}" class="gc-card__photo" aria-label="View {{ product.title | escape }}">{{ card_image | image_url: width: 1200 | image_tag: widths: '240, 360, 540, 750, 1000, 1200', sizes: '(min-width: 1000px) 25vw, 50vw', loading: image_loading, alt: product.title }}{% render 'guillo-card-video', product: product, media_override: media_override, card_media_default: card_media_default, card_image: card_image %}</a>
     {%- if product.images[1] != blank -%}<a href="{{ editorial_url }}" class="gc-card__photo gc-card__photo--second" aria-label="Another view of {{ product.title | escape }}">{{ product.images[1] | image_url: width: 1200 | image_tag: widths: '240, 360, 540, 750, 1000, 1200', sizes: '(min-width: 1000px) 25vw, 50vw', loading: 'lazy', alt: product.title }}</a>{%- endif -%}
@@ -67,7 +70,8 @@
     <div class="gc-card__title-row"><h2><a href="{{ editorial_url }}">{{ product.title | remove_first: 'The ' | escape }}</a></h2></div>
     {% render 'guillo-family-options', product: product %}
     <p class="gc-card__subtitle">{{ fit }}{% if fit != blank and style != blank %} · {% endif %}{{ style }}{% if colour != blank %}{% if fit != blank or style != blank %} · {% endif %}{{ colour | capitalize }}{% endif %}</p>
-    {%- if rating != blank and rating > 0 -%}<span class="gc-card__rating" aria-label="Rated {{ rating }} out of five">{{ rating | round: 2 }} <span aria-hidden="true">★★★★★</span></span>{%- endif -%}
+    {%- comment -%} Filled by guillo-card-ratings.js with the product-line figure the product page shows; the review app's stored rating is pooled for chinos and per colour for shorts, so it is only used to decide whether the slot exists. {%- endcomment -%}
+    {%- if rating != blank and rating > 0 -%}<span class="gc-card__rating" data-gc-rating style="visibility:hidden">&nbsp;</span>{%- endif -%}
     <div class="gc-card__bottom"><span>{{ product.price | money }}</span><button type="button" class="gc-card__quick" data-gc-quick="{{ product.id }}" aria-label="Choose a size for {{ product.title | escape }}" aria-haspopup="dialog"><span class="gc-card__quick-icon">+</span><span class="gc-card__quick-label">Quick Add</span></button></div>
   </div>
   <template data-gc-quick-template="{{ product.id }}">{% render 'guillo-quick-product', product: product %}</template>

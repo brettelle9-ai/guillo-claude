@@ -65,6 +65,8 @@
       <script src="{{ 'guillo-editorial-collection.js' | asset_url }}" defer></script>
       <script src="{{ 'guillo-card-video.js' | asset_url }}" defer></script>
       <script src="{{ 'guillo-quick-drawer.js' | asset_url }}" defer></script>
+      {%- render 'guillo-review-lines' -%}
+      <script src="{{ 'guillo-card-ratings.js' | asset_url }}" defer></script>
     {%- endif -%}
     {%- if request.page_type == 'product' -%}
       {{ 'guillo-editorial-product.css' | asset_url | stylesheet_tag }}

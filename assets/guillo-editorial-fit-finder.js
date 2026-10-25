@@ -497,7 +497,7 @@
     out += '<button type="button" class="gff__atc" data-gff-add="' + esc(label) + '">Add the ' + esc(label) + ' to bag · ' + esc(P.price) + '</button>' +
       '<p class="gff__reassure">' +
         '<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-        (P.freeExchange ? 'Wrong size? Free exchanges within 44 days.' : 'Wrong size? 44 days to exchange.') + '</p>' +
+        (P.freeExchange ? 'Wrong size? Free exchanges within 44 days on full-price items.' : 'Wrong size? 44 days to exchange.') + '</p>' +
       '<button type="button" class="gff__restart" data-gff-restart>Change my answers</button>' +
       '</div>';
     return out;

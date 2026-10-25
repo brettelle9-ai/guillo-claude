@@ -14,8 +14,8 @@
       "settings": {
         "availability_mode": "normal",
         "subtitle": "A slim silhouette, from the waist through the leg. Pair with a fitted shirt or polo.",
-        "fabric_fit": "<p>Slim through the leg, tapering towards the ankle. Start with your usual waist size, then use Find my size to adjust for your preferred fit.</p>",
-        "care": "<p>Compare the inside-leg measurement with a pair you already like. Follow the care label supplied with your piece.</p>"
+        "fabric_fit": "<p>Cotton twill blended with elastane, finished to resist wrinkles.</p><p>Slim through the leg, tapering towards the ankle. Start with your usual waist size, then use Find my size to adjust for your preferred fit.</p>",
+        "care": "<p>Machine wash cold, hang to dry, no ironing.</p>"
       },
       "blocks": {
         "sizeguide": {
@@ -24,7 +24,7 @@
             "button_text": "Guillo Find Your Size",
             "show_icon": true,
             "eyebrow": "Size Guide",
-            "heading": "The Luxe Chino \u2014 size guide",
+            "heading": "The Luxe Chino \u00b7 size guide",
             "subheading": "Use your body measurements to choose the right Guillo fit.",
             "logo_image": "shopify://shop_images/Black_and_Brown_Stylish_and_Edgy_Black_Friday_Fashion_Sale_Instagram_Post_31.png",
             "logo_url": "",

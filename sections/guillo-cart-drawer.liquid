@@ -385,7 +385,7 @@
     <div class="gcart-totals" data-gcart-totals>
       <div class="gcart-row gcart-row--subtotal">
         <span class="gcart-eyebrow">{{ section.settings.subtotal_label }}</span>
-        <span class="gcart-row__value" data-gcart-subtotal>—</span>
+        <span class="gcart-row__value" data-gcart-subtotal>·</span>
       </div>
       {%- comment -%} Duties are prepaid on every non-domestic destination. {%- endcomment -%}
       {%- assign gcart_domestic = settings.guillo_domestic_markets | default: 'AU,NZ' | split: ',' -%}
