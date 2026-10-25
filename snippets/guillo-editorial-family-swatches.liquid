@@ -18,4 +18,4 @@
   {%- endif -%}
 {%- endfor -%}
 {%- endcapture -%}
-{% if family_count > 1 %}<div class="ge-family-picker"><p>Colour <span class="ge-selected-colour">{{ selected_name | escape }}</span></p><div class="ge-family-swatches">{{ family_swatches }}</div></div>{% endif %}
+{% if family_count > 0 %}<div class="ge-family-picker"><p>Colour <span class="ge-selected-colour">{{ selected_name | escape }}</span></p><div class="ge-family-swatches">{{ family_swatches }}</div></div>{% endif %}

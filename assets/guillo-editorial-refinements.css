@@ -28,10 +28,11 @@
  .gc-card__photo{position:absolute;inset:0;transition:opacity .5s ease,transform .7s ease}
  .gc-card__photo--second{opacity:0;pointer-events:none;transform:scale(1.015)}
  .gc-card:hover .gc-card__photo--second,.gc-card:focus-within .gc-card__photo--second{opacity:1;transform:scale(1);pointer-events:auto}
+ .ge-style .gc-card__photo--second{display:block!important}
  .gc-card__details{position:relative}
- .gc-card__rating{transition:opacity .22s,transform .25s}
+ .gc-card__rating{transition:opacity .22s .16s,transform .25s .16s}
  .gc-card:hover .gc-card__rating,.gc-card:focus-within .gc-card__rating{opacity:0;transform:translateY(-4px)}
- .gc-card__quick{position:absolute;right:10px;bottom:42px;display:flex;align-items:center;gap:8px;width:auto;opacity:0;transform:translateY(5px);transition:opacity .25s,transform .3s}
+ .gc-card__quick{position:absolute;right:10px;bottom:42px;display:flex;align-items:center;gap:8px;width:auto;opacity:0;transform:translateY(5px);transition:opacity .25s .18s,transform .3s .18s}
  .gc-card:hover .gc-card__quick,.gc-card:focus-within .gc-card__quick{opacity:1;transform:translateY(0)}
  .gc-card__quick-label{display:inline;font:400 10px/1.4 var(--g-sans)}
  .ge-style .gc-card__quick{position:static;opacity:1;transform:none;margin-left:auto}
