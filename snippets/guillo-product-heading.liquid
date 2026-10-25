@@ -1,0 +1,1 @@
+{%- assign name = product.title | remove_first: 'The ' -%}{% if product.title contains 'The ' %}<span class="ge-name-accent" aria-hidden="true">the</span><span class="gc-visually-hidden">The </span>{% endif %}<span class="ge-name-main">{{ name | escape }}</span>

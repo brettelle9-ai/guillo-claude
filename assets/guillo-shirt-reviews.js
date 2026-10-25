@@ -23,8 +23,10 @@
     return el;
   };
   let reviews = [], shown = 0;
+  const mobile = matchMedia('(max-width:749px)');
   function render() {
-    reviews.slice(shown, shown + 5).forEach(review => {
+    const batch = mobile.matches ? (shown === 0 ? 2 : 3) : 5;
+    reviews.slice(shown, shown + batch).forEach(review => {
       const card = node('article', null, 'ge-review');
       const author = node('div');
       author.append(node('strong', review.author || 'Customer'));
@@ -42,10 +44,15 @@
       card.append(author, body);
       list.append(card);
     });
-    shown = Math.min(shown + 5, reviews.length);
+    shown = Math.min(shown + batch, reviews.length);
     more.hidden = shown >= reviews.length;
   }
   more.addEventListener('click', render);
+  const sort = section.querySelector('[data-review-sort]');
+  sort?.addEventListener('change', () => {
+    reviews.sort((a,b) => sort.value === 'highest' ? Number(b.rating)-Number(a.rating) || new Date(b.created_at)-new Date(a.created_at) : sort.value === 'lowest' ? Number(a.rating)-Number(b.rating) || new Date(b.created_at)-new Date(a.created_at) : new Date(b.created_at)-new Date(a.created_at));
+    shown = 0; list.replaceChildren(); render();
+  });
   async function loadProduct(product) {
     const collected = [];
     for (let offset = 0; ; offset += 100) {

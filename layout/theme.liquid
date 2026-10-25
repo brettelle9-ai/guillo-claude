@@ -64,11 +64,13 @@
       {{ 'guillo-editorial-collection.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'guillo-editorial-collection.js' | asset_url }}" defer></script>
       <script src="{{ 'guillo-card-video.js' | asset_url }}" defer></script>
+      <script src="{{ 'guillo-quick-drawer.js' | asset_url }}" defer></script>
     {%- endif -%}
     {%- if request.page_type == 'product' -%}
       {{ 'guillo-editorial-product.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'guillo-editorial-product.js' | asset_url }}" defer></script>
     {%- endif -%}
+    {% if request.page_type == 'index' or request.page_type == 'collection' or request.page_type == 'product' %}{{ 'guillo-editorial-refinements.css' | asset_url | stylesheet_tag }}{% endif %}
 
     {%- if request.page_type == 'product' -%}
       {{ 'guillo-purchase-motion.css' | asset_url | stylesheet_tag }}
@@ -196,5 +198,6 @@
     {% if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add-modal' %}
     {% endif %}
+    {% if request.page_type == 'product' or request.page_type == 'collection' or request.page_type == 'index' %}{% render 'guillo-quick-drawer' %}{% endif %}
   </body>
 </html>

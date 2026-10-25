@@ -66,7 +66,7 @@ body .guillo-story__text{font:400 15px/1.7 var(--g-sans);color:#515d64}
 body .guillo-story__media{min-height:590px;overflow:hidden}
 body .guillo-newsletter__heading{font-weight:500;letter-spacing:-.045em}
 body .guillo-newsletter__text{font-weight:400}
-body .guillo-footer{background:#0c0e0f}
+body .guillo-footer{background:var(--guillo-footer-navy,#14232c)}
 body .guillo-footer__links a{min-height:36px;display:inline-flex;align-items:center;font-weight:400}
 @media(hover:hover) and (pointer:fine){body .g-card:hover .g-card__img{transform:scale(1.035)}}
 @media(prefers-reduced-motion:no-preference){body .g-campaign.has-exit-motion .g-campaign__media{clip-path:inset(calc(var(--campaign-exit,0)*8%) calc(var(--campaign-exit,0)*5%) 0);will-change:clip-path}body.g-modern-ready [data-g-reveal]{clip-path:inset(calc((1 - var(--g-reveal,1))*10%) 0 0);will-change:clip-path}body.g-modern-ready [data-g-reveal] img{translate:0 calc((1 - var(--g-reveal,1))*20px)}body .ga-outfit__shop[open] form{animation:g-panel-enter .5s cubic-bezier(.2,.7,.2,1) both}}

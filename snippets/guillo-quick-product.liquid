@@ -1,0 +1,27 @@
+{%- liquid
+ assign preorder = false
+ assign interest = false
+ if product.template_suffix contains 'interest'
+  assign interest = true
+ elsif product.template_suffix contains 'pre-order' and product.handle != 'firenze-chevron-shirt'
+  assign preorder = true
+ endif
+ assign colour = product.metafields.custom.colour_name.value
+ for tag in product.tags
+  if tag contains 'colour:' and colour == blank
+   assign colour = tag | remove: 'colour:' | capitalize
+  endif
+ endfor
+-%}
+<div class="gq-product" data-gq-product="{{ product.handle }}" data-gq-preorder="{{ preorder }}">
+ <div class="gq-gallery" aria-label="{{ product.title | escape }} photographs" tabindex="0">{% for photo in product.images limit: 6 %}{{ photo | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '350, 650, 1000', sizes: '250px', alt: product.title }}{% endfor %}</div>
+ <div class="gq-summary"><div><h2>{{ product.title | escape }}</h2>{% if colour != blank %}<p>{{ colour | escape }}</p>{% endif %}</div><span data-gq-price>{{ product.price | money }}</span></div>
+ <div class="gq-controls"><a href="{{ product.url }}" class="gq-details">More Details</a>
+ <div class="gq-colours">{% render 'guillo-family-options', product: product, quick: true %}</div>
+ {% if interest %}<p>Register your preferred size on the product page.</p><a href="{{ product.url }}" class="gq-interest">Register interest</a>{% else %}
+ {% capture form_id %}GQForm-{{ product.id }}{% endcapture %}{% form 'product', product, id: form_id, data-gq-form: '' %}<input type="hidden" name="id" value="{% if product.has_only_default_variant and product.available %}{{ product.selected_or_first_available_variant.id }}{% endif %}" data-gq-variant><input type="hidden" name="quantity" value="1">
+ {% unless product.has_only_default_variant %}<div class="gq-sizes" role="group" aria-label="Choose your size">{% for variant in product.variants %}<button type="button" data-gq-size="{{ variant.id }}" data-size-label="{{ variant.title | escape }}" data-price="{{ variant.price | money | escape }}" aria-pressed="false" {% unless variant.available %}disabled{% endunless %}>{{ variant.title | escape }}</button>{% endfor %}</div>{% endunless %}
+ {% if preorder %}<p class="gq-note">Pre-order · See product details for dispatch information.</p>{% endif %}
+ <button type="submit" class="gq-add" {% unless product.has_only_default_variant and product.available %}disabled{% endunless %}>{% if product.has_only_default_variant and product.available %}{% if preorder %}Pre-order{% else %}Add to Bag{% endif %}{% elsif product.available %}Choose your size{% else %}Sold out{% endif %}</button>{% endform %}{% endif %}
+ <p class="gq-status" data-gq-status role="status"></p></div>
+</div>

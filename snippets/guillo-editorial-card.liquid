@@ -53,22 +53,11 @@
     {%- unless product.available -%}<span class="gc-card__badge">Sold out</span>{%- else -%}{%- if is_preorder -%}<span class="gc-card__badge">Pre-order</span>{%- endif -%}{%- endunless -%}
   </div>
   <div class="gc-card__details">
-    <div class="gc-card__title-row"><h2><a href="{{ editorial_url }}">{{ product.title | remove_first: 'The ' | escape }}</a></h2><span class="gc-card__colour" style="--swatch:{{ colour | default: 'transparent' | escape }}" aria-label="{{ colour | capitalize | escape }}" title="{{ colour | capitalize | escape }}"></span></div>
+    <div class="gc-card__title-row"><h2><a href="{{ editorial_url }}">{{ product.title | remove_first: 'The ' | escape }}</a></h2></div>
+    {% render 'guillo-family-options', product: product %}
     <p class="gc-card__subtitle">{{ fit }}{% if fit != blank and style != blank %} · {% endif %}{{ style }}{% if colour != blank %} · {{ colour | capitalize }}{% endif %}</p>
     {%- if rating != blank and rating > 0 -%}<span class="gc-card__rating" aria-label="Rated {{ rating }} out of five">{{ rating | round: 1 }} <span aria-hidden="true">★★★★★</span></span>{%- endif -%}
-    <div class="gc-card__bottom"><span>{{ product.price | money }}</span><button type="button" class="gc-card__quick" data-gc-quick="{{ product.id }}" aria-label="Choose a size for {{ product.title | escape }}" aria-haspopup="dialog">+</button></div>
+    <div class="gc-card__bottom"><span>{{ product.price | money }}</span><button type="button" class="gc-card__quick" data-gc-quick="{{ product.id }}" aria-label="Choose a size for {{ product.title | escape }}" aria-haspopup="dialog"><span class="gc-card__quick-icon">+</span><span class="gc-card__quick-label">Quick Add</span></button></div>
   </div>
-  <template data-gc-quick-template="{{ product.id }}">
-    <div class="gc-quick__product">{{ product.featured_image | image_url: width: 300 | image_tag: loading: 'lazy', alt: product.title }}<div><h2>{{ product.title | escape }}</h2><span>{{ product.price | money_with_currency }}</span></div></div>
-    {%- if is_preorder -%}<p class="gc-quick__note">Pre-order. Check the product page for the current dispatch date.</p>{%- endif -%}
-    {% if is_interest %}<p>Register your preferred size on the product page.</p>{% else %}
-    {%- capture quick_form_id -%}GCQuickForm-{{ product.id }}{%- endcapture -%}
-    {%- form 'product', product, id: quick_form_id -%}
-      <input type="hidden" name="id" value="{% if product.has_only_default_variant %}{{ product.selected_or_first_available_variant.id }}{% endif %}" data-gc-variant>
-      <input type="hidden" name="quantity" value="1">
-      {%- unless product.has_only_default_variant -%}<p class="gc-quick__label">Choose your size</p><div class="gc-quick__sizes">{%- for variant in product.variants -%}<button type="button" data-gc-size="{{ variant.id }}" aria-pressed="false" {% unless variant.available %}disabled{% endunless %}>{{ variant.title | escape }}</button>{%- endfor -%}</div>{%- endunless -%}
-      <button type="submit" class="gc-quick__add" {% unless product.has_only_default_variant and product.available %}disabled{% endunless %}>{% if product.available %}{% if product.has_only_default_variant %}Add to bag{% else %}Choose your size{% endif %}{% else %}Sold out{% endif %}</button>
-    {%- endform -%}{% endif %}
-    <a href="{{ editorial_url }}" class="gc-quick__full">View full details &amp; size guide</a>
-  </template>
+  <template data-gc-quick-template="{{ product.id }}">{% render 'guillo-quick-product', product: product %}</template>
 </article>

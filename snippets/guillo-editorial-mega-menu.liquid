@@ -33,5 +33,5 @@
     </div>
     <div class="gc-mega__footer">{% unless is_polos %}<a class="gc-mega__shop" href="{{ link.url }}">Shop {{ link.title | escape }}</a>{% endunless %}{% render 'guillo-navigation-help' %}</div>
   </div>
-  {% if feature_image != blank %}<a class="gc-mega__feature" href="{{ feature_url }}">{{ feature_image | image_url: width: 1600 | image_tag: loading: 'lazy', sizes: '50vw', widths: '650, 1000, 1600', alt: feature_title }}<span>{{ feature_title | escape }}<small>Shop now</small></span></a>{% endif %}
+  {% if is_polos %}<div class="gc-mega__polo-pair">{% assign polo_handles = 'the-portofino-polo-black,the-valenti-knit-polo-navy' | split: ',' %}{% for handle in polo_handles %}{% assign polo = all_products[handle] %}<a class="gc-mega__feature" href="{{ polo.url }}">{{ polo.featured_image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '25vw', alt: polo.title }}<span>{{ polo.title | remove_first: 'The ' }}<small>Shop now</small></span></a>{% endfor %}</div>{% elsif feature_image != blank %}<a class="gc-mega__feature" href="{{ feature_url }}">{{ feature_image | image_url: width: 1600 | image_tag: loading: 'lazy', sizes: '50vw', widths: '650, 1000, 1600', alt: feature_title }}<span>{{ feature_title | escape }}<small>Shop now</small></span></a>{% endif %}
 </div>

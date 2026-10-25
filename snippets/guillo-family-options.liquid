@@ -1,0 +1,90 @@
+{%- liquid
+ capture key
+  render 'guillo-product-family-key', product: product
+ endcapture
+ assign pool = collections.all.products
+ if key == 'shirts'
+  assign pool = collections.shirts.products
+  capture shirt_handles
+   render 'guillo-shirt-family', product: product
+  endcapture
+ elsif key contains 'chinos'
+  assign pool = collections.chinos.products
+ elsif key contains 'polos'
+  assign pool = collections.polos.products
+ elsif key == 'capri-shorts'
+  assign pool = collections.shorts.products
+ elsif key == 'torino-jeans'
+  assign pool = collections.jeans.products
+ elsif key == 'classico-tees'
+  assign pool = collections['t-shirts'].products
+ endif
+ assign group = product.metafields.custom.product_group.value
+ capture group_images
+  for img in group.custom_images.value
+   echo img | image_url: width: 300
+   unless forloop.last
+    echo '|||'
+   endunless
+  endfor
+ endcapture
+ assign group_images = group_images | split: '|||'
+-%}
+<div class="g-family-options" aria-label="Available colours for {{ product.title | escape }}">
+{%- for sibling in pool -%}
+ {%- capture sibling_key -%}{% render 'guillo-product-family-key', product: sibling %}{%- endcapture -%}
+ {%- assign match = false -%}
+ {%- if key == 'shirts' -%}{% if shirt_handles contains sibling.handle %}{% assign match = true %}{% endif %}{%- elsif sibling_key == key -%}{% assign match = true %}{%- endif -%}
+ {%- if match -%}
+  {%- liquid
+   assign name = sibling.title | remove_first: 'The '
+   assign image = sibling.metafields.custom.fabric_swatch.value | default: sibling.featured_image
+   assign image_url = image | image_url: width: 300
+   if key != 'shirts'
+    for tag in sibling.tags
+     if tag contains 'colour:'
+      assign name = tag | remove: 'colour:' | capitalize
+     endif
+    endfor
+    for member in group.products.value
+     if member.id == sibling.id
+      assign image_url = group_images[forloop.index0] | default: image_url
+      assign name = group.display_names.value[forloop.index0] | default: name
+      break
+     endif
+    endfor
+   endif
+   assign x = 58
+   assign y = 61
+   assign zoom = 9
+   if sibling.handle == 'milano-pinstripe-shirt'
+    assign x = 51
+    assign y = 68
+    assign zoom = 14
+   elsif sibling.handle == 'amalfi-short-sleeve-shirt'
+    assign x = 46
+    assign y = 64
+    assign zoom = 12
+   elsif sibling.handle == 'como-short-sleeve-shirt'
+    assign x = 61
+    assign y = 59
+   elsif sibling.handle == 'the-santorini-grandad-collar'
+    assign x = 60
+    assign y = 64
+   endif
+   if key != 'shirts' or sibling.metafields.custom.fabric_swatch.value != blank
+    assign zoom = 1
+    assign x = 50
+    assign y = 50
+   else
+    assign image_url = image | image_url: width: 1800
+   endif
+   assign width = zoom | times: 100
+   assign height = image.height | times: 1.0 | divided_by: image.width | times: width
+   assign left = x | times: zoom | minus: 50
+   assign top = y | times: height | divided_by: 100.0 | minus: 50
+  -%}
+  <a class="g-family-option{% if sibling.id == product.id %} is-current{% endif %}" href="{{ sibling.url }}" {% if quick %}data-gq-sibling="{{ sibling.handle }}"{% else %}data-gc-quick-handle="{{ sibling.handle }}"{% endif %} aria-label="{{ sibling.title | escape }} — {{ name | escape }}{% if key == 'capri-shorts' %}{% if sibling.handle contains '5in' %} · 5 inch{% else %} · 7 inch{% endif %}{% endif %}" title="{{ name | escape }}" {% if sibling.id == product.id %}aria-current="true"{% endif %}><span style="--swatch-width:{{ width }}%;--swatch-left:-{{ left }}%;--swatch-top:-{{ top }}%;{% if zoom == 1 %}--swatch-fit:cover{% endif %}"><img src="{{ image_url }}" alt="{{ name | escape }}" width="60" height="60" loading="lazy"></span></a>
+ {%- endif -%}
+{%- endfor -%}
+</div>

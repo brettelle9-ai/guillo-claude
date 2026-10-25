@@ -1,6 +1,6 @@
 {%- capture family_handles -%}{%- render 'guillo-shirt-family', product: product -%}{%- endcapture -%}
 {%- assign family_handles = family_handles | strip | split: ',' -%}
-<div class="ge-shirt-family"><p>Style: <span>{{ product.title | remove_first: 'The ' }}</span></p><div class="ge-shirt-swatches" aria-label="Shirt styles">
+<div class="ge-shirt-family">{% assign selected_colour = product.metafields.custom.colour_name.value %}{% for tag in product.tags %}{% if tag contains 'colour:' and selected_colour == blank %}{% assign selected_colour = tag | remove: 'colour:' | capitalize %}{% endif %}{% endfor %}<p>Colour <span class="ge-selected-colour">{{ selected_colour | default: product.title | remove_first: 'The ' | escape }}</span></p><div class="ge-shirt-swatches" aria-label="Shirt styles">
 {%- for handle in family_handles -%}{%- assign sibling = all_products[handle] -%}{%- if sibling != blank -%}
 {%- liquid
   assign swatch_image = sibling.metafields.custom.fabric_swatch.value | default: sibling.featured_image

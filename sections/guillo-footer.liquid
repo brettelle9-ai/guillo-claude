@@ -3,7 +3,7 @@
   copyright row with payment chips.
 {% endcomment %}
 
-<footer class="guillo-footer g-pad">
+<footer class="guillo-footer g-pad" style="--guillo-footer-navy:{{ section.settings.background | default: '#14232c' }}">
   <div class="g-container">
     <div class="guillo-footer__grid">
       <div class="guillo-footer__brand">
@@ -15,6 +15,7 @@
         {%- if section.settings.text != blank -%}
           <p class="guillo-footer__tagline">{{ section.settings.text }}</p>
         {%- endif -%}
+        <nav class="guillo-footer__socials" aria-label="Guillo social media">{% assign platforms = 'instagram,facebook,youtube,tiktok,pinterest,twitter' | split: ',' %}{% for platform in platforms %}{% assign setting_key = platform | prepend: 'social_' %}{% assign profile_url = section.settings[setting_key] %}{% if profile_url == blank and platform == 'instagram' %}{% assign profile_url = 'https://www.instagram.com/guilloclothing/' %}{% elsif profile_url == blank and platform == 'facebook' %}{% assign profile_url = 'https://www.facebook.com/p/Guillo-Clothing-61563291266328/' %}{% endif %}{% if profile_url != blank %}<a href="{{ profile_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ platform | capitalize }}"><svg viewBox="0 0 20 20" aria-hidden="true">{% render 'icon', icon: platform %}</svg></a>{% endif %}{% endfor %}</nav>
       </div>
       {%- for block in section.blocks -%}
         <div class="guillo-footer__col" {{ block.shopify_attributes }}>
@@ -132,21 +133,95 @@
 {% schema %}
 {
   "name": "Guillo footer",
-  "enabled_on": { "groups": ["footer"] },
+  "enabled_on": {
+    "groups": [
+      "footer"
+    ]
+  },
   "settings": [
-    { "type": "image_picker", "id": "logo", "label": "Logo (light)" },
-    { "type": "textarea", "id": "text", "label": "Brand line", "default": "Designed for movement, escapes and life beyond routine. Brought to life in Brisbane." },
-    { "type": "text", "id": "copyright_note", "label": "Copyright note", "default": "Brisbane, Australia." },
-    { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment icons", "default": true },
-    { "type": "text", "id": "payment_labels", "label": "Payment text chips", "info": "Comma-separated labels rendered as bordered chips instead of icons.", "default": "Afterpay, Visa, Mastercard, Apple Pay, Paypal" }
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo (light)"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Brand line",
+      "default": "Designed for movement, escapes and life beyond routine. Brought to life in Brisbane."
+    },
+    {
+      "type": "text",
+      "id": "copyright_note",
+      "label": "Copyright note",
+      "default": "Brisbane, Australia."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "payment_labels",
+      "label": "Payment text chips",
+      "info": "Comma-separated labels rendered as bordered chips instead of icons.",
+      "default": "Afterpay, Visa, Mastercard, Apple Pay, Paypal"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Footer background",
+      "default": "#14232c"
+    },
+    {
+      "type": "url",
+      "id": "social_instagram",
+      "label": "Instagram profile"
+    },
+    {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "Facebook profile"
+    },
+    {
+      "type": "url",
+      "id": "social_youtube",
+      "label": "Youtube profile"
+    },
+    {
+      "type": "url",
+      "id": "social_tiktok",
+      "label": "Tiktok profile"
+    },
+    {
+      "type": "url",
+      "id": "social_pinterest",
+      "label": "Pinterest profile"
+    },
+    {
+      "type": "url",
+      "id": "social_twitter",
+      "label": "Twitter profile"
+    }
   ],
   "blocks": [
     {
       "type": "menu",
       "name": "Menu column",
       "settings": [
-        { "type": "text", "id": "title", "label": "Title" },
-        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "footer"
+        }
       ]
     }
   ],
@@ -156,9 +231,24 @@
       "name": "Guillo footer",
       "category": "Guillo",
       "blocks": [
-        { "type": "menu", "settings": { "title": "Shop" } },
-        { "type": "menu", "settings": { "title": "Help" } },
-        { "type": "menu", "settings": { "title": "Guillo" } }
+        {
+          "type": "menu",
+          "settings": {
+            "title": "Shop"
+          }
+        },
+        {
+          "type": "menu",
+          "settings": {
+            "title": "Help"
+          }
+        },
+        {
+          "type": "menu",
+          "settings": {
+            "title": "Guillo"
+          }
+        }
       ]
     }
   ]
