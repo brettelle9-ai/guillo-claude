@@ -7,7 +7,7 @@
   Rates and thresholds mirror the "ALL" delivery profile in
   Settings > Shipping and delivery. Will edits those by hand, so when a
   rate changes there, change it here too. Last checked against the admin
-  on 2026-09-19. Delivery-day estimates are the ones the store has always
+  on 2026-10-25. Delivery-day estimates are the ones the store has always
   published; nothing new is claimed.
 {%- endcomment -%}
 {%- liquid
@@ -35,7 +35,7 @@
 {%- case ship_zone -%}
   {%- when 'au' -%}
     <ul>
-      <li>Delivery across Australia in 2 to 4 days.</li>
+      <li>Standard 2 to 8 business days, Express 1 to 4 business days.</li>
       <li>Standard $9.95, free on orders over $100.</li>
       <li>Express $14.95, free on orders over $200.</li>
     </ul>
@@ -53,27 +53,27 @@
       <li>Standard S$15, free on orders over S$250.</li>
       <li>Express S$27, free on orders over S$350.</li>
     </ul>
-    <p>Ships DDP. Duties and taxes are paid at checkout, so nothing is owed on arrival.</p>
+    <p>Duties and import taxes are covered by Guillo, so there is nothing to pay on arrival.</p>
   {%- when 'gb' -%}
     <ul>
       <li>Delivery to the United Kingdom in 5 to 8 days.</li>
       <li>Standard £16, free on orders over £65.</li>
       <li>Express £25, free on orders over £180.</li>
     </ul>
-    <p>Ships DDP. Duties and taxes are paid at checkout, so nothing is owed on arrival.</p>
+    <p>Duties and import taxes are covered by Guillo, so there is nothing to pay on arrival.</p>
   {%- when 'eu' -%}
     <ul>
       <li>Delivery across Europe in 6 to 9 days.</li>
-      <li>Standard €25.</li>
+      <li>Standard €25, free on orders over €150.</li>
     </ul>
-    <p>Ships DDP. Duties and taxes are paid at checkout, so nothing is owed on arrival.</p>
+    <p>Duties and import taxes are covered by Guillo, so there is nothing to pay on arrival.</p>
   {%- when 'us' -%}
     <ul>
       <li>Standard US$20.</li>
       <li>Express US$28.</li>
     </ul>
-    <p>Ships DDP. Duties and taxes are paid at checkout, so nothing is owed on arrival.</p>
+    <p>Duties and import taxes are covered by Guillo, so there is nothing to pay on arrival.</p>
   {%- else -%}
     <p>Shipping options and cost for your country are shown at checkout.</p>
-    <p>Ships DDP. Duties and taxes are paid at checkout, so nothing is owed on arrival.</p>
+    <p>Duties and import taxes are covered by Guillo, so there is nothing to pay on arrival.</p>
 {%- endcase -%}
