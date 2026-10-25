@@ -13,15 +13,19 @@
    assign complement = complement | concat: collections.jeans.products
   endif
  else
-  assign complement = collections.shirts.products | slice: 0, 3
-  assign polos = collections.polos.products | slice: 0, 2
-  assign tees = collections['t-shirts'].products | slice: 0, 2
-  if polos != blank
-   assign complement = complement | concat: polos
-  endif
-  if tees != blank
-   assign complement = complement | concat: tees
-  endif
+  # slice does not work on a collection's product list (it falls back to text and yields one empty product), so collect handles with limit and look them up below.
+  capture complement_handles
+   for item in collections.shirts.products limit: 3
+    echo item.handle | append: ','
+   endfor
+   for item in collections.polos.products limit: 2
+    echo item.handle | append: ','
+   endfor
+   for item in collections['t-shirts'].products limit: 2
+    echo item.handle | append: ','
+   endfor
+  endcapture
+  assign complement = complement_handles | split: ','
  endif
  if product.metafields.custom.style_with.value != blank
   assign complement = product.metafields.custom.style_with.value
@@ -30,7 +34,7 @@
  assign count = 0
 -%}
 {% capture coordinated %}
- {% for item in complement %}{% capture token %}|{{ item.id }}|{% endcapture %}{% unless seen contains token or item.handle contains 'test' or item.available == false %}{% if count < 6 %}{% render 'guillo-editorial-card', product: item, image_loading: 'lazy' %}{% assign seen = seen | append: token %}{% assign count = count | plus: 1 %}{% endif %}{% endunless %}{% endfor %}
+ {% for entry in complement %}{% if entry.id %}{% assign item = entry %}{% else %}{% assign item = all_products[entry] %}{% endif %}{% capture token %}|{{ item.id }}|{% endcapture %}{% unless item == blank or item.id == blank or seen contains token or item.handle contains 'test' or item.available == false %}{% if count < 6 %}{% render 'guillo-editorial-card', product: item, image_loading: 'lazy' %}{% assign seen = seen | append: token %}{% assign count = count | plus: 1 %}{% endif %}{% endunless %}{% endfor %}
  {% for item in ge_catalog.products %}{% capture token %}|{{ item.id }}|{% endcapture %}{% unless seen contains token or item.handle contains 'test' or item.available == false %}{% if count < 8 %}{% render 'guillo-editorial-card', product: item, image_loading: 'lazy' %}{% assign seen = seen | append: token %}{% assign count = count | plus: 1 %}{% endif %}{% endunless %}{% endfor %}
 {% endcapture %}
 {% if count > 0 %}<div class="ge-related"><div class="ge-rail-heading"><h2>Complete Your Wardrobe</h2><div><button type="button" data-ge-rail-previous aria-label="Previous recommendations">‹</button><button type="button" data-ge-rail-next aria-label="Next recommendations">›</button></div></div><div class="ge-rail">{{ coordinated }}</div></div>{% endif %}
