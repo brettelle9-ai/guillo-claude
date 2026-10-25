@@ -1,0 +1,8 @@
+{%- comment -%}
+  Product line -> product ids, so card ratings count the same reviews the
+  product page's reviews section counts. Line keys come from
+  guillo-product-family-key. collections.all returns at most 50 products
+  without paginate (44 published on 2026-10-25); past 50, lines would be
+  missing members and card counts would run low.
+{%- endcomment -%}
+<script type="application/json" id="GCReviewLines">[{%- for p in collections.all.products -%}{%- capture line_key -%}{% render 'guillo-product-family-key', product: p %}{%- endcapture -%}[{{ line_key | strip | json }},{{ p.id | append: '' | json }}]{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]</script>
