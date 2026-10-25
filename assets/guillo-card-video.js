@@ -20,7 +20,12 @@
     document.querySelectorAll('[data-guillo-card-video]').forEach(video => {
       if (videos.has(video)) return;
       videos.add(video); observer.observe(video);
-      video.addEventListener('playing', () => video.classList.add('is-playing'));
+      const start = Number(video.dataset.cardStart || 0), end = Number(video.dataset.cardEnd || 0);
+      const show = () => { if (!video.paused && video.currentTime >= start) video.classList.add('is-playing'); };
+      video.addEventListener('loadedmetadata', () => { if (start && video.duration > start) video.currentTime = start; });
+      video.addEventListener('playing', show);
+      video.addEventListener('seeked', show);
+      if (end) video.addEventListener('timeupdate', () => { if (video.currentTime >= end) { video.classList.remove('is-playing'); video.currentTime = start; } });
       video.addEventListener('error', () => video.classList.remove('is-playing'));
     });
   }
