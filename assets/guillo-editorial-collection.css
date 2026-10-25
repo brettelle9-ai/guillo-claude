@@ -6,7 +6,7 @@
 .gc-collection-preview .gc-header{background:#fff;color:var(--gc-ink);border-bottom:1px solid var(--gc-line)}
 .gc-header__row{height:78px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 28px;gap:26px}
 .gc-icon-button{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:0;background:transparent;color:inherit;padding:8px;cursor:pointer;font:400 27px/1 var(--g-sans)}
-.gc-header__menu{justify-self:start;gap:10px;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.gc-header__menu{grid-column:1;grid-row:1;justify-self:start;gap:10px;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
 .gc-header__logo{font:400 25px/1.1 var(--g-sans);letter-spacing:.31em;text-decoration:none;color:inherit;padding-left:.31em;grid-column:2;grid-row:1}
 .gc-header__actions{display:flex;align-items:center;justify-content:flex-end;gap:20px;grid-column:3;grid-row:1;font-size:11px}
 .gc-header__actions a{color:inherit;text-decoration:none}
