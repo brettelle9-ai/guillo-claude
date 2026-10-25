@@ -70,7 +70,7 @@
       {{ 'guillo-editorial-product.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'guillo-editorial-product.js' | asset_url }}" defer></script>
     {%- endif -%}
-    {% if request.page_type == 'index' or request.page_type == 'collection' or request.page_type == 'product' %}{{ 'guillo-editorial-refinements.css' | asset_url | stylesheet_tag }}{% endif %}
+    {% if request.page_type == 'index' or request.page_type == 'collection' or request.page_type == 'product' %}{{ 'guillo-editorial-refinements.css' | asset_url | stylesheet_tag }}{{ 'guillo-editorial-media-fill.css' | asset_url | stylesheet_tag }}{% endif %}
 
     {%- if request.page_type == 'product' -%}
       {{ 'guillo-purchase-motion.css' | asset_url | stylesheet_tag }}

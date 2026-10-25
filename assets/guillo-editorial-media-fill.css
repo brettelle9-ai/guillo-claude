@@ -1,0 +1,5 @@
+/* Keep collection and recommendation media edge to edge. */
+body.gc-collection-preview .gc-card__photo>img{object-fit:cover!important;object-position:50% 25%!important}
+body.gc-collection-preview .gc-card__photo>video{object-fit:cover!important;object-position:center!important}
+body.gh-home-preview .gh-feature__image{aspect-ratio:4/5!important}
+body.gh-home-preview .gh-feature__image img,body.gh-home-preview .gh-feature__image video{object-fit:cover!important;object-position:50% 35%!important}
