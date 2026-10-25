@@ -2,7 +2,7 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const start = () => {
-    const root = document.querySelector('[data-gc-collection]');
+    const root = document.querySelector('[data-gc-collection], [data-ge-product]');
     if (!root || root.dataset.mounted) return;
     root.dataset.mounted = 'true';
     const headerGroup = document.getElementById('header-group');
@@ -36,8 +36,9 @@
     back.addEventListener('click',()=>{if(stack.length>1)stack.pop();setPanel(stack.at(-1),true);});
     menu.addEventListener('close',()=>document.querySelector('[data-gc-menu-open]')?.setAttribute('aria-expanded','false'));
     // Keep the duplicated shirts view when a menu link returns to this collection.
-    menu.querySelectorAll('a').forEach(a=>{const u=new URL(a.href,location.origin);if(u.pathname===location.pathname){u.searchParams.set('view','shirts-editorial');a.href=u.href;}});
+    if (root.matches('[data-gc-collection]')) menu.querySelectorAll('a').forEach(a=>{const u=new URL(a.href,location.origin);if(u.pathname===location.pathname){u.searchParams.set('view','shirts-editorial');a.href=u.href;}});
     const grid=root.querySelector('[data-gc-grid]');
+    if (!grid) return;
     let cards=[...grid.querySelectorAll('[data-gc-card]')];
     const filters=document.querySelector('[data-gc-filters]');
     const form=filters.querySelector('[data-gc-filter-form]');

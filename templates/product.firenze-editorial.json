@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "guillo-editorial-product",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
