@@ -1,6 +1,6 @@
 {% if summary %}<a class="ge-rating" href="#GEReviews" data-shirt-rating hidden></a>{% else %}
 {{ 'guillo-shirt-reviews.css' | asset_url | stylesheet_tag }}
-<section class="ge-shirt-reviews" id="GEReviews" data-ge-shirt-reviews>
+<section class="ge-shirt-reviews" id="GEReviews" data-ge-shirt-reviews data-review-family="{{ family_key | escape }}">
  <h2>Customer Reviews</h2><p class="ge-review-score" data-shirt-score></p><p data-shirt-status role="status">Loading customer reviews…</p><div data-shirt-review-list></div><button type="button" data-shirt-more hidden>Read more reviews</button>
  <script type="application/json" data-shirt-review-products>[
  {%- assign review_product_count = 0 -%}

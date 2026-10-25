@@ -3,6 +3,16 @@
   const section = document.querySelector('[data-ge-shirt-reviews]');
   if (!section) return;
   const products = JSON.parse(section.querySelector('[data-shirt-review-products]').textContent);
+  const family = section.dataset.reviewFamily;
+  const productIds = new Set(products.map(product => String(product.id)));
+  const belongsToFamily = review => {
+    if (!family) return true;
+    const item = review.product || {};
+    if (productIds.has(String(item.shopify_id || item.external_id || ''))) return true;
+    // Keep historic Luxe colour names from before the catalogue rename.
+    const handle = item.shopify_handle || item.handle || '';
+    return family === 'luxe-chinos' && /(?:luxe|slim)-chino/.test(handle) && !handle.includes('signore');
+  };
   const list = section.querySelector('[data-shirt-review-list]');
   const status = section.querySelector('[data-shirt-status]');
   const more = section.querySelector('[data-shirt-more]');
@@ -45,7 +55,7 @@
       if (!response.ok) throw new Error('Reviews unavailable');
       const data = await response.json();
       if (!Array.isArray(data.reviews)) throw new Error('Invalid reviews response');
-      collected.push(...data.reviews.filter(r => ['Published', 'Featured'].includes(r.status) && !r.is_store).map(r => ({...r, shirtName:product.name})));
+      collected.push(...data.reviews.filter(r => ['Published', 'Featured'].includes(r.status) && !r.is_store && belongsToFamily(r)).map(r => ({...r, shirtName:product.name})));
       if (!data.has_more || !data.reviews.length) return collected;
     }
   }
