@@ -1,0 +1,28 @@
+{%- liquid
+ assign picks = collections['best-sellers'].products | default: collections.all.products
+ assign is_top = false
+ if product.tags contains 'garment:shirt' or product.tags contains 'garment:polo' or product.tags contains 'garment:tee'
+  assign is_top = true
+ endif
+ if is_top
+  assign complement = collections.chinos.products | concat: collections.shorts.products | concat: collections.jeans.products
+ else
+  assign complement = collections.shirts.products | slice: 0, 3
+  assign polos = collections.polos.products | slice: 0, 2
+  assign tees = collections['t-shirts'].products | slice: 0, 2
+  assign complement = complement | concat: polos | concat: tees
+ endif
+ assign complement = product.metafields.custom.style_with.value | default: complement
+ assign seen = product.id | prepend: '|' | append: '|'
+ assign count = 0
+-%}
+{% capture coordinated %}
+ {% for item in complement %}{% capture token %}|{{ item.id }}|{% endcapture %}{% unless seen contains token or item.handle contains 'test' or item.available == false %}{% if count < 6 %}{% render 'guillo-editorial-card', product: item, image_loading: 'lazy' %}{% assign seen = seen | append: token %}{% assign count = count | plus: 1 %}{% endif %}{% endunless %}{% endfor %}
+ {% for item in ge_catalog.products %}{% capture token %}|{{ item.id }}|{% endcapture %}{% unless seen contains token or item.handle contains 'test' or item.available == false %}{% if count < 8 %}{% render 'guillo-editorial-card', product: item, image_loading: 'lazy' %}{% assign seen = seen | append: token %}{% assign count = count | plus: 1 %}{% endif %}{% endunless %}{% endfor %}
+{% endcapture %}
+{% if count > 0 %}<div class="ge-related"><div class="ge-rail-heading"><h2>Complete Your Wardrobe</h2><div><button type="button" data-ge-rail-previous aria-label="Previous recommendations">‹</button><button type="button" data-ge-rail-next aria-label="Next recommendations">›</button></div></div><div class="ge-rail">{{ coordinated }}</div></div>{% endif %}
+{%- assign other_count = 0 -%}
+{% capture alternatives %}{% for item in family_candidates %}{% capture item_key %}{% render 'guillo-product-family-key', product: item %}{% endcapture %}{% assign same_product = false %}{% if item_key == family_key %}{% assign same_product = true %}{% if family_key == 'shirts' and item.title != product.title %}{% assign same_product = false %}{% endif %}{% endif %}{% if same_product and item.id != product.id and item.available and other_count < 8 %}{% unless item.handle contains 'test' %}{% render 'guillo-editorial-card', product: item, image_loading: 'lazy' %}{% assign other_count = other_count | plus: 1 %}{% endunless %}{% endif %}{% endfor %}{% endcapture %}
+{% assign alternative_title = 'Other Colours' %}
+{% if other_count == 0 %}{% assign alternative_title = 'Discover More' %}{% capture alternatives %}{% for item in picks %}{% capture token %}|{{ item.id }}|{% endcapture %}{% unless seen contains token or item.handle contains 'test' or item.available == false %}{% if other_count < 4 %}{% render 'guillo-editorial-card', product: item, image_loading: 'lazy' %}{% assign other_count = other_count | plus: 1 %}{% endif %}{% endunless %}{% endfor %}{% endcapture %}{% endif %}
+{% if other_count > 0 %}<div class="ge-related"><div class="ge-rail-heading"><h2>{{ alternative_title }}</h2><div><button type="button" data-ge-rail-previous aria-label="Previous alternatives">‹</button><button type="button" data-ge-rail-next aria-label="Next alternatives">›</button></div></div><div class="ge-rail">{{ alternatives }}</div></div>{% endif %}

@@ -1,0 +1,8 @@
+<section class="ge-proof" aria-label="The Guillo promise" data-ge-proof>
+ <div class="ge-proof__track" data-proof-track>
+  <a class="ge-proof__item" href="#GEReviews"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true"><path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg><strong>Reviewed by Guillo customers</strong><span data-proof-score>Read their experiences</span></a>
+  <a class="ge-proof__item" href="{{ shop.refund_policy.url }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true"><path d="M5 8a8 8 0 1 1-1 8M5 3v5h5"/></svg><strong>44 days to find your fit</strong><span>{% if localization.country.iso_code == 'AU' or localization.country.iso_code == 'NZ' %}Free returns &amp; exchanges in AU/NZ{% else %}Returns &amp; exchanges available{% endif %}</span></a>
+  <a class="ge-proof__item" href="{{ shop.shipping_policy.url }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true"><path d="m3 7 9-5 9 5v10l-9 5-9-5zM3 7l9 5 9-5M12 12v10"/></svg><strong>Sent from Brisbane</strong><span>Tracked delivery to your door</span></a>
+ </div>
+ <div class="ge-proof__dots" aria-label="Trust messages">{% for i in (1..3) %}<button type="button" data-proof-dot="{{ forloop.index0 }}" aria-label="Show trust message {{ i }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"></button>{% endfor %}</div>
+</section>

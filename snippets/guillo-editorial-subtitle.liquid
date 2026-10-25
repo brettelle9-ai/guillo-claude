@@ -1,0 +1,36 @@
+{%- liquid
+ assign cut = 'Athletic-fit'
+ if product.tags contains 'garment:shirt'
+  if product.handle contains 'firenze'
+   echo 'Athletic-fit chevron shirt'
+  elsif product.handle contains 'milano'
+   echo 'Athletic-fit pinstripe shirt'
+  elsif product.tags contains 'grandad-collar'
+   echo 'Athletic-fit grandad-collar shirt'
+  elsif product.tags contains 'long-sleeve'
+   echo 'Athletic-fit long-sleeve shirt'
+  else
+   echo 'Athletic-fit short-sleeve shirt'
+  endif
+ elsif product.handle contains 'luxe-chino'
+  echo 'Tailored-fit stretch chinos'
+ elsif product.handle contains 'signore-chino'
+  echo 'Classic-fit side-tab chinos'
+ elsif product.handle contains 'capri-chino-short'
+  echo 'Lightweight stretch chino shorts'
+ elsif product.handle contains 'portofino'
+  echo 'English-knit polo in 100% cotton'
+ elsif product.handle contains 'valenti' or product.handle contains 'valentino'
+  echo 'Muscle-fit knit polo'
+ elsif product.handle contains 'torino-jean'
+  echo 'Tailored-fit jeans'
+ elsif product.handle contains 'weekender'
+  echo 'Genuine-leather weekender bag'
+ elsif product.handle contains 'wash-bag'
+  echo 'Genuine-leather wash bag'
+ elsif product.handle contains 'passport'
+  echo 'Genuine-leather passport holder'
+ else
+  echo product.type | default: product.title | remove_first: 'The ' | truncate: 65
+ endif
+-%}

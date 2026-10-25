@@ -1,0 +1,79 @@
+/* Quieter typography and deliberate spacing around the product information. */
+body .ge-info{padding-top:44px;width:72%;max-width:470px}
+body .ge-product .ge-title-row h1{font-size:21px;line-height:1.2}
+body .ge-name-main{font-size:21px;letter-spacing:-.025em}
+body .ge-name-accent{font-size:9px}
+body .ge-rating{font-size:11px;letter-spacing:.04em}
+body .ge-subtitle{font:400 12px/1.6 var(--g-sans);color:#7b7b7b;margin:18px 0 8px;max-width:38ch}
+body .ge-price{font-size:13px;margin-top:0}
+body .ge-family-picker,body .ge-shirt-family{margin:28px 0;padding-bottom:25px}
+body .ge-selected-colour,body .ge-shirt-family>p>.ge-selected-colour{font-size:19px}
+body .ge-sizes legend{font-size:12px}
+body .ge-fitline{font-size:11px;margin:16px 0 24px}
+body .ge-services{display:grid;gap:13px;margin:22px 0 0;color:#777;font:400 11px/1.55 var(--g-sans)}
+.ge-service{display:flex;gap:12px;align-items:center}
+.ge-service>svg{width:21px;height:22px;flex:none}
+.ge-service button,.ge-service small{display:block;color:#888;font:inherit;border:0;background:none;padding:0;text-align:left}
+.ge-service button{cursor:pointer;text-underline-offset:3px}
+.ge-service button:hover{text-decoration:underline}
+body .ge-accordions{margin-top:28px}
+body .ge-accordions>button{min-height:47px;font-size:12px;border-bottom:1px solid #e6e6e6}
+body .ge-accordions>button>span{display:flex;align-items:center}
+.ge-accordions svg{width:15px;height:15px;transition:transform .25s ease}
+.ge-accordions>button:hover svg,.ge-accordions>button:focus-visible svg{transform:translateX(3px)}
+body .ge-style{margin-top:32px}
+body .ge-style>h2{font-size:12px}
+body .ge-rail-heading>h2{font-size:25px}
+.ge-proof{max-width:1200px;margin:0 auto;padding:35px 24px 40px;border-top:1px solid #e4e4e4;font:400 12px/1.6 var(--g-sans)}
+.ge-proof__track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px}
+.ge-proof__item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;text-decoration:none!important;padding:24px 8px;color:#333}
+.ge-proof__item svg{width:25px;height:25px;margin-bottom:10px}
+.ge-proof__item strong{font-weight:500;font-size:12px}
+.ge-proof__item>span{font-size:11px;color:#777}
+.ge-proof__dots{display:none}
+body .guillo-social-strip{background:#fff;color:#292929;display:flex;justify-content:center;gap:23px;align-items:center;padding:29px 24px;margin:0;width:100%}
+.guillo-social-strip a{display:flex;align-items:center;justify-content:center;width:22px;height:28px;color:inherit}
+.guillo-social-strip svg{width:18px;height:18px;fill:currentColor}
+body .guillo-newsletter{padding-block:34px!important;background:#f4f4f2!important;color:#252525!important;border-top:1px solid #e6e6e4!important}
+body .guillo-newsletter__inner{max-width:1100px;gap:40px!important}
+body .guillo-newsletter__heading{font:400 25px/1.2 var(--g-sans)!important;letter-spacing:-.025em;margin:0 0 9px!important;color:#252525!important}
+body .guillo-newsletter__text{font-size:12px!important;line-height:1.65;color:#777!important;margin:0!important}
+body .guillo-newsletter__label{font-size:11px;color:#666!important;margin-bottom:7px}
+body input.guillo-newsletter__input{min-height:43px;height:43px;font-size:12px;border:1px solid #b6b6b1;background:transparent!important;padding:0 12px}
+body .guillo-newsletter__submit{min-height:43px;min-width:106px;background:#25343d!important;color:#fff!important;border-color:#25343d;font-size:9px;gap:10px}
+body .guillo-newsletter__success{color:#25343d!important}
+body .guillo-newsletter__error{color:#9c2222!important}
+@media(max-width:749px){
+ body .ge-info{width:100%;max-width:none;padding:23px 16px 28px}
+ body .ge-name-main{font-size:18px}
+ body .ge-name-accent{font-size:8px}
+ body .ge-product .ge-title-row h1{font-size:18px}
+ body .ge-rating{font-size:10px}
+ body .ge-subtitle{font-size:11px;margin:16px 0 8px;max-width:36ch}
+ body .ge-price{font-size:12px}
+ body .ge-family-picker,body .ge-shirt-family{margin:25px 0 28px;padding-bottom:25px}
+ body .ge-selected-colour,body .ge-shirt-family>p>.ge-selected-colour{font-size:18px}
+ body .ge-shirt-swatch>span{width:35px;height:35px}
+ body .ge-family-swatch>span{width:37px;height:46px}
+ body .ge-shirt-swatches,body .ge-family-swatches{gap:13px}
+ body .ge-family-swatch small,body .ge-shirt-swatch small{font-size:9px}
+ body .ge-services{font-size:10px;gap:12px;margin-top:20px}
+ body .ge-accordions{margin-top:24px}
+ body .ge-accordions>button{font-size:11px;min-height:44px}
+ body .ge-style .gc-card__subtitle{font-size:10px}
+ body .ge-rail-heading>h2{font-size:22px}
+ .ge-proof{padding:14px 16px 23px}
+ .ge-proof__track{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+ .ge-proof__track::-webkit-scrollbar{display:none}
+ .ge-proof__item{flex:0 0 100%;scroll-snap-align:center;min-height:145px;padding:23px 5px}
+ .ge-proof__dots{display:flex;justify-content:center;gap:5px;margin-top:5px}
+ .ge-proof__dots button{width:5px;height:5px;border:0;border-radius:50%;padding:0;background:#c7c7c7;cursor:pointer;box-shadow:0 0 0 6px transparent}
+ .ge-proof__dots button[aria-pressed=true]{background:#5e5e5e}
+ body .guillo-newsletter{padding:27px 20px!important}
+ body .guillo-newsletter__inner{gap:18px!important}
+ body .guillo-newsletter__heading{font-size:21px!important;margin-bottom:7px!important}
+ body .guillo-newsletter__text{font-size:11px!important;max-width:32ch}
+ body .guillo-newsletter__row{gap:6px}
+ body .guillo-social-strip{padding:24px 20px}
+}
+@media(prefers-reduced-motion:reduce){.ge-accordions svg{transition:none}}

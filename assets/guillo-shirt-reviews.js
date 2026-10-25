@@ -77,10 +77,12 @@
       const rating = (reviews.reduce((sum,r) => sum + Number(r.rating), 0) / reviews.length).toFixed(1);
       section.querySelector('[data-shirt-score]').textContent = `${rating} / 5 · ${reviews.length} reviews`;
       document.querySelectorAll('[data-shirt-rating]').forEach(el => {
-        el.textContent = `${rating} ★★★★★ (${reviews.length})`;
+        el.textContent = `★★★★★ (${reviews.length})`;
         el.setAttribute('aria-label', `${rating} out of five from ${reviews.length} customer reviews`);
         el.hidden = false;
       });
+      const proof = document.querySelector('[data-proof-score]');
+      if (proof) proof.textContent = `${rating} / 5 from ${reviews.length} published reviews`;
       section.dataset.reviewSource = 'klaviyo';
       render();
     } catch (error) {

@@ -116,7 +116,7 @@
     </div>
     <div class="ge-info">
       <div class="ge-title-row"><h1>{% render 'guillo-product-heading', product: product %}</h1>{% render 'guillo-editorial-reviews', product: product, summary: true %}</div>
-      <p class="ge-subtitle">{{ subtitle | escape }}{% if colour != blank %} · {{ colour | escape }}{% endif %}</p>
+      <p class="ge-subtitle">{% render 'guillo-editorial-subtitle', product: product %}{% if colour != blank %} · {{ colour | escape }}{% endif %}</p>
       <p class="ge-price"><span data-ge-price>{{ product.price | money }}</span> {% if product.compare_at_price > product.price %}<s>{{ product.compare_at_price | money }}</s>{% endif %}</p>
       {% if product.tags contains 'garment:shirt' %}{% render 'guillo-shirt-swatches', product: product %}{% else %}{% render 'guillo-editorial-family-swatches', product: product, candidates: family_candidates, family_key: family_key %}{% endif %}
       {% form 'product', product, id: 'GEProductForm', data-ge-product-form: '', data-purchase-state: 'blocked' %}
@@ -133,12 +133,12 @@
         <button type="submit" class="ge-add" data-ge-add>{% if product.available or availability_mode == 'interest' %}{{ add_label }}{% else %}Notify me{% endif %}</button>
       {% endform %}
       {% render 'guillo-editorial-notify', product: product, availability_mode: availability_mode %}
-      <div class="ge-delivery"><svg width="19" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="m3 7 9-5 9 5v10l-9 5-9-5zM3 7l9 5 9-5M12 12v10M7 4.8l10 5"/></svg><span>{% if availability_mode == 'preorder' %}Pre-order · Dispatches when available{% elsif availability_mode == 'interest' %}Register interest · Not available to buy yet{% else %}Ships from Brisbane{% endif %}<br><button type="button" data-ge-panel="delivery">Delivery to {{ localization.country.name }} · See delivery options</button></span></div>
+      {% render 'guillo-editorial-services', product: product, availability_mode: availability_mode %}
       <div class="ge-accordions" aria-label="Product information">
-        <button type="button" data-ge-panel="details">Details<span>›</span></button>
-        <button type="button" data-ge-panel="fabric">Fabric &amp; Fit<span>›</span></button>
-        <button type="button" data-ge-panel="care">Care Instructions<span>›</span></button>
-        <button type="button" data-ge-panel="delivery">Delivery<span>›</span></button>
+        <button type="button" data-ge-panel="details">Details<span aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.1"><path d="m6 3 5 5-5 5"/></svg></span></button>
+        <button type="button" data-ge-panel="fabric">Fabric &amp; Fit<span aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.1"><path d="m6 3 5 5-5 5"/></svg></span></button>
+        <button type="button" data-ge-panel="care">Care Instructions<span aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.1"><path d="m6 3 5 5-5 5"/></svg></span></button>
+        <button type="button" data-ge-panel="delivery">Delivery<span aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.1"><path d="m6 3 5 5-5 5"/></svg></span></button>
       </div>
       {% if product.handle contains 'bellagio' %}{% render 'guillo-bellagio-features' %}{% endif %}
       {% capture pairings %}
@@ -149,11 +149,9 @@
       <nav class="ge-breadcrumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / <a href="{{ ge_catalog.url }}">{{ ge_catalog.title | escape }}</a> / {{ product.title | escape }}</nav>
     </div>
   </div>
-  <div class="ge-related"><div class="ge-rail-heading"><h2>Explore the Collection</h2><div><button type="button" data-ge-rail-previous aria-label="Previous recommendations">‹</button><button type="button" data-ge-rail-next aria-label="Next recommendations">›</button></div></div><div class="ge-rail">{% for related in ge_catalog.products limit: 9 %}{% unless related.id == product.id or related.handle contains 'test' %}{% render 'guillo-editorial-card', product: related, image_loading: 'lazy' %}{% endunless %}{% endfor %}</div></div>
-  {% capture colour_tag %}colour:{{ colour | downcase }}{% endcapture %}
-  {% capture navy_rail %}{% assign navy_count = 0 %}{% for navy_product in collections.all.products limit: 50 %}{% if navy_product.tags contains colour_tag and navy_product.id != product.id and navy_count < 8 %}{% render 'guillo-editorial-card', product: navy_product, image_loading: 'lazy' %}{% assign navy_count = navy_count | plus: 1 %}{% endif %}{% endfor %}{% endcapture %}
-  {% if navy_count > 0 %}<div class="ge-related"><div class="ge-rail-heading"><h2>In the Same Colour</h2><div><button type="button" data-ge-rail-previous aria-label="Previous products in this colour">‹</button><button type="button" data-ge-rail-next aria-label="Next products in this colour">›</button></div></div><div class="ge-rail">{{ navy_rail }}</div></div>{% endif %}
+  {% render 'guillo-editorial-recommendations', product: product, ge_catalog: ge_catalog, family_candidates: family_candidates, family_key: family_key %}
   {% render 'guillo-editorial-reviews', product: product, candidates: family_candidates, family_key: family_key %}
+  {% render 'guillo-editorial-proof' %}
   <div class="ge-sticky" data-ge-sticky><button type="button" data-ge-sticky-add>{% if product.available or availability_mode == 'interest' %}{{ add_label }}{% else %}Notify me{% endif %}</button></div>
   {% if fys_block %}<div class="ge-sizeguide-source">{% render 'guillo-find-your-size', settings: fys_block.settings, unique: fys_block.id, product: product %}{% unless availability_mode == 'interest' %}{% render 'guillo-editorial-fit-finder', product: product, fys: fys_block, settings: section.settings %}{% endunless %}</div>{% endif %}
   <script type="application/json" data-variant-data>{{ product.variants | json }}</script>
@@ -161,7 +159,7 @@
   <template data-ge-panel-template="details"><div class="ge-copy">{{ product.description }}</div></template>
   <template data-ge-panel-template="fabric"><div class="ge-copy">{% if composition != blank %}<p>{{ composition }}</p>{% endif %}{% if fit_text != blank %}{{ fit_text }}{% elsif product.description != blank %}{{ product.description }}{% else %}<p>See the product description and size guide for this item.</p>{% endif %}</div></template>
   <template data-ge-panel-template="care"><div class="ge-copy">{% if care_text != blank %}{{ care_text }}{% else %}<p>Follow the care instructions supplied with this item.</p>{% endif %}</div></template>
-  <template data-ge-panel-template="delivery"><div class="ge-copy">{% render 'guillo-shipping-panel' %}<p><a href="{{ shop.shipping_policy.url }}">Full shipping policy</a> · <a href="{{ shop.refund_policy.url }}">Returns &amp; exchanges</a></p></div></template>
+  <template data-ge-panel-template="delivery"><div class="ge-copy">{% render 'guillo-shipping-panel' %}<h3>44 days to find your fit</h3><p>{% if localization.country.iso_code == 'AU' or localization.country.iso_code == 'NZ' %}Free returns and exchanges within 44 days in Australia and New Zealand.{% else %}Returns and exchanges are available within 44 days. See our returns policy for international return costs.{% endif %}</p><p><a href="{{ shop.shipping_policy.url }}">Full shipping policy</a> · <a href="{{ shop.refund_policy.url }}">Returns &amp; exchanges</a></p></div></template>
   <template data-ge-panel-template="sizeguide"><div class="ge-copy"><p>Compare your measurements with the guide for {{ product.title | escape }}.</p>{% if product.metafields.custom.size_chart != blank %}{{ product.metafields.custom.size_chart }}{% endif %}<p>Use the measurements for this product before choosing your size.</p><a href="{{ pages['fit-guide'].url | default: '/pages/fit-guide' }}" target="_blank" rel="noopener">Open Guillo’s full size guide ↗</a></div></template>
   <dialog class="gc-quick gc-dialog" aria-label="Choose product size" data-ge-quick><button type="button" class="gc-icon-button gc-quick__close" data-gc-close aria-label="Close quick add">×</button><div data-ge-quick-content></div></dialog>
   <dialog class="ge-zoom gc-dialog" aria-label="Product photograph" data-ge-zoom-dialog><button type="button" class="gc-icon-button" data-gc-close aria-label="Close photograph">×</button><img alt="{{ product.title | escape }}" data-ge-zoom-image></dialog>
