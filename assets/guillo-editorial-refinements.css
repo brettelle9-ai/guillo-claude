@@ -15,15 +15,14 @@
 .g-family-option:focus-visible{outline:2px solid #687989;outline-offset:2px}
 .gc-card__details>.g-family-options{margin:9px 0 8px;max-width:100%}
 .gc-card__quick-label{display:none}
-.gc-card__photo img{object-fit:cover!important;object-position:center 25%!important;background:#f0efec}
-.gc-card__photo video{object-fit:cover!important;object-position:center!important;background:#f0efec}
+.gc-card__photo img,.gc-card__photo video{object-fit:contain!important;object-position:center!important;background:#f0efec}
 .ge-style .gc-card__media{height:155px}
 .ge-style .gc-card{grid-template-columns:105px minmax(0,1fr)}
 .ge-style .gc-card__photo--second{display:none}
 .ge-style .gc-card__quick:before{content:none}
 .gh-feature__image{aspect-ratio:4/5!important;background:#eeedeb}
-.gh-feature__image img,.gh-feature__image video{object-fit:cover!important;object-position:center 35%!important}
-.gh-feature__image .g-editorial-media picture img,.gh-feature__image .g-editorial-media>video{object-fit:cover!important}
+.gh-feature__image img,.gh-feature__image video{object-fit:contain!important;object-position:center!important}
+.gh-feature__image .g-editorial-media picture img,.gh-feature__image .g-editorial-media>video{object-fit:contain!important}
 @media(hover:hover) and (pointer:fine){
  .gc-card__media{display:block;overflow:hidden}
  .gc-card__photo{position:absolute;inset:0;transition:opacity .5s ease,transform .7s ease}
