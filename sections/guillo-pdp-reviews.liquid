@@ -148,7 +148,9 @@
   endif
 -%}
 
-{%- if live_reviews.size > 0 or has_app_reviews -%}
+{%- if product.tags contains 'garment:shirt' -%}
+  {% render 'guillo-shirt-reviews' %}
+{%- elsif live_reviews.size > 0 or has_app_reviews -%}
 <section class="guillo-reviews g-pad"{% if product.handle == 'the-luxe-chino-stone' or product.template_suffix == 'aw26_luxe-chino_claude_' %} id="guillo-reviews"{% endif %}>
   <div class="g-container g-container--wide">
     <div class="g-section-head">

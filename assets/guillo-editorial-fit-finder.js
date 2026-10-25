@@ -410,7 +410,7 @@
     var n = 1;
     var order = groupOrder();
     if (order.indexOf('glutes') > -1) out += groupHTML('glutes', n++, 'Your glutes', 'And through the glutes?', segHTML('glutes', GLUTES), pickLabel(GLUTES, S.glutes));
-    out += groupHTML('fit', n++, 'How you like them', 'How do you like them to fit?', segHTML('fit', FITS), pickLabel(FITS, S.fit));
+    out += groupHTML('fit', n++, 'Your preferred fit', 'How do you like your shirt to fit?', segHTML('fit', FITS), pickLabel(FITS, S.fit));
     return out + '</div>';
   }
 
@@ -522,7 +522,7 @@
       el.liveSize.textContent = haveSize ? P.sizes[r.idx] : '\u2014';
       el.livePct.textContent = P.noConfidence ? '' : haveSize ? live + '%' : '\u2014';
       el.liveFill.style.width = haveSize ? live + '%' : '0%';
-      el.liveHint.textContent = num === 1 ? 'From your size' : done ? 'Ready' : 'Two more to go';
+      el.liveHint.textContent = num === 1 ? 'From your size' : done ? 'Ready' : 'Your preferred fit';
       el.back.hidden = num < 2;
       el.next.textContent = num === 2 ? 'Find my size' : 'Continue';
       el.next.disabled = (num === 1 && !step1Done()) || (num === 2 && !done);

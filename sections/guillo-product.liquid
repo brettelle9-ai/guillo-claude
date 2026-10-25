@@ -372,7 +372,9 @@
       {%- endif -%}
 
 
-      {%- if rating != blank and rating_count != blank and rating_count > 0 -%}
+      {%- if product.tags contains 'garment:shirt' -%}
+        <a class="guillo-pdp__rating" href="#GEReviews" data-shirt-rating hidden></a>
+      {%- elsif rating != blank and rating_count != blank and rating_count > 0 -%}
         {%- if stone_test or capri_page -%}
           {%- comment -%}
             On the stone page the rating is a plain anchor to the reviews
