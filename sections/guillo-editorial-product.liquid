@@ -68,6 +68,12 @@
   elsif availability_mode == 'interest'
     assign add_label = 'Register your interest'
   endif
+  assign product_video = section.settings.video
+  for media_override in section.blocks
+    if media_override.type == 'product_video' and media_override.settings.product.handle == product.handle
+      assign product_video = media_override.settings.video | default: product_video
+    endif
+  endfor
   assign video_index = blank
   assign gallery_count = product.media.size
   for item in product.media
@@ -78,7 +84,7 @@
     endif
   endfor
   assign use_extra_video = false
-  if video_index == blank and section.settings.video != blank
+  if video_index == blank and product_video != blank
     assign video_index = product.media.size
     assign gallery_count = gallery_count | plus: 1
     assign use_extra_video = true
@@ -103,7 +109,7 @@
             {%- elsif media.media_type == 'video' -%}{{ media | video_tag: controls: true, loop: true, muted: true, preload: 'none', image_size: '1200x' }}{%- else -%}{{ media | media_tag }}{%- endif -%}
           </div>
         {%- endfor -%}
-        {%- if use_extra_video -%}<div class="ge-slide ge-slide--video" data-ge-slide data-ge-video-slide>{{ section.settings.video | video_tag: controls: true, loop: true, muted: true, preload: 'none', image_size: '1200x', class: 'ge-product-video' }}</div>{%- endif -%}
+        {%- if use_extra_video -%}<div class="ge-slide ge-slide--video" data-ge-slide data-ge-video-slide>{{ product_video | video_tag: controls: true, loop: true, muted: true, preload: 'none', image_size: '1200x', class: 'ge-product-video' }}</div>{%- endif -%}
       </div>
       <div class="ge-gallery-controls"><button type="button" data-ge-previous aria-label="Previous photograph">‹</button><span data-ge-gallery-count>1 / {{ gallery_count }}</span><button type="button" data-ge-next aria-label="Next photograph">›</button></div>
       {%- if video_index != blank -%}<button type="button" class="ge-video-shortcut" data-ge-video-shortcut="{{ video_index }}" aria-label="View product video"><svg width="25" height="25" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="white"/><path d="m10 7 7 5-7 5z" fill="#454545"/></svg><span>Video</span></button>{%- endif -%}
@@ -636,6 +642,22 @@
           "id": "help_text",
           "label": "Text",
           "default": "Order your usual size. Easy 44-day returns if the fit isn't right."
+        }
+      ]
+    },
+    {
+      "type": "product_video",
+      "name": "Product video override",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Product video"
         }
       ]
     }

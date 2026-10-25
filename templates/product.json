@@ -444,6 +444,13 @@
             "help_text": "Need help? Message us and we'll recommend your best size",
             "family": "classico-tees"
           }
+        },
+        "firenze_film": {
+          "type": "product_video",
+          "settings": {
+            "product": "firenze-chevron-shirt",
+            "video": "shopify://files/videos/lv_0_20260914131333.mp4"
+          }
         }
       },
       "block_order": [
@@ -454,7 +461,8 @@
         "guide_portofino_polos",
         "guide_valenti_polos",
         "guide_torino_jeans",
-        "guide_classico_tees"
+        "guide_classico_tees",
+        "firenze_film"
       ]
     }
   },
