@@ -417,7 +417,9 @@
         display names, swatch images and hex swatches); falls back to the
         colour_group sibling list where a product is not in a group.
       {%- endcomment -%}
-      {%- if group != blank and group_products.size > 1 -%}
+      {%- if product.tags contains 'garment:shirt' -%}
+        {% render 'guillo-shirt-swatches', product: product %}
+      {%- elsif group != blank and group_products.size > 1 -%}
         <div class="guillo-pdp__field">
           <div class="guillo-pdp__field-label">
             {{ section.settings.style_label | default: 'Style' }}:

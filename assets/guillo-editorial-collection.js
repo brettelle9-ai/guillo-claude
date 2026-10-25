@@ -11,10 +11,19 @@
     new ResizeObserver(syncHeader).observe(headerGroup || header);
     syncHeader();
     const dialogs = document.querySelectorAll('.gc-dialog');
-    const show = dialog => {if (!dialog.open) dialog.showModal();};
+    const show = dialog => {
+      if(dialog.open)return;dialog.showModal();
+      if(dialog.matches('.gc-menu')&&!reduced.matches)dialog.animate([{transform:'translateX(-100%)'},{transform:'translateX(0)'}],{duration:620,easing:'cubic-bezier(.22,.78,.23,1)'});
+    };
+    const closeDialog = dialog => {
+      if(!dialog.open||dialog.dataset.closing)return;
+      if(!dialog.matches('.gc-menu')||reduced.matches){dialog.close();return;}
+      dialog.dataset.closing='true';dialog.animate([{transform:'translateX(0)'},{transform:'translateX(-100%)'}],{duration:420,easing:'cubic-bezier(.4,0,.7,.2)'}).finished.catch(()=>{}).then(()=>{dialog.close();delete dialog.dataset.closing;});
+    };
     dialogs.forEach(dialog => {
-      dialog.querySelectorAll('[data-gc-close]').forEach(button => button.addEventListener('click', () => dialog.close()));
-      dialog.addEventListener('click', e => {if (e.target === dialog) {const b=dialog.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)dialog.close();}});
+      dialog.querySelectorAll('[data-gc-close]').forEach(button => button.addEventListener('click', () => closeDialog(dialog)));
+      if(dialog.matches('.gc-menu'))dialog.addEventListener('cancel',e=>{e.preventDefault();closeDialog(dialog);});
+      dialog.addEventListener('click', e => {if (e.target === dialog) {const b=dialog.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)closeDialog(dialog);}});
     });
     const menu = document.querySelector('[data-gc-menu]');
     const menuTitle = menu.querySelector('[data-gc-menu-title]');
@@ -27,7 +36,7 @@
       menuTitle.textContent = panel.dataset.panelTitle;
       back.hidden = id === 'root';
       const body = menu.querySelector('.gc-menu__body');body.scrollTop=0;
-      if (!reduced.matches) panel.animate([{opacity:.4,transform:`translateX(${backwards?-22:22}px)`},{opacity:1,transform:'translateX(0)'}],{duration:330,easing:'cubic-bezier(.22,1,.36,1)'});
+      if (!reduced.matches) panel.animate([{opacity:.4,transform:`translateX(${backwards?-60:60}px)`},{opacity:1,transform:'translateX(0)'}],{duration:450,easing:'cubic-bezier(.22,1,.36,1)'});
     };
     document.querySelectorAll('[data-gc-menu-open],[data-gc-menu-start]').forEach(button=>button.addEventListener('click',()=>{
       const id=button.dataset.gcMenuStart||'root';stack=id==='root'?['root']:['root',id];setPanel(id);show(menu);document.querySelector('[data-gc-menu-open]')?.setAttribute('aria-expanded','true');

@@ -1,0 +1,12 @@
+{%- liquid
+  assign printed_handles = 'firenze-chevron-shirt,milano-pinstripe-shirt,amalfi-short-sleeve-shirt,como-short-sleeve-shirt,the-santorini-grandad-collar'
+  if product.tags contains 'long-sleeve'
+    echo 'guillo-fitted-siracusa-long-sleeve-shirt,amalfi-long-sleeve-slim-fit-shirt,vulcano-short-sleeve-slim-fit-shirt-copy'
+  elsif product.tags contains 'grandad-collar'
+    echo 'the-santorini-grandad-collar,vulcano-banded-collar-jersey,rapallo-banded-collar-jersey,turin-banded-collar-jersey,ischia-banded-collar-shirt'
+  elsif printed_handles contains product.handle
+    echo printed_handles
+  else
+    echo 'siracusa-short-sleeve-slim-fit-shirt,guillo-fitted-vulcano-short-sleeve-shirt,turin-short-sleeve-shirt,guillo-rapallo-short-sleeve-shirt'
+  endif
+-%}

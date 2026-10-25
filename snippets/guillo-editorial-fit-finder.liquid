@@ -1,0 +1,197 @@
+{%- comment -%}
+  ============================================================================
+  GUILLO FIT — size recommendation modal
+  ----------------------------------------------------------------------------
+  Two questions (height/weight, then build/thighs/fit), then a recommended
+  size with fit notes and add to bag.
+
+  The size chart is read from the SAME setting the on-page size guide uses
+  (the guillo_find_your_size block's `measurements_cm`), so the two can never
+  disagree and there is no second copy of the numbers to maintain.
+
+  The chart is sanity-checked before anything renders: a bottoms chart must
+  read as waist centimetres and a tops chart as chest centimetres. If a chart
+  fails (the shirt templates currently hold inches in the centimetre field),
+  nothing renders at all and the page is unchanged. Wrong size advice is worse
+  than no size advice.
+
+  Accepts:
+    product  : the product object (required)
+    fys      : the guillo_find_your_size block (required, supplies the chart)
+    settings : section settings (optional, for the cross-fit product)
+  ============================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign ff_ok = false
+  assign ff_kind = ''
+  assign ff_leg = false
+
+  assign ff_raw = fys.settings.measurements_cm | default: ''
+  assign ff_rows = ff_raw | strip | newline_to_br | split: '<br />'
+  assign ff_head = ff_rows[0] | strip | downcase
+
+  if ff_head contains 'waist'
+    assign ff_kind = 'bottom'
+  elsif ff_head contains 'chest'
+    assign ff_kind = 'top'
+  endif
+
+  if ff_head contains 'inside leg'
+    assign ff_leg = true
+  endif
+
+  # Second column is the one the estimate is matched against (waist or chest).
+  # A range such as "97 - 102" is a body measurement the size fits up to, so
+  # the upper bound is the ceiling for that size.
+  assign ff_sizes = ''
+  assign ff_chart = ''
+  assign ff_inside = ''
+  assign ff_count = 0
+  assign ff_bad = 0
+
+  for ff_line in ff_rows
+    unless forloop.first
+      assign ff_cells = ff_line | strip | split: '|'
+      if ff_cells.size > 1
+        assign ff_size = ff_cells[0] | strip
+        assign ff_val_raw = ff_cells[1] | strip | split: '-' | last | strip
+        assign ff_val = ff_val_raw | times: 1.0
+        # Sanity: a waist in cm sits roughly 55-140, a chest roughly 80-150.
+        if ff_kind == 'bottom' and ff_val >= 55.0 and ff_val <= 140.0
+          assign ff_ok_row = true
+        elsif ff_kind == 'top' and ff_val >= 80.0 and ff_val <= 150.0
+          assign ff_ok_row = true
+        else
+          assign ff_ok_row = false
+          assign ff_bad = ff_bad | plus: 1
+        endif
+        if ff_ok_row
+          assign ff_sizes = ff_sizes | append: ff_size | append: '|'
+          assign ff_chart = ff_chart | append: ff_val | append: '|'
+          if ff_leg and ff_cells.size > 2
+            assign ff_in_val = ff_cells[2] | strip | split: '-' | last | strip | times: 1.0
+            assign ff_inside = ff_inside | append: ff_in_val | append: '|'
+          endif
+          assign ff_count = ff_count | plus: 1
+        endif
+      endif
+    endunless
+  endfor
+
+  # Chinos and shorts only for now. The fit advice, the thigh question and the
+  # cross-cut are all written for legwear; tops would need their own wording
+  # and their own tuning before they earn it.
+  assign ff_allowed = false
+  if product.tags contains 'garment:chino'
+    assign ff_allowed = true
+  endif
+  if product.tags contains 'garment:short'
+    assign ff_allowed = true
+  endif
+
+  if product.tags contains 'garment:shirt'
+    assign ff_allowed = true
+  endif
+
+  # Every row must be sane and there must be at least three sizes to choose from.
+  if ff_allowed and ff_kind != '' and ff_bad == 0 and ff_count >= 3
+    assign ff_ok = true
+  endif
+
+  # A fuller cut through the seat and thigh changes the advice, so the two
+  # chino patterns are told apart. Driven by the handle, not by a guess.
+  assign ff_thigh_cut = 'close'
+  if product.handle contains 'signore'
+    assign ff_thigh_cut = 'room'
+  endif
+
+  assign ff_size_list = ff_sizes | split: '|'
+  assign ff_chart_list = ff_chart | split: '|'
+  assign ff_inside_list = ff_inside | split: '|'
+
+  assign ff_cross = settings.fit_finder_cross_product
+  assign ff_short = product.title | remove_first: 'The ' | strip
+-%}
+
+{%- if ff_ok -%}
+  {{ 'guillo-fit-finder.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'guillo-editorial-fit-finder.js' | asset_url }}" defer></script>
+
+  <script type="application/json" data-gff-data>
+    {
+      "kind": {{ ff_kind | json }},
+      "noConfidence": true,
+      "freeExchange": {% assign ff_cc = localization.country.iso_code | default: 'ZZ' %}{% if ff_cc == 'AU' or ff_cc == 'NZ' %}true{% else %}false{% endif %},
+      "leg": {{ ff_leg }},
+      "thighCut": {{ ff_thigh_cut | json }},
+      "name": {{ product.title | json }},
+      "short": {{ ff_short | json }},
+      "price": {{ product.selected_or_first_available_variant.price | money | json }},
+      "sizes": [
+        {%- for s in ff_size_list -%}{{ s | json }}{% unless forloop.last %},{% endunless %}{%- endfor -%}
+      ],
+      "chart": [
+        {%- for c in ff_chart_list -%}{{ c | times: 1.0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%}
+      ],
+      "inside": [
+        {%- for c in ff_inside_list -%}{{ c | times: 1.0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%}
+      ],
+      "cross": {%- if ff_cross != blank -%}
+        {
+          "name": {{ ff_cross.title | json }},
+          "short": {{ ff_cross.title | remove_first: 'The ' | strip | json }},
+          "url": {{ ff_cross.url | json }},
+          "price": {{ ff_cross.price | money | json }},
+          "thighCut": {%- if ff_cross.handle contains 'signore' -%}"room"{%- else -%}"close"{%- endif -%}
+        }
+      {%- else -%}null{%- endif -%}
+    }
+  </script>
+
+  <div class="gff{% if product.handle contains 'the-luxe-chino-' %} gff--luxe{% endif %}" data-gff-root hidden>
+    <div class="gff__scrim" data-gff-close></div>
+    <div class="gff__panel" role="dialog" aria-modal="true" aria-label="The Fitting" tabindex="-1" data-gff-panel>
+
+      <div class="gff__head">
+        <div class="gff__brand">
+          <img class="gff__logo" src="{{ 'guillo-wordmark-black.png' | asset_url }}" alt="{{ shop.name | escape }}" width="720" height="120">
+          <span class="gff__divider" aria-hidden="true"></span>
+          <span class="gff__mark">The Fitting</span>
+          <span class="gff__divider" aria-hidden="true"></span>
+          <span class="gff__product">{{ product.title }}</span>
+        </div>
+        <button type="button" class="gff__close" data-gff-close aria-label="Close">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        </button>
+      </div>
+
+      {%- comment -%} Running estimate, shown while answering. {%- endcomment -%}
+      <div class="gff__strip" data-gff-strip>
+        <div class="gff__estimate">
+          <span class="gff__label">Estimate</span>
+          <span class="gff__estimate-size" data-gff-live-size></span>
+        </div>
+        <div class="gff__conf">
+          <div class="gff__conf-labels">
+            <span class="gff__label">{% if product.handle contains 'the-luxe-chino-' %}Size guidance{% else %}Confidence{% endif %}</span>
+            <span class="gff__label" data-gff-live-hint></span>
+          </div>
+          <div class="gff__conf-track"><div class="gff__conf-fill" data-gff-live-fill></div></div>
+        </div>
+        <span class="gff__conf-pct" data-gff-live-pct></span>
+      </div>
+
+      <div class="gff__body" data-gff-body></div>
+
+      <div class="gff__foot" data-gff-foot>
+        <button type="button" class="gff__back" data-gff-back>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+        <button type="button" class="gff__next" data-gff-next></button>
+      </div>
+
+    </div>
+  </div>
+{%- endif -%}
