@@ -94,3 +94,5 @@
 @media(prefers-reduced-motion:reduce){.gh-category video{display:none}.gh-home-preview .gc-header,.gh-campaign__track{scroll-behavior:auto;transition:none}}
 
 .gh-home-preview #header-group [id*="header_announcements"]{display:none!important}.gh-home-preview .content-for-layout>.shopify-section:first-child{margin-top:0!important}
+
+.gh-home .gc-card h2{font:400 12px/1.5 var(--g-sans);letter-spacing:0}@media(max-width:767px){.gh-home .gc-card h2{font-size:11px}}
