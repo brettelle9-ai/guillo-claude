@@ -1,3 +1,4 @@
+{%- capture search_icon -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>{%- endcapture -%}
 {%- assign preview_menu = linklists['guillo-redesign-main'] | default: section.settings.menu -%}
 <div class="gc-header" data-gc-header>
   <div class="gc-header__row">
@@ -11,13 +12,14 @@
     </nav>
     <div class="gc-header__actions"><a class="gc-header__account" href="{{ routes.account_url }}">Account</a><a class="gc-icon-button" href="{{ routes.cart_url }}" aria-label="Open shopping bag"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M5 8h14l1 13H4zM9 8V6a3 3 0 0 1 6 0v2"/></svg></a></div>
   </div>
-  <form class="gc-header__search" action="{{ routes.search_url }}" method="get" role="search"><input type="hidden" name="type" value="product"><input type="search" name="q" placeholder="Try searching for…" data-gc-type-search data-search-terms="{{ section.settings.search_suggestions | escape }}" aria-label="Search Guillo products" autocomplete="off"><button type="submit" aria-label="Search"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button></form>
+  <form class="gc-header__search" action="{{ routes.search_url }}" method="get" role="search"><input type="hidden" name="type" value="product"><input type="search" name="q" placeholder="Try searching for…" data-gc-type-search data-gc-search-input aria-controls="GCSearchPanel" aria-expanded="false" data-search-terms="{{ section.settings.search_suggestions | escape }}" aria-label="Search Guillo products" autocomplete="off"><button type="submit" aria-label="Search"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button></form>
   <div class="gc-mega-shade" data-gc-mega-shade hidden></div>
-  {%- for link in preview_menu.links limit: 6 -%}{%- if link.links.size > 0 -%}{%- capture mega_id -%}root-{{ forloop.index }}{%- endcapture -%}{% render 'guillo-editorial-mega-menu', link: link, panel_id: mega_id %}{%- endif -%}{%- endfor -%}
+  {%- for link in preview_menu.links limit: 6 -%}{%- if link.links.size > 0 -%}{%- capture mega_id -%}root-{{ forloop.index }}{%- endcapture -%}{% render 'guillo-editorial-mega-menu', link: link, panel_id: mega_id, settings: section.settings %}{%- endif -%}{%- endfor -%}
+  {% render 'guillo-editorial-search', section: section %}
 </div>
 <dialog class="gc-menu gc-dialog" id="GCNavigation" aria-label="Guillo navigation" data-gc-menu>
-  <div class="gc-menu__top"><button type="button" class="gc-icon-button" data-gc-menu-back aria-label="Back to previous menu" hidden>‹</button><span data-gc-menu-title>Menu</span><button type="button" class="gc-icon-button" data-gc-close aria-label="Close menu">×</button></div>
-  <form class="gc-menu__search" action="{{ routes.search_url }}" role="search"><input type="hidden" name="type" value="product"><input type="search" name="q" placeholder="Search Guillo" aria-label="Search products from menu"><button type="submit">Search</button></form>
+  <div class="gc-menu__top"><button type="button" class="gc-icon-button" data-gc-menu-back aria-label="Back to previous menu" hidden>‹</button><a class="gc-menu__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home"><img src="{{ 'guillo-wordmark-black.png' | asset_url }}" width="720" height="120" alt="{{ shop.name | escape }}"></a><span class="gc-visually-hidden" data-gc-menu-title>Menu</span><button type="button" class="gc-icon-button" data-gc-close aria-label="Close menu" autofocus>×</button></div>
+  <form class="gc-menu__search" action="{{ routes.search_url }}" method="get" role="search"><input type="hidden" name="type" value="product"><input type="search" name="q" placeholder="Try searching for…" data-gc-type-search data-gc-menu-search data-search-terms="{{ section.settings.search_suggestions | escape }}" aria-label="Search products from menu" autocomplete="off"><button type="submit" aria-label="Search">{{ search_icon }}</button></form>
   <div class="gc-menu__body">{% render 'guillo-editorial-menu-panel', links: preview_menu.links, panel_id: 'root', title: 'Menu' %}</div>
   <footer class="gc-menu__footer"><a href="{{ routes.account_url }}">Your account</a>{%- form 'localization', id: 'GCMenuLocalization' -%}<label class="gc-visually-hidden" for="GCCountry">Country and currency</label><select name="country_code" id="GCCountry" data-gc-country>{%- for country in localization.available_countries -%}<option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} · {{ country.currency.iso_code }}</option>{%- endfor -%}</select><button type="submit" aria-label="Update country">→</button>{%- endform -%}</footer>
 </dialog>
@@ -29,5 +31,58 @@
 {{ 'guillo-editorial-navigation.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'guillo-editorial-navigation.js' | asset_url }}" defer></script>
 {% schema %}
-{"name":"Collection preview header","class":"gc-preview-header-section","settings":[{"type":"textarea","id":"search_suggestions","label":"Animated search suggestions","default":"Fitted shirts\nLuxe Chinos\nNew Arrivals\nPortofino Polos"},{"type":"link_list","id":"menu","label":"Navigation menu","default":"main-menu"}]}
+{
+  "name": "Editorial header",
+  "class": "gc-preview-header-section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "search_suggestions",
+      "label": "Animated search suggestions",
+      "default": "Shirts\nSlim fit\nLuxe chinos\nKnit polos\nNew arrivals"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigation menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "textarea",
+      "id": "popular_searches",
+      "label": "Popular search links",
+      "default": "Shirts\nSlim fit\nLuxe chinos\nKnit polos"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_image_new-in",
+      "label": "New in \u2014 dropdown feature image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_image_pants",
+      "label": "Pants \u2014 dropdown feature image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_image_shirts",
+      "label": "Shirts \u2014 dropdown feature image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_image_polos",
+      "label": "Polos \u2014 dropdown feature image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_image_tees",
+      "label": "Tees \u2014 dropdown feature image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_image_accessories",
+      "label": "Accessories \u2014 dropdown feature image"
+    }
+  ]
+}
 {% endschema %}

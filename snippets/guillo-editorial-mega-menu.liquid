@@ -1,6 +1,37 @@
+{%- liquid
+  assign is_polos = false
+  if link.url contains '/collections/polos' or link.title == 'Polos'
+    assign is_polos = true
+  endif
+  assign feature = link.object
+  assign feature_title = link.title
+  assign feature_url = link.url
+  if is_polos
+    assign feature = all_products['the-portofino-polo-black']
+    assign feature_title = 'Portofino Polo'
+    assign feature_url = feature.url
+  endif
+  assign feature_image = feature.image | default: feature.featured_image | default: feature.products.first.featured_image
+  assign custom_image_key = link.title | handleize | prepend: 'mega_image_'
+  assign feature_image = settings[custom_image_key] | default: feature_image
+-%}
 <div class="gc-mega" id="GCMega-{{ panel_id }}" data-gc-mega="{{ panel_id }}" aria-label="{{ link.title | escape }}" hidden>
-  <div class="gc-mega__links"><a class="gc-mega__all" href="{{ link.url }}">Shop all {{ link.title | escape }}</a><div class="gc-mega__columns">
-    {% for child in link.links %}<div><a class="gc-mega__heading" href="{{ child.url }}">{{ child.title | escape }}</a>{% if child.links.size > 0 %}<ul>{% for leaf in child.links %}<li><a href="{{ leaf.url }}">{{ leaf.title | escape }}</a></li>{% endfor %}</ul>{% endif %}</div>{% endfor %}
-  </div></div>
-  <div class="gc-mega__tiles">{% assign tile_count = 0 %}{% for child in link.links %}{% assign tile_image = child.object.image | default: child.object.featured_image | default: child.object.products.first.featured_image %}{% if tile_image != blank and tile_count < 2 %}<a class="gc-mega__tile" href="{{ child.url }}">{{ tile_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: child.title }}<span>{{ child.title | escape }}<small>Shop now</small></span></a>{% assign tile_count = tile_count | plus: 1 %}{% endif %}{% endfor %}</div>
+  <div class="gc-mega__left">
+    <div class="gc-mega__columns">
+      {% if is_polos %}
+        <div><p class="gc-mega__heading">Polos</p><ul><li><a href="{{ all_products['the-portofino-polo-black'].url }}">Portofino Polo</a></li><li><a href="{{ all_products['the-valenti-knit-polo-navy'].url }}">Valenti Polo</a></li></ul></div>
+      {% else %}
+        {% assign nested = false %}{% for child in link.links %}{% if child.links.size > 0 %}{% assign nested = true %}{% endif %}{% endfor %}
+        {% if nested %}
+          {% for child in link.links %}<div><a class="gc-mega__heading" href="{{ child.url }}">{{ child.title | escape }}</a><ul>{% for leaf in child.links %}<li><a href="{{ leaf.url }}">{{ leaf.title | escape }}</a></li>{% endfor %}</ul></div>{% endfor %}
+        {% else %}
+          <div><p class="gc-mega__heading">{{ link.title | escape }}</p><ul>{% for child in link.links %}<li><a href="{{ child.url }}">{{ child.title | escape }}</a></li>{% endfor %}</ul></div>
+        {% endif %}
+        <div><p class="gc-mega__heading">Discover</p><ul><li><a href="{{ collections['new-arrivals'].url }}">New Arrivals</a></li><li><a href="{{ collections['best-sellers'].url }}">Bestsellers</a></li></ul></div>
+        {% if link.url contains '/collections/shirts' %}<div><p class="gc-mega__heading">Fit</p><ul><li><a href="{{ collections['slim-fit-tops'].url }}">Slim Fit</a></li><li><a href="{{ pages['fit-guide'].url }}">Find Your Size</a></li></ul></div>{% endif %}
+      {% endif %}
+    </div>
+    <div class="gc-mega__footer">{% unless is_polos %}<a class="gc-mega__shop" href="{{ link.url }}">Shop {{ link.title | escape }}</a>{% endunless %}{% render 'guillo-navigation-help' %}</div>
+  </div>
+  {% if feature_image != blank %}<a class="gc-mega__feature" href="{{ feature_url }}">{{ feature_image | image_url: width: 1600 | image_tag: loading: 'lazy', sizes: '50vw', widths: '650, 1000, 1600', alt: feature_title }}<span>{{ feature_title | escape }}<small>Shop now</small></span></a>{% endif %}
 </div>

@@ -1,0 +1,10 @@
+<section class="gc-search-panel" id="GCSearchPanel" aria-label="Search suggestions" data-gc-search-panel data-search-url="{{ routes.search_url }}" data-suggest-url="{{ routes.predictive_search_url }}" hidden>
+  <div class="gc-search-panel__top"><div><p data-gc-search-heading>Popular Searches</p><div class="gc-search-panel__terms" data-gc-search-terms>{% assign search_terms = section.settings.popular_searches | default: 'Shirts|Slim fit|Luxe chinos|Knit polos' | newline_to_br | replace: '<br />', '|' | split: '|' %}{% for term in search_terms %}{% assign term = term | strip %}{% if term != blank %}<a href="{{ routes.search_url }}?type=product&amp;q={{ term | url_encode }}">{{ term | escape }}</a>{% endif %}{% endfor %}</div></div><button class="gc-icon-button" type="button" data-gc-search-close aria-label="Close search">×</button></div>
+  <p class="gc-visually-hidden" role="status" data-gc-search-status></p>
+  <div data-gc-search-discovery class="gc-search-panel__rail">
+    {% assign collection_handles = 'new-arrivals,best-sellers,shirts,chinos,polos,shorts' | split: ',' %}
+    {% for handle in collection_handles %}{% assign search_collection = collections[handle] %}{% assign search_image = search_collection.image | default: search_collection.products.first.featured_image %}{% if search_image != blank %}<a class="gc-search-tile" href="{{ search_collection.url }}">{{ search_image | image_url: width: 750 | image_tag: loading: 'lazy', widths: '300, 500, 750', sizes: '(min-width:1250px) 17vw, 50vw', alt: search_collection.title }}<span>{{ search_collection.title | escape }}</span></a>{% endif %}{% endfor %}
+  </div>
+  <div class="gc-search-panel__results" data-gc-search-results hidden></div>
+  <a class="gc-search-panel__all" data-gc-search-all hidden></a>
+</section>

@@ -1,26 +1,36 @@
-{%- comment -%}One real menu level; recursively renders Shopify's child links.{%- endcomment -%}
+{%- liquid
+  assign is_polos = false
+  if parent_url contains '/collections/polos' or title == 'Polos'
+    assign is_polos = true
+  endif
+-%}
 <section class="gc-menu__panel" data-gc-menu-panel="{{ panel_id }}" data-panel-title="{{ title | escape }}" {% unless panel_id == 'root' %}hidden{% endunless %}>
+  {% unless panel_id == 'root' %}<h2 class="gc-menu__category">{{ title | escape }}</h2>{% endunless %}
   <ul class="gc-menu__links">
-    {%- if parent_url != blank -%}<li><a href="{{ parent_url }}">Shop all {{ title | downcase | escape }}</a></li>{%- endif -%}
-    {%- for link in links -%}
-      {%- capture child_id -%}{{ panel_id }}-{{ forloop.index }}{%- endcapture -%}
-      <li>{%- if link.links.size > 0 -%}<button type="button" data-gc-menu-go="{{ child_id }}">{{ link.title | escape }}<span aria-hidden="true">›</span></button>{%- else -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endif -%}</li>
-    {%- endfor -%}
+    {% if is_polos %}
+      <li><a href="{{ all_products['the-portofino-polo-black'].url }}">Portofino Polo</a></li>
+      <li><a href="{{ all_products['the-valenti-knit-polo-navy'].url }}">Valenti Polo</a></li>
+    {% else %}
+      {%- for link in links -%}
+        {%- capture child_id -%}{{ panel_id }}-{{ forloop.index }}{%- endcapture -%}
+        <li>{%- if link.links.size > 0 -%}<button type="button" data-gc-menu-go="{{ child_id }}">{{ link.title | escape }}<span aria-hidden="true">›</span></button>{%- else -%}<a href="{{ link.url }}">{{ link.title | escape }}</a>{%- endif -%}</li>
+      {%- endfor -%}
+      {%- if parent_url != blank -%}<li><a href="{{ parent_url }}">Shop all {{ title | downcase | escape }}</a></li>{%- endif -%}
+    {% endif %}
   </ul>
   <div class="gc-menu__tiles">
-    {%- assign tile_count = 0 -%}
-    {%- for link in links -%}
-      {%- assign tile_image = link.object.image | default: link.object.featured_image | default: link.object.products.first.featured_image -%}
-      {%- if tile_image != blank and tile_count < 2 -%}
-        <a href="{{ link.url }}" class="gc-menu__tile">{{ tile_image | image_url: width: 650 | image_tag: loading: 'lazy', widths: '240, 400, 650', sizes: '250px', alt: link.title }}<span>{{ link.title | escape }}<small>Shop now</small></span></a>
-        {%- assign tile_count = tile_count | plus: 1 -%}
-      {%- endif -%}
-    {%- endfor -%}
+    {% if is_polos %}
+      {% assign polo_handles = 'the-portofino-polo-black,the-valenti-knit-polo-navy' | split: ',' %}
+      {% for handle in polo_handles %}{% assign polo = all_products[handle] %}<a href="{{ polo.url }}" class="gc-menu__tile">{{ polo.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '50vw', alt: polo.title }}<span>{{ polo.title | remove_first: 'The ' | escape }}<small>Shop now</small></span></a>{% endfor %}
+    {% elsif panel_id == 'root' %}
+      {% assign tile_handles = 'shirts,chinos' | split: ',' %}{% for handle in tile_handles %}{% assign tile_collection = collections[handle] %}{% assign tile_image = tile_collection.image | default: tile_collection.products.first.featured_image %}<a href="{{ tile_collection.url }}" class="gc-menu__tile">{{ tile_image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '50vw', alt: tile_collection.title }}<span>{{ tile_collection.title | escape }}<small>Shop now</small></span></a>{% endfor %}
+    {% else %}
+      {%- assign tile_count = 0 -%}
+      {%- for link in links -%}{%- assign tile_image = link.object.image | default: link.object.featured_image | default: link.object.products.first.featured_image -%}
+        {%- if tile_image != blank and tile_count < 2 -%}<a href="{{ link.url }}" class="gc-menu__tile">{{ tile_image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '50vw', alt: link.title }}<span>{{ link.title | escape }}<small>Shop now</small></span></a>{%- assign tile_count = tile_count | plus: 1 -%}{%- endif -%}
+      {%- endfor -%}
+    {% endif %}
   </div>
+  <div class="gc-menu__help">{% render 'guillo-navigation-help' %}</div>
 </section>
-{%- for link in links -%}
-  {%- if link.links.size > 0 -%}
-    {%- capture child_id -%}{{ panel_id }}-{{ forloop.index }}{%- endcapture -%}
-    {% render 'guillo-editorial-menu-panel', links: link.links, panel_id: child_id, title: link.title, parent_url: link.url %}
-  {%- endif -%}
-{%- endfor -%}
+{% unless is_polos %}{%- for link in links -%}{%- if link.links.size > 0 -%}{%- capture child_id -%}{{ panel_id }}-{{ forloop.index }}{%- endcapture -%}{% render 'guillo-editorial-menu-panel', links: link.links, panel_id: child_id, title: link.title, parent_url: link.url %}{%- endif -%}{%- endfor -%}{% endunless %}
