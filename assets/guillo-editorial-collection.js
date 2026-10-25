@@ -45,7 +45,7 @@
     back.addEventListener('click',()=>{if(stack.length>1)stack.pop();setPanel(stack.at(-1),true);});
     menu.addEventListener('close',()=>document.querySelector('[data-gc-menu-open]')?.setAttribute('aria-expanded','false'));
     // Keep the duplicated shirts view when a menu link returns to this collection.
-    menu.querySelectorAll('a').forEach(a=>{const u=new URL(a.href,location.origin);if(u.pathname==='/collections/shirts'){u.searchParams.set('view','shirts-editorial');a.href=u.href;}});
+    menu.querySelectorAll('a').forEach(a=>{const u=new URL(a.href,location.origin);if(u.pathname==='/collections/shirts'){u.searchParams.delete('view');a.href=u.href;}});
     const grid=root.querySelector('[data-gc-grid]');
     if (!grid) return;
     let cards=[...grid.querySelectorAll('[data-gc-card]')];
@@ -68,7 +68,7 @@
     };
     const persist = (navigate=false,sort=null) => {
       const u=new URL(location.href);['size','colour','style','available','min','max'].forEach(key=>{u.searchParams.delete('gc_'+key);const value=state[key];if(Array.isArray(value))value.forEach(v=>u.searchParams.append('gc_'+key,v));else if(value!==''&&value!==false)u.searchParams.set('gc_'+key,String(value));});
-      u.searchParams.set('view','shirts-editorial');if(sort)u.searchParams.set('sort_by',sort);
+      if(root.dataset.templateSuffix)u.searchParams.set('view',root.dataset.templateSuffix);else u.searchParams.delete('view');if(sort)u.searchParams.set('sort_by',sort);
       if(navigate)location.assign(u.href);else history.replaceState(null,'',u.href);
     };
     const apply = () => {
@@ -96,7 +96,7 @@
         quickContent.querySelectorAll('[data-gc-size]').forEach(button=>button.addEventListener('click',()=>{
           quickContent.querySelectorAll('[data-gc-size]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
           quickContent.querySelector('[data-gc-variant]').value=button.dataset.gcSize;
-          const add=quickContent.querySelector('[type="submit"]');add.disabled=false;add.textContent=card.dataset.handle!=='firenze-chevron-shirt'&&card.dataset.tags.split('|').includes('pre-order')?'Pre-order':'Add to bag';
+          const add=quickContent.querySelector('[type="submit"]');add.disabled=false;add.textContent=card.dataset.handle!=='firenze-chevron-shirt'&&card.dataset.preorder==='true'?'Pre-order':'Add to bag';
         }));
         show(quick);
       });

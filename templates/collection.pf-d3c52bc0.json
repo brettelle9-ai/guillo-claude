@@ -1,49 +1,16 @@
 {
   "sections": {
-    "banner": {
-      "type": "guillo-collection-banner",
+    "editorial": {
+      "type": "guillo-editorial-collection",
       "settings": {
-        "fallback_asset": "guillo-brown-01.jpg"
+        "heading": "",
+        "description": "",
+        "products_per_page": 48,
+        "card_media_default": "auto"
       }
-    },
-    "grid": {
-      "type": "guillo-collection-grid",
-      "blocks": {
-        "summer": {
-          "type": "filter_set",
-          "settings": {
-            "collection": "summer-preview",
-            "chips": "New:newest, Slim fit:fit-slim, Relaxed fit:fit-relaxed, Shirts:garment-shirt, Pants:pants"
-          }
-        }
-      },
-      "block_order": [
-        "summer"
-      ],
-      "settings": {
-        "filter_chips": "Slim fit:slim-fit, Stretch:stretch, Under $120:under-120",
-        "show_quick_add": true,
-        "show_break": true,
-        "break_eyebrow": "The Guillo fit",
-        "break_heading": "Find your shape.",
-        "break_text": "Compare the cuts and measurements in the Guillo fit guide.",
-        "break_link_label": "Open the fit guide",
-        "break_link": "shopify://pages/fit-guide",
-        "break_image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_33_AM.png",
-        "seo_title_1": "Chinos built for real legs",
-        "seo_text_1": "<p>Compare the available shapes and sizes in the Guillo fit guide. Explore the product views to see the silhouette from every angle.</p>",
-        "seo_title_2": "Choosing between the cuts",
-        "seo_text_2": "<p>The Luxe Chino is slim and tailored, sitting close without restricting. The Signore is classic with a hint of slim, and its side fastening keeps the front clean under an untucked shirt.</p><p>If you train, start with your usual waist. Both cuts are drafted with room through the thigh, so sizing up is rarely the answer.</p>"
-      }
-    },
-    "pf-d3c52bc0": {
-      "type": "pf-d3c52bc0",
-      "settings": {}
     }
   },
   "order": [
-    "banner",
-    "grid",
-    "pf-d3c52bc0"
+    "editorial"
   ]
 }

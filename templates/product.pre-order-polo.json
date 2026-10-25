@@ -1,72 +1,14 @@
 {
   "sections": {
     "main": {
-      "type": "guillo-product",
+      "type": "guillo-editorial-product",
+      "settings": {
+        "availability_mode": "preorder",
+        "subtitle": "A knitted polo in a viscose and cotton blend, cut to an athletic fit. High stretch through the chest and shoulders, tapered through the body, close without pulling.",
+        "fabric_fit": "<p>Athletic fit. Shaped through the chest and shoulders, tapered through the body, close without pulling. It runs closer than the Portofino.</p><p>True to size if you want it close. If you sit between sizes, or you want it sitting looser through the middle, size up.</p>",
+        "care": "<p>Machine wash cold. Reshape and dry flat so the knit holds its shape.</p>"
+      },
       "blocks": {
-        "feat1": {
-          "type": "feature",
-          "settings": {
-            "label": "Viscose cotton blend",
-            "icon": "shield"
-          }
-        },
-        "feat2": {
-          "type": "feature",
-          "settings": {
-            "label": "High stretch",
-            "icon": "stretch"
-          }
-        },
-        "feat3": {
-          "type": "feature",
-          "settings": {
-            "label": "Knitted",
-            "icon": "dot"
-          }
-        },
-        "feat4": {
-          "type": "feature",
-          "settings": {
-            "label": "Breathable",
-            "icon": "breathable"
-          }
-        },
-        "tab1": {
-          "type": "tab",
-          "settings": {
-            "title": "Fit & Care",
-            "content": "<p><strong>This is a pre-order.</strong> You order now, the run goes into production, and your size is cut with it and shipped to you first. You are charged at checkout, which is what reserves the size. If the run is delayed we write to you, and you can cancel for a full refund at any point before it ships.</p><p>Athletic fit. Shaped through the chest and shoulders, tapered through the body, close without pulling. It runs closer than the Portofino.</p><p>True to size if you want it close. If you sit between sizes, or you want it sitting looser through the middle, size up.</p><p>Machine wash cold. Reshape and dry flat so the knit holds its shape.</p>",
-            "content_intl": "",
-            "country_shipping": false
-          }
-        },
-        "tab2": {
-          "type": "tab",
-          "settings": {
-            "title": "Details",
-            "content": "<p>A knitted viscose and cotton blend with high stretch, so it moves with you and comes back into shape rather than bagging out at the elbows and hem.</p><p>The viscose gives the knit its drape and soft handle. The cotton keeps it breathable.</p><p>Open collar. Designed in Brisbane.</p>",
-            "content_intl": "",
-            "country_shipping": false
-          }
-        },
-        "tab3": {
-          "type": "tab",
-          "settings": {
-            "title": "Shipping",
-            "content": "<p>This is a pre-order, so it does not dispatch today. Your size ships as soon as the run lands, ahead of general stock.</p><ul><li>Australia: 2 to 4 days once dispatched. Free standard shipping over $100, free express over $200.</li><li>New Zealand: 2 to 4 days once dispatched. Free priority express over NZ$160.</li></ul><p>Tracked door to door on every order.</p>",
-            "content_intl": "<p>This is a pre-order, so it does not dispatch today. Your size ships as soon as the run lands, ahead of general stock.</p><ul><li>Singapore: 4 to 6 days once dispatched. Free standard shipping over S$250.</li><li>United Kingdom: 5 to 8 days once dispatched. Free standard shipping over £65.</li><li>Europe: 6 to 9 days once dispatched.</li></ul><p>Every international order ships DDP. Duties and import taxes are calculated and paid at checkout, so nothing is owed on arrival.</p>",
-            "country_shipping": true
-          }
-        },
-        "tab4": {
-          "type": "tab",
-          "settings": {
-            "title": "Exchanges & Returns",
-            "content": "<p>Free exchanges and returns within 44 days of delivery across Australia and New Zealand. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
-            "content_intl": "<p>44-day returns and exchanges, starting the day it is delivered. Return postage is paid by you. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
-            "country_shipping": false
-          }
-        },
         "sizeguide": {
           "type": "guillo_find_your_size",
           "settings": {
@@ -74,7 +16,7 @@
             "show_icon": true,
             "eyebrow": "Size Guide",
             "heading": "Find Your Size",
-            "subheading": "Measurements are the garment laid flat. Compare them against a polo you already own and like the fit of.",
+            "subheading": "Garment measurements laid flat in centimetres. Compare with a polo you own.",
             "logo_image": "shopify://shop_images/Black_and_Brown_Stylish_and_Edgy_Black_Friday_Fashion_Sale_Instagram_Post_31.png",
             "logo_url": "",
             "show_fit_profile": true,
@@ -92,7 +34,7 @@
             "chart_heading": "Size Chart",
             "show_unit_toggle": true,
             "default_unit": "cm",
-            "measurements_cm": "Size|Chest|Waist|Bicep|Length\nS|47|43|17.5|71\nM|49.5|46|18.5|72.5\nL|52|48.5|19.5|74\nXL|54.5|51|20.5|75.5\nXXL|57|53.5|21.5|77",
+            "measurements_cm": "Size|Chest width (flat)|Waist width (flat)|Bicep width (flat)|Length\nS|47|43|17.5|71\nM|49.5|46|18.5|72.5\nL|52|48.5|19.5|74\nXL|54.5|51|20.5|75.5\nXXL|57|53.5|21.5|77",
             "measurements_in": "Size|Chest|Waist|Bicep|Length\nS|18.5|16.9|6.9|28.0\nM|19.5|18.1|7.3|28.5\nL|20.5|19.1|7.7|29.1\nXL|21.5|20.1|8.1|29.7\nXXL|22.4|21.1|8.5|30.3",
             "show_fit_notes": true,
             "fit_notes_heading": "Fit Notes",
@@ -118,245 +60,17 @@
             "reco_link_label": "View Long Sleeve Styles",
             "reco_link_url": "shopify://products/vulcano-short-sleeve-slim-fit-shirt-copy",
             "help_title": "Still unsure?",
-            "help_text": "Need help? Message us and we'll recommend your best size"
+            "help_text": "Need help? Message us and we'll recommend your best size",
+            "family": "all"
           }
         }
       },
       "block_order": [
-        "feat1",
-        "feat2",
-        "feat3",
-        "feat4",
-        "tab1",
-        "tab2",
-        "tab3",
-        "tab4",
         "sizeguide"
-      ],
-      "settings": {
-        "availability_mode": "preorder",
-        "avail_eyebrow": "Pre-order",
-        "avail_headline": "Reserved now. Made in the next run.",
-        "avail_note": "Your size is cut and set aside when the run goes in.",
-        "avail_reward": "",
-        "interest_cta": "Register your interest",
-        "interest_size_tag": "Register",
-        "interest_hint": "Choose the size you would take.",
-        "interest_panel_title": "Register your interest in size",
-        "interest_panel_sub": "One letter, the morning it opens. Nothing else.",
-        "show_short_description": true,
-        "short_description": "A knitted polo in a viscose and cotton blend, cut to an athletic fit. High stretch through the chest and shoulders, tapered through the body, close without pulling.",
-        "fit_guide_link": "shopify://pages/fit-guide",
-        "size_guide_page": "shopify://pages/fit-guide",
-        "fit_finder_cross_product": "",
-        "trust_line": "Reserved at checkout · 44 days to decide, from the day it lands",
-        "open_first_tab": false,
-        "show_pair": false,
-        "show_video_tile": false,
-        "video_position": "center 70% center",
-        "video_ratio": "3 / 4",
-        "video_fit": "contain",
-        "video_poster_asset": "",
-        "video_caption": "Watch the fit in motion"
-      }
-    },
-    "wear": {
-      "type": "guillo-wear-with",
-      "settings": {
-        "products": [
-          "the-capri-chino-short-navy",
-          "the-luxe-chino-black",
-          "the-signore-chino-midnight",
-          "the-signore-chino-mocha",
-          "bellagio-leather-weekender-duffel-bag",
-          "the-capri-chino-short-stone",
-          "the-luxe-chino-stone",
-          "the-luxe-chino-sage"
-        ],
-        "heading": "Wear it with",
-        "wardrobe_note": "Build your wardrobe. Three pieces or more, 20% off automatically.",
-        "wardrobe_link": "",
-        "collection": "",
-        "products_to_show": 8
-      }
-    },
-    "trust": {
-      "type": "guillo-trust",
-      "blocks": {
-        "card1": {
-          "type": "card",
-          "settings": {
-            "icon": "truck",
-            "title": "Fast, tracked shipping",
-            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order.",
-            "text_intl": ""
-          }
-        },
-        "card2": {
-          "type": "card",
-          "settings": {
-            "icon": "refresh",
-            "title": "Easy 44 day returns",
-            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day.",
-            "text_intl": "44-day returns and exchanges. Return postage is paid by you. Size swaps ship same day."
-          }
-        },
-        "card3": {
-          "type": "card",
-          "settings": {
-            "icon": "shield",
-            "title": "Duties and taxes covered",
-            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship.",
-            "text_intl": ""
-          }
-        }
-      },
-      "block_order": [
-        "card1",
-        "card2",
-        "card3"
-      ],
-      "settings": {
-        "show_press": true,
-        "press_logo_alt": "7NEWS",
-        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
-      }
-    },
-    "anatomy": {
-      "type": "guillo-anatomy",
-      "blocks": {
-        "cl1": {
-          "type": "callout_left",
-          "settings": {
-            "title": "Athletic fit",
-            "text": "Shaped through the chest and shoulders, then tapered through the body. Close without pulling.",
-            "spec": "True to size"
-          }
-        },
-        "cl2": {
-          "type": "callout_left",
-          "settings": {
-            "title": "Viscose cotton knit",
-            "text": "The viscose gives it drape and a soft handle. The cotton keeps it breathable.",
-            "spec": "Viscose cotton blend"
-          }
-        },
-        "cr1": {
-          "type": "callout_right",
-          "settings": {
-            "title": "High stretch",
-            "text": "Moves with you through the shoulders and comes back into shape rather than bagging out.",
-            "spec": "Sizes S to XXL"
-          }
-        },
-        "cr2": {
-          "type": "callout_right",
-          "settings": {
-            "title": "Wears all day",
-            "text": "Breathable enough for a long lunch and clean enough for evening drinks.",
-            "spec": "Open collar"
-          }
-        }
-      },
-      "block_order": [
-        "cl1",
-        "cl2",
-        "cr1",
-        "cr2"
-      ],
-      "disabled": true,
-      "settings": {
-        "heading": "A knitted polo, cut athletic.",
-        "image": "shopify://shop_images/042A9663-Edit.jpg",
-        "image_alt": "The Valenti Knit Polo in navy, athletic fit knit",
-        "image_position": "center 74%"
-      }
-    },
-    "reviews": {
-      "type": "guillo-pdp-reviews",
-      "settings": {
-        "heading": "Worn, washed, reported back.",
-        "write_link": "",
-        "all_link": "",
-        "fit_marker": 50,
-        "fit_note": "",
-        "reviews_to_show": 60,
-        "show_fit_meter": false,
-        "reviews_visible": 3
-      }
-    },
-    "faq": {
-      "type": "guillo-faq",
-      "blocks": {
-        "q1": {
-          "type": "faq",
-          "settings": {
-            "question": "How does it fit?",
-            "answer": "<p>An athletic fit. Shaped through the chest and shoulders and tapered through the body, close without pulling. It runs closer than the Portofino. True to size if you want it close, size up for more room through the middle.</p>"
-          }
-        },
-        "q2": {
-          "type": "faq",
-          "settings": {
-            "question": "What is the fabric?",
-            "answer": "<p>A knitted viscose and cotton blend with high stretch. The viscose gives it drape and a soft handle, the cotton keeps it breathable, and the stretch means it recovers its shape instead of bagging out.</p>"
-          }
-        },
-        "q3": {
-          "type": "faq",
-          "settings": {
-            "question": "Is it comfortable for all day wear?",
-            "answer": "<p>Yes. The stretch moves with you and the knit breathes, so it holds its line from morning through to evening.</p>"
-          }
-        },
-        "q4": {
-          "type": "faq",
-          "settings": {
-            "question": "What should I pair it with?",
-            "answer": "<p>Chinos and loafers for a long lunch. Tailored shorts by the water. It layers cleanly under a jacket when the evening cools.</p>"
-          }
-        },
-        "q5": {
-          "type": "faq",
-          "settings": {
-            "question": "What is your return policy?",
-            "answer": "<p>Complimentary returns &amp; exchanges within 44 days for AU/NZ orders. International orders: 44-day returns and exchanges, return shipping paid by the customer. All returns via our self-service portal, no emails, no waiting.</p>"
-          }
-        },
-        "q6": {
-          "type": "faq",
-          "settings": {
-            "question": "When will it arrive?",
-            "answer": "<p>This is a pre-order. You are charged at checkout, and that is what reserves your size in the run. Pre-orders are picked and sent first, ahead of general stock.</p><p>We write to you with the dispatch date as soon as the run is confirmed. If it slips you hear from us, and you can cancel for a full refund at any point before it ships.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "q1",
-        "q2",
-        "q3",
-        "q4",
-        "q5",
-        "q6"
-      ],
-      "settings": {
-        "layout": "split",
-        "anchor": "",
-        "eyebrow": "Questions",
-        "heading": "Before you order.",
-        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
-        "link_label": "Ask a question",
-        "link": "shopify://pages/contact",
-        "open_first": false
-      }
+      ]
     }
   },
   "order": [
-    "main",
-    "wear",
-    "trust",
-    "anatomy",
-    "reviews",
-    "faq"
+    "main"
   ]
 }

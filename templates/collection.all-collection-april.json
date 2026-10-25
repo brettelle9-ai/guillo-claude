@@ -1,32 +1,16 @@
 {
   "sections": {
-    "banner": {
-      "type": "guillo-collection-banner",
+    "editorial": {
+      "type": "guillo-editorial-collection",
       "settings": {
-        "fallback_asset": "guillo-brown-01.jpg"
-      }
-    },
-    "grid": {
-      "type": "guillo-collection-grid",
-      "settings": {
-        "filter_chips": "Shirts:garment-shirt, Pants:pants, Polos:garment-polo, Tees:garment-tee",
-        "show_quick_add": true,
-        "show_break": true,
-        "break_eyebrow": "The Guillo fit",
-        "break_heading": "Find your shape.",
-        "break_text": "Compare the cuts and measurements in the Guillo fit guide.",
-        "break_link_label": "Open the fit guide",
-        "break_link": "shopify://pages/fit-guide",
-        "break_image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_19_AM.png",
-        "seo_title_1": "The whole range",
-        "seo_text_1": "<p>Compare the available shapes and sizes in the Guillo fit guide. Explore the product views to see the silhouette from every angle.</p>",
-        "seo_title_2": "Where to start",
-        "seo_text_2": "<p>Most men start with a chino and a shirt. The fit guide compares every cut side by side, with the waist and thigh measurements laid out, so you can size once and be right.</p>"
+        "heading": "",
+        "description": "",
+        "products_per_page": 48,
+        "card_media_default": "auto"
       }
     }
   },
   "order": [
-    "banner",
-    "grid"
+    "editorial"
   ]
 }

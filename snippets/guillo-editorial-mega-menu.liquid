@@ -1,0 +1,6 @@
+<div class="gc-mega" id="GCMega-{{ panel_id }}" data-gc-mega="{{ panel_id }}" aria-label="{{ link.title | escape }}" hidden>
+  <div class="gc-mega__links"><a class="gc-mega__all" href="{{ link.url }}">Shop all {{ link.title | escape }}</a><div class="gc-mega__columns">
+    {% for child in link.links %}<div><a class="gc-mega__heading" href="{{ child.url }}">{{ child.title | escape }}</a>{% if child.links.size > 0 %}<ul>{% for leaf in child.links %}<li><a href="{{ leaf.url }}">{{ leaf.title | escape }}</a></li>{% endfor %}</ul>{% endif %}</div>{% endfor %}
+  </div></div>
+  <div class="gc-mega__tiles">{% assign tile_count = 0 %}{% for child in link.links %}{% assign tile_image = child.object.image | default: child.object.featured_image | default: child.object.products.first.featured_image %}{% if tile_image != blank and tile_count < 2 %}<a class="gc-mega__tile" href="{{ child.url }}">{{ tile_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: child.title }}<span>{{ child.title | escape }}<small>Shop now</small></span></a>{% assign tile_count = tile_count | plus: 1 %}{% endif %}{% endfor %}</div>
+</div>

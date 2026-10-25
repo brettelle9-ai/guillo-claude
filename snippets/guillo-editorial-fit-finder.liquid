@@ -66,6 +66,17 @@
           assign ff_ok_row = false
           assign ff_bad = ff_bad | plus: 1
         endif
+        assign ff_size_norm = ff_size | replace: '2XL', 'XXL' | remove: '"' | remove: "'" | downcase
+        assign ff_present = false
+        for ff_variant in product.variants
+          assign ff_option_norm = ff_variant.option1 | replace: '2XL', 'XXL' | remove: '"' | remove: "'" | downcase
+          if ff_option_norm == ff_size_norm
+            assign ff_present = true
+          endif
+        endfor
+        if ff_present == false
+          assign ff_ok_row = false
+        endif
         if ff_ok_row
           assign ff_sizes = ff_sizes | append: ff_size | append: '|'
           assign ff_chart = ff_chart | append: ff_val | append: '|'
@@ -90,6 +101,9 @@
     assign ff_allowed = true
   endif
 
+  if product.tags contains 'garment:polo' or product.tags contains 'garment:tee'
+    assign ff_allowed = true
+  endif
   if product.tags contains 'garment:shirt'
     assign ff_allowed = true
   endif
@@ -116,11 +130,12 @@
 
 {%- if ff_ok -%}
   {{ 'guillo-fit-finder.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'guillo-editorial-fit-finder.js' | asset_url }}" defer></script>
+  {% if ff_kind == 'bottom' %}<script src="{{ 'guillo-fit-finder.js' | asset_url }}" defer></script>{% else %}<script src="{{ 'guillo-editorial-fit-finder.js' | asset_url }}" defer></script>{% endif %}
 
   <script type="application/json" data-gff-data>
     {
       "kind": {{ ff_kind | json }},
+      "garment": {% if product.tags contains 'garment:polo' %}"polo"{% elsif product.tags contains 'garment:tee' %}"tee"{% else %}"shirt"{% endif %},
       "noConfidence": true,
       "freeExchange": {% assign ff_cc = localization.country.iso_code | default: 'ZZ' %}{% if ff_cc == 'AU' or ff_cc == 'NZ' %}true{% else %}false{% endif %},
       "leg": {{ ff_leg }},

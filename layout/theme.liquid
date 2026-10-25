@@ -59,20 +59,17 @@
     {%- render 'guillo-fonts' -%}
     {{ 'guillo.css' | asset_url | stylesheet_tag }}
     {{ 'guillo-modern.css' | asset_url | stylesheet_tag }}
-    {%- if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' or request.page_type == 'index' -%}
-      <meta name="robots" content="noindex, follow">
+    {%- if request.page_type == 'collection' or request.page_type == 'product' or request.page_type == 'index' -%}
+      {%- if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' -%}<meta name="robots" content="noindex, follow">{%- endif -%}
       {{ 'guillo-editorial-collection.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'guillo-editorial-collection.js' | asset_url }}" defer></script>
       <script src="{{ 'guillo-card-video.js' | asset_url }}" defer></script>
     {%- endif -%}
-    {%- if template.suffix == 'firenze-editorial' -%}
+    {%- if request.page_type == 'product' -%}
       {{ 'guillo-editorial-product.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'guillo-editorial-product.js' | asset_url }}" defer></script>
     {%- endif -%}
-    {%- if product.tags contains 'garment:short' or template.suffix contains 'shorts' -%}
-      {{ 'guillo-capri.css' | asset_url | stylesheet_tag }}
-      <script src="{{ 'guillo-capri.js' | asset_url }}" defer></script>
-    {%- endif -%}
+
     {%- if request.page_type == 'product' -%}
       {{ 'guillo-purchase-motion.css' | asset_url | stylesheet_tag }}
     {%- endif -%}
@@ -90,11 +87,11 @@
     {{ content_for_header }}
   </head>
 
-  <body class="{% if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' or request.page_type == 'index' %}gc-collection-preview {% if template.suffix == 'firenze-editorial' %}ge-product-preview {% endif %}{% endif %}{% if request.page_type == 'index' %}gh-home-preview {% endif %}page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}{% if product.tags contains 'garment:short' or template.suffix contains 'shorts' %} guillo-capri-page{% endif %}">
+  <body class="{% if request.page_type == 'collection' or request.page_type == 'product' or request.page_type == 'index' %}gc-collection-preview {% if request.page_type == 'product' %}ge-product-preview {% endif %}{% endif %}{% if request.page_type == 'index' %}gh-home-preview {% endif %}page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}{% if product.tags contains 'garment:short' or template.suffix contains 'shorts' %} guillo-capri-page{% endif %}">
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
     <div id="header-group">
       {% sections 'header-group' %}
-      {%- if template.suffix == 'shirts-editorial' or template.suffix == 'firenze-editorial' or request.page_type == 'index' -%}{% section 'guillo-editorial-header' %}{%- endif -%}
+      {%- if request.page_type == 'collection' or request.page_type == 'product' or request.page_type == 'index' -%}{% section 'guillo-editorial-header' %}{%- endif -%}
     </div>
 
     <script>

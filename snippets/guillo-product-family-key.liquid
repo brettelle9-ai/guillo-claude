@@ -1,0 +1,25 @@
+{%- liquid
+  if product.tags contains 'garment:shirt'
+    echo 'shirts'
+  elsif product.handle contains 'luxe-chino'
+    echo 'luxe-chinos'
+  elsif product.handle contains 'signore-chino'
+    echo 'signore-chinos'
+  elsif product.handle contains 'portofino'
+    echo 'portofino-polos'
+  elsif product.handle contains 'valenti' or product.handle contains 'valentino'
+    echo 'valenti-polos'
+  elsif product.handle contains 'capri-chino-short'
+    echo 'capri-shorts'
+  elsif product.handle contains 'torino-jean'
+    echo 'torino-jeans'
+  elsif product.handle contains 'classico'
+    echo 'classico-tees'
+  elsif product.metafields.custom.product_group.value != blank
+    echo product.metafields.custom.product_group.value.system.id
+  elsif product.metafields.custom.colour_group.value != blank
+    echo product.metafields.custom.colour_group.value.first.handle
+  else
+    echo product.id
+  endif
+-%}

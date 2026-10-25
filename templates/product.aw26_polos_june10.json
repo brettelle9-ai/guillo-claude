@@ -1,67 +1,14 @@
 {
   "sections": {
     "main": {
-      "type": "guillo-product",
+      "type": "guillo-editorial-product",
+      "settings": {
+        "availability_mode": "normal",
+        "subtitle": "English rib knit in 100% cotton, classic with a hint of slim. Relaxed through the body without ever looking loose.",
+        "fabric_fit": "<p>Classic, comfortable fit with a hint of slim. Relaxed through the body without looking loose, close enough through the chest to hold a line.</p><p>True to size. Take your usual chest size.</p>",
+        "care": "<p>Machine wash cold. Reshape and dry flat so the rib keeps its shape.</p>"
+      },
       "blocks": {
-        "feat1": {
-          "type": "feature",
-          "settings": {
-            "label": "100% cotton",
-            "icon": "shield"
-          }
-        },
-        "feat2": {
-          "type": "feature",
-          "settings": {
-            "label": "Natural stretch",
-            "icon": "stretch"
-          }
-        },
-        "feat3": {
-          "type": "feature",
-          "settings": {
-            "label": "English rib knit",
-            "icon": "dot"
-          }
-        },
-        "feat4": {
-          "type": "feature",
-          "settings": {
-            "label": "Breathable",
-            "icon": "breathable"
-          }
-        },
-        "tab1": {
-          "type": "tab",
-          "settings": {
-            "title": "Fit & Care",
-            "content": "<p>Classic, comfortable fit with a hint of slim. Relaxed through the body without looking loose, close enough through the chest to hold a line.</p><p>True to size. Take your usual chest size.</p><p>Machine wash cold. Reshape and dry flat so the rib keeps its shape.</p>"
-          }
-        },
-        "tab2": {
-          "type": "tab",
-          "settings": {
-            "title": "Details",
-            "content": "<p>English rib knit in cotton. The give comes from the knit itself, not from elastane, and the rib gives the polo its body wash after wash.</p><p>Open collar. Designed in Brisbane.</p>"
-          }
-        },
-        "tab3": {
-          "type": "tab",
-          "settings": {
-            "title": "Shipping",
-            "country_shipping": true,
-            "content_intl": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Singapore: 4 to 6 days. Free standard shipping over S$250.</li><li>United Kingdom: 5 to 8 days. Free standard shipping over £65.</li><li>Europe: 6 to 9 days.</li></ul><p>Every international order ships DDP. Duties and import taxes are calculated and paid at checkout, so nothing is owed on arrival.</p>",
-            "content": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Australia: 2 to 4 days. Free standard shipping over $100, free express over $200.</li><li>New Zealand: 2 to 4 days. Free priority express over NZ$160.</li></ul><p>Tracked door to door on every order.</p>"
-          }
-        },
-        "tab4": {
-          "type": "tab",
-          "settings": {
-            "title": "Exchanges & Returns",
-            "content_intl": "<p>44-day returns and exchanges. Return postage is paid by you. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
-            "content": "<p>Free exchanges and returns within 44 days across Australia and New Zealand. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>"
-          }
-        },
         "sizeguide": {
           "type": "guillo_find_your_size",
           "settings": {
@@ -113,231 +60,17 @@
             "reco_link_label": "View Long Sleeve Styles",
             "reco_link_url": "shopify://products/vulcano-short-sleeve-slim-fit-shirt-copy",
             "help_title": "Still unsure?",
-            "help_text": "Need help? Message us and we'll recommend your best size"
+            "help_text": "Need help? Message us and we'll recommend your best size",
+            "family": "all"
           }
         }
       },
       "block_order": [
-        "feat1",
-        "feat2",
-        "feat3",
-        "feat4",
-        "tab1",
-        "tab2",
-        "tab3",
-        "tab4",
         "sizeguide"
-      ],
-      "settings": {
-        "short_description": "English rib knit in 100% cotton, classic with a hint of slim. Relaxed through the body without ever looking loose.",
-        "fit_guide_link": "shopify://pages/fit-guide",
-        "size_guide_page": "shopify://pages/fit-guide",
-        "trust_line": "Same-day dispatch · 44-day returns and exchanges",
-        "open_first_tab": false,
-        "show_pair": true,
-        "show_video_tile": true,
-        "video": "shopify://files/videos/lv_0_20260705200424.mp4",
-        "video_position": "center 70% center",
-        "video_ratio": "3 / 4",
-        "video_fit": "contain",
-        "video_poster_asset": "",
-        "video_caption": "Watch the fit in motion"
-      }
-    },
-    "wear": {
-      "type": "guillo-wear-with",
-      "settings": {
-        "products": [
-          "the-capri-chino-short-navy",
-          "the-luxe-chino-black",
-          "the-signore-chino-midnight",
-          "the-signore-chino-mocha",
-          "bellagio-leather-weekender-duffel-bag",
-          "the-capri-chino-short-stone",
-          "the-luxe-chino-stone",
-          "the-luxe-chino-sage"
-        ],
-        "heading": "Wear it with",
-        "wardrobe_note": "Build your wardrobe. Three pieces or more, 20% off automatically.",
-        "wardrobe_link": "",
-        "collection": "",
-        "products_to_show": 8
-      }
-    },
-    "trust": {
-      "type": "guillo-trust",
-      "blocks": {
-        "card1": {
-          "type": "card",
-          "settings": {
-            "icon": "truck",
-            "title": "Fast, tracked shipping",
-            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order."
-          }
-        },
-        "card2": {
-          "type": "card",
-          "settings": {
-            "icon": "refresh",
-            "title": "Easy 44 day returns",
-            "text_intl": "44-day returns and exchanges. Return postage is paid by you. Size swaps ship same day.",
-            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
-          }
-        },
-        "card3": {
-          "type": "card",
-          "settings": {
-            "icon": "shield",
-            "title": "Duties and taxes covered",
-            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship."
-          }
-        }
-      },
-      "block_order": [
-        "card1",
-        "card2",
-        "card3"
-      ],
-      "settings": {
-        "show_press": true,
-        "press_logo_alt": "7NEWS",
-        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
-      }
-    },
-    "anatomy": {
-      "type": "guillo-anatomy",
-      "blocks": {
-        "cl1": {
-          "type": "callout_left",
-          "settings": {
-            "title": "Classic, hint of slim",
-            "text": "Relaxed through the body without ever looking loose, and close enough through the chest to hold a line.",
-            "spec": "True to size"
-          }
-        },
-        "cl2": {
-          "type": "callout_left",
-          "settings": {
-            "title": "English rib knit",
-            "text": "A textured rib that gives the polo its body and keeps its shape wash after wash.",
-            "spec": "100% cotton"
-          }
-        },
-        "cr1": {
-          "type": "callout_right",
-          "settings": {
-            "title": "Natural stretch",
-            "text": "The give comes from the knit itself, not from elastane.",
-            "spec": "Sizes S to XL"
-          }
-        },
-        "cr2": {
-          "type": "callout_right",
-          "settings": {
-            "title": "Wears all day",
-            "text": "Cotton that breathes from a long lunch through to evening drinks.",
-            "spec": "Open collar"
-          }
-        }
-      },
-      "block_order": [
-        "cl1",
-        "cl2",
-        "cr1",
-        "cr2"
-      ],
-      "settings": {
-        "heading": "An English rib polo, classic with a hint of slim.",
-        "image": "shopify://shop_images/042A9663-Edit.jpg",
-        "image_alt": "The Portofino Polo, English rib knit",
-        "image_position": "center 74%"
-      }
-    },
-    "reviews": {
-      "type": "guillo-pdp-reviews",
-      "settings": {
-        "heading": "Worn, washed, reported back.",
-        "write_link": "",
-        "all_link": "",
-        "fit_marker": 50,
-        "fit_note": "",
-        "reviews_to_show": 60,
-        "show_fit_meter": false,
-        "reviews_visible": 3
-      }
-    },
-    "faq": {
-      "type": "guillo-faq",
-      "blocks": {
-        "q1": {
-          "type": "faq",
-          "settings": {
-            "question": "How does it fit?",
-            "answer": "<p>A classic regular fit with a quiet stretch through the knit. Relaxed through the body, refined enough to never look loose. True to size.</p>"
-          }
-        },
-        "q2": {
-          "type": "faq",
-          "settings": {
-            "question": "What is the fabric?",
-            "answer": "<p>A breathable knit with natural stretch and an open collar that keeps its shape wash after wash.</p>"
-          }
-        },
-        "q3": {
-          "type": "faq",
-          "settings": {
-            "question": "Is it comfortable for all day wear?",
-            "answer": "<p>Yes. The knit breathes and moves with you from morning coffee to evening drinks.</p>"
-          }
-        },
-        "q4": {
-          "type": "faq",
-          "settings": {
-            "question": "What should I pair it with?",
-            "answer": "<p>Chinos and loafers for a long lunch. Tailored shorts by the water. It layers cleanly under a jacket when the evening cools.</p>"
-          }
-        },
-        "q5": {
-          "type": "faq",
-          "settings": {
-            "question": "What is your return policy?",
-            "answer": "<p>Complimentary returns &amp; exchanges within 44 days for AU/NZ orders. International orders: 44-day returns and exchanges, return shipping paid by the customer. All returns via our self-service portal, no emails, no waiting.</p>"
-          }
-        },
-        "q6": {
-          "type": "faq",
-          "settings": {
-            "question": "When will it arrive?",
-            "answer": "<p>All orders dispatched within 24 hours. Standard delivery to Australia in 2 to 8 business days. Express in 1 to 4. International shipping available to Singapore, UK, US and Europe.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "q1",
-        "q2",
-        "q3",
-        "q4",
-        "q5",
-        "q6"
-      ],
-      "settings": {
-        "layout": "split",
-        "anchor": "",
-        "eyebrow": "Questions",
-        "heading": "Before you order.",
-        "text": "Still unsure? Our team wears these every day and answers in under an hour, Brisbane time.",
-        "link_label": "Ask a question",
-        "link": "shopify://pages/contact",
-        "open_first": false
-      }
+      ]
     }
   },
   "order": [
-    "main",
-    "wear",
-    "trust",
-    "anatomy",
-    "reviews",
-    "faq"
+    "main"
   ]
 }

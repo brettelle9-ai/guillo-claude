@@ -1,0 +1,5 @@
+<div class="ge-notify" data-ge-notify hidden data-product-title="{{ product.title | escape }}" data-product-url="{{ shop.url }}{{ product.url }}" data-product-image="{{ product.featured_image | image_url: width: 400 }}">
+ <button type="button" data-ge-notify-close>← Back to product</button>
+ <h3>{% if availability_mode == 'interest' %}Register your interest{% else %}Notify me when available{% endif %} <span data-ge-notify-size></span></h3>
+ <form data-ge-notify-form><label>Email address<input type="email" name="email" required autocomplete="email" placeholder="Your email address"></label><button type="submit">{% if availability_mode == 'interest' %}Register interest{% else %}Notify me{% endif %}</button><p data-ge-notify-status role="status"></p></form>
+</div>

@@ -1,33 +1,16 @@
 {
   "sections": {
-    "banner": {
-      "type": "guillo-collection-banner",
+    "editorial": {
+      "type": "guillo-editorial-collection",
       "settings": {
-        "fallback_asset": "guillo-brown-01.jpg"
-      }
-    },
-    "grid": {
-      "type": "guillo-collection-grid",
-      "settings": {
-        "filter_chips": "",
-        "desktop_columns": "4",
-        "show_quick_add": true,
-        "show_break": true,
-        "break_eyebrow": "The Guillo fit",
-        "break_heading": "Find your shape.",
-        "break_text": "Compare the cuts and measurements in the Guillo fit guide.",
-        "break_link_label": "Open the fit guide",
-        "break_link": "shopify://pages/fit-guide",
-        "break_image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_33_AM.png",
-        "seo_title_1": "No collar. No decisions.",
-        "seo_text_1": "<p>The grandad collar loses the collar stand and the buttons at the neck, which takes the formality out of a shirt without taking the shape out of it. Left open it sits flat and clean instead of splaying, so it reads considered rather than undone.</p><p>Same body as the signature shirt underneath: fitted through the chest and taken in at the waist.</p>",
-        "seo_title_2": "Short sleeve, and built for heat",
-        "seo_text_2": "<p>Compare the available shapes and sizes in the Guillo fit guide. Explore the product views to see the silhouette from every angle.</p>"
+        "heading": "",
+        "description": "",
+        "products_per_page": 48,
+        "card_media_default": "auto"
       }
     }
   },
   "order": [
-    "banner",
-    "grid"
+    "editorial"
   ]
 }

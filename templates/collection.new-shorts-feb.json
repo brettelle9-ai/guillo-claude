@@ -1,32 +1,16 @@
 {
   "sections": {
-    "banner": {
-      "type": "guillo-collection-banner",
+    "editorial": {
+      "type": "guillo-editorial-collection",
       "settings": {
-        "fallback_asset": "guillo-brown-01.jpg"
-      }
-    },
-    "grid": {
-      "type": "guillo-collection-grid",
-      "settings": {
-        "filter_chips": "Classic fit:fit-classic",
-        "show_quick_add": true,
-        "show_break": true,
-        "break_eyebrow": "The Guillo fit",
-        "break_heading": "Find your shape.",
-        "break_text": "Compare the cuts and measurements in the Guillo fit guide.",
-        "break_link_label": "Open the fit guide",
-        "break_link": "shopify://pages/fit-guide",
-        "seo_title_1": "Tailored, not baggy",
-        "seo_text_1": "<p>Compare the available shapes and sizes in the Guillo fit guide. Explore the product views to see the silhouette from every angle.</p>",
-        "seo_title_2": "Sizing the Capri",
-        "seo_text_2": "<p>Compare the available shapes and sizes in the Guillo fit guide. Explore the product views to see the silhouette from every angle.</p>",
-        "desktop_columns": "3"
+        "heading": "",
+        "description": "",
+        "products_per_page": 48,
+        "card_media_default": "auto"
       }
     }
   },
   "order": [
-    "banner",
-    "grid"
+    "editorial"
   ]
 }

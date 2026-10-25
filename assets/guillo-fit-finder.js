@@ -641,7 +641,7 @@
     var want = norm(size);
     var inputs = document.querySelectorAll('form[action*="/cart/add"] input[type="radio"]');
     for (var i = 0; i < inputs.length; i++) {
-      if (norm(inputs[i].value) === want && !inputs[i].disabled) { inputs[i].click(); return true; }
+      if (norm(inputs[i].dataset.size || inputs[i].value) === want && !inputs[i].disabled) { inputs[i].click(); return true; }
     }
     return false;
   }

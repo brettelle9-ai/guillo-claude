@@ -1,32 +1,16 @@
 {
   "sections": {
-    "banner": {
-      "type": "guillo-collection-banner",
+    "editorial": {
+      "type": "guillo-editorial-collection",
       "settings": {
-        "fallback_asset": "guillo-brown-01.jpg"
-      }
-    },
-    "grid": {
-      "type": "guillo-collection-grid",
-      "settings": {
-        "filter_chips": "Shirts:garment-shirt, Pants:pants, Polos:garment-polo, Tees:garment-tee",
-        "show_quick_add": true,
-        "show_break": true,
-        "break_eyebrow": "The Guillo fit",
-        "break_heading": "Find your shape.",
-        "break_text": "Compare the cuts and measurements in the Guillo fit guide.",
-        "break_link_label": "Open the fit guide",
-        "break_link": "shopify://pages/fit-guide",
-        "break_image": "shopify://shop_images/ChatGPT_Image_Sep_2_2026_09_38_06_AM.png",
-        "seo_title_1": "What has just landed",
-        "seo_text_1": "<p>New colourways, new cuts and the first pieces of the season, in one place. Everything here is made in small runs rather than restocked on a schedule.</p>",
-        "seo_title_2": "Made in small runs",
-        "seo_text_2": "<p>When a colourway sells through it does not always come back. If something here fits, it is worth taking while it is on the site.</p>"
+        "heading": "",
+        "description": "",
+        "products_per_page": 48,
+        "card_media_default": "auto"
       }
     }
   },
   "order": [
-    "banner",
-    "grid"
+    "editorial"
   ]
 }

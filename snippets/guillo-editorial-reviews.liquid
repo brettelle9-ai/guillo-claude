@@ -1,0 +1,11 @@
+{% if summary %}<a class="ge-rating" href="#GEReviews" data-shirt-rating hidden></a>{% else %}
+{{ 'guillo-shirt-reviews.css' | asset_url | stylesheet_tag }}
+<section class="ge-shirt-reviews" id="GEReviews" data-ge-shirt-reviews>
+ <h2>Customer Reviews</h2><p class="ge-review-score" data-shirt-score></p><p data-shirt-status role="status">Loading customer reviews…</p><div data-shirt-review-list></div><button type="button" data-shirt-more hidden>Read more reviews</button>
+ <script type="application/json" data-shirt-review-products>[
+ {%- assign review_product_count = 0 -%}
+ {%- for candidate in candidates -%}{%- capture candidate_key -%}{% render 'guillo-product-family-key', product: candidate %}{%- endcapture -%}{%- if candidate_key == family_key -%}{% if review_product_count > 0 %},{% endif %}{"id":{{ candidate.id | append: '' | json }},"name":{{ candidate.title | json }}}{% assign review_product_count = review_product_count | plus: 1 %}{%- endif -%}{%- endfor -%}
+ {% if review_product_count == 0 %}{"id":{{ product.id | append: '' | json }},"name":{{ product.title | json }}}{% endif %}
+ ]</script>
+</section><script src="{{ 'guillo-shirt-reviews.js' | asset_url }}" defer></script>
+{% endif %}

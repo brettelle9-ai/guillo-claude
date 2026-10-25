@@ -19,7 +19,16 @@
 {%- liquid
   assign rows = data | strip | replace: '\n', '<br />' | newline_to_br | split: '<br />'
   assign header_row = rows | first
+  assign omit_inseam_index = -1
   assign header_cells = header_row | strip | split: '|'
+  if product.handle contains 'capri-chino-short' and product.handle contains '5in'
+    for header_cell in header_cells
+      assign lc_header = header_cell | downcase
+      if lc_header contains 'inseam' or lc_header contains 'inside leg'
+        assign omit_inseam_index = forloop.index0
+      endif
+    endfor
+  endif
 -%}
 
 {%- if data != blank and rows.size > 0 -%}
@@ -29,7 +38,7 @@
         <thead>
           <tr>
             {%- for cell in header_cells -%}
-              <th>{{ cell | strip | escape }}</th>
+              {% unless forloop.index0 == omit_inseam_index %}<th>{{ cell | strip | escape }}</th>{% endunless %}
             {%- endfor -%}
           </tr>
         </thead>
@@ -39,7 +48,7 @@
             {%- if cells.size > 0 -%}
               <tr>
                 {%- for cell in cells -%}
-                  <td>{{ cell | strip | escape }}</td>
+                  {% unless forloop.index0 == omit_inseam_index %}<td>{{ cell | strip | escape }}</td>{% endunless %}
                 {%- endfor -%}
               </tr>
             {%- endif -%}

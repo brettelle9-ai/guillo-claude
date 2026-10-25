@@ -3,8 +3,10 @@
     "main": {
       "type": "guillo-editorial-product",
       "settings": {
+        "availability_mode": "normal",
         "video": "shopify://files/videos/lv_0_20260914131333.mp4",
-        "video_caption": "Watch the fit in motion"
+        "video_caption": "Watch the fit in motion",
+        "subtitle": ""
       },
       "blocks": {
         "firenze_sizeguide": {
@@ -58,7 +60,8 @@
             "reco_link_label": "View Long Sleeve Styles",
             "reco_link_url": "shopify://products/vulcano-short-sleeve-slim-fit-shirt-copy",
             "help_title": "Still unsure?",
-            "help_text": "Need help? Message us and we'll recommend your best size"
+            "help_text": "Need help? Message us and we'll recommend your best size",
+            "family": "all"
           }
         }
       },

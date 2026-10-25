@@ -1,60 +1,12 @@
 {
   "sections": {
     "main": {
-      "type": "guillo-product",
-      "blocks": {
-        "tab1": {
-          "type": "tab",
-          "settings": {
-            "title": "Care",
-            "content": "<p>Follow the care instructions supplied with your item. Avoid soaking the leather or prolonged direct sunlight. Contact Guillo before using a cleaner or treatment if you are unsure.</p>"
-          }
-        },
-        "tab2": {
-          "type": "tab",
-          "settings": {
-            "title": "Details",
-            "content": ""
-          }
-        },
-        "tab3": {
-          "type": "tab",
-          "settings": {
-            "title": "Shipping",
-            "country_shipping": true,
-            "content_intl": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Singapore: 4 to 6 days. Free standard shipping over S$250.</li><li>United Kingdom: 5 to 8 days. Free standard shipping over \u00a365.</li><li>Europe: 6 to 9 days.</li></ul><p>Every international order ships DDP. Duties and import taxes are calculated and paid at checkout, so nothing is owed on arrival.</p>",
-            "content": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Australia: 2 to 4 days. Free standard shipping over $100, free express over $200.</li><li>New Zealand: 2 to 4 days. Free priority express over NZ$160.</li></ul><p>Tracked door to door on every order.</p>"
-          }
-        },
-        "tab4": {
-          "type": "tab",
-          "settings": {
-            "title": "Exchanges & Returns",
-            "content_intl": "<p>44-day returns and exchanges. International return postage is paid by the customer. Please return the item in its original condition.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
-            "content": "<p>Free returns and exchanges within 44 days for orders in Australia and New Zealand. Please return the item in its original condition.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>"
-          }
-        }
-      },
-      "block_order": [
-        "tab1",
-        "tab2",
-        "tab3",
-        "tab4"
-      ],
+      "type": "guillo-editorial-product",
       "settings": {
-        "short_description": "",
-        "fit_guide_link": "",
-        "size_guide_page": "",
-        "trust_line": "",
-        "open_first_tab": false,
-        "show_pair": false,
-        "show_video_tile": false,
+        "availability_mode": "normal",
         "video": "shopify://files/videos/copy_0B0889A7-52A1-4972-A97D-A97AF11BEF08 2.MOV",
-        "video_position": "center center",
-        "video_ratio": "1 / 1",
-        "video_fit": "cover",
-        "video_poster_asset": "",
-        "video_caption": "The Bellagio in detail"
+        "subtitle": "",
+        "care": "<p>Follow the care instructions supplied with your item. Avoid soaking the leather or prolonged direct sunlight. Contact Guillo before using a cleaner or treatment if you are unsure.</p>"
       }
     },
     "story": {
@@ -69,19 +21,6 @@
         "part": "accessories"
       }
     },
-    "reviews": {
-      "type": "guillo-pdp-reviews",
-      "settings": {
-        "heading": "Customer reviews",
-        "write_link": "",
-        "all_link": "",
-        "fit_marker": 50,
-        "fit_note": "",
-        "reviews_to_show": 60,
-        "show_fit_meter": false,
-        "reviews_visible": 3
-      }
-    },
     "questions": {
       "type": "guillo-bellagio",
       "settings": {
@@ -93,7 +32,6 @@
     "main",
     "story",
     "accessories",
-    "reviews",
     "questions"
   ]
 }

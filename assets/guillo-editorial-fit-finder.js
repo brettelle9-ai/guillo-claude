@@ -30,7 +30,8 @@
 
   var BOTTOM = P.kind === 'bottom';
   var RANGES = { h: [152, 205], w: [50, 135] };
-  var STORE_KEY = 'guillo-fit-shirts';
+  var GARMENT = P.garment || 'shirt';
+  var STORE_KEY = 'guillo-fit-' + GARMENT;
 
   // The sizes a man can say he wears. Guillo cuts even waists, but most men
   // are a 29, 31 or 33 in their own heads, so those are offered too and the
@@ -234,7 +235,7 @@
   }
 
   function noteFor(r, label) {
-    if(!BOTTOM)return 'Suggested from your usual shirt size and preferred fit. Check the chest measurements in the size guide to confirm.';
+    if(!BOTTOM)return 'Suggested from your usual ' + GARMENT + ' size and preferred fit. Check the chest measurements in the size guide to confirm.';
     if (P.noConfidence) return 'Suggested size: ' + label + '. Based on your answers about your usual size, build and preferred fit. Check the measurements below before choosing.';
     var s = 'Take the ' + label + '.';
     if (r.between) {
@@ -334,7 +335,7 @@
           '<span class="gff__stepno">01 / 02</span>' +
           '<h2>' + (S.route === 'usual' ? 'What size do you wear now?' : 'Height and weight.') + '</h2>' +
           '<p class="gff__sub">' + (S.route === 'usual'
-            ? 'In fitted shirts. Any brand.'
+            ? 'In fitted ' + GARMENT + 's. Any brand.'
             : 'Less exact than your size, so use it only if you must.') + '</p>' +
         '</div>' +
         (S.route === 'estimate' ? '<div class="gff__units">' +
@@ -404,13 +405,13 @@
     var out = '' +
       '<div class="gff__intro">' +
         '<span class="gff__stepno">02 / 02</span>' +
-        '<h2>How do you like your shirt to fit?</h2>' +
-        '<p class="gff__sub">Start from your usual shirt size, then choose how closely you like it cut.</p>' +
+        '<h2>How do you like your ' + GARMENT + ' to fit?</h2>' +
+        '<p class="gff__sub">Start from your usual ' + GARMENT + ' size, then choose how closely you like it cut.</p>' +
       '</div><div>';
     var n = 1;
     var order = groupOrder();
     if (order.indexOf('glutes') > -1) out += groupHTML('glutes', n++, 'Your glutes', 'And through the glutes?', segHTML('glutes', GLUTES), pickLabel(GLUTES, S.glutes));
-    out += groupHTML('fit', n++, 'Your preferred fit', 'How do you like your shirt to fit?', segHTML('fit', FITS), pickLabel(FITS, S.fit));
+    out += groupHTML('fit', n++, 'Your preferred fit', 'How do you like your ' + GARMENT + ' to fit?', segHTML('fit', FITS), pickLabel(FITS, S.fit));
     return out + '</div>';
   }
 

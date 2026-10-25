@@ -1,46 +1,14 @@
 {
   "sections": {
     "main": {
-      "type": "guillo-product",
+      "type": "guillo-editorial-product",
+      "settings": {
+        "availability_mode": "preorder",
+        "subtitle": "A close fit through the shoulders and body, with a clean hem.",
+        "fabric_fit": "<p>A close fit through the shoulders and body, with a clean hem.</p>",
+        "care": "<p>Compare the measurements in the size guide before choosing. Follow the care label supplied with your piece.</p>"
+      },
       "blocks": {
-        "feat1": {
-          "type": "feature",
-          "settings": {
-            "label": "Lightweight",
-            "icon": "breathable"
-          }
-        },
-        "tab1": {
-          "type": "tab",
-          "settings": {
-            "title": "Fit & Care",
-            "content": "<p>A close fit through the shoulders and body, with a clean hem.</p><p>Compare the measurements in the size guide before choosing. Follow the care label supplied with your piece.</p>"
-          }
-        },
-        "tab2": {
-          "type": "tab",
-          "settings": {
-            "title": "Details",
-            "content": "<p>A close fit through the shoulders and body, with a clean hem.</p>"
-          }
-        },
-        "tab3": {
-          "type": "tab",
-          "settings": {
-            "title": "Shipping",
-            "country_shipping": true,
-            "content_intl": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Singapore: 4 to 6 days. Free standard shipping over S$250.</li><li>United Kingdom: 5 to 8 days. Free standard shipping over £65.</li><li>Europe: 6 to 9 days.</li></ul><p>Every international order ships DDP. Duties and import taxes are calculated and paid at checkout, so nothing is owed on arrival.</p>",
-            "content": "<p>Orders placed before 4pm dispatch from Brisbane the same afternoon.</p><ul><li>Australia: 2 to 4 days. Free standard shipping over $100, free express over $200.</li><li>New Zealand: 2 to 4 days. Free priority express over NZ$160.</li></ul><p>Tracked door to door on every order.</p>"
-          }
-        },
-        "tab4": {
-          "type": "tab",
-          "settings": {
-            "title": "Exchanges & Returns",
-            "content_intl": "<p>44-day returns and exchanges. Return postage is paid by you. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>",
-            "content": "<p>Free exchanges and returns within 44 days across Australia and New Zealand. Send it back in the satchel it arrived in, no questions asked.</p><p>Exchanges ship the day we scan your return, so a size swap does not cost you another week. Hemming does not affect your returns window.</p><p><a href=\"https://guilloclothing.com/apps/redo/returns-portal/login\">Start a return or exchange</a></p>"
-          }
-        },
         "sizeguide": {
           "type": "guillo_find_your_size",
           "settings": {
@@ -92,223 +60,17 @@
             "reco_link_label": "View Long Sleeve Styles",
             "reco_link_url": "shopify://products/vulcano-short-sleeve-slim-fit-shirt-copy",
             "help_title": "Still unsure?",
-            "help_text": "Need help? Message us and we'll recommend your best size"
+            "help_text": "Need help? Message us and we'll recommend your best size",
+            "family": "all"
           }
         }
       },
       "block_order": [
-        "feat1",
-        "tab1",
-        "tab2",
-        "tab3",
-        "tab4",
         "sizeguide"
-      ],
-      "settings": {
-        "short_description": "A close fit through the shoulders and body, with a clean hem.",
-        "fit_guide_link": "shopify://pages/fit-guide",
-        "size_guide_page": "shopify://pages/fit-guide",
-        "trust_line": "Reserved at checkout · 44 days to decide, from the day it lands",
-        "open_first_tab": false,
-        "show_pair": false,
-        "show_video_tile": false,
-        "video_position": "center center",
-        "video_ratio": "1 / 1",
-        "video_fit": "cover",
-        "video_poster_asset": "",
-        "video_caption": "Watch the fit in motion",
-        "availability_mode": "preorder",
-        "avail_eyebrow": "Pre-order",
-        "avail_headline": "Reserved now. Made in the next run.",
-        "avail_note": "Your size is cut and set aside when the run goes in. Nothing ships today.",
-        "avail_reward": "",
-        "show_short_description": false
-      }
-    },
-    "wear": {
-      "type": "guillo-wear-with",
-      "settings": {
-        "products": [
-          "the-luxe-chino-black",
-          "the-luxe-chino-sage",
-          "the-signore-chino-midnight",
-          "the-signore-chino-mocha",
-          "the-signore-chino-latte"
-        ],
-        "heading": "Wear it with",
-        "wardrobe_note": "Chosen to wear together.",
-        "wardrobe_link": "",
-        "collection": "",
-        "products_to_show": 8
-      }
-    },
-    "trust": {
-      "type": "guillo-trust",
-      "blocks": {
-        "card1": {
-          "type": "card",
-          "settings": {
-            "icon": "truck",
-            "title": "Fast, tracked shipping",
-            "text": "Dispatched from Brisbane before 4pm, tracked door to door on every order."
-          }
-        },
-        "card2": {
-          "type": "card",
-          "settings": {
-            "icon": "refresh",
-            "title": "Easy 44 day returns",
-            "text_intl": "44-day returns and exchanges. Return postage is paid by you. Size swaps ship same day.",
-            "text": "Free exchanges and returns in the satchel it arrived in. Size swaps ship same day."
-          }
-        },
-        "card3": {
-          "type": "card",
-          "settings": {
-            "icon": "shield",
-            "title": "Duties and taxes covered",
-            "text": "Every price includes duties and import taxes. Nothing owed on arrival, anywhere we ship."
-          }
-        }
-      },
-      "block_order": [
-        "card1",
-        "card2",
-        "card3"
-      ],
-      "settings": {
-        "show_press": true,
-        "press_logo_alt": "7NEWS",
-        "press_quote": "Best-selling menswear label with 'amazing' slim-fit shirts and chinos for summer"
-      }
-    },
-    "anatomy": {
-      "type": "guillo-anatomy",
-      "blocks": {
-        "cl1": {
-          "type": "callout_left",
-          "settings": {
-            "title": "The silhouette",
-            "text": "A close fit through the shoulders and body, with a clean hem.",
-            "spec": ""
-          }
-        },
-        "cl2": {
-          "type": "callout_left",
-          "settings": {
-            "title": "The waist",
-            "text": "See the waistband and fastening in the product views.",
-            "spec": ""
-          }
-        },
-        "cr1": {
-          "type": "callout_right",
-          "settings": {
-            "title": "The full view",
-            "text": "Explore the front, side and back views.",
-            "spec": ""
-          }
-        },
-        "cr2": {
-          "type": "callout_right",
-          "settings": {
-            "title": "Choose your size",
-            "text": "Compare your measurements with the size guide.",
-            "spec": ""
-          }
-        }
-      },
-      "block_order": [
-        "cl1",
-        "cl2",
-        "cr1",
-        "cr2"
-      ],
-      "settings": {
-        "heading": "The shape, considered.",
-        "image": "",
-        "image_alt": "",
-        "image_position": "center 25%",
-        "use_product_image": true
-      }
-    },
-    "reviews": {
-      "type": "guillo-pdp-reviews",
-      "settings": {
-        "heading": "Worn, washed, reported back.",
-        "write_link": "",
-        "all_link": "",
-        "fit_marker": 50,
-        "fit_note": "",
-        "reviews_to_show": 60,
-        "show_fit_meter": false,
-        "reviews_visible": 3
-      }
-    },
-    "faq": {
-      "type": "guillo-faq",
-      "blocks": {
-        "q1": {
-          "type": "faq",
-          "settings": {
-            "question": "How does it fit?",
-            "answer": "<p>Slim through the body with fitted shoulders and a clean hem. True to size gives a closer fit. Size up for a more relaxed feel.</p>"
-          }
-        },
-        "q3": {
-          "type": "faq",
-          "settings": {
-            "question": "Is it comfortable for all day wear?",
-            "answer": "<p>Yes. Soft against the skin with a cut that moves with you. No twisting seams, no sagging collar.</p>"
-          }
-        },
-        "q4": {
-          "type": "faq",
-          "settings": {
-            "question": "What should I pair it with?",
-            "answer": "<p>Chinos and clean sneakers through the week. Tailored shorts in summer. It layers under a shirt or jacket without adding bulk.</p>"
-          }
-        },
-        "q5": {
-          "type": "faq",
-          "settings": {
-            "question": "What is your return policy?",
-            "answer": "<p>44 days to decide, starting the day it arrives. Exchanges and returns are free within Australia and New Zealand, returned in the satchel it came in.</p><p>Outside Australia and New Zealand you cover the return postage. Duties and taxes are included in every price, so nothing is owed on arrival.</p>"
-          }
-        },
-        "q6": {
-          "type": "faq",
-          "settings": {
-            "question": "When will it arrive?",
-            "answer": "<p>This is a pre-order. The run ships in <strong>early November 2026</strong>, and pre-orders go out first, the same afternoon they are picked. You are charged at checkout, which is what reserves your size.</p><p>If the run is delayed beyond that date we write to you, and you can cancel for a full refund.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "q1",
-        "q3",
-        "q4",
-        "q5",
-        "q6"
-      ],
-      "settings": {
-        "layout": "split",
-        "anchor": "",
-        "eyebrow": "Questions",
-        "heading": "Before you order.",
-        "text": "For sizing or order questions, contact Guillo.",
-        "link_label": "Ask a question",
-        "link": "shopify://pages/contact",
-        "open_first": false
-      }
+      ]
     }
   },
   "order": [
-    "main",
-    "wear",
-    "trust",
-    "anatomy",
-    "reviews",
-    "faq"
+    "main"
   ]
 }

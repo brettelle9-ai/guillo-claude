@@ -56,12 +56,12 @@
       for (let i = 0; i < products.length; i += 4) results.push(...await Promise.all(products.slice(i, i + 4).map(loadProduct)));
       reviews = [...new Map(results.flat().map(r => [r.id, r])).values()].sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
       status.hidden = true;
-      if (!reviews.length) { status.hidden = false; status.textContent = 'No shirt reviews yet.'; return; }
+      if (!reviews.length) { status.hidden = false; status.textContent = 'No reviews yet.'; return; }
       const rating = (reviews.reduce((sum,r) => sum + Number(r.rating), 0) / reviews.length).toFixed(1);
       section.querySelector('[data-shirt-score]').textContent = `${rating} / 5 · ${reviews.length} reviews`;
       document.querySelectorAll('[data-shirt-rating]').forEach(el => {
         el.textContent = `${rating} ★★★★★ (${reviews.length})`;
-        el.setAttribute('aria-label', `${rating} out of five from ${reviews.length} shirt reviews`);
+        el.setAttribute('aria-label', `${rating} out of five from ${reviews.length} customer reviews`);
         el.hidden = false;
       });
       section.dataset.reviewSource = 'klaviyo';

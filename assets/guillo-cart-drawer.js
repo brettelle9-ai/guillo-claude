@@ -881,6 +881,7 @@
       if (!form.matches || !form.matches('form[action*="/cart/add"]')) return;
       // The outfit selector validates multiple sizes and submits its own JSON batch.
       if (form.matches('[data-guillo-outfit]')) return;
+      if (form.matches('[data-ge-product-form]') && form.dataset.purchaseState !== 'available') return;
       e.preventDefault();
       e.stopImmediatePropagation(); // prevent the theme's own AJAX/redirect
 
