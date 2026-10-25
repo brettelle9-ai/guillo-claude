@@ -92,3 +92,5 @@
  .gh-home-preview .guillo-footer__grid{grid-template-columns:1fr 1fr;gap:30px}.gh-home-preview .guillo-footer__brand{grid-column:1/-1}
 }
 @media(prefers-reduced-motion:reduce){.gh-category video{display:none}.gh-home-preview .gc-header,.gh-campaign__track{scroll-behavior:auto;transition:none}}
+
+.gh-home-preview #header-group [id*="header_announcements"]{display:none!important}.gh-home-preview .content-for-layout>.shopify-section:first-child{margin-top:0!important}

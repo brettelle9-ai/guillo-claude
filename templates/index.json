@@ -8,7 +8,17 @@
         "feature_product": "the-signore-chino-latte",
         "feature_heading": "The Signore Chino",
         "feature_text": "A clean front. Side-tab adjusters. A considered fit through the leg. Meet the chino with a different point of view.",
-        "campaign_video": "shopify://files/videos/lv_0_20260914131333.mp4"
+        "campaign_video": "shopify://files/videos/lv_0_20260914131333.mp4",
+        "featured_products": [
+          "milano-pinstripe-shirt",
+          "the-luxe-chino-stone",
+          "firenze-chevron-shirt",
+          "the-signore-chino-latte",
+          "the-portofino-polo-black",
+          "the-capri-chino-short-navy",
+          "amalfi-short-sleeve-shirt",
+          "siracusa-short-sleeve-slim-fit-shirt"
+        ]
       },
       "blocks": {
         "shirts": {
