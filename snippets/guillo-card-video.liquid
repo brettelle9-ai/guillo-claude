@@ -1,5 +1,6 @@
 {%- liquid
   assign card_video = product.media | where: 'media_type', 'video' | first
+  assign card_source = card_video.sources | where: 'format', 'mp4' | sort: 'height' | last
   assign card_film = blank
   if card_video == blank
     case product.handle
@@ -14,6 +15,6 @@
 -%}
 {%- if card_video != blank or card_film != blank -%}
   <video class="gc-card__video" data-guillo-card-video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" poster="{{ product.featured_image | image_url: width: 750 }}">
-    {%- if card_video != blank -%}{%- for source in card_video.sources -%}{%- if source.format == 'mp4' -%}<source data-src="{{ source.url }}" type="video/mp4">{%- break -%}{%- endif -%}{%- endfor -%}{%- else -%}<source data-src="{{ card_film | asset_url }}" type="video/mp4">{%- endif -%}
+    {%- if card_video != blank -%}<source data-src="{{ card_source.url }}" type="video/mp4">{%- else -%}<source data-src="{{ card_film | asset_url }}" type="video/mp4">{%- endif -%}
   </video>
 {%- endif -%}
