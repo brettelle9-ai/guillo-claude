@@ -19,6 +19,7 @@
   shade.addEventListener('pointerenter',()=>{closing=setTimeout(closeMega,150);});shade.addEventListener('click',()=>{closeMega();closeSearch();});desktop.addEventListener('change',()=>{closeMega();closeSearch();});
   document.querySelector('[data-gc-menu-open]')?.addEventListener('click',()=>{closeSearch();closeMega();});
   input.addEventListener('focus',()=>{if(suppressSearchFocus)return;openSearch();if(input.value.trim())queueSearch();});
+  input.addEventListener('click',openSearch);
   search.querySelector('[data-gc-search-close]').addEventListener('click',()=>closeSearch(true));
   // Focusing the menu search moves the same query into the full-width search surface.
   menu?.querySelector('[data-gc-menu-search]')?.addEventListener('focus',e=>{const value=e.currentTarget.value;menu.close();requestAnimationFrame(()=>{input.value=value;input.focus({preventScroll:true});});});
@@ -30,7 +31,7 @@
    heading.textContent='Suggestions';terms.hidden=true;discovery.hidden=true;results.hidden=false;results.replaceChildren();status.textContent='Searching…';
    all.href=searchURL(query);all.textContent=`View all results for “${query}”`;all.hidden=false;
    try{
-    const url=new URL(search.dataset.suggestUrl+'.json',location.origin);url.searchParams.set('q',query);url.searchParams.set('resources[type]','product,collection,query');url.searchParams.set('resources[limit]','6');url.searchParams.set('resources[options][unavailable_products]','last');
+    const url=new URL(search.dataset.suggestUrl+'.json',location.origin);url.searchParams.set('q',query);url.searchParams.set('resources[type]','product,collection,query');url.searchParams.set('resources[limit]','6');url.searchParams.set('resources[limit_scope]','each');url.searchParams.set('resources[options][unavailable_products]','last');
     const response=await fetch(url,{signal:controller.signal});if(!response.ok)throw Error('Search unavailable');const data=await response.json();if(number!==requestNumber||search.hidden)return;
     const found=data.resources?.results||{},products=(found.products||[]).filter(p=>p.handle!=='pos-test-product'&&!p.url?.includes('pos-test-product'));
     const suggestions=[...(found.queries||[]),...(found.collections||[])].slice(0,6);terms.replaceChildren();
