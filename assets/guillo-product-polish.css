@@ -78,3 +78,5 @@ body .guillo-newsletter__error{color:#9c2222!important}
  body .guillo-social-strip{padding:24px 20px}
 }
 @media(prefers-reduced-motion:reduce){.ge-accordions svg{transition:none}}
+
+@media(min-width:750px){body .ge-services{justify-content:center;grid-template-columns:repeat(2,minmax(0,max-content));column-gap:34px}body .ge-service{align-items:center}body .ge-service>svg{margin-top:0}}
