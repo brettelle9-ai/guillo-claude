@@ -10,8 +10,8 @@ body .ge-family-picker,body .ge-shirt-family{margin:28px 0;padding-bottom:25px}
 body .ge-selected-colour,body .ge-shirt-family>p>.ge-selected-colour{font-size:19px}
 body .ge-sizes legend{font-size:12px}
 body .ge-fitline{font-size:11px;margin:16px 0 24px}
-body .ge-services{display:grid;gap:13px;margin:22px 0 0;color:#777;font:400 11px/1.55 var(--g-sans)}
-.ge-service{display:flex;gap:12px;align-items:center}
+body .ge-services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:22px 0 0;color:#777;font:400 11px/1.55 var(--g-sans)}
+.ge-service{display:flex;gap:10px;align-items:flex-start;min-width:0}.ge-service>span{min-width:0}.ge-service>svg{margin-top:2px}
 .ge-service>svg{width:21px;height:22px;flex:none}
 .ge-service button,.ge-service small{display:block;color:#888;font:inherit;border:0;background:none;padding:0;text-align:left}
 .ge-service button{cursor:pointer;text-underline-offset:3px}
@@ -57,7 +57,7 @@ body .guillo-newsletter__error{color:#9c2222!important}
  body .ge-family-swatch>span{width:37px;height:46px}
  body .ge-shirt-swatches,body .ge-family-swatches{gap:13px}
  body .ge-family-swatch small,body .ge-shirt-swatch small{font-size:9px}
- body .ge-services{font-size:10px;gap:12px;margin-top:20px}
+ body .ge-services{grid-template-columns:1fr;font-size:10px;gap:12px;margin-top:20px}\n body .ge-service__weekday{display:none}
  body .ge-accordions{margin-top:24px}
  body .ge-accordions>button{font-size:11px;min-height:44px}
  body .ge-style .gc-card__subtitle{font-size:10px}
