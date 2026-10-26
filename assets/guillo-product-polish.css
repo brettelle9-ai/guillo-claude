@@ -57,7 +57,8 @@ body .guillo-newsletter__error{color:#9c2222!important}
  body .ge-family-swatch>span{width:37px;height:46px}
  body .ge-shirt-swatches,body .ge-family-swatches{gap:13px}
  body .ge-family-swatch small,body .ge-shirt-swatch small{font-size:9px}
- body .ge-services{grid-template-columns:1fr;font-size:10px;gap:12px;margin-top:20px}\n body .ge-service__weekday{display:none}
+ body .ge-services{grid-template-columns:1fr;font-size:10px;gap:12px;margin-top:20px}
+ body .ge-service__weekday{display:none}
  body .ge-accordions{margin-top:24px}
  body .ge-accordions>button{font-size:11px;min-height:44px}
  body .ge-style .gc-card__subtitle{font-size:10px}
