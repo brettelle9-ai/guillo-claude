@@ -17,9 +17,14 @@
         "products_per_page": 48,
         "card_media_default": "auto"
       }
+    },
+    "pf-d3c52bc0": {
+      "type": "pf-d3c52bc0",
+      "settings": {}
     }
   },
   "order": [
-    "editorial"
+    "editorial",
+    "pf-d3c52bc0"
   ]
 }
