@@ -80,3 +80,20 @@ body .guillo-newsletter__error{color:#9c2222!important}
 @media(prefers-reduced-motion:reduce){.ge-accordions svg{transition:none}}
 
 @media(min-width:750px){body .ge-services{justify-content:center;grid-template-columns:repeat(2,minmax(0,max-content));column-gap:34px}body .ge-service{align-items:center}body .ge-service>svg{margin-top:0}}
+
+/* Keep both service messages together on every screen. */
+body .ge-services{grid-template-columns:repeat(2,minmax(0,1fr));justify-content:center;column-gap:16px}
+body .ge-service{align-items:center;justify-content:center;gap:8px}
+body .ge-service>svg{margin:0;flex:0 0 21px}
+@media(min-width:750px){
+ body .ge-services{width:calc(100% + 140px);max-width:calc(50vw - 40px);position:relative;left:50%;transform:translateX(-50%);grid-template-columns:repeat(2,max-content);column-gap:26px;font-size:10px}
+ body .ge-service>span{display:flex;align-items:baseline;gap:5px;white-space:nowrap}
+ body .ge-service button,body .ge-service small{display:inline;font:inherit}
+ body .ge-service>span>button::before,body .ge-service>span>small::before{content:'·';margin-right:5px}
+}
+@media(max-width:749px){
+ body .ge-services{grid-template-columns:repeat(2,minmax(0,1fr));font-size:9px;gap:12px;width:100%;margin-top:20px}
+ body .ge-service{justify-content:flex-start;gap:7px}
+ body .ge-service>svg{width:19px;height:20px;flex-basis:19px}
+ body .ge-service>span{white-space:normal;line-height:1.55}
+}
