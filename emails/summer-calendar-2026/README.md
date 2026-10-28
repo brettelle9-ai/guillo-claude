@@ -30,12 +30,13 @@ If section heights change, update `ROWS` in `build.js`. The build fails loudly i
 
 ## Sending from Klaviyo
 
-1. Upload the files in `images/` to the Klaviyo image library, or any public host.
-2. Rebuild with `IMG_BASE` set to that location, so every `src` is an absolute URL.
-3. Create a new HTML template in Klaviyo and paste in `index.html`.
-4. Send a preview to Gmail, Apple Mail and Outlook before scheduling.
+The draft template **Summer Calendar 2026 - Eight dates, and one wardrobe (draft)** is already in Klaviyo, template ID `YapCZV`.
+Open it at https://www.klaviyo.com/email-editor/YapCZV/edit or pick it when creating a campaign.
 
-The footer already uses Klaviyo's `{% web_view_link %}`, `{% manage_preferences_link %}` and `{% unsubscribe_link %}` tags.
+- `klaviyo.html` is the exact HTML in that template. Every image points at its copy in the Klaviyo image library.
+- `klaviyo-images.json` maps each slice to its Klaviyo URL. Klaviyo gives every upload a new URL, so if the slices change, re-upload them, update this file and rebuild.
+- The template has a plain-text version, and its footer uses Klaviyo's `{% web_view_link %}`, `{% manage_preferences_link %}` and `{% unsubscribe_link %}` tags.
+- Send a preview to Gmail, Apple Mail and Outlook before scheduling.
 
 ## Check before sending
 

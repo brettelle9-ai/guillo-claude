@@ -238,7 +238,19 @@ Guillo Clothing, Brisbane, Australia<br>
   await browser.close();
   server.close();
 
-  fs.writeFileSync(path.join(ROOT, 'index.html'), emailHtml(footerBg));
+  const html = emailHtml(footerBg);
+  fs.writeFileSync(path.join(ROOT, 'index.html'), html);
+
+  // klaviyo.html: same email with every image pointed at its Klaviyo-hosted copy.
+  // klaviyo-images.json maps file name to Klaviyo CDN URL. Re-upload and update it
+  // whenever the slices change, because Klaviyo gives each upload a new URL.
+  const mapFile = path.join(ROOT, 'klaviyo-images.json');
+  if (fs.existsSync(mapFile)) {
+    const map = JSON.parse(fs.readFileSync(mapFile, 'utf8'));
+    const missing = fs.readdirSync(OUT_IMG).filter((f) => !map[f]);
+    if (missing.length) console.warn(`klaviyo.html not written; no Klaviyo URL for: ${missing.join(', ')}`);
+    else fs.writeFileSync(path.join(ROOT, 'klaviyo.html'), html.replace(/(src="|background="|url\(')([^"')]+\.jpg)/g, (m, pre, src) => pre + (map[src.slice(IMG_BASE.length)] || src)));
+  }
   const kb = fs.readdirSync(OUT_IMG).reduce((t, f) => t + fs.statSync(path.join(OUT_IMG, f)).size, 0) / 1024;
   console.log(`wrote index.html (${(fs.statSync(path.join(ROOT, 'index.html')).size / 1024).toFixed(1)} KB) and ${n + 1} images (${kb.toFixed(0)} KB)`);
 })().catch((e) => { console.error(e); process.exit(1); });
