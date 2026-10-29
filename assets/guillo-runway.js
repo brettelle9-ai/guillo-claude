@@ -3,7 +3,7 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     if (this.ready) return;
     this.ready=true; this.abort=new AbortController(); this.track=this.querySelector('.gr-track');
     this.allLooks=[...this.querySelectorAll('[data-gr-look]')];this.looks=this.allLooks;
-    this.allLooks.forEach(look=>{const image=look.querySelector('.gr-cutout');if(image){const light=image.cloneNode();light.classList.add('gr-cutout--light');light.alt='';light.setAttribute('aria-hidden','true');image.after(light);}}); this.content=this.querySelector('[data-gr-content]');
+    this.content=this.querySelector('[data-gr-content]');
     if(!this.looks.length)return;
     this.index=Math.floor(this.looks.length/2); this.position=this.index; this.target=this.index; this.velocity=0;
     this.progress=0; this.detail=false; this.paused=false; this.inView=false; this.direction=1; this.sizes=new Map();

@@ -29,9 +29,5 @@ guillo-runway.gr.is-night{background:#17191d;--gr-muted:#b7b0a7}
 guillo-runway.gr::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 25% -8%,#c79a6845 0,transparent 57%),radial-gradient(ellipse at 83% 18%,#ce99501c 0,transparent 45%),radial-gradient(ellipse at var(--gr-light-x,50%) 86%,#be986b25 0,transparent 43%),linear-gradient(115deg,#28231f,#1e2024 68%,#171b21);transition:opacity .85s}
 guillo-runway.gr.is-night::before{opacity:1}
 .gr-track::before,.gr-figure::after{content:none}
-.gr-cutout{transition:filter .85s}
-.gr-cutout--light{position:absolute;inset:0;opacity:0;pointer-events:none;filter:sepia(.5) saturate(.78) brightness(1.06);mask-image:linear-gradient(110deg,#000 0%,#000e 35%,#0006 68%,#0002 100%);transition:opacity .85s}
-.gr.is-night .gr-cutout:not(.gr-cutout--light){filter:brightness(.58) saturate(.68) contrast(1.04)}
-.gr.is-night .gr-cutout--light{opacity:.88}
-.gr.is-night .gr-look:not(.is-active) .gr-cutout--light{opacity:.57}
+.gr-cutout{filter:none;mix-blend-mode:normal;opacity:1}
 .gr.is-night .gr-look__open::after{left:25%;bottom:2.8%;height:2.2%;width:64%;transform:translateX(8%) rotate(8deg);background:#0008;filter:blur(9px)}
