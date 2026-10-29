@@ -2,35 +2,79 @@
 <script src="{{ 'guillo-runway.js' | asset_url }}" defer></script>
 {%- assign looks = section.blocks | where: 'type', 'look' -%}
 {% if looks.size > 0 %}
-<guillo-runway class="gr" id="guillo-runway-{{ section.id }}" data-currency="{{ cart.currency.iso_code }}" data-root="{{ routes.root_url }}">
-  <header class="gr-head"><div><span class="gr-micro">The Guillo edit</span><h2>{{ section.settings.runway_heading | default: 'The art of getting dressed.' | escape }}</h2><p>Select a look. Make it yours.</p></div><span class="gr-head__hint">Considered pieces. Complete looks.</span></header>
-  <div class="gr-track" aria-label="Guillo outfit carousel" aria-roledescription="carousel" tabindex="0">
-    {% for block in looks %}
-      {%- liquid
-        assign primary = block.settings.product
-        assign image_index = block.settings.image_index | default: 1 | minus: 1
-        assign look_image = block.settings.image | default: primary.images[image_index] | default: primary.featured_image
-        assign look_title = block.settings.title | default: primary.title
-      -%}
-      <article class="gr-look{% if forloop.first %} is-active{% endif %}" data-gr-look aria-label="{{ forloop.index }} of {{ looks.size }}: {{ look_title | escape }}" {{ block.shopify_attributes }}>
-        <button type="button" class="gr-look__open" data-gr-open aria-label="Shop {{ look_title | escape }}">
-          <span class="gr-look__media">{% if block.settings.media_type == 'video' and block.settings.video != blank %}{{ block.settings.video | video_tag: image_size: '1000x', autoplay: false, loop: true, muted: true, controls: false, preload: 'none', playsinline: true }}{% elsif look_image != blank %}{{ look_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '400, 600, 800, 1000, 1400', sizes: '(min-width: 990px) 400px, 76vw', alt: block.settings.alt | default: look_title }}{% endif %}</span>
-          <span class="gr-look__label"><span><small>Look 0{{ forloop.index }}</small><strong>{{ look_title | escape }}</strong></span><span class="gr-look__plus" aria-hidden="true">+</span></span>
-        </button>
-        <template data-gr-template>
-          <div class="gr-detail__media">{% if look_image != blank %}{{ look_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1600', sizes: '(min-width: 990px) 55vw, 100vw', alt: block.settings.alt | default: look_title }}{% endif %}
-            {% if primary != blank %}<button class="gr-pin" style="--x:{{ block.settings.pin_x | default: 52 }}%;--y:{{ block.settings.pin_y | default: 35 }}%" type="button" data-gr-pin="1" aria-label="Choose {{ primary.title | escape }} size">1</button>{% endif %}
-            {% for piece in block.settings.products limit: 3 %}{% unless piece.id == primary.id %}{% assign marker_offset = forloop.index0 | times: 12 %}<button class="gr-pin" style="--x:{{ block.settings.pin_two_x | default: 52 }}%;--y:{{ block.settings.pin_two_y | default: 65 | plus: marker_offset }}%" type="button" data-gr-pin="{{ forloop.index | plus: 1 }}" aria-label="Choose {{ piece.title | escape }} size">{{ forloop.index | plus: 1 }}</button>{% endunless %}{% endfor %}
-            <div class="gr-detail__caption"><span class="gr-micro">Look 0{{ forloop.index }}</span><h3>{{ look_title | escape }}</h3></div>
+<guillo-runway class="gr" id="guillo-runway-{{ section.id }}" data-currency="{{ cart.currency.iso_code }}" data-root="{{ routes.root_url }}" data-version="cutout-stage-v2">
+  <header class="gr-head">
+    <div><span class="gr-micro">The Guillo edit</span><h2>{{ section.settings.runway_heading | default: 'The art of getting dressed.' | escape }}</h2><p data-gr-hint>Select a look. Make it yours.</p></div>
+    <button class="gr-back" type="button" data-gr-close hidden>← All looks</button>
+  </header>
+  <div class="gr-stage">
+    <div class="gr-track" role="group" aria-label="Guillo outfit runway" aria-roledescription="carousel" tabindex="0">
+      {% for block in looks %}
+        {%- liquid
+          assign primary = block.settings.product
+          assign image_index = block.settings.image_index | default: 1 | minus: 1
+          assign look_image = block.settings.image | default: primary.images[image_index] | default: primary.featured_image
+          assign look_title = block.settings.title | default: primary.title
+          assign cutout_asset = block.settings.cutout_asset
+          assign piece_count = 0
+          if primary != blank
+            assign piece_count = 1
+          endif
+          for piece in block.settings.products limit: 3
+            unless piece.id == primary.id
+              assign piece_count = piece_count | plus: 1
+            endunless
+          endfor
+        -%}
+        <article class="gr-look" data-gr-look data-title="{{ look_title | escape }}" data-count="{{ piece_count }}" aria-label="{{ forloop.index }} of {{ looks.size }}: {{ look_title | escape }}" {{ block.shopify_attributes }}>
+          <div class="gr-figure">
+            <button type="button" class="gr-look__open" data-gr-open aria-label="Shop {{ look_title | escape }}" aria-expanded="false" aria-controls="gr-shop-{{ section.id }}">
+              {% if block.settings.image != blank or cutout_asset == blank %}
+                {% if look_image != blank %}{{ look_image | image_url: width: 1200 | image_tag: class: 'gr-cutout', loading: 'lazy', widths: '400, 600, 900, 1200', sizes: '(min-width: 990px) 400px, 75vw', alt: block.settings.alt | default: look_title }}{% endif %}
+              {% else %}
+                <img class="gr-cutout" src="{{ cutout_asset | asset_url }}" width="1060" height="1484" loading="lazy" decoding="async" alt="{{ block.settings.alt | default: look_title | escape }}">
+              {% endif %}
+            </button>
+            <div class="gr-pins" inert aria-hidden="true">
+              {% if primary != blank %}<button class="gr-pin" style="--x:{{ block.settings.pin_x | default: 50 }}%;--y:{{ block.settings.pin_y | default: 35 }}%" type="button" data-gr-pin="1" aria-label="Choose {{ primary.title | escape }} size">1</button>{% endif %}
+              {%- assign piece_index = 1 -%}
+              {% for piece in block.settings.products limit: 3 %}
+                {% unless piece.id == primary.id %}
+                  {%- liquid
+                    assign piece_index = piece_index | plus: 1
+                    assign pin_x = block.settings.pin_two_x | default: 52
+                    assign pin_y = block.settings.pin_two_y | default: 70
+                    if piece_index == 3
+                      assign pin_x = block.settings.pin_three_x | default: 73
+                      assign pin_y = block.settings.pin_three_y | default: 52
+                    elsif piece_index == 4
+                      assign pin_x = 48
+                      assign pin_y = 91
+                    endif
+                  -%}
+                  <button class="gr-pin" style="--x:{{ pin_x }}%;--y:{{ pin_y }}%" type="button" data-gr-pin="{{ piece_index }}" aria-label="Choose {{ piece.title | escape }} size">{{ piece_index }}</button>
+                {% endunless %}
+              {% endfor %}
+            </div>
           </div>
-          <div class="gr-detail__shop"><header><span class="gr-micro">Wear it your way</span><h3>Shop the look</h3><p>Choose your size for each piece.</p></header><div class="gr-pieces">{% render 'guillo-runway-product', product: primary, index: 1 %}{% for piece in block.settings.products limit: 3 %}{% unless piece.id == primary.id %}{% assign piece_index = forloop.index | plus: 1 %}{% render 'guillo-runway-product', product: piece, index: piece_index %}{% endunless %}{% endfor %}</div>
+          <template data-gr-template>
+            <header class="gr-shop__head"><span class="gr-micro">In this look</span><h3>{{ look_title | escape }}</h3><p>Choose your size for each piece.</p></header>
+            <div class="gr-pieces">
+              {% render 'guillo-runway-product', product: primary, index: 1 %}
+              {%- assign piece_index = 1 -%}
+              {% for piece in block.settings.products limit: 3 %}{% unless piece.id == primary.id %}{% assign piece_index = piece_index | plus: 1 %}{% render 'guillo-runway-product', product: piece, index: piece_index %}{% endunless %}{% endfor %}
+            </div>
             <footer class="gr-summary"><div><span>The complete look</span><strong data-gr-total></strong></div><button class="gr-add-all" type="button" data-gr-add-all>Add the complete look <span aria-hidden="true">→</span></button><p class="gr-status" data-gr-status role="status" aria-live="polite"></p><a class="gr-cart-link" href="{{ routes.cart_url }}" hidden>View your bag →</a></footer>
-          </div>
-        </template>
-      </article>
-    {% endfor %}
+          </template>
+        </article>
+      {% endfor %}
+    </div>
+    <section class="gr-shop" id="gr-shop-{{ section.id }}" data-gr-content aria-label="Shop the selected look" hidden inert></section>
   </div>
-  <footer class="gr-controls"><span class="gr-counter" aria-live="polite"><span data-gr-current>01</span><span class="gr-counter__line"></span>{{ looks.size | prepend: '0' }}</span><div class="gr-dots" aria-label="Choose a look">{% for block in looks %}<button type="button" data-gr-dot="{{ forloop.index0 }}" aria-label="View look {{ forloop.index }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"></button>{% endfor %}</div><div class="gr-arrows"><button type="button" data-gr-prev aria-label="Previous look">←</button><button type="button" data-gr-next aria-label="Next look">→</button></div></footer>
-  <dialog class="gr-dialog" aria-label="Shop the Guillo look"><button class="gr-close" type="button" data-gr-close aria-label="Close shop the look">×</button><div class="gr-detail" data-gr-content></div><nav class="gr-detail__nav" aria-label="Browse outfits"><button type="button" data-gr-detail-prev>← Previous look</button><button type="button" data-gr-detail-next>Next look →</button></nav></dialog>
+  <footer class="gr-controls">
+    <div class="gr-caption" aria-live="polite"><span class="gr-micro">Look <span data-gr-current>01</span></span><span class="gr-title" data-gr-title></span></div>
+    <nav class="gr-numbers" aria-label="Choose a look"><span class="gr-number-line" aria-hidden="true"></span>{% for block in looks %}<button type="button" data-gr-dot="{{ forloop.index0 }}" aria-label="View look {{ forloop.index }}" aria-pressed="false"><span class="gr-number-roll" aria-hidden="true"><span>{{ forloop.index | prepend: '0' }}</span><span>{{ forloop.index | prepend: '0' }}</span></span></button>{% endfor %}</nav>
+    <div class="gr-arrows"><button type="button" data-gr-prev aria-label="Previous look">←</button><button type="button" data-gr-next aria-label="Next look">→</button></div>
+  </footer>
 </guillo-runway>
 {% endif %}

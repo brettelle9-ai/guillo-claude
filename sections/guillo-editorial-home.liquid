@@ -428,7 +428,7 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image / video cover"
+          "label": "Transparent model cutout"
         },
         {
           "type": "video",
@@ -488,6 +488,32 @@
           "step": 1,
           "unit": "%",
           "default": 65
+        },
+        {
+          "type": "text",
+          "id": "cutout_asset",
+          "label": "Transparent model asset filename",
+          "info": "Use a PNG with a transparent background. A custom image above overrides this file."
+        },
+        {
+          "type": "range",
+          "id": "pin_three_x",
+          "label": "Third marker: horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 73
+        },
+        {
+          "type": "range",
+          "id": "pin_three_y",
+          "label": "Third marker: vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 52
         }
       ]
     },

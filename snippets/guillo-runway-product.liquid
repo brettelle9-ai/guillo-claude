@@ -1,5 +1,5 @@
 {% if product != blank %}
-<article class="gr-piece" data-gr-piece data-index="{{ index }}">
+<article class="gr-piece" data-gr-piece data-product="{{ product.handle }}" data-index="{{ index }}">
   <a class="gr-piece__image" href="{{ product.url }}">{{ product.featured_image | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120, 180, 240', sizes: '80px', alt: product.title }}</a>
   <div class="gr-piece__body"><span class="gr-micro">Piece {{ index }}</span><a class="gr-piece__title" href="{{ product.url }}">{{ product.title | escape }}</a><span class="gr-piece__price" data-gr-price>{{ product.price | money }}</span>
     <label class="gr-size"><span class="visually-hidden">{{ product.title | escape }} size</span><select data-gr-variant aria-label="Choose size for {{ product.title | escape }}"><option value="">{% if product.available %}Choose size{% else %}Sold out{% endif %}</option>{% for variant in product.variants %}<option value="{{ variant.id }}" data-price="{{ variant.price }}" {% unless variant.available %}disabled{% endunless %}>{{ variant.title | escape }}{% unless variant.available %} — Sold out{% endunless %}</option>{% endfor %}</select></label>

@@ -63,11 +63,12 @@
             ],
             "media_type": "image",
             "image_index": 5,
-            "alt": "A certain presence. Guillo outfit at the villa.",
-            "pin_x": 49,
-            "pin_y": 34,
-            "pin_two_x": 51,
-            "pin_two_y": 65
+            "alt": "Guillo Milano outfit, full-length model cutout.",
+            "pin_x": 50,
+            "pin_y": 35,
+            "pin_two_x": 50,
+            "pin_two_y": 70,
+            "cutout_asset": "guillo-runway-milano-cutout.png"
           }
         },
         "look_portofino": {
@@ -80,11 +81,12 @@
             ],
             "media_type": "image",
             "image_index": 6,
-            "alt": "An unhurried afternoon. Guillo outfit at the villa.",
-            "pin_x": 48,
-            "pin_y": 55,
-            "pin_two_x": 53,
-            "pin_two_y": 76
+            "alt": "Guillo Portofino outfit, full-length model cutout.",
+            "pin_x": 50,
+            "pin_y": 35,
+            "pin_two_x": 50,
+            "pin_two_y": 70,
+            "cutout_asset": "guillo-runway-portofino-cutout.png"
           }
         },
         "look_valenti": {
@@ -97,11 +99,12 @@
             ],
             "media_type": "image",
             "image_index": 5,
-            "alt": "The evening, considered. Guillo outfit at the villa.",
+            "alt": "Guillo Valenti outfit, full-length model cutout.",
             "pin_x": 50,
-            "pin_y": 32,
-            "pin_two_x": 53,
-            "pin_two_y": 65
+            "pin_y": 35,
+            "pin_two_x": 50,
+            "pin_two_y": 70,
+            "cutout_asset": "guillo-runway-valenti-cutout.png"
           }
         }
       },
