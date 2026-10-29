@@ -52,9 +52,9 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     on(this,'focusout',e=>{if(!this.contains(e.relatedTarget)){this.focused=false;this.scheduleAuto();}});
     on(document,'visibilitychange',()=>document.hidden?this.stopAuto():this.scheduleAuto());
     on(document,'shopify:block:select',e=>{const i=this.looks.findIndex(look=>look===e.target||look.contains(e.target));if(i>=0){if(this.detail)this.close(false);this.go(i);}});
-    this.resize=new ResizeObserver(()=>{this.width=this.track.clientWidth;this.mobile=this.width<750;this.step=this.mobile?this.width*.57:Math.min(300,this.width*.235);this.paint();});this.resize.observe(this.track);
+    this.resize=new ResizeObserver(()=>{this.style.setProperty('--gr-track-height',`${this.track.clientHeight}px`);this.width=this.track.clientWidth;this.mobile=this.width<750;this.step=this.mobile?this.width*.57:Math.min(300,this.width*.235);this.paint();});this.resize.observe(this.track);
     this.visibility=new IntersectionObserver(entries=>{this.inView=entries[0].isIntersecting;if(this.inView)this.scheduleAuto();else this.stopAuto();},{threshold:.35});this.visibility.observe(this);
-    this.width=this.track.clientWidth;this.mobile=this.width<750;this.step=this.mobile?this.width*.57:Math.min(300,this.width*.235);
+    this.style.setProperty('--gr-track-height',`${this.track.clientHeight}px`);this.width=this.track.clientWidth;this.mobile=this.width<750;this.step=this.mobile?this.width*.57:Math.min(300,this.width*.235);
     this.paint();this.controls();this.classList.add('is-ready');
   }
   disconnectedCallback(){this.abort?.abort();this.resize?.disconnect();this.visibility?.disconnect();cancelAnimationFrame(this.raf);this.stopAuto();clearTimeout(this.wheelTimer);clearTimeout(this.hideTimer);clearTimeout(this.highlightTimer);}
@@ -102,7 +102,8 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
   go(index){if(this.busy||this.detail)return;this.index=this.clamp(index);this.target=this.index;this.controls();this.animate();this.scheduleAuto();}
   click(e){
     const button=e.target.closest('button');if(!button||!this.contains(button))return;
-    if(button.matches('[data-gr-open]')){if(performance.now()<(this.suppressClickUntil||0)){e.preventDefault();return;}if(!this.detail)this.open(this.looks.indexOf(button.closest('[data-gr-look]')),button);}
+    if(button.matches('[data-gr-night]')){const night=this.classList.toggle('is-night');button.setAttribute('aria-checked',String(night));}
+    else if(button.matches('[data-gr-open]')){if(performance.now()<(this.suppressClickUntil||0)){e.preventDefault();return;}if(!this.detail)this.open(this.looks.indexOf(button.closest('[data-gr-look]')),button);}
     else if(button.matches('[data-gr-prev]'))this.go(this.index-1);
     else if(button.matches('[data-gr-next]'))this.go(this.index+1);
     else if(button.matches('[data-gr-dot]'))this.go(Number(button.dataset.grDot));
