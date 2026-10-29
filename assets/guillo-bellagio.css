@@ -37,27 +37,21 @@
 .bellagio-questions details p{font:400 13px/1.9 var(--g-sans);color:var(--g-muted);max-width:620px;margin:16px 0 0}
 @media(max-width:749px){.bellagio-story,.bellagio-pairings,.bellagio-questions{padding:50px 20px}.bellagio-story__inner,.bellagio-questions__inner{grid-template-columns:1fr;gap:32px}.bellagio-story__image{aspect-ratio:1/1}.bellagio-pairings__grid{gap:32px;grid-template-columns:1fr}.bellagio-companion__image img{aspect-ratio:4/3}.bellagio-companion__text{min-height:0}.bellagio-companion__add{width:100%}.guillo-pdp--bellagio .guillo-pdp__desc{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.bellagio-companion__image img{transition:none;transform:none}}
-/* Quiet product-feature strip between the buying area and the editorial story. */
-.bellagio-features{padding:44px 40px 48px;background:var(--g-paper);color:var(--g-ink)}
-.bellagio-features__list{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:32px;max-width:1320px;margin:0 auto;padding:0;list-style:none}
-.bellagio-features__item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;font:400 12px/1.65 var(--g-sans);letter-spacing:.025em}
-.bellagio-features__item span{max-width:145px}
-.bellagio-features__icon{display:block;flex-shrink:0;width:28px;height:28px}
-@media(min-width:750px) and (max-width:1050px){.bellagio-features__list{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:32px}}
-@media(max-width:749px){.bellagio-features{padding:32px 20px 38px}.bellagio-features__list{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 24px}.bellagio-features__item{gap:12px}}
+/* Features inside the purchase column, below the product information tabs. */
+.bellagio-features{padding:0;margin:25px 0 0;color:inherit;background:transparent}
+.bellagio-features__list{display:block;margin:0;padding:0;list-style:none}
+.bellagio-features__item{display:block;margin:0;padding:12px 0;list-style:none;font:400 14px/1.4 var(--ge-font,var(--g-sans));text-align:left}
+.bellagio-features__item+.bellagio-features__item{border-top:1px solid #e7e7e7}
+@media(max-width:749px){.bellagio-features__item{font-size:12px}}
 
-/* Features sit within the purchase panel, immediately after the detail tabs. */
-.guillo-pdp--bellagio .bellagio-features{padding:30px 0 0;margin-top:0;border-top:0;background:transparent}
-.guillo-pdp--bellagio .bellagio-features__list{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 18px}
-.guillo-pdp--bellagio .bellagio-features__item{font-size:11px;gap:12px}
-@media(max-width:749px){.guillo-pdp--bellagio .bellagio-features__list{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 22px}.guillo-pdp--bellagio .bellagio-features__item{font-size:12px}}
-
-.bellagio-features__icon{transition:transform .55s cubic-bezier(.22,1,.36,1),color .55s ease}
-@media(hover:hover) and (pointer:fine){.bellagio-features__item:hover .bellagio-features__icon{transform:translateY(-2px);color:var(--g-bronze,var(--g-ink))}}
-@media(prefers-reduced-motion:reduce){.bellagio-features__icon{transition:none}.bellagio-features__item:hover .bellagio-features__icon{transform:none}}
-
-/* Keep the space above feature icons free of dividers, including the tabs' baseline. */
+/* Retain the previous Bellagio tabs without their baseline divider. */
 .guillo-pdp--bellagio .guillo-pdp__tabbar{border-bottom:0}
+
+.bellagio-interior{padding:52px 24px;background:#f8f8f8}
+.bellagio-interior__figure{max-width:960px;margin:0 auto}
+.bellagio-interior__image{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain}
+.bellagio-interior__caption{margin:16px 0 0;text-align:center;font:400 12px/1.4 var(--ge-font,var(--g-sans));color:#777}
+@media(max-width:749px){.bellagio-interior{padding:32px 14px}.bellagio-interior__caption{font-size:11px}}
 
 /* Keep the introductory description close, quiet and expandable inline. */
 .guillo-pdp--bellagio .guillo-pdp__titlerow{margin-bottom:12px}

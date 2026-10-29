@@ -1,3 +1,4 @@
+{% if product.handle contains 'bellagio' %}{{ 'guillo-bellagio.css' | asset_url | stylesheet_tag }}{% endif %}
 {%- liquid
   assign rating = product.metafields.reviews.rating.value.rating | plus: 0
   assign rating_count = product.metafields.reviews.rating_count.value | plus: 0
@@ -149,6 +150,7 @@
       <nav class="ge-breadcrumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a> / <a href="{{ ge_catalog.url }}">{{ ge_catalog.title | escape }}</a> / {{ product.title | escape }}</nav>
     </div>
   </div>
+  {% if product.handle == 'bellagio-leather-weekender-duffel-bag' %}{% render 'guillo-bellagio-interior', section: section %}{% endif %}
   {% render 'guillo-editorial-recommendations', product: product, ge_catalog: ge_catalog, family_candidates: family_candidates, family_key: family_key %}
   {% render 'guillo-editorial-reviews', product: product, candidates: family_candidates, family_key: family_key %}
   {% render 'guillo-editorial-proof' %}
@@ -168,6 +170,8 @@
 {
   "name": "Editorial product",
   "settings": [
+    { "type": "image_picker", "id": "interior_image", "label": "Interior image" },
+    { "type": "text", "id": "interior_caption", "label": "Interior image caption" },
     {
       "type": "video",
       "id": "video",

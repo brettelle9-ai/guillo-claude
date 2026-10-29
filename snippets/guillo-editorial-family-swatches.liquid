@@ -1,7 +1,7 @@
 {%- capture family_swatches -%}
 {%- assign family_count = 0 -%}{%- assign selected_name = blank -%}
 {%- assign group = product.metafields.custom.product_group.value -%}
-{%- capture group_image_urls -%}{% for image in group.custom_images.value %}{{ image | image_url: width: 400 }}{% unless forloop.last %}|||{% endunless %}{% endfor %}{%- endcapture -%}
+{%- capture group_image_urls -%}{% for image in group.custom_images.value %}{{ image | image_url: width: 432 }}{% unless forloop.last %}|||{% endunless %}{% endfor %}{%- endcapture -%}
 {%- assign group_image_urls = group_image_urls | split: '|||' -%}
 {%- for sibling in candidates -%}
   {%- capture sibling_key -%}{% render 'guillo-product-family-key', product: sibling %}{%- endcapture -%}
@@ -13,7 +13,7 @@
     {%- for grouped in group.products.value -%}{% if grouped.id == sibling.id %}{% assign name = group.display_names.value[forloop.index0] | default: name %}{% assign image_url = group_image_urls[forloop.index0] %}{% break %}{% endif %}{%- endfor -%}
     {% if sibling.id == product.id %}{% assign selected_name = name %}{% endif %}
     <a href="{{ sibling.url }}" class="ge-family-swatch{% if sibling.id == product.id %} is-current{% endif %}" {% if sibling.id == product.id %}aria-current="page"{% endif %} aria-label="{{ sibling.title | escape }} — {{ name | escape }}">
-      <span>{% if image_url != blank %}<img src="{{ image_url }}" width="160" height="200" loading="lazy" alt="{{ name | escape }}">{% else %}{{ sibling.featured_image | image_url: width: 300 | image_tag: loading: 'lazy', alt: name }}{% endif %}</span><small>{{ name | escape }}{% if family_key == 'capri-shorts' %}{% if sibling.handle contains '5in' %} · 5″{% else %} · 7″{% endif %}{% endif %}</small>
+      <span>{% if image_url != blank %}<img src="{{ image_url }}" width="216" height="270" loading="lazy" alt="{{ name | escape }}">{% else %}{{ sibling.featured_image | image_url: width: 432 | image_tag: loading: 'lazy', alt: name }}{% endif %}</span><small>{{ name | escape }}{% if family_key == 'capri-shorts' %}{% if sibling.handle contains '5in' %} · 5″{% else %} · 7″{% endif %}{% endif %}</small>
     </a>
   {%- endif -%}
 {%- endfor -%}

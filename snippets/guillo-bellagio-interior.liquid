@@ -1,0 +1,11 @@
+{%- if section.settings.interior_image != blank -%}
+  {%- assign interior_alt = section.settings.interior_image.alt | default: 'Open Bellagio Weekender interior' -%}
+  <div class="bellagio-interior">
+    <figure class="bellagio-interior__figure">
+      {{ section.settings.interior_image | image_url: width: 1920 | image_tag: class: 'bellagio-interior__image', loading: 'lazy', widths: '360, 540, 750, 960, 1440, 1920', sizes: '(min-width: 1008px) 960px, (min-width: 750px) calc(100vw - 48px), calc(100vw - 28px)', alt: interior_alt }}
+      {%- if section.settings.interior_caption != blank -%}
+        <figcaption class="bellagio-interior__caption">{{ section.settings.interior_caption | escape }}</figcaption>
+      {%- endif -%}
+    </figure>
+  </div>
+{%- endif -%}
