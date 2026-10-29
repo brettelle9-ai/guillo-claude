@@ -39,10 +39,11 @@
 @media(prefers-reduced-motion:reduce){.bellagio-companion__image img{transition:none;transform:none}}
 /* Features inside the purchase column, below the product information tabs. */
 .bellagio-features{padding:0;margin:25px 0 0;color:inherit;background:transparent}
-.bellagio-features__list{display:block;margin:0;padding:0;list-style:none}
-.bellagio-features__item{display:block;margin:0;padding:12px 0;list-style:none;font:400 14px/1.4 var(--ge-font,var(--g-sans));text-align:left}
-.bellagio-features__item+.bellagio-features__item{border-top:1px solid #e7e7e7}
-@media(max-width:749px){.bellagio-features__item{font-size:12px}}
+.bellagio-features__list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;row-gap:0;margin:0;padding:0;list-style:none}
+.bellagio-features__item{display:flex;align-items:center;gap:10px;min-width:0;margin:0;padding:16px 0;list-style:none;font:400 14px/1.4 var(--ge-font,var(--g-sans));text-align:left}
+.bellagio-features__item:nth-child(n+3){border-top:1px solid #e7e7e7}
+.bellagio-features__icon{display:block;width:26px;height:26px;flex:0 0 26px;color:inherit}
+@media(max-width:749px){.bellagio-features__list{column-gap:18px}.bellagio-features__item{font-size:12px;gap:8px;padding:14px 0}.bellagio-features__icon{width:23px;height:23px;flex-basis:23px}}
 
 /* Retain the previous Bellagio tabs without their baseline divider. */
 .guillo-pdp--bellagio .guillo-pdp__tabbar{border-bottom:0}
