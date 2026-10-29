@@ -103,6 +103,7 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
   }
   open(index, trigger) {
     clearTimeout(this.closeTimer);clearTimeout(this.switchTimer);
+    this.looks[index].style.setProperty('--entry-offset',index-this.index);
     this.index=index; this.trigger=trigger; this.detail=true;
     this.render(); this.sync();
     this.content.hidden=false; this.content.inert=false;
