@@ -24,10 +24,17 @@ guillo-runway.gr.is-night{--gr-ink:#f3f4f6;--gr-muted:#abb3bf;background:#101722
 .gr.is-night button:focus-visible,.gr.is-night a:focus-visible{outline-color:#dce3eb}
 @media(max-width:749px){.gr-night__label{font-size:9px}.gr-night{gap:7px}.gr.is-detail .gr-night{right:46px}.gr:not(.is-detail) .gr-heading{padding-right:100px}.gr:not(.is-detail) .gr-head{height:106px}.gr .gr-head h2{max-width:100%}}
 
-/* Evening dining ambience is painted across the entire section. */
-guillo-runway.gr.is-night{background:#17191d;--gr-muted:#b7b0a7}
-guillo-runway.gr::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 25% -8%,#c79a6845 0,transparent 57%),radial-gradient(ellipse at 83% 18%,#ce99501c 0,transparent 45%),radial-gradient(ellipse at var(--gr-light-x,50%) 86%,#be986b25 0,transparent 43%),linear-gradient(115deg,#28231f,#1e2024 68%,#171b21);transition:opacity .85s}
-guillo-runway.gr.is-night::before{opacity:1}
+/* A full-section dinner setting, behind the original unfiltered model images. */
+.gr-setting{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .85s}
+.gr-setting img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 60%}
+.gr-setting::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#111922b8 0,transparent 28%,transparent 76%,#111922aa 100%)}
+.gr.is-night .gr-setting{opacity:1}
 .gr-track::before,.gr-figure::after{content:none}
 .gr-cutout{filter:none;mix-blend-mode:normal;opacity:1}
+.gr-night__day{opacity:1}.gr-night__evening{opacity:.55}
+.gr.is-night .gr-night__day{opacity:.55}.gr.is-night .gr-night__evening{opacity:1}
+.gr.is-night .gr-head p{color:#f0e9e0}
+.gr.is-night .gr-head,.gr.is-night .gr-controls,.gr.is-night .gr-detail-hint{text-shadow:0 1px 12px #0009}
+.gr.is-night .gr-shop{background:#18212aeb;backdrop-filter:blur(12px);border:1px solid #ffffff25;padding:20px;border-radius:2px}
 .gr.is-night .gr-look__open::after{left:25%;bottom:2.8%;height:2.2%;width:64%;transform:translateX(8%) rotate(8deg);background:#0008;filter:blur(9px)}
+@media(max-width:749px){.gr:not(.is-detail) .gr-heading{padding-right:130px}.gr.is-detail .gr-selected-heading{max-width:calc(100% - 175px)}.gr.is-night .gr-shop{margin:20px 16px 0;padding:18px}.gr-setting img{object-position:58% 60%}.gr.is-night.is-detail .gr-setting img{object-position:58% top}.gr-night{gap:6px}}

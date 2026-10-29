@@ -2,11 +2,12 @@
 <script src="{{ 'guillo-runway.js' | asset_url }}" defer></script>
 {%- assign looks = section.blocks | where: 'type', 'look' -%}
 {% if looks.size > 0 %}
-<guillo-runway class="gr" id="guillo-runway-{{ section.id }}" data-currency="{{ cart.currency.iso_code }}" data-root="{{ routes.root_url }}" data-version="streetlight-runway-v5">
+<guillo-runway class="gr" id="guillo-runway-{{ section.id }}" data-currency="{{ cart.currency.iso_code }}" data-root="{{ routes.root_url }}" data-version="dinner-terrace-v6">
+  <div class="gr-setting" aria-hidden="true"><img src="{{ 'guillo-evening-terrace.jpg' | asset_url }}" width="1536" height="1024" alt="" loading="lazy" decoding="async"></div>
   <header class="gr-head">
     <div class="gr-heading"><h2>{{ section.settings.runway_heading | default: 'Try the look.' | escape }}</h2><p data-gr-intro>{{ looks.size }} looks, styled head to toe. Select a look to explore the pieces.</p></div>
     <div class="gr-selected-heading" aria-live="polite" aria-hidden="true"><span class="gr-micro">Look <span data-gr-current>01</span></span><strong data-gr-title></strong></div>
-    <button class="gr-night" type="button" role="switch" data-gr-night aria-label="Night mode" aria-checked="false"><span class="gr-night__label">Night mode</span><span class="gr-night__track" aria-hidden="true"><span></span></span></button>
+    <button class="gr-night" type="button" role="switch" data-gr-night aria-label="Evening setting" aria-checked="false"><span class="gr-night__label gr-night__day">Day</span><span class="gr-night__track" aria-hidden="true"><span></span></span><span class="gr-night__label gr-night__evening">Evening</span></button>
     <button class="gr-back" type="button" data-gr-close hidden aria-label="Back to all looks">×</button>
   </header>
   <div class="gr-stage">

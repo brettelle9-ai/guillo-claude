@@ -72,7 +72,7 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     this.index=Math.max(0,candidates.indexOf(current));this.position=this.index;this.target=this.index;this.velocity=0;
     if(this.detail)this.selectedIndex=this.index;
     this.querySelectorAll('[data-gr-dot]').forEach((dot,i)=>{dot.hidden=!candidates.includes(this.allLooks[i]);});
-    this.querySelector('[data-gr-intro]').textContent=`${candidates.length} ${night?'night':'day'} looks, styled head to toe. Select a look to explore the pieces.`;
+    this.querySelector('[data-gr-intro]').textContent=`${candidates.length} ${night?'evening':'day'} looks, styled head to toe. Select a look to explore the pieces.`;
     this.paint();this.controls();this.scheduleAuto();
   }
   clamp(value){return Math.max(0,Math.min(this.looks.length-1,value));}
