@@ -24,19 +24,14 @@ guillo-runway.gr.is-night{--gr-ink:#f3f4f6;--gr-muted:#abb3bf;background:#101722
 .gr.is-night button:focus-visible,.gr.is-night a:focus-visible{outline-color:#dce3eb}
 @media(max-width:749px){.gr-night__label{font-size:9px}.gr-night{gap:7px}.gr.is-detail .gr-night{right:46px}.gr:not(.is-detail) .gr-heading{padding-right:100px}.gr:not(.is-detail) .gr-head{height:106px}.gr .gr-head h2{max-width:100%}}
 
-/* Warm directional streetlight against cool night air. */
-guillo-runway.gr.is-night{background:radial-gradient(ellipse at 34% 78%,#303741 0,transparent 52%),linear-gradient(115deg,#162231,#1c2835 46%,#111c2a)}
-.gr-track::before{content:"";position:absolute;z-index:0;pointer-events:none;left:var(--gr-light-x,50%);top:-90px;bottom:0;width:min(760px,95vw);transform:translateX(-56%) rotate(-8deg);transform-origin:48% 0;clip-path:polygon(43% 0,49% 0,92% 100%,4% 100%);background:linear-gradient(180deg,#ffe3aa26,#ffe7b70a 45%,#ffe3aa17);filter:blur(18px);opacity:0;transition:opacity .8s,left .55s var(--gr-ease)}
-.gr.is-night .gr-track::before{opacity:1}
-.gr-figure::after{content:"";position:absolute;pointer-events:none;z-index:-2;left:-38%;bottom:1%;width:175%;height:12%;border-radius:50%;background:radial-gradient(ellipse,#ffe4b844 0,#eacb9630 25%,#ebd4a411 50%,transparent 72%);filter:blur(7px);transform:rotate(-9deg);opacity:0;transition:opacity .8s}
-.gr.is-night .gr-figure::after{opacity:1}
-.gr-cutout{transition:filter .8s}
-.gr-cutout--light{position:absolute;inset:0;opacity:0;pointer-events:none;filter:sepia(.26) saturate(.85) brightness(1.13);mask-image:linear-gradient(115deg,#000 8%,#000e 35%,#0005 60%,transparent 82%);transition:opacity .8s}
-.gr.is-night .gr-cutout:not(.gr-cutout--light){filter:brightness(.63) saturate(.74) contrast(1.06)}
-.gr.is-night .gr-cutout--light{opacity:.95}
-.gr.is-night .gr-look__open::after{left:37%;bottom:2.7%;height:2.2%;width:76%;transform:translateX(12%) rotate(13deg);background:#0008;filter:blur(7px)}
-.gr.is-night .gr-look:not(.is-active) .gr-cutout--light{opacity:.38}
-.gr.is-night .gr-look:not(.is-active) .gr-figure::after{opacity:.4}
-
-/* Feather the beam into the air rather than drawing a hard cone. */
-.gr-track::before{clip-path:none;background:conic-gradient(from 0deg at 50% -10%,transparent 0deg,transparent 151deg,#ffe4ad06 159deg,#ffe4ad18 179deg,#ffe4ad0a 199deg,transparent 210deg);mask-image:linear-gradient(#000 0%,#000 76%,transparent 100%);filter:blur(18px);transform:translateX(-50%) rotate(-11deg)}
+/* Evening dining ambience is painted across the entire section. */
+guillo-runway.gr.is-night{background:#17191d;--gr-muted:#b7b0a7}
+guillo-runway.gr::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 25% -8%,#c79a6845 0,transparent 57%),radial-gradient(ellipse at 83% 18%,#ce99501c 0,transparent 45%),radial-gradient(ellipse at var(--gr-light-x,50%) 86%,#be986b25 0,transparent 43%),linear-gradient(115deg,#28231f,#1e2024 68%,#171b21);transition:opacity .85s}
+guillo-runway.gr.is-night::before{opacity:1}
+.gr-track::before,.gr-figure::after{content:none}
+.gr-cutout{transition:filter .85s}
+.gr-cutout--light{position:absolute;inset:0;opacity:0;pointer-events:none;filter:sepia(.5) saturate(.78) brightness(1.06);mask-image:linear-gradient(110deg,#000 0%,#000e 35%,#0006 68%,#0002 100%);transition:opacity .85s}
+.gr.is-night .gr-cutout:not(.gr-cutout--light){filter:brightness(.58) saturate(.68) contrast(1.04)}
+.gr.is-night .gr-cutout--light{opacity:.88}
+.gr.is-night .gr-look:not(.is-active) .gr-cutout--light{opacity:.57}
+.gr.is-night .gr-look__open::after{left:25%;bottom:2.8%;height:2.2%;width:64%;transform:translateX(8%) rotate(8deg);background:#0008;filter:blur(9px)}
