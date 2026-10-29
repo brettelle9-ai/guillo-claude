@@ -7,7 +7,7 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     this.looks = [...this.querySelectorAll('[data-gr-look]')];
     this.dialog = this.querySelector('dialog');
     this.content = this.querySelector('[data-gr-content]');
-    this.index = 0;
+    this.index = Math.floor(this.looks.length / 2);
     this.reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.money = value => new Intl.NumberFormat(document.documentElement.lang || 'en', {style:'currency', currency:this.dataset.currency || 'AUD'}).format(value / 100);
     const on = (node, type, callback) => node.addEventListener(type, callback, {signal:this.abort.signal});
@@ -24,6 +24,7 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     this.visibility.observe(this);
     on(document,'visibilitychange',()=>this.video());
     on(document,'shopify:block:select',e=>{const i=this.looks.findIndex(look=>look.contains(e.target)||look===e.target);if(i>=0)this.go(i);});
+    this.go(this.index, true);
     this.sync();
   }
   disconnectedCallback(){this.abort?.abort();this.resize?.disconnect();this.visibility?.disconnect();cancelAnimationFrame(this.raf);clearTimeout(this.closeTimer);this.unlock();}
