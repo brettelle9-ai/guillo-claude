@@ -72,7 +72,7 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     }
     const goal=this.detail?1:0;
     if(this.reduced)this.progress=goal;
-    else if(Math.abs(this.progress-goal)>.001){this.progress+=(goal-this.progress)*Math.min(1,dt*8);moving=true;}else this.progress=goal;
+    else if(this.progress!==goal){const t=Math.min(1,(now-this.progressStarted)/550);this.progress=this.progressFrom+(goal-this.progressFrom)*(1-Math.pow(1-t,3));if(t<1)moving=true;else this.progress=goal;}
     this.paint();
     if(moving)this.raf=requestAnimationFrame(t=>this.frame(t));
   }
@@ -115,12 +115,12 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     else if(button.matches('[data-gr-add-all]'))this.add([...this.content.querySelectorAll('[data-gr-piece]')],button);
   }
   open(index,trigger){
-    clearTimeout(this.hideTimer);this.stopAuto();this.drag=null;this.classList.remove('is-dragging');this.index=index;this.selectedIndex=index;this.target=index;this.trigger=trigger;this.detail=true;
+    clearTimeout(this.hideTimer);this.stopAuto();this.drag=null;this.classList.remove('is-dragging');this.index=index;this.selectedIndex=index;this.target=index;this.trigger=trigger;this.progressFrom=this.progress;this.progressStarted=performance.now();this.detail=true;
     this.render();this.content.hidden=false;this.content.inert=false;this.querySelector('[data-gr-close]').hidden=false;this.controls();
     requestAnimationFrame(()=>{if(this.detail)this.classList.add('is-detail');});this.animate();
   }
   close(restoreFocus=true){
-    if(this.busy)return;this.detail=false;this.classList.remove('is-detail');this.content.inert=true;this.querySelector('[data-gr-close]').hidden=true;this.controls();this.animate();
+    if(this.busy)return;this.progressFrom=this.progress;this.progressStarted=performance.now();this.detail=false;this.classList.remove('is-detail');this.content.inert=true;this.querySelector('[data-gr-close]').hidden=true;this.controls();this.animate();
     clearTimeout(this.hideTimer);this.hideTimer=setTimeout(()=>{if(!this.detail){this.content.hidden=true;this.selectedIndex=null;}},this.reduced?0:800);
     if(restoreFocus)this.looks[this.index].querySelector('[data-gr-open]').focus({preventScroll:true});this.scheduleAuto();
   }
