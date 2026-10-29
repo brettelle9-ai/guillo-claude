@@ -23,6 +23,26 @@
           "label": "Look title"
         },
         {
+          "type": "select",
+          "id": "period",
+          "label": "Show this outfit",
+          "default": "both",
+          "options": [
+            {
+              "value": "day",
+              "label": "Day only"
+            },
+            {
+              "value": "night",
+              "label": "Night only"
+            },
+            {
+              "value": "both",
+              "label": "Day and night"
+            }
+          ]
+        },
+        {
           "type": "product",
           "id": "product",
           "label": "Featured product"
@@ -163,7 +183,8 @@
             "pin_y": 35,
             "pin_two_x": 50,
             "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-milano-cutout.png"
+            "cutout_asset": "guillo-runway-milano-cutout.png",
+            "period": "day"
           }
         },
         {
@@ -181,7 +202,8 @@
             "pin_y": 35,
             "pin_two_x": 50,
             "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-portofino-cutout.png"
+            "cutout_asset": "guillo-runway-portofino-cutout.png",
+            "period": "both"
           }
         },
         {
@@ -199,7 +221,8 @@
             "pin_y": 35,
             "pin_two_x": 50,
             "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-valenti-cutout.png"
+            "cutout_asset": "guillo-runway-valenti-cutout.png",
+            "period": "night"
           }
         }
       ]

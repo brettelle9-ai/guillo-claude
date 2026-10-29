@@ -68,7 +68,8 @@
             "pin_y": 35,
             "pin_two_x": 50,
             "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-milano-cutout.png"
+            "cutout_asset": "guillo-runway-milano-cutout.png",
+            "period": "day"
           }
         },
         "look_portofino": {
@@ -86,7 +87,8 @@
             "pin_y": 35,
             "pin_two_x": 50,
             "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-portofino-cutout.png"
+            "cutout_asset": "guillo-runway-portofino-cutout.png",
+            "period": "both"
           }
         },
         "look_valenti": {
@@ -104,7 +106,8 @@
             "pin_y": 35,
             "pin_two_x": 50,
             "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-valenti-cutout.png"
+            "cutout_asset": "guillo-runway-valenti-cutout.png",
+            "period": "night"
           }
         }
       },

@@ -2,7 +2,8 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
   connectedCallback() {
     if (this.ready) return;
     this.ready=true; this.abort=new AbortController(); this.track=this.querySelector('.gr-track');
-    this.looks=[...this.querySelectorAll('[data-gr-look]')]; this.content=this.querySelector('[data-gr-content]');
+    this.allLooks=[...this.querySelectorAll('[data-gr-look]')];this.looks=this.allLooks;
+    this.allLooks.forEach(look=>{const image=look.querySelector('.gr-cutout');if(image){const light=image.cloneNode();light.classList.add('gr-cutout--light');light.alt='';light.setAttribute('aria-hidden','true');image.after(light);}}); this.content=this.querySelector('[data-gr-content]');
     if(!this.looks.length)return;
     this.index=Math.floor(this.looks.length/2); this.position=this.index; this.target=this.index; this.velocity=0;
     this.progress=0; this.detail=false; this.paused=false; this.inView=false; this.direction=1; this.sizes=new Map();
@@ -55,9 +56,25 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     this.resize=new ResizeObserver(()=>{this.style.setProperty('--gr-track-height',`${this.track.clientHeight}px`);this.width=this.track.clientWidth;this.mobile=this.width<750;this.step=this.mobile?this.width*.57:Math.min(300,this.width*.235);this.paint();});this.resize.observe(this.track);
     this.visibility=new IntersectionObserver(entries=>{this.inView=entries[0].isIntersecting;if(this.inView)this.scheduleAuto();else this.stopAuto();},{threshold:.35});this.visibility.observe(this);
     this.style.setProperty('--gr-track-height',`${this.track.clientHeight}px`);this.width=this.track.clientWidth;this.mobile=this.width<750;this.step=this.mobile?this.width*.57:Math.min(300,this.width*.235);
-    this.paint();this.controls();this.classList.add('is-ready');
+    this.setMode(false);this.classList.add('is-ready');
   }
   disconnectedCallback(){this.abort?.abort();this.resize?.disconnect();this.visibility?.disconnect();cancelAnimationFrame(this.raf);this.stopAuto();clearTimeout(this.wheelTimer);clearTimeout(this.hideTimer);clearTimeout(this.highlightTimer);}
+  setMode(night){
+    if(this.busy)return;
+    const current=this.looks[this.index];
+    const candidates=this.allLooks.filter(look=>look.dataset.period==='both'||look.dataset.period===(night?'night':'day'));
+    if(!candidates.length)return;
+    if(this.detail&&!candidates.includes(current)){this.close(false);this.progress=0;this.selectedIndex=null;this.content.hidden=true;}
+    this.classList.toggle('is-night',night);
+    this.querySelector('[data-gr-night]').setAttribute('aria-checked',String(night));
+    this.looks=candidates;
+    this.allLooks.forEach(look=>{look.hidden=!candidates.includes(look);});
+    this.index=Math.max(0,candidates.indexOf(current));this.position=this.index;this.target=this.index;this.velocity=0;
+    if(this.detail)this.selectedIndex=this.index;
+    this.querySelectorAll('[data-gr-dot]').forEach((dot,i)=>{dot.hidden=!candidates.includes(this.allLooks[i]);});
+    this.querySelector('[data-gr-intro]').textContent=`${candidates.length} ${night?'night':'day'} looks, styled head to toe. Select a look to explore the pieces.`;
+    this.paint();this.controls();this.scheduleAuto();
+  }
   clamp(value){return Math.max(0,Math.min(this.looks.length-1,value));}
   stopAuto(){clearTimeout(this.autoTimer);}
   scheduleAuto(){this.stopAuto();if(this.paused||this.reduced||this.detail||this.hovered||this.focused||this.drag||!this.inView||document.hidden||this.looks.length<2)return;this.autoTimer=setTimeout(()=>{if(this.index>=this.looks.length-1)this.direction=-1;if(this.index<=0)this.direction=1;this.go(this.index+this.direction);},4500);}
@@ -78,7 +95,7 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
   }
   paint(){
     if(!this.width)return;
-    const p=this.progress||0;
+    const p=this.progress||0;this.style.setProperty('--gr-light-x',`${(50-(this.mobile?0:16.5)*p).toFixed(2)}%`);
     this.looks.forEach((look,i)=>{
       const offset=i-this.position,distance=Math.abs(offset),scale=1-Math.min(distance,2.5)*.085;
       let x=offset*this.step,s=scale,opacity=distance>3?0:1,blur=Math.min(3,Math.max(0,distance-.12)*1.05);
@@ -93,8 +110,8 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
       look.inert=!!this.detail&&!chosen;look.querySelector('[data-gr-open]').setAttribute('aria-expanded',String(chosen));
       const pins=look.querySelector('.gr-pins');pins.inert=!chosen;pins.setAttribute('aria-hidden',String(!chosen));
     });
-    this.querySelector('[data-gr-current]').textContent=String(this.index+1).padStart(2,'0');this.querySelector('[data-gr-title]').textContent=this.looks[this.index].dataset.title;
-    this.querySelectorAll('[data-gr-dot]').forEach((dot,i)=>dot.setAttribute('aria-pressed',String(i===this.index)));
+    this.querySelector('[data-gr-current]').textContent=String(this.allLooks.indexOf(this.looks[this.index])+1).padStart(2,'0');this.querySelector('[data-gr-title]').textContent=this.looks[this.index].dataset.title;
+    this.querySelectorAll('[data-gr-dot]').forEach((dot,i)=>dot.setAttribute('aria-pressed',String(this.allLooks[i]===this.looks[this.index])));
     this.querySelector('[data-gr-prev]').disabled=this.index===0;this.querySelector('[data-gr-next]').disabled=this.index===this.looks.length-1;
     this.querySelector('.gr-selected-heading').setAttribute('aria-hidden',String(!this.detail));
     this.querySelector('.gr-controls').inert=!!this.detail;
@@ -102,11 +119,11 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
   go(index){if(this.busy||this.detail)return;this.index=this.clamp(index);this.target=this.index;this.controls();this.animate();this.scheduleAuto();}
   click(e){
     const button=e.target.closest('button');if(!button||!this.contains(button))return;
-    if(button.matches('[data-gr-night]')){const night=this.classList.toggle('is-night');button.setAttribute('aria-checked',String(night));}
+    if(button.matches('[data-gr-night]'))this.setMode(!this.classList.contains('is-night'));
     else if(button.matches('[data-gr-open]')){if(performance.now()<(this.suppressClickUntil||0)){e.preventDefault();return;}if(!this.detail)this.open(this.looks.indexOf(button.closest('[data-gr-look]')),button);}
     else if(button.matches('[data-gr-prev]'))this.go(this.index-1);
     else if(button.matches('[data-gr-next]'))this.go(this.index+1);
-    else if(button.matches('[data-gr-dot]'))this.go(Number(button.dataset.grDot));
+    else if(button.matches('[data-gr-dot]'))this.go(this.looks.indexOf(this.allLooks[Number(button.dataset.grDot)]));
     else if(button.matches('[data-gr-pause]')){this.paused=!this.paused;button.textContent=this.paused?'▷':'Ⅱ';button.setAttribute('aria-label',this.paused?'Play runway':'Pause runway');button.setAttribute('aria-pressed',String(this.paused));this.scheduleAuto();}
     else if(button.matches('[data-gr-close]'))this.close();
     else if(button.matches('[data-gr-pin]'))this.revealPiece(button.dataset.grPin);

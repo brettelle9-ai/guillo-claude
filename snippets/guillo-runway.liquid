@@ -2,9 +2,9 @@
 <script src="{{ 'guillo-runway.js' | asset_url }}" defer></script>
 {%- assign looks = section.blocks | where: 'type', 'look' -%}
 {% if looks.size > 0 %}
-<guillo-runway class="gr" id="guillo-runway-{{ section.id }}" data-currency="{{ cart.currency.iso_code }}" data-root="{{ routes.root_url }}" data-version="spring-runway-v4">
+<guillo-runway class="gr" id="guillo-runway-{{ section.id }}" data-currency="{{ cart.currency.iso_code }}" data-root="{{ routes.root_url }}" data-version="streetlight-runway-v5">
   <header class="gr-head">
-    <div class="gr-heading"><h2>{{ section.settings.runway_heading | default: 'Try the look.' | escape }}</h2><p>{{ looks.size }} looks, styled head to toe. Select a look to explore the pieces.</p></div>
+    <div class="gr-heading"><h2>{{ section.settings.runway_heading | default: 'Try the look.' | escape }}</h2><p data-gr-intro>{{ looks.size }} looks, styled head to toe. Select a look to explore the pieces.</p></div>
     <div class="gr-selected-heading" aria-live="polite" aria-hidden="true"><span class="gr-micro">Look <span data-gr-current>01</span></span><strong data-gr-title></strong></div>
     <button class="gr-night" type="button" role="switch" data-gr-night aria-label="Night mode" aria-checked="false"><span class="gr-night__label">Night mode</span><span class="gr-night__track" aria-hidden="true"><span></span></span></button>
     <button class="gr-back" type="button" data-gr-close hidden aria-label="Back to all looks">×</button>
@@ -28,7 +28,7 @@
             endunless
           endfor
         -%}
-        <article class="gr-look" data-gr-look data-title="{{ look_title | escape }}" data-count="{{ piece_count }}" aria-label="{{ forloop.index }} of {{ looks.size }}: {{ look_title | escape }}" {{ block.shopify_attributes }}>
+        <article class="gr-look" data-gr-look data-period="{{ block.settings.period | default: 'both' }}" data-title="{{ look_title | escape }}" data-count="{{ piece_count }}" aria-label="{{ forloop.index }} of {{ looks.size }}: {{ look_title | escape }}" {{ block.shopify_attributes }}>
           <div class="gr-figure">
             <button type="button" class="gr-look__open" data-gr-open aria-label="Shop {{ look_title | escape }}" aria-expanded="false" aria-controls="gr-shop-{{ section.id }}">
               {% if block.settings.image != blank or cutout_asset == blank %}
