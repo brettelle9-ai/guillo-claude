@@ -1,0 +1,127 @@
+{% render 'guillo-runway', section: section %}
+{% schema %}
+{
+  "name": "Guillo outfit slider",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "runway_heading",
+      "label": "Heading",
+      "default": "The art of getting dressed."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Interactive outfit",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Look title"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Featured product"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Other products in this look",
+          "limit": 3
+        },
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Display",
+          "default": "image",
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "video",
+              "label": "Video"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image / video cover"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Image description"
+        },
+        {
+          "type": "range",
+          "id": "image_index",
+          "label": "Product image to use if no custom image",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "pin_x",
+          "label": "Top marker: horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 52
+        },
+        {
+          "type": "range",
+          "id": "pin_y",
+          "label": "Top marker: vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 35
+        },
+        {
+          "type": "range",
+          "id": "pin_two_x",
+          "label": "Bottom marker: horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 52
+        },
+        {
+          "type": "range",
+          "id": "pin_two_y",
+          "label": "Bottom marker: vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 65
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Guillo outfit slider",
+      "category": "Guillo"
+    }
+  ]
+}
+{% endschema %}

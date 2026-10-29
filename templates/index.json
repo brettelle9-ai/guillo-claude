@@ -56,54 +56,52 @@
         "look_milano": {
           "type": "look",
           "settings": {
+            "title": "A certain presence.",
             "product": "milano-pinstripe-shirt",
             "products": [
               "the-luxe-chino-stone"
             ],
             "media_type": "image",
-            "alt": "The Milano pinstripe shirt with cream chinos by the pool",
-            "image_asset": "guillo-bone-pool.jpg"
+            "image_index": 5,
+            "alt": "A certain presence. Guillo outfit at the villa.",
+            "pin_x": 49,
+            "pin_y": 34,
+            "pin_two_x": 51,
+            "pin_two_y": 65
           }
         },
-        "look_luxe": {
+        "look_portofino": {
           "type": "look",
           "settings": {
+            "title": "An unhurried afternoon.",
+            "product": "the-portofino-polo-black",
+            "products": [
+              "the-luxe-chino-stone"
+            ],
+            "media_type": "image",
+            "image_index": 6,
+            "alt": "An unhurried afternoon. Guillo outfit at the villa.",
+            "pin_x": 48,
+            "pin_y": 33,
+            "pin_two_x": 53,
+            "pin_two_y": 65
+          }
+        },
+        "look_valenti": {
+          "type": "look",
+          "settings": {
+            "title": "The evening, considered.",
             "product": "the-valenti-knit-polo-navy",
             "products": [
-              "milano-pinstripe-shirt",
-              "the-alassio-linen-pants-white"
+              "the-luxe-chino-stone"
             ],
             "media_type": "image",
-            "image": "shopify://shop_images/rn-image_picker_lib_temp_887dddd9-3a8b-48da-b86b-1e9ab15c7595.jpg",
-            "alt": "The Capri Chino Short in Stone with the Milano pinstripe shirt",
-            "image_asset": "guillo-luxe-stone-film.jpg"
-          }
-        },
-        "look_signore": {
-          "type": "look",
-          "settings": {
-            "product": "the-weekend-tee-biscotti",
-            "products": [
-              "siracusa-short-sleeve-slim-fit-shirt",
-              "the-capri-chino-short-navy"
-            ],
-            "media_type": "video",
-            "video": "shopify://files/videos/copy_6257A5BD-7CE9-4C2F-8547-0243DE7C813A.MOV",
-            "alt": "The Signore Chino in Latte with a fitted white shirt",
-            "image_asset": "guillo-signore-raised-foot.jpg"
-          }
-        },
-        "look_shirt": {
-          "type": "look",
-          "settings": {
-            "product": "siracusa-short-sleeve-slim-fit-shirt",
-            "products": [
-              "the-luxe-chino-sage"
-            ],
-            "media_type": "image",
-            "image": "shopify://shop_images/0S0A2082_1_5396cea3-65b7-4a85-bcf7-7348aeeee06e.jpg",
-            "alt": "A fitted white shirt with brown chinos",
-            "image_asset": "guillo-brown-01.jpg"
+            "image_index": 5,
+            "alt": "The evening, considered. Guillo outfit at the villa.",
+            "pin_x": 50,
+            "pin_y": 32,
+            "pin_two_x": 53,
+            "pin_two_y": 65
           }
         }
       },
@@ -113,9 +111,8 @@
         "polos",
         "shorts",
         "look_milano",
-        "look_luxe",
-        "look_signore",
-        "look_shirt"
+        "look_portofino",
+        "look_valenti"
       ],
       "settings": {
         "hero_heading": "A Mediterranean state of mind.",
@@ -151,7 +148,8 @@
         "campaign_two_button": "Shop shirts",
         "campaign_two_link": "/collections/shirts?view=shirts-editorial",
         "campaign_two_media_type": "video",
-        "campaign_video": "shopify://files/videos/lv_0_20260914131333.mp4"
+        "campaign_video": "shopify://files/videos/lv_0_20260914131333.mp4",
+        "runway_heading": "The art of getting dressed."
       }
     }
   },

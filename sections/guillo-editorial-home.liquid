@@ -59,27 +59,488 @@
     </div>
     <div class="gh-campaign__controls"><button type="button" data-gh-slide="0" aria-label="View campaign 1" aria-pressed="true"></button><button type="button" data-gh-slide="1" aria-label="View campaign 2" aria-pressed="false"></button><button class="gh-campaign__pause" type="button" data-gh-pause aria-label="Pause campaign slideshow">Ⅱ</button></div>
   </section>
-  <section class="gh-looks">
-    <header class="gh-section-heading"><h2>Worn the Guillo way.</h2></header>
-    <div class="gh-look-rail">
-      {% for block in section.blocks %}{% if block.type == 'look' %}
-        {%- assign look_product = block.settings.product -%}
-        <article class="gh-look" {{ block.shopify_attributes }}>
-          {% render 'guillo-editorial-media', media_type: block.settings.media_type, image: block.settings.image, video: block.settings.video, fallback_image: look_product.featured_image, fallback_asset: block.settings.image_asset, alt: block.settings.alt %}
-          <button type="button" data-gh-look="{{ look_product.handle }}" aria-label="Shop this look: {{ look_product.title | escape }}">Shop the look <span aria-hidden="true">+</span></button>
-          <template><h2 class="gh-look-heading">Shop this look</h2><div class="gh-look-products">
-            {% render 'guillo-look-product', product: look_product %}
-            {% for piece in block.settings.products %}{% unless piece.id == look_product.id %}{% render 'guillo-look-product', product: piece %}{% endunless %}{% endfor %}
-          </div></template>
-        </article>
-      {% endif %}{% endfor %}
-    </div>
-    <a class="gh-instagram gh-link" href="https://www.instagram.com/guilloclothing/" target="_blank" rel="noopener">Follow @guilloclothing</a>
-  </section>
+  {% render 'guillo-runway', section: section %}
   <div class="gh-perks"><a href="{{ pages['fit-guide'].url }}"><strong>Find your fit</strong><span>Size guides for a closer fit</span></a><a href="{{ shop.refund_policy.url }}"><strong>44 days to get it right</strong><span>Returns &amp; exchanges · AU &amp; NZ</span></a></div>
 </div>
 <dialog class="gc-quick gc-dialog" aria-label="Choose product size" data-gh-quick><button type="button" class="gc-icon-button gc-quick__close" data-gc-close aria-label="Close quick add">×</button><div data-gh-quick-content></div></dialog>
 <dialog class="gc-quick gc-dialog" aria-label="Shop the look" data-gh-look-dialog><button type="button" class="gc-icon-button gc-quick__close" data-gc-close aria-label="Close shop the look">×</button><div data-gh-look-content></div></dialog>
 {% schema %}
-{"name":"Guillo editorial homepage","settings":[{"type":"header","content":"Main hero"},{"type":"text","id":"hero_heading","label":"Heading","default":"A Mediterranean state of mind."},{"type":"text","id":"hero_subheading","label":"Optional supporting line"},{"type":"text","id":"hero_button","label":"Button label","default":"Explore Guillo"},{"type":"url","id":"hero_link","label":"Button link"},{"type":"select","id":"hero_media_type","label":"Hero display","default":"image","options":[{"value":"image","label":"Image"},{"value":"video","label":"Video"}]},{"type":"image_picker","id":"hero_image","label":"Desktop image"},{"type":"image_picker","id":"hero_mobile_image","label":"Mobile image"},{"type":"video","id":"hero_video","label":"Desktop video"},{"type":"video","id":"hero_mobile_video","label":"Mobile video (optional)"},{"type":"product","id":"hero_product","label":"Fallback mobile image product"},{"type":"header","content":"Feature section"},{"type":"product","id":"feature_product","label":"Feature product"},{"type":"text","id":"feature_heading","label":"Feature heading","default":"The Signore Chino"},{"type":"textarea","id":"feature_text","label":"Description","default":"A clean front. Side-tab adjusters. A considered fit through the leg. Meet the chino with a different point of view."},{"type":"text","id":"feature_button","label":"Button label","default":"Discover the Signore"},{"type":"select","id":"feature_media_type","label":"Feature display","default":"image","options":[{"value":"image","label":"Image"},{"value":"video","label":"Video"}]},{"type":"image_picker","id":"feature_image","label":"Feature image"},{"type":"video","id":"feature_video","label":"Feature video"},{"type":"header","content":"Chosen for you"},{"type":"product_list","id":"featured_products","label":"Products","limit":12},{"type":"select","id":"card_media_default","label":"Default card display","default":"auto","options":[{"value":"auto","label":"Automatic — play available video"},{"value":"image","label":"Image"},{"value":"video","label":"Video"}]},{"type":"paragraph","content":"Add a Product card media block below to choose an image or video for an individual product."},{"type":"header","content":"Campaign 1"},{"type":"text","id":"campaign_one_heading","label":"Heading","default":"A certain presence."},{"type":"text","id":"campaign_one_button","label":"Button label","default":"Shop the collection"},{"type":"url","id":"campaign_one_link","label":"Button link"},{"type":"select","id":"campaign_one_media_type","label":"Display","default":"image","options":[{"value":"image","label":"Image"},{"value":"video","label":"Video"}]},{"type":"image_picker","id":"campaign_one_image","label":"Main image / video cover"},{"type":"image_picker","id":"campaign_one_image_two","label":"Second image (desktop)"},{"type":"video","id":"campaign_one_video","label":"Video"},{"type":"header","content":"Campaign 2"},{"type":"text","id":"campaign_two_heading","label":"Heading","default":"Guillo in motion."},{"type":"text","id":"campaign_two_button","label":"Button label","default":"Shop shirts"},{"type":"url","id":"campaign_two_link","label":"Button link"},{"type":"select","id":"campaign_two_media_type","label":"Display","default":"video","options":[{"value":"image","label":"Image"},{"value":"video","label":"Video"}]},{"type":"image_picker","id":"campaign_two_image","label":"Desktop image / video cover"},{"type":"image_picker","id":"campaign_two_mobile_image","label":"Mobile image"},{"type":"video","id":"campaign_video","label":"Video"}],"blocks":[{"type":"category","name":"Category tile","limit":4,"settings":[{"type":"text","id":"heading","label":"Heading"},{"type":"product","id":"product","label":"Fallback image product"},{"type":"url","id":"link","label":"Link"},{"type":"select","id":"media_type","label":"Display","default":"image","options":[{"value":"image","label":"Image"},{"value":"video","label":"Video"}]},{"type":"image_picker","id":"image","label":"Image / video cover"},{"type":"video","id":"video","label":"Video"},{"type":"text","id":"film_asset","label":"Original film (optional)","info":"Keeps the current film until you select another video. Choose Image above to turn it off."}]},{"type":"look","name":"Shop the look","limit":4,"settings":[{"type":"product","id":"product","label":"Featured product"},{"type":"product_list","id":"products","label":"Other products in this look","limit":4},{"type":"select","id":"media_type","label":"Display","default":"image","options":[{"value":"image","label":"Image"},{"value":"video","label":"Video"}]},{"type":"image_picker","id":"image","label":"Image / video cover"},{"type":"video","id":"video","label":"Video"},{"type":"text","id":"alt","label":"Image description"},{"type":"text","id":"image_asset","label":"Original image (optional)","info":"Your current image is kept until you select a replacement above."}]},{"type":"product_media","name":"Product card media","settings":[{"type":"product","id":"product","label":"Product"},{"type":"select","id":"media_type","label":"Display","default":"auto","options":[{"value":"auto","label":"Automatic — play available video"},{"value":"image","label":"Image"},{"value":"video","label":"Video"}]},{"type":"image_picker","id":"image","label":"Card image / video cover"},{"type":"video","id":"video","label":"Card video"},{"type":"paragraph","content":"Choose the product, then Image or Video. Automatic uses its product video or the existing film. Leave the image empty to keep the product photo."}]}],"presets":[{"name":"Guillo editorial homepage"}]}
+{
+  "name": "Guillo editorial homepage",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Main hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Heading",
+      "default": "A Mediterranean state of mind."
+    },
+    {
+      "type": "text",
+      "id": "hero_subheading",
+      "label": "Optional supporting line"
+    },
+    {
+      "type": "text",
+      "id": "hero_button",
+      "label": "Button label",
+      "default": "Explore Guillo"
+    },
+    {
+      "type": "url",
+      "id": "hero_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "hero_media_type",
+      "label": "Hero display",
+      "default": "image",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Desktop video"
+    },
+    {
+      "type": "video",
+      "id": "hero_mobile_video",
+      "label": "Mobile video (optional)"
+    },
+    {
+      "type": "product",
+      "id": "hero_product",
+      "label": "Fallback mobile image product"
+    },
+    {
+      "type": "header",
+      "content": "Feature section"
+    },
+    {
+      "type": "product",
+      "id": "feature_product",
+      "label": "Feature product"
+    },
+    {
+      "type": "text",
+      "id": "feature_heading",
+      "label": "Feature heading",
+      "default": "The Signore Chino"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_text",
+      "label": "Description",
+      "default": "A clean front. Side-tab adjusters. A considered fit through the leg. Meet the chino with a different point of view."
+    },
+    {
+      "type": "text",
+      "id": "feature_button",
+      "label": "Button label",
+      "default": "Discover the Signore"
+    },
+    {
+      "type": "select",
+      "id": "feature_media_type",
+      "label": "Feature display",
+      "default": "image",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_image",
+      "label": "Feature image"
+    },
+    {
+      "type": "video",
+      "id": "feature_video",
+      "label": "Feature video"
+    },
+    {
+      "type": "header",
+      "content": "Chosen for you"
+    },
+    {
+      "type": "product_list",
+      "id": "featured_products",
+      "label": "Products",
+      "limit": 12
+    },
+    {
+      "type": "select",
+      "id": "card_media_default",
+      "label": "Default card display",
+      "default": "auto",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Automatic \u2014 play available video"
+        },
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "Add a Product card media block below to choose an image or video for an individual product."
+    },
+    {
+      "type": "header",
+      "content": "Campaign 1"
+    },
+    {
+      "type": "text",
+      "id": "campaign_one_heading",
+      "label": "Heading",
+      "default": "A certain presence."
+    },
+    {
+      "type": "text",
+      "id": "campaign_one_button",
+      "label": "Button label",
+      "default": "Shop the collection"
+    },
+    {
+      "type": "url",
+      "id": "campaign_one_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "campaign_one_media_type",
+      "label": "Display",
+      "default": "image",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "campaign_one_image",
+      "label": "Main image / video cover"
+    },
+    {
+      "type": "image_picker",
+      "id": "campaign_one_image_two",
+      "label": "Second image (desktop)"
+    },
+    {
+      "type": "video",
+      "id": "campaign_one_video",
+      "label": "Video"
+    },
+    {
+      "type": "header",
+      "content": "Campaign 2"
+    },
+    {
+      "type": "text",
+      "id": "campaign_two_heading",
+      "label": "Heading",
+      "default": "Guillo in motion."
+    },
+    {
+      "type": "text",
+      "id": "campaign_two_button",
+      "label": "Button label",
+      "default": "Shop shirts"
+    },
+    {
+      "type": "url",
+      "id": "campaign_two_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "campaign_two_media_type",
+      "label": "Display",
+      "default": "video",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "campaign_two_image",
+      "label": "Desktop image / video cover"
+    },
+    {
+      "type": "image_picker",
+      "id": "campaign_two_mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "video",
+      "id": "campaign_video",
+      "label": "Video"
+    },
+    {
+      "type": "text",
+      "id": "runway_heading",
+      "label": "Outfit slider heading",
+      "default": "The art of getting dressed."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category tile",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Fallback image product"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Display",
+          "default": "image",
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "video",
+              "label": "Video"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image / video cover"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "text",
+          "id": "film_asset",
+          "label": "Original film (optional)",
+          "info": "Keeps the current film until you select another video. Choose Image above to turn it off."
+        }
+      ]
+    },
+    {
+      "type": "look",
+      "name": "Interactive outfit",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Look title"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Featured product"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Other products in this look",
+          "limit": 3
+        },
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Display",
+          "default": "image",
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "video",
+              "label": "Video"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image / video cover"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Image description"
+        },
+        {
+          "type": "range",
+          "id": "image_index",
+          "label": "Product image to use if no custom image",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "pin_x",
+          "label": "Top marker: horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 52
+        },
+        {
+          "type": "range",
+          "id": "pin_y",
+          "label": "Top marker: vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 35
+        },
+        {
+          "type": "range",
+          "id": "pin_two_x",
+          "label": "Bottom marker: horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 52
+        },
+        {
+          "type": "range",
+          "id": "pin_two_y",
+          "label": "Bottom marker: vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 65
+        }
+      ]
+    },
+    {
+      "type": "product_media",
+      "name": "Product card media",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Display",
+          "default": "auto",
+          "options": [
+            {
+              "value": "auto",
+              "label": "Automatic \u2014 play available video"
+            },
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "video",
+              "label": "Video"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card image / video cover"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Card video"
+        },
+        {
+          "type": "paragraph",
+          "content": "Choose the product, then Image or Video. Automatic uses its product video or the existing film. Leave the image empty to keep the product photo."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guillo editorial homepage"
+    }
+  ]
+}
 {% endschema %}
