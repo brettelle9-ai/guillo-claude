@@ -54,9 +54,11 @@ body .guillo-newsletter__error{color:#9c2222!important}
  body .ge-family-picker,body .ge-shirt-family{margin:25px 0 28px;padding-bottom:25px}
  body .ge-selected-colour,body .ge-shirt-family>p>.ge-selected-colour{font-size:18px}
  body .ge-shirt-swatch>span{width:35px;height:35px}
- body .ge-family-swatch>span{width:37px;height:46px}
- body .ge-shirt-swatches,body .ge-family-swatches{gap:13px}
- body .ge-family-swatch small,body .ge-shirt-swatch small{font-size:9px}
+ body .ge-family-swatch>span{width:72px;height:90px}
+ body .ge-shirt-swatches{gap:13px}
+ body .ge-family-swatches{gap:18px}
+ body .ge-shirt-swatch small{font-size:9px}
+ body .ge-family-swatch small{font-size:12px}
  body .ge-services{grid-template-columns:1fr;font-size:10px;gap:12px;margin-top:20px}
  body .ge-service__weekday{display:none}
  body .ge-accordions{margin-top:24px}
