@@ -61,9 +61,9 @@
           <template data-gr-template>
             <header class="gr-shop__head"><span class="gr-micro">In this look</span><span class="gr-piece-count">{{ piece_count }} pieces</span><h3>{{ look_title | escape }}</h3><p>Choose your size for each piece.</p></header>
             <div class="gr-pieces">
-              {% render 'guillo-runway-product', product: primary, index: 1 %}
+              {% render 'guillo-runway-product', product: primary, index: 1, runway_section_id: section.id %}
               {%- assign piece_index = 1 -%}
-              {% for piece in block.settings.products limit: 3 %}{% unless piece.id == primary.id %}{% assign piece_index = piece_index | plus: 1 %}{% render 'guillo-runway-product', product: piece, index: piece_index %}{% endunless %}{% endfor %}
+              {% for piece in block.settings.products limit: 3 %}{% unless piece.id == primary.id %}{% assign piece_index = piece_index | plus: 1 %}{% render 'guillo-runway-product', product: piece, index: piece_index, runway_section_id: section.id %}{% endunless %}{% endfor %}
             </div>
             <footer class="gr-summary"><div><span>The complete look</span><strong data-gr-total></strong></div><button class="gr-add-all" type="button" data-gr-add-all>Add the complete look <span aria-hidden="true">→</span></button><p class="gr-status" data-gr-status role="status" aria-live="polite"></p><a class="gr-cart-link" href="{{ routes.cart_url }}" hidden>View your bag →</a></footer>
           </template>

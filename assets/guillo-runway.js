@@ -160,8 +160,8 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     const items=pieces.map(piece=>({id:piece.dataset.selected,quantity:1}));this.busy=true;const label=button.textContent;
     this.querySelectorAll('button').forEach(el=>{el.dataset.grDisabled=String(el.disabled);el.disabled=true;});button.textContent='Adding…';this.status('');
     try{
-      const response=await fetch(`${this.dataset.root||'/'}cart/add.js`,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({items,sections:[...new Set([...document.querySelectorAll('cart-items-component[data-section-id]')].map(el=>el.dataset.sectionId))].slice(0,5).join(','),sections_url:location.pathname})});
-      const data=await response.json();if(!response.ok)throw new Error(data.description||'Unable to add these pieces. Please try again.');
+      const response=await fetch(`${this.dataset.root||'/'}cart/add.js`,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({items,sections:[...new Set([...document.querySelectorAll('cart-items-component[data-section-id]')].map(el=>el.dataset.sectionId))].slice(0,5).join(','),sections_url:location.pathname.startsWith('/')?location.pathname:(this.dataset.root||'/')})});
+      const data=await response.json();if(!response.ok)throw new Error(data.description||data.message||'Unable to add these pieces. Please try again.');
       this.status(items.length===1?'Piece added to your bag.':'Your complete look has been added to your bag.');this.content.querySelector('.gr-cart-link').hidden=false;
       document.dispatchEvent(new CustomEvent('cart:update',{bubbles:true,detail:{resource:{},sourceId:this.id,data:{source:'product-form-component',itemCount:items.length,sections:data.sections}}}));
     }catch(error){this.status(error.message||'Unable to add. Please try again.');}
