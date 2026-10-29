@@ -38,3 +38,9 @@ guillo-runway.gr.is-night{--gr-ink:#f3f4f6;--gr-muted:#abb3bf;background:#101722
 .gr.is-night .gr-shop{background:#18212aeb;backdrop-filter:blur(12px);border:1px solid #ffffff25;padding:20px;border-radius:2px}
 .gr.is-night .gr-look__open::after{left:25%;bottom:2.8%;height:2.2%;width:64%;transform:translateX(8%) rotate(8deg);background:#0008;filter:blur(9px)}
 @media(max-width:749px){.gr:not(.is-detail) .gr-heading{padding-right:130px}.gr.is-detail .gr-selected-heading{max-width:calc(100% - 175px)}.gr.is-night .gr-shop{margin:20px 16px 0;padding:18px}.gr-setting img{object-position:58% 60%}.gr.is-night.is-detail .gr-setting img{object-position:58% top}.gr-night{gap:6px}}
+/* Larger full-length figures, with matching stage space to preserve headroom. */
+.gr-stage{height:clamp(510px,65vw,660px)}
+.gr-look{width:clamp(350px,34vw,475px)}
+@media(min-width:1600px){.gr-stage{height:740px}.gr-look{width:535px}}
+@media(min-width:750px) and (max-width:1050px){.gr-stage{height:580px}.gr-look{width:400px}}
+@media(max-width:749px){.gr-stage{height:510px}.gr-look{width:86vw}.gr.is-detail .gr-stage{height:auto}.gr.is-detail .gr-track{height:510px}.gr-detail-hint{top:498px}}
