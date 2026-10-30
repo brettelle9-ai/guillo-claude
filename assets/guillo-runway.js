@@ -61,7 +61,7 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
   disconnectedCallback(){this.abort?.abort();this.resize?.disconnect();this.visibility?.disconnect();cancelAnimationFrame(this.raf);this.stopAuto();clearTimeout(this.wheelTimer);clearTimeout(this.hideTimer);clearTimeout(this.highlightTimer);}
   setMode(night){
     if(this.busy)return;
-    const current=this.looks[this.index];
+    const current=this.classList.contains('is-ready')?this.looks[this.index]:null;
     const candidates=this.allLooks.filter(look=>look.dataset.period==='both'||look.dataset.period===(night?'night':'day'));
     if(!candidates.length)return;
     if(this.detail&&!candidates.includes(current)){this.close(false);this.progress=0;this.selectedIndex=null;this.content.hidden=true;}
