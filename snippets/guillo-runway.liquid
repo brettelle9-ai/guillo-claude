@@ -77,7 +77,7 @@
   </div>
   <footer class="gr-controls">
     <button type="button" class="gr-nav-arrow" data-gr-prev aria-label="Previous look">←</button>
-    <nav class="gr-numbers" aria-label="Choose a look">{% for block in looks %}<button type="button" data-gr-dot="{{ forloop.index0 }}" aria-label="View look {{ forloop.index }}" aria-pressed="false"><span>{{ forloop.index | prepend: '0' }}</span><span class="gr-number-title" aria-hidden="true">{{ block.settings.title | default: block.settings.product.title | escape }}</span></button>{% endfor %}</nav>
+    <nav class="gr-numbers" aria-label="Choose a look">{% for block in looks %}<button type="button" data-gr-dot="{{ forloop.index0 }}" aria-label="View look {{ forloop.index }}" aria-pressed="false"><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span><span class="gr-number-title" aria-hidden="true">{{ block.settings.title | default: block.settings.product.title | escape }}</span></button>{% endfor %}</nav>
     <button type="button" class="gr-pause" data-gr-pause aria-label="Pause runway" aria-pressed="false">Ⅱ</button>
     <button type="button" class="gr-nav-arrow" data-gr-next aria-label="Next look">→</button>
   </footer>

@@ -52,7 +52,7 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     on(this,'focusin',()=>{this.focused=true;this.stopAuto();});
     on(this,'focusout',e=>{if(!this.contains(e.relatedTarget)){this.focused=false;this.scheduleAuto();}});
     on(document,'visibilitychange',()=>document.hidden?this.stopAuto():this.scheduleAuto());
-    on(document,'shopify:block:select',e=>{const i=this.looks.findIndex(look=>look===e.target||look.contains(e.target));if(i>=0){if(this.detail)this.close(false);this.go(i);}});
+    on(document,'shopify:block:select',e=>{const look=this.allLooks.find(look=>look===e.target||look.contains(e.target));if(!look)return;if(look.hidden)this.setMode(look.dataset.period==='night');const i=this.looks.indexOf(look);if(i>=0){if(this.detail)this.close(false);this.go(i);}});
     this.resize=new ResizeObserver(()=>{this.style.setProperty('--gr-track-height',`${this.track.clientHeight}px`);this.width=this.track.clientWidth;this.mobile=this.width<750;this.step=this.mobile?this.width*.57:Math.min(300,this.width*.235);this.paint();});this.resize.observe(this.track);
     this.visibility=new IntersectionObserver(entries=>{this.inView=entries[0].isIntersecting;if(this.inView)this.scheduleAuto();else this.stopAuto();},{threshold:.35});this.visibility.observe(this);
     this.style.setProperty('--gr-track-height',`${this.track.clientHeight}px`);this.width=this.track.clientWidth;this.mobile=this.width<750;this.step=this.mobile?this.width*.57:Math.min(300,this.width*.235);
