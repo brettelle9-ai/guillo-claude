@@ -233,11 +233,12 @@
           "settings": {
             "title": "Firenze & Black",
             "period": "night",
-            "product": "firenze-chevron-shirt",
+            "product": "guillo-rapallo-short-sleeve-shirt",
             "products": [
               "the-luxe-chino-black"
             ],
             "media_type": "image",
+            "image": "shopify://shop_images/Untitled_design_60.png",
             "alt": "Firenze & Black. Full-length Guillo outfit.",
             "image_index": 1,
             "pin_x": 50,
@@ -325,6 +326,7 @@
               "the-luxe-chino-stone"
             ],
             "media_type": "image",
+            "image": "shopify://shop_images/Untitled_design_61.png",
             "alt": "Milano & Stone. Full-length Guillo outfit.",
             "image_index": 1,
             "pin_x": 50,
