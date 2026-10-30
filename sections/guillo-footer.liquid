@@ -4,7 +4,7 @@
 {% endcomment %}
 
 <nav class="guillo-social-strip" aria-label="Guillo social media">{% assign platforms = 'instagram,facebook,youtube,tiktok,pinterest,twitter' | split: ',' %}{% for platform in platforms %}{% assign setting_key = platform | prepend: 'social_' %}{% assign profile_url = section.settings[setting_key] %}{% if profile_url == blank and platform == 'instagram' %}{% assign profile_url = 'https://www.instagram.com/guilloclothing/' %}{% elsif profile_url == blank and platform == 'facebook' %}{% assign profile_url = 'https://www.facebook.com/p/Guillo-Clothing-61563291266328/' %}{% endif %}{% if profile_url != blank %}<a href="{{ profile_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ platform | capitalize }}"><svg viewBox="0 0 20 20" aria-hidden="true">{% render 'icon', icon: platform %}</svg></a>{% endif %}{% endfor %}</nav>
-<footer class="guillo-footer g-pad" style="--guillo-footer-navy:{{ section.settings.background | default: '#14232c' }}">
+<footer id="GuilloFooter-{{ section.id }}" class="guillo-footer g-pad" style="--guillo-footer-navy:{{ section.settings.background | default: '#14232c' }}">
   <div class="g-container">
     <div class="guillo-footer__grid">
       <div class="guillo-footer__brand">
@@ -19,14 +19,14 @@
 
       </div>
       {%- for block in section.blocks -%}
-        <div class="guillo-footer__col" {{ block.shopify_attributes }}>
-          <div class="guillo-footer__col-title">{{ block.settings.title | default: block.settings.menu.title }}</div>
+        <details class="guillo-footer__col" open {{ block.shopify_attributes }}>
+          <summary class="guillo-footer__col-title">{{ block.settings.title | default: block.settings.menu.title | escape }}<span class="guillo-footer__menu-icon" aria-hidden="true"></span></summary>
           <div class="guillo-footer__links">
             {%- for link in block.settings.menu.links -%}
               <a href="{{ link.url }}">{{ link.title }}</a>
             {%- endfor -%}
           </div>
-        </div>
+        </details>
       {%- endfor -%}
     </div>
     <div class="guillo-footer__bottom">
@@ -48,6 +48,22 @@
     </div>
   </div>
 </footer>
+
+<script>
+(() => {
+  const footer = document.getElementById('GuilloFooter-{{ section.id }}');
+  if (!footer || footer.dataset.menusReady) return;
+  footer.dataset.menusReady = 'true';
+  const mobile = matchMedia('(max-width: 749px)');
+  const menus = [...footer.querySelectorAll('.guillo-footer__col')];
+  const sync = () => menus.forEach(menu => { menu.open = !mobile.matches; });
+  sync();
+  mobile.addEventListener('change', sync);
+  footer.addEventListener('click', event => {
+    if (!mobile.matches && event.target.closest('summary')) event.preventDefault();
+  });
+})();
+</script>
 
 {% stylesheet %}
   .guillo-footer {
@@ -128,6 +144,30 @@
       gap: 40px;
     }
     .guillo-footer__brand { grid-column: 1 / -1; }
+  }
+
+  .guillo-footer__col-title{list-style:none;cursor:default}
+  .guillo-footer__col-title::-webkit-details-marker{display:none}
+  .guillo-footer__menu-icon{display:none}
+  @media(max-width:749px){
+    body .guillo-footer{padding-block:28px 22px}
+    body .guillo-footer .guillo-footer__grid{grid-template-columns:1fr;gap:0;padding-bottom:0;border-bottom:0}
+    body .guillo-footer .guillo-footer__brand{grid-column:1/-1;padding-bottom:22px}
+    body .guillo-footer .guillo-footer__logo{height:21px;margin-bottom:12px}
+    body .guillo-footer .guillo-footer__tagline{font-size:12px;line-height:1.6;max-width:270px}
+    body .guillo-footer .guillo-footer__col{border-top:1px solid #ffffff24}
+    body .guillo-footer .guillo-footer__col-title{display:flex;align-items:center;justify-content:space-between;min-height:48px;margin:0;cursor:pointer;letter-spacing:.15em}
+    body .guillo-footer .guillo-footer__col-title:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+    .guillo-footer__menu-icon{display:block;position:relative;width:12px;height:12px}
+    .guillo-footer__menu-icon::before,.guillo-footer__menu-icon::after{content:'';position:absolute;left:0;top:5px;width:12px;height:1px;background:currentColor}
+    .guillo-footer__menu-icon::after{transform:rotate(90deg)}
+    .guillo-footer__col[open] .guillo-footer__menu-icon::after{transform:rotate(0deg)}
+    body .guillo-footer .guillo-footer__links{gap:0;padding:0 0 12px}
+    body .guillo-footer .guillo-footer__links a{min-height:44px;font-size:13px;line-height:1.4}
+    body .guillo-footer .guillo-footer__bottom{border-top:1px solid #ffffff24;gap:14px;padding-top:20px;flex-direction:column;align-items:flex-start}
+    body .guillo-footer .guillo-footer__copyright{font-size:10px;line-height:1.5}
+    body .guillo-footer .guillo-footer__payments{gap:5px}
+    body .guillo-footer .guillo-footer__payment-chip{font-size:8px;letter-spacing:.05em;padding:6px 7px}
   }
 {% endstylesheet %}
 
