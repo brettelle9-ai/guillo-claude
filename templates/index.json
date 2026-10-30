@@ -60,7 +60,8 @@
             "period": "both",
             "product": "milano-pinstripe-shirt",
             "products": [
-              "the-luxe-chino-stone"
+              "the-luxe-chino-stone",
+              "the-signore-chino-latte"
             ],
             "media_type": "image",
             "alt": "Milano & Stone. Full-length Guillo outfit.",
@@ -319,11 +320,11 @@
         "look_night_milano": {
           "type": "look",
           "settings": {
-            "title": "Milano & Stone",
+            "title": "Milano & Black",
             "period": "night",
             "product": "milano-pinstripe-shirt",
             "products": [
-              "the-luxe-chino-stone"
+              "the-luxe-chino-black"
             ],
             "media_type": "image",
             "image": "shopify://shop_images/Untitled_design_61.png",
