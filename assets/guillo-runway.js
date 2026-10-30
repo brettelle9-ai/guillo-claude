@@ -171,7 +171,19 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     piece.querySelector('[data-gr-price]').textContent=this.money(Number(button.dataset.price));piece.querySelector('[data-gr-add-one]').disabled=false;
     if(update){this.total();this.status('');}
   }
-  total(){let sum=0;this.content.querySelectorAll('[data-gr-piece]').forEach(piece=>{sum+=Number(piece.dataset.selectedPrice||piece.dataset.price||0);});this.content.querySelector('[data-gr-total]').textContent=this.money(sum);}
+  total(){
+    const pieces=[...this.content.querySelectorAll('[data-gr-piece]')];
+    const prices=pieces.map(piece=>Number(piece.dataset.selectedPrice||piece.dataset.price||0));
+    const original=prices.reduce((sum,price)=>sum+price,0);
+    const qualifies=pieces.length>=3;
+    const total=qualifies?prices.reduce((sum,price)=>sum+Math.round(price*.8),0):original;
+    const was=this.content.querySelector('[data-gr-original]');
+    was.hidden=!qualifies;was.textContent=qualifies?this.money(original):'';
+    this.content.querySelector('[data-gr-total]').textContent=this.money(total);
+    this.content.querySelector('[data-gr-offer-note]').textContent=qualifies
+      ?`20% off this ${pieces.length}-piece look · Save ${this.money(original-total)}`
+      :'Choose 3+ items for 20% off.';
+  }
   status(message){this.content.querySelector('[data-gr-status]').textContent=message;}
   async add(pieces,button){
     if(this.busy)return;const missing=pieces.find(piece=>!piece.dataset.selected);

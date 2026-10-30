@@ -7,6 +7,7 @@
   <header class="gr-head">
     <div class="gr-heading"><h2>{{ section.settings.runway_heading | default: 'Try the look.' | escape }}</h2><p data-gr-intro>{{ looks.size }} looks, styled head to toe. Select a look to explore the pieces.</p></div>
     <div class="gr-selected-heading" aria-live="polite" aria-hidden="true"><span class="gr-micro">Look <span data-gr-current>01</span></span><strong data-gr-title></strong></div>
+    <p class="gr-offer">3+ items, 20% off</p>
     <button class="gr-night" type="button" role="switch" data-gr-night aria-label="Evening setting" aria-checked="false"><span class="gr-night__label gr-night__day">Day</span><span class="gr-night__track" aria-hidden="true"><span></span></span><span class="gr-night__label gr-night__evening">Evening</span></button>
     <button class="gr-back" type="button" data-gr-close hidden aria-label="Back to all looks">×</button>
   </header>
@@ -67,7 +68,7 @@
               {%- assign piece_index = 1 -%}
               {% for piece in block.settings.products limit: 3 %}{% unless piece.id == primary.id %}{% assign piece_index = piece_index | plus: 1 %}{% render 'guillo-runway-product', product: piece, index: piece_index, runway_section_id: section.id %}{% endunless %}{% endfor %}
             </div>
-            <footer class="gr-summary"><div><span>The complete look</span><strong data-gr-total></strong></div><button class="gr-add-all" type="button" data-gr-add-all>Add the complete look <span aria-hidden="true">→</span></button><p class="gr-status" data-gr-status role="status" aria-live="polite"></p><a class="gr-cart-link" href="{{ routes.cart_url }}" hidden>View your bag →</a></footer>
+            <footer class="gr-summary"><div class="gr-summary__price" aria-live="polite"><span>The complete look</span><span class="gr-total-price"><s data-gr-original hidden aria-label="Original total"></s><strong data-gr-total></strong></span></div><p class="gr-offer-note" data-gr-offer-note></p><button class="gr-add-all" type="button" data-gr-add-all>Add the complete look <span aria-hidden="true">→</span></button><p class="gr-status" data-gr-status role="status" aria-live="polite"></p><a class="gr-cart-link" href="{{ routes.cart_url }}" hidden>View your bag →</a></footer>
           </template>
         </article>
       {% endfor %}

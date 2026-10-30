@@ -44,3 +44,12 @@ guillo-runway.gr.is-night{--gr-ink:#f3f4f6;--gr-muted:#abb3bf;background:#101722
 @media(min-width:1600px){.gr-stage{height:740px}.gr-look{width:535px}}
 @media(min-width:750px) and (max-width:1050px){.gr-stage{height:580px}.gr-look{width:400px}}
 @media(max-width:749px){.gr-stage{height:510px}.gr-look{width:86vw}.gr.is-detail .gr-stage{height:auto}.gr.is-detail .gr-track{height:510px}.gr-detail-hint{top:498px}}
+
+/* Wardrobe offer, visible in both the runway and selected-look views. */
+.gr .gr-head .gr-offer{position:absolute;left:0;bottom:8px;margin:0;color:var(--gr-ink);font-size:10px;letter-spacing:.08em}
+.gr-total-price{display:flex;align-items:baseline;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.gr-total-price s{color:var(--gr-muted);font-size:10px}
+.gr-summary .gr-summary__price{align-items:baseline;gap:12px;margin-bottom:5px}
+.gr .gr-offer-note{margin:0 0 12px;font-size:10px;line-height:1.5;color:var(--gr-muted)}
+.gr.is-night .gr-offer-note{color:#d4dbe3}
+@media(max-width:749px){.gr .gr-head .gr-offer{bottom:7px;font-size:9px}.gr.is-detail .gr-head{height:106px}}
