@@ -93,7 +93,7 @@
             "pin_two_y": 70,
             "cutout_asset": "guillo-runway-classico-cutout.webp",
             "pin_three_x": 76,
-            "pin_three_y": 58
+            "pin_three_y": 47
           }
         },
         "look_siracusa_sage": {
@@ -136,7 +136,7 @@
             "pin_two_y": 70,
             "cutout_asset": "guillo-runway-red-cutout.webp",
             "pin_three_x": 76,
-            "pin_three_y": 58
+            "pin_three_y": 47
           }
         },
         "look_amalfi": {
@@ -179,7 +179,7 @@
             "pin_two_y": 70,
             "cutout_asset": "guillo-runway-portofino-cutout.png",
             "pin_three_x": 76,
-            "pin_three_y": 58
+            "pin_three_y": 47
           }
         },
         "look_valenti": {
