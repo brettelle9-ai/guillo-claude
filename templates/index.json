@@ -53,27 +53,6 @@
             "film_asset": ""
           }
         },
-        "look_milano": {
-          "type": "look",
-          "settings": {
-            "title": "Milano & Stone",
-            "period": "day",
-            "product": "milano-pinstripe-shirt",
-            "products": [
-              "the-luxe-chino-stone"
-            ],
-            "media_type": "image",
-            "alt": "Milano & Stone. Full-length Guillo outfit.",
-            "image_index": 1,
-            "pin_x": 50,
-            "pin_y": 35,
-            "pin_two_x": 50,
-            "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-milano-cutout.png",
-            "pin_three_x": 76,
-            "pin_three_y": 58
-          }
-        },
         "look_gXp8r4": {
           "type": "look",
           "settings": {
@@ -96,16 +75,38 @@
             "pin_three_y": 47
           }
         },
+        "look_milano": {
+          "type": "look",
+          "settings": {
+            "title": "Milano & Stone",
+            "period": "day",
+            "product": "milano-pinstripe-shirt",
+            "products": [
+              "the-luxe-chino-stone"
+            ],
+            "media_type": "image",
+            "alt": "Milano & Stone. Full-length Guillo outfit.",
+            "image_index": 1,
+            "pin_x": 50,
+            "pin_y": 35,
+            "pin_two_x": 50,
+            "pin_two_y": 70,
+            "cutout_asset": "guillo-runway-milano-cutout.png",
+            "pin_three_x": 76,
+            "pin_three_y": 58
+          }
+        },
         "look_siracusa_sage": {
           "type": "look",
           "settings": {
             "title": "Siracusa & Sage",
-            "period": "day",
+            "period": "night",
             "product": "siracusa-short-sleeve-slim-fit-shirt",
             "products": [
               "the-luxe-chino-sage"
             ],
             "media_type": "image",
+            "image": "shopify://shop_images/Untitled_design_50.png",
             "alt": "Siracusa & Sage. Full-length Guillo outfit.",
             "image_index": 1,
             "pin_x": 50,
@@ -115,6 +116,28 @@
             "cutout_asset": "guillo-runway-siracusa-sage-cutout.webp",
             "pin_three_x": 76,
             "pin_three_y": 58
+          }
+        },
+        "look_EhCW36": {
+          "type": "look",
+          "settings": {
+            "title": "",
+            "period": "day",
+            "product": "como-short-sleeve-shirt",
+            "products": [
+              "the-capri-chino-short-grey-5in"
+            ],
+            "media_type": "image",
+            "image": "shopify://shop_images/Untitled_design_55.png",
+            "alt": "",
+            "image_index": 1,
+            "pin_x": 52,
+            "pin_y": 35,
+            "pin_two_x": 52,
+            "pin_two_y": 65,
+            "cutout_asset": "",
+            "pin_three_x": 73,
+            "pin_three_y": 52
           }
         },
         "look_portofino_red": {
@@ -128,6 +151,7 @@
               "bellagio-leather-weekender-duffel-bag"
             ],
             "media_type": "image",
+            "image": "shopify://shop_images/Untitled_design_57.png",
             "alt": "Portofino in Red. Full-length Guillo outfit.",
             "image_index": 1,
             "pin_x": 50,
@@ -139,16 +163,38 @@
             "pin_three_y": 47
           }
         },
+        "look_day_valenti": {
+          "type": "look",
+          "settings": {
+            "title": "Valenti & Linen",
+            "period": "day",
+            "product": "the-valenti-knit-polo-navy",
+            "products": [
+              "the-alassio-linen-pants-white"
+            ],
+            "media_type": "image",
+            "alt": "Valenti & Linen. Full-length Guillo outfit.",
+            "image_index": 1,
+            "pin_x": 50,
+            "pin_y": 35,
+            "pin_two_x": 50,
+            "pin_two_y": 70,
+            "cutout_asset": "guillo-runway-valenti-cutout.png",
+            "pin_three_x": 76,
+            "pin_three_y": 58
+          }
+        },
         "look_amalfi": {
           "type": "look",
           "settings": {
             "title": "Amalfi & Black",
             "period": "day",
-            "product": "amalfi-short-sleeve-shirt",
+            "product": "the-classico-raglan-tee-off-white",
             "products": [
-              "the-luxe-chino-black"
+              "the-capri-chino-short-reef"
             ],
             "media_type": "image",
+            "image": "shopify://shop_images/Untitled_design_59.png",
             "alt": "Amalfi & Black. Full-length Guillo outfit.",
             "image_index": 1,
             "pin_x": 50,
@@ -160,8 +206,52 @@
             "pin_three_y": 58
           }
         },
+        "look_day_black": {
+          "type": "look",
+          "settings": {
+            "title": "Portofino in Black",
+            "period": "day",
+            "product": "the-portofino-polo-black",
+            "products": [
+              "the-capri-chino-short-stone"
+            ],
+            "media_type": "image",
+            "image": "shopify://shop_images/Untitled_design_51.png",
+            "alt": "Portofino in Black. Full-length Guillo outfit.",
+            "image_index": 1,
+            "pin_x": 50,
+            "pin_y": 35,
+            "pin_two_x": 50,
+            "pin_two_y": 70,
+            "cutout_asset": "guillo-runway-portofino-cutout.png",
+            "pin_three_x": 76,
+            "pin_three_y": 47
+          }
+        },
+        "look_day_firenze": {
+          "type": "look",
+          "settings": {
+            "title": "Firenze & Black",
+            "period": "night",
+            "product": "firenze-chevron-shirt",
+            "products": [
+              "the-luxe-chino-black"
+            ],
+            "media_type": "image",
+            "alt": "Firenze & Black. Full-length Guillo outfit.",
+            "image_index": 1,
+            "pin_x": 50,
+            "pin_y": 35,
+            "pin_two_x": 50,
+            "pin_two_y": 70,
+            "cutout_asset": "guillo-runway-firenze-black-cutout.webp",
+            "pin_three_x": 76,
+            "pin_three_y": 58
+          }
+        },
         "look_portofino": {
           "type": "look",
+          "disabled": true,
           "settings": {
             "title": "Portofino in Black",
             "period": "night",
@@ -180,27 +270,6 @@
             "cutout_asset": "guillo-runway-portofino-cutout.png",
             "pin_three_x": 76,
             "pin_three_y": 47
-          }
-        },
-        "look_valenti": {
-          "type": "look",
-          "settings": {
-            "title": "Valenti & Linen",
-            "period": "night",
-            "product": "the-valenti-knit-polo-navy",
-            "products": [
-              "the-alassio-linen-pants-white"
-            ],
-            "media_type": "image",
-            "alt": "Valenti & Linen. Full-length Guillo outfit.",
-            "image_index": 1,
-            "pin_x": 50,
-            "pin_y": 35,
-            "pin_two_x": 50,
-            "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-valenti-cutout.png",
-            "pin_three_x": 76,
-            "pin_three_y": 58
           }
         },
         "look_ry36iE": {
@@ -229,96 +298,12 @@
           "settings": {
             "title": "Firenze & Black",
             "period": "night",
-            "product": "firenze-chevron-shirt",
+            "product": "amalfi-short-sleeve-shirt",
             "products": [
               "the-luxe-chino-black"
             ],
             "media_type": "image",
-            "alt": "Firenze & Black. Full-length Guillo outfit.",
-            "image_index": 1,
-            "pin_x": 50,
-            "pin_y": 35,
-            "pin_two_x": 50,
-            "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-firenze-black-cutout.webp",
-            "pin_three_x": 76,
-            "pin_three_y": 58
-          }
-        },
-        "look_firenze_navy": {
-          "type": "look",
-          "settings": {
-            "title": "Firenze & Midnight",
-            "period": "night",
-            "product": "firenze-chevron-shirt",
-            "products": [
-              "the-signore-chino-midnight"
-            ],
-            "media_type": "image",
-            "alt": "Firenze & Midnight. Full-length Guillo outfit.",
-            "image_index": 1,
-            "pin_x": 50,
-            "pin_y": 35,
-            "pin_two_x": 50,
-            "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-firenze-cutout.webp",
-            "pin_three_x": 76,
-            "pin_three_y": 58
-          }
-        },
-        "look_day_black": {
-          "type": "look",
-          "settings": {
-            "title": "Portofino in Black",
-            "period": "day",
-            "product": "the-portofino-polo-black",
-            "products": [
-              "the-alassio-linen-pants-white",
-              "bellagio-leather-weekender-duffel-bag"
-            ],
-            "media_type": "image",
-            "alt": "Portofino in Black. Full-length Guillo outfit.",
-            "image_index": 1,
-            "pin_x": 50,
-            "pin_y": 35,
-            "pin_two_x": 50,
-            "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-portofino-cutout.png",
-            "pin_three_x": 76,
-            "pin_three_y": 47
-          }
-        },
-        "look_day_valenti": {
-          "type": "look",
-          "settings": {
-            "title": "Valenti & Linen",
-            "period": "day",
-            "product": "the-valenti-knit-polo-navy",
-            "products": [
-              "the-alassio-linen-pants-white"
-            ],
-            "media_type": "image",
-            "alt": "Valenti & Linen. Full-length Guillo outfit.",
-            "image_index": 1,
-            "pin_x": 50,
-            "pin_y": 35,
-            "pin_two_x": 50,
-            "pin_two_y": 70,
-            "cutout_asset": "guillo-runway-valenti-cutout.png",
-            "pin_three_x": 76,
-            "pin_three_y": 58
-          }
-        },
-        "look_day_firenze": {
-          "type": "look",
-          "settings": {
-            "title": "Firenze & Black",
-            "period": "day",
-            "product": "firenze-chevron-shirt",
-            "products": [
-              "the-luxe-chino-black"
-            ],
-            "media_type": "image",
+            "image": "shopify://shop_images/Untitled_design_53.png",
             "alt": "Firenze & Black. Full-length Guillo outfit.",
             "image_index": 1,
             "pin_x": 50,
@@ -351,12 +336,33 @@
             "pin_three_y": 58
           }
         },
+        "look_firenze_navy": {
+          "type": "look",
+          "settings": {
+            "title": "Firenze & Midnight",
+            "period": "night",
+            "product": "firenze-chevron-shirt",
+            "products": [
+              "the-signore-chino-midnight"
+            ],
+            "media_type": "image",
+            "alt": "Firenze & Midnight. Full-length Guillo outfit.",
+            "image_index": 1,
+            "pin_x": 50,
+            "pin_y": 35,
+            "pin_two_x": 50,
+            "pin_two_y": 70,
+            "cutout_asset": "guillo-runway-firenze-cutout.webp",
+            "pin_three_x": 76,
+            "pin_three_y": 58
+          }
+        },
         "look_night_classico": {
           "type": "look",
           "settings": {
             "title": "Classico & Linen",
             "period": "night",
-            "product": "the-classico-raglan-tee-blue",
+            "product": "the-santorini-grandad-collar",
             "products": [
               "the-alassio-linen-pants-white",
               "bellagio-leather-weekender-duffel-bag"
@@ -375,6 +381,7 @@
         },
         "look_night_sage": {
           "type": "look",
+          "disabled": true,
           "settings": {
             "title": "Siracusa & Sage",
             "period": "night",
@@ -400,20 +407,20 @@
         "chinos",
         "polos",
         "shorts",
-        "look_milano",
         "look_gXp8r4",
+        "look_milano",
         "look_siracusa_sage",
+        "look_EhCW36",
         "look_portofino_red",
+        "look_day_valenti",
         "look_amalfi",
         "look_day_black",
-        "look_day_valenti",
         "look_day_firenze",
         "look_portofino",
-        "look_valenti",
         "look_ry36iE",
         "look_JeyrYE",
-        "look_firenze_navy",
         "look_night_milano",
+        "look_firenze_navy",
         "look_night_classico",
         "look_night_sage"
       ],
