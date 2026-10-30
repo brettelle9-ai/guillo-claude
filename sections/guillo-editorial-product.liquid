@@ -151,6 +151,7 @@
     </div>
   </div>
   {% if product.handle == 'bellagio-leather-weekender-duffel-bag' %}{% render 'guillo-bellagio-interior', section: section %}{% endif %}
+  {% render 'guillo-runway', section: section %}
   {% render 'guillo-editorial-recommendations', product: product, ge_catalog: ge_catalog, family_candidates: family_candidates, family_key: family_key %}
   {% render 'guillo-editorial-reviews', product: product, candidates: family_candidates, family_key: family_key %}
   {% render 'guillo-editorial-proof' %}
@@ -170,8 +171,16 @@
 {
   "name": "Editorial product",
   "settings": [
-    { "type": "image_picker", "id": "interior_image", "label": "Interior image" },
-    { "type": "text", "id": "interior_caption", "label": "Interior image caption" },
+    {
+      "type": "image_picker",
+      "id": "interior_image",
+      "label": "Interior image"
+    },
+    {
+      "type": "text",
+      "id": "interior_caption",
+      "label": "Interior image caption"
+    },
     {
       "type": "video",
       "id": "video",
@@ -227,6 +236,12 @@
       "type": "product",
       "id": "fit_finder_cross_product",
       "label": "Optional comparison product"
+    },
+    {
+      "type": "text",
+      "id": "runway_heading",
+      "label": "Heading",
+      "default": "Try the look."
     }
   ],
   "blocks": [
@@ -660,6 +675,155 @@
           "type": "video",
           "id": "video",
           "label": "Product video"
+        }
+      ]
+    },
+    {
+      "type": "look",
+      "name": "Interactive outfit",
+      "limit": 24,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Look title"
+        },
+        {
+          "type": "select",
+          "id": "period",
+          "label": "Show this outfit",
+          "default": "both",
+          "options": [
+            {
+              "value": "day",
+              "label": "Day only"
+            },
+            {
+              "value": "night",
+              "label": "Evening only"
+            },
+            {
+              "value": "both",
+              "label": "Day and evening"
+            }
+          ]
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Featured product"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Other products in this look",
+          "limit": 3
+        },
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Display",
+          "default": "image",
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "video",
+              "label": "Video"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Transparent model cutout"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Image description"
+        },
+        {
+          "type": "range",
+          "id": "image_index",
+          "label": "Product image to use if no custom image",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "pin_x",
+          "label": "Top marker: horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 52
+        },
+        {
+          "type": "range",
+          "id": "pin_y",
+          "label": "Top marker: vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 35
+        },
+        {
+          "type": "range",
+          "id": "pin_two_x",
+          "label": "Bottom marker: horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 52
+        },
+        {
+          "type": "range",
+          "id": "pin_two_y",
+          "label": "Bottom marker: vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 65
+        },
+        {
+          "type": "text",
+          "id": "cutout_asset",
+          "label": "Transparent model asset filename",
+          "info": "Use a PNG with a transparent background. A custom image above overrides this file."
+        },
+        {
+          "type": "range",
+          "id": "pin_three_x",
+          "label": "Third marker: horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 73
+        },
+        {
+          "type": "range",
+          "id": "pin_three_y",
+          "label": "Third marker: vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 52
         }
       ]
     }
