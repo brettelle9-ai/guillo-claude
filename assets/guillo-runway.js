@@ -69,7 +69,8 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     this.querySelector('[data-gr-night]').setAttribute('aria-checked',String(night));
     this.looks=candidates;
     this.allLooks.forEach(look=>{look.hidden=!candidates.includes(look);});
-    this.index=Math.max(0,candidates.indexOf(current));this.position=this.index;this.target=this.index;this.velocity=0;
+    const currentIndex=candidates.indexOf(current);
+    this.index=currentIndex>=0?currentIndex:Math.floor(candidates.length/2);this.position=this.index;this.target=this.index;this.velocity=0;
     if(this.detail)this.selectedIndex=this.index;
     this.querySelectorAll('[data-gr-dot]').forEach((dot,i)=>{dot.hidden=!candidates.includes(this.allLooks[i]);});
     this.querySelector('[data-gr-intro]').textContent=`${candidates.length} ${night?'evening':'day'} looks, styled head to toe. Select a look to explore the pieces.`;
