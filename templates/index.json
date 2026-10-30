@@ -57,57 +57,128 @@
           "type": "look",
           "settings": {
             "title": "A certain presence.",
+            "period": "day",
             "product": "milano-pinstripe-shirt",
             "products": [
               "the-luxe-chino-stone"
             ],
             "media_type": "image",
-            "image_index": 5,
+            "video": "shopify://files/videos/0907(11)8989.mov",
             "alt": "Guillo Milano outfit, full-length model cutout.",
+            "image_index": 5,
             "pin_x": 50,
             "pin_y": 35,
             "pin_two_x": 50,
             "pin_two_y": 70,
             "cutout_asset": "guillo-runway-milano-cutout.png",
-            "period": "day"
+            "pin_three_x": 73,
+            "pin_three_y": 52
+          }
+        },
+        "look_gXp8r4": {
+          "type": "look",
+          "settings": {
+            "title": "",
+            "period": "both",
+            "product": "the-classico-raglan-tee-blue",
+            "products": [
+              "the-alassio-linen-pants-white",
+              "bellagio-leather-weekender-duffel-bag"
+            ],
+            "media_type": "image",
+            "alt": "",
+            "image_index": 1,
+            "pin_x": 52,
+            "pin_y": 44,
+            "pin_two_x": 52,
+            "pin_two_y": 88,
+            "cutout_asset": "",
+            "pin_three_x": 85,
+            "pin_three_y": 84
+          }
+        },
+        "look_ry36iE": {
+          "type": "look",
+          "settings": {
+            "title": "",
+            "period": "night",
+            "product": "siracusa-short-sleeve-slim-fit-shirt",
+            "products": [],
+            "media_type": "image",
+            "alt": "",
+            "image_index": 1,
+            "pin_x": 52,
+            "pin_y": 35,
+            "pin_two_x": 52,
+            "pin_two_y": 65,
+            "cutout_asset": "",
+            "pin_three_x": 73,
+            "pin_three_y": 52
           }
         },
         "look_portofino": {
           "type": "look",
           "settings": {
             "title": "An unhurried afternoon.",
+            "period": "both",
             "product": "the-portofino-polo-black",
             "products": [
               "the-luxe-chino-stone"
             ],
             "media_type": "image",
-            "image_index": 6,
             "alt": "Guillo Portofino outfit, full-length model cutout.",
+            "image_index": 6,
             "pin_x": 50,
             "pin_y": 35,
             "pin_two_x": 50,
             "pin_two_y": 70,
             "cutout_asset": "guillo-runway-portofino-cutout.png",
-            "period": "both"
+            "pin_three_x": 73,
+            "pin_three_y": 52
           }
         },
         "look_valenti": {
           "type": "look",
           "settings": {
             "title": "The evening, considered.",
-            "product": "the-valenti-knit-polo-navy",
+            "period": "night",
+            "product": "firenze-chevron-shirt",
             "products": [
               "the-luxe-chino-stone"
             ],
             "media_type": "image",
-            "image_index": 5,
             "alt": "Guillo Valenti outfit, full-length model cutout.",
+            "image_index": 5,
             "pin_x": 50,
             "pin_y": 35,
             "pin_two_x": 50,
             "pin_two_y": 70,
             "cutout_asset": "guillo-runway-valenti-cutout.png",
-            "period": "night"
+            "pin_three_x": 73,
+            "pin_three_y": 52
+          }
+        },
+        "look_JeyrYE": {
+          "type": "look",
+          "settings": {
+            "title": "",
+            "period": "night",
+            "product": "firenze-chevron-shirt",
+            "products": [
+              "the-alassio-linen-pants-white",
+              "the-luxe-chino-black"
+            ],
+            "media_type": "image",
+            "image": "shopify://shop_images/firenze_cutout.png",
+            "alt": "",
+            "image_index": 1,
+            "pin_x": 52,
+            "pin_y": 35,
+            "pin_two_x": 52,
+            "pin_two_y": 65,
+            "cutout_asset": "",
+            "pin_three_x": 73,
+            "pin_three_y": 52
           }
         }
       },
@@ -117,8 +188,11 @@
         "polos",
         "shorts",
         "look_milano",
+        "look_gXp8r4",
+        "look_ry36iE",
         "look_portofino",
-        "look_valenti"
+        "look_valenti",
+        "look_JeyrYE"
       ],
       "settings": {
         "hero_heading": "A Mediterranean state of mind.",
