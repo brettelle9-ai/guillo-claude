@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -22,6 +31,7 @@
     },
     "quick": {
       "type": "giveaway-quick",
+      "disabled": true,
       "settings": {
         "script": "enter in seconds",
         "text": "Your name and email puts you in the draw, and your $20 off is yours straight away.",
@@ -36,24 +46,193 @@
     "prize": {
       "type": "giveaway-prize",
       "blocks": {
-        "panel_1": { "type": "panel", "settings": { "image": "shopify://shop_images/rn-image_picker_lib_temp_1ac1fba7-423b-4c3c-b1bb-bf1fb97534d2.jpg", "alt": "The Capri Chino Short in Reef", "position": "50% 60%", "label": "day one", "line": "The Capri Short in Reef. Bags not unpacked yet, already by the pool." } },
-        "panel_2": { "type": "panel", "settings": { "image": "shopify://shop_images/FullSizeRender_20.heic", "alt": "The Amalfi shirt and the Luxe Chino in Black at a table in a stone courtyard", "position": "50% 30%", "label": "after lunch", "line": "The Amalfi and the Luxe Chino in Black. One more coffee in the shade before anyone moves." } },
-        "panel_3": { "type": "panel", "settings": { "image": "shopify://shop_images/rn-image_picker_lib_temp_1d477c80-339f-47c0-8a5b-d360e9e34c2b.jpg", "alt": "The Milano pinstripe shirt, walking through a villa", "position": "50% 40%", "label": "dinner at eight", "line": "The Milano. Showered, dressed and heading out as it cools down." } },
-        "panel_4": { "type": "panel", "settings": { "image": "shopify://shop_images/rn-image_picker_lib_temp_52b83b3a-a12d-4fa9-a15b-5b863e6290a0.jpg", "alt": "The Firenze shirt", "position": "50% 25%", "label": "aperitivo", "line": "The Firenze. A drink on the terrace while the heat drops off." } },
-        "panel_5": { "type": "panel", "settings": { "image": "shopify://shop_images/Mediterranean_Villa_Summer_Style.png", "alt": "The Alassio Linen Pants in white with a striped shirt", "position": "50% 25%", "label": "midday", "line": "The Alassio Linen Pants. Light enough for the hottest part of the day." } },
-        "now_1": { "type": "item_now", "settings": { "name": "Capri Chino Short", "colour": "Reef", "price": "$114", "image": "shopify://shop_images/rn-image_picker_lib_temp_1ac1fba7-423b-4c3c-b1bb-bf1fb97534d2.jpg", "position": "50% 55%", "link": "shopify://products/the-capri-chino-short-reef" } },
-        "now_2": { "type": "item_now", "settings": { "name": "Capri Chino Short", "colour": "Navy", "price": "$114", "image": "shopify://shop_images/rn-image_picker_lib_temp_ef8c83ff-d149-4cee-9283-a24cfa0444fc.jpg", "position": "50% 55%", "link": "shopify://products/the-capri-chino-short-navy" } },
-        "now_3": { "type": "item_now", "settings": { "name": "Portofino Polo", "colour": "Red", "price": "$138", "image": "shopify://shop_images/red_porto.png", "position": "50% 25%", "link": "shopify://products/the-portofino-polo-red" } },
-        "now_4": { "type": "item_now", "settings": { "name": "Classico Tee", "colour": "Off-White", "price": "$84", "image": "shopify://shop_images/rn-image_picker_lib_temp_d6f37873-c47d-403b-b706-f3addb1dd8a0.jpg", "position": "50% 30%", "link": "shopify://products/the-classico-raglan-tee-off-white" } },
-        "now_5": { "type": "item_now", "settings": { "name": "The Rapallo Shirt", "colour": "", "price": "$132", "image": "shopify://shop_images/rn-image_picker_lib_temp_d393d90d-d2d8-4c05-b059-8a181abc2e1b.jpg", "position": "50% 25%", "link": "shopify://products/guillo-rapallo-short-sleeve-shirt" } },
-        "now_6": { "type": "item_now", "settings": { "name": "The Firenze Shirt", "colour": "", "price": "$142", "image": "shopify://shop_images/rn-image_picker_lib_temp_52b83b3a-a12d-4fa9-a15b-5b863e6290a0.jpg", "position": "50% 25%", "link": "shopify://products/firenze-chevron-shirt" } },
-        "now_7": { "type": "item_now", "settings": { "name": "The Milano Shirt", "colour": "", "price": "$142", "image": "shopify://shop_images/rn-image_picker_lib_temp_a7bc0f2e-3fcf-46b8-8c2e-347ab8a72915.jpg", "position": "50% 25%", "link": "shopify://products/milano-pinstripe-shirt" } },
-        "now_8": { "type": "item_now", "settings": { "name": "Luxe Chino", "colour": "Black", "price": "$138", "image": "shopify://shop_images/rn-image_picker_lib_temp_8319f3de-f2b3-47df-aec8-33e7edef02db.jpg", "position": "50% 45%", "link": "shopify://products/the-luxe-chino-black" } },
-        "later_1": { "type": "item_later", "settings": { "name": "The Como Shirt", "price": "$142", "image": "shopify://shop_images/forst_green_sirt.png", "position": "50% 25%", "link": "" } },
-        "later_2": { "type": "item_later", "settings": { "name": "The Alassio Linen Pants", "price": "$158", "image": "shopify://shop_images/rn-image_picker_lib_temp_4b8cced4-ff02-4d4e-9e91-19278ac0d2c5.jpg", "position": "50% 40%", "link": "shopify://products/the-alassio-linen-pants-white" } },
-        "later_3": { "type": "item_later", "settings": { "name": "The Capri Chino 5\"", "price": "$114", "image": "shopify://shop_images/rn-image_picker_lib_temp_1d1ce7b4-a7ab-4c17-aebd-4a4aab135a74.jpg", "position": "50% 40%", "link": "shopify://products/the-capri-chino-short-grey-5in" } }
+        "panel_1": {
+          "type": "panel",
+          "settings": {
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_1ac1fba7-423b-4c3c-b1bb-bf1fb97534d2.jpg",
+            "alt": "The Capri Chino Short in Reef",
+            "position": "50% 60%",
+            "label": "day one",
+            "line": "The Capri Short in Reef. Bags not unpacked yet, already by the pool."
+          }
+        },
+        "panel_2": {
+          "type": "panel",
+          "settings": {
+            "image": "shopify://shop_images/FullSizeRender_20.heic",
+            "alt": "The Amalfi shirt and the Luxe Chino in Black at a table in a stone courtyard",
+            "position": "50% 30%",
+            "label": "after lunch",
+            "line": "The Amalfi and the Luxe Chino in Black. One more coffee in the shade before anyone moves."
+          }
+        },
+        "panel_3": {
+          "type": "panel",
+          "settings": {
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_1d477c80-339f-47c0-8a5b-d360e9e34c2b.jpg",
+            "alt": "The Milano pinstripe shirt, walking through a villa",
+            "position": "50% 40%",
+            "label": "dinner at eight",
+            "line": "The Milano. Showered, dressed and heading out as it cools down."
+          }
+        },
+        "panel_4": {
+          "type": "panel",
+          "settings": {
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_52b83b3a-a12d-4fa9-a15b-5b863e6290a0.jpg",
+            "alt": "The Firenze shirt",
+            "position": "50% 25%",
+            "label": "aperitivo",
+            "line": "The Firenze. A drink on the terrace while the heat drops off."
+          }
+        },
+        "panel_5": {
+          "type": "panel",
+          "settings": {
+            "image": "shopify://shop_images/Mediterranean_Villa_Summer_Style.png",
+            "alt": "The Alassio Linen Pants in white with a striped shirt",
+            "position": "50% 25%",
+            "label": "midday",
+            "line": "The Alassio Linen Pants. Light enough for the hottest part of the day."
+          }
+        },
+        "now_1": {
+          "type": "item_now",
+          "settings": {
+            "name": "Capri Chino Short",
+            "colour": "Reef",
+            "price": "$114",
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_1ac1fba7-423b-4c3c-b1bb-bf1fb97534d2.jpg",
+            "position": "50% 55%",
+            "link": "shopify://products/the-capri-chino-short-reef"
+          }
+        },
+        "now_2": {
+          "type": "item_now",
+          "settings": {
+            "name": "Capri Chino Short",
+            "colour": "Navy",
+            "price": "$114",
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_ef8c83ff-d149-4cee-9283-a24cfa0444fc.jpg",
+            "position": "50% 55%",
+            "link": "shopify://products/the-capri-chino-short-navy"
+          }
+        },
+        "now_3": {
+          "type": "item_now",
+          "settings": {
+            "name": "Portofino Polo",
+            "colour": "Red",
+            "price": "$138",
+            "image": "shopify://shop_images/red_porto.png",
+            "position": "50% 25%",
+            "link": "shopify://products/the-portofino-polo-red"
+          }
+        },
+        "now_4": {
+          "type": "item_now",
+          "settings": {
+            "name": "Classico Tee",
+            "colour": "Off-White",
+            "price": "$84",
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_d6f37873-c47d-403b-b706-f3addb1dd8a0.jpg",
+            "position": "50% 30%",
+            "link": "shopify://products/the-classico-raglan-tee-off-white"
+          }
+        },
+        "now_5": {
+          "type": "item_now",
+          "settings": {
+            "name": "The Rapallo Shirt",
+            "colour": "",
+            "price": "$132",
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_d393d90d-d2d8-4c05-b059-8a181abc2e1b.jpg",
+            "position": "50% 25%",
+            "link": "shopify://products/guillo-rapallo-short-sleeve-shirt"
+          }
+        },
+        "now_6": {
+          "type": "item_now",
+          "settings": {
+            "name": "The Firenze Shirt",
+            "colour": "",
+            "price": "$142",
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_52b83b3a-a12d-4fa9-a15b-5b863e6290a0.jpg",
+            "position": "50% 25%",
+            "link": "shopify://products/firenze-chevron-shirt"
+          }
+        },
+        "now_7": {
+          "type": "item_now",
+          "settings": {
+            "name": "The Milano Shirt",
+            "colour": "",
+            "price": "$142",
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_a7bc0f2e-3fcf-46b8-8c2e-347ab8a72915.jpg",
+            "position": "50% 25%",
+            "link": "shopify://products/milano-pinstripe-shirt"
+          }
+        },
+        "now_8": {
+          "type": "item_now",
+          "settings": {
+            "name": "Luxe Chino",
+            "colour": "Black",
+            "price": "$138",
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_8319f3de-f2b3-47df-aec8-33e7edef02db.jpg",
+            "position": "50% 45%",
+            "link": "shopify://products/the-luxe-chino-black"
+          }
+        },
+        "later_1": {
+          "type": "item_later",
+          "settings": {
+            "name": "The Como Shirt",
+            "price": "$142",
+            "image": "shopify://shop_images/forst_green_sirt.png",
+            "position": "50% 25%",
+            "link": ""
+          }
+        },
+        "later_2": {
+          "type": "item_later",
+          "settings": {
+            "name": "The Alassio Linen Pants",
+            "price": "$158",
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_4b8cced4-ff02-4d4e-9e91-19278ac0d2c5.jpg",
+            "position": "50% 40%",
+            "link": "shopify://products/the-alassio-linen-pants-white"
+          }
+        },
+        "later_3": {
+          "type": "item_later",
+          "settings": {
+            "name": "The Capri Chino 5\"",
+            "price": "$114",
+            "image": "shopify://shop_images/rn-image_picker_lib_temp_1d1ce7b4-a7ab-4c17-aebd-4a4aab135a74.jpg",
+            "position": "50% 40%",
+            "link": "shopify://products/the-capri-chino-short-grey-5in"
+          }
+        }
       },
-      "block_order": ["panel_1","panel_2","panel_3","panel_4","panel_5","now_1","now_2","now_3","now_4","now_5","now_6","now_7","now_8","later_1","later_2","later_3"],
+      "block_order": [
+        "panel_1",
+        "panel_2",
+        "panel_3",
+        "panel_4",
+        "panel_5",
+        "now_1",
+        "now_2",
+        "now_3",
+        "now_4",
+        "now_5",
+        "now_6",
+        "now_7",
+        "now_8",
+        "later_1",
+        "later_2",
+        "later_3"
+      ],
       "settings": {
         "script": "everything you could win",
         "heading": "The Summer Wardrobe",
@@ -107,6 +286,8 @@
         "button": "Enter and get $20 off",
         "fine": "Australian residents 18 and over. One ticket per person. Entering adds you to Guillo emails, and you can unsubscribe any time. Full terms below.",
         "code": "ESTATE20",
+        "spend_label": "Use your $20",
+        "spend_path": "/collections",
         "spend_url": "shopify://collections/all",
         "closed_text": "Thank you to everyone who entered. The winner is drawn on Monday 2 November and will hear from us by email.",
         "map_image": "shopify://shop_images/ChatGPT_Image_Jul_3_2026_09_31_14_AM_883c9130-c1ba-4b09-a833-485e270e4f08.png",
@@ -137,5 +318,13 @@
       }
     }
   },
-  "order": ["hero","quick","prize","offer","ticket","closing","footer"]
+  "order": [
+    "hero",
+    "quick",
+    "prize",
+    "offer",
+    "ticket",
+    "closing",
+    "footer"
+  ]
 }
