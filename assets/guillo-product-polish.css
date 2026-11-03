@@ -99,3 +99,11 @@ body .ge-service>svg{margin:0;flex:0 0 21px}
  body .ge-service>svg{width:19px;height:20px;flex-basis:19px}
  body .ge-service>span{white-space:normal;line-height:1.55}
 }
+
+/* Stacked service lines under Add to Bag (duties, dispatch, returns), 2026-11-03. */
+body .ge-services.ge-services--stack{display:grid;grid-template-columns:1fr;row-gap:10px;width:auto;max-width:none;left:auto;transform:none;justify-content:start;margin:20px 0 0;color:#444;font:400 12px/1.5 var(--g-sans)}
+body .ge-services--stack .ge-service{display:flex;align-items:center;justify-content:flex-start;gap:12px}
+body .ge-services--stack .ge-service>svg{width:20px;height:20px;flex:0 0 20px;margin:0}
+body .ge-services--stack .ge-service>span{display:inline;white-space:normal}
+body .ge-services--stack .ge-service button{display:inline;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:#bbb}
+body .ge-services--stack .ge-service>span>button::before{content:none}
