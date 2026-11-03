@@ -132,6 +132,7 @@
         {% endunless %}
         {% if availability_mode == 'preorder' %}<p class="ge-availability">Pre-order · Ships when the production run arrives.{% if product.metafields.custom.preorder_ships_by != blank %} {{ product.metafields.custom.preorder_ships_by }}{% endif %}</p>{% elsif availability_mode == 'interest' %}<p class="ge-availability">Register your size to hear when this piece becomes available.</p>{% endif %}
         <button type="submit" class="ge-add" data-ge-add>{% if product.available or availability_mode == 'interest' %}{{ add_label }}{% else %}Notify me{% endif %}</button>
+        {% if product.available and availability_mode != 'interest' %}<p class="ge-multibuy">Two pieces, 14% off. Three or more, 20%.</p>{% endif %}
       {% endform %}
       {% render 'guillo-editorial-notify', product: product, availability_mode: availability_mode %}
       {% render 'guillo-editorial-services', product: product, availability_mode: availability_mode %}
