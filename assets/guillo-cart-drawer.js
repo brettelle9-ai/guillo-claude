@@ -627,7 +627,7 @@
   })();
 
   // One line based on cart contents. Returns { text, loud } or null.
-  // Priority: free-delivery nudge > 3+ nudge. No pair pricing anywhere.
+  // Priority: free-delivery nudge > 2-piece / 3+ nudge.
   function nudgeLine(cart) {
     var count = cart.item_count;
     if (count >= (CFG.threshold || 3)) return null; // unlocked message handles 3+
@@ -644,8 +644,9 @@
       };
     }
 
-    // Pair discounts retired 2026-09-21. One line only, towards the 3+ offer.
-    if (count === 2) return { text: 'A third piece takes 20% off everything.', loud: false };
+    // Any 2 pieces 14% off, 3+ 20% (automatic "Any 2 - 14% off" and Wardrobe 20, 2026-11-03).
+    if (count === 1) return { text: 'Add a second piece and both take 14% off.', loud: false };
+    if (count === 2) return { text: 'Ecco. 14% off. A third piece takes it to 20%.', loud: false };
     return null;
   }
 

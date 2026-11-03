@@ -175,14 +175,16 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     const pieces=[...this.content.querySelectorAll('[data-gr-piece]')];
     const prices=pieces.map(piece=>Number(piece.dataset.selectedPrice||piece.dataset.price||0));
     const original=prices.reduce((sum,price)=>sum+price,0);
-    const qualifies=pieces.length>=3;
-    const total=qualifies?prices.reduce((sum,price)=>sum+Math.round(price*.8),0):original;
+    // Mirrors the live automatic discounts: any 2 pieces 14% off, 3+ 20% off.
+    const rate=pieces.length>=3?.2:pieces.length===2?.14:0;
+    const qualifies=rate>0;
+    const total=qualifies?prices.reduce((sum,price)=>sum+Math.round(price*(1-rate)),0):original;
     const was=this.content.querySelector('[data-gr-original]');
-    was.hidden=!qualifies;was.textContent=qualifies?this.money(original):'';
+    was.hidden=!qualifies;was.textContent=qualifies?`Separately ${this.money(original)}`:'';
     this.content.querySelector('[data-gr-total]').textContent=this.money(total);
-    this.content.querySelector('[data-gr-offer-note]').textContent=qualifies
-      ?`20% off this ${pieces.length}-piece look · Save ${this.money(original-total)}`
-      :'Choose 3+ items for 20% off.';
+    this.content.querySelector('[data-gr-offer-note]').textContent=pieces.length>=3
+      ?'Three or more pieces, 20% off.'
+      :pieces.length===2?'Two pieces, 14% off.':'Two pieces, 14% off. Three or more, 20%.';
   }
   status(message){this.content.querySelector('[data-gr-status]').textContent=message;}
   async add(pieces,button){

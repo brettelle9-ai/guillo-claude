@@ -48,7 +48,7 @@ guillo-runway.gr.is-night{--gr-ink:#f3f4f6;--gr-muted:#abb3bf;background:#101722
 /* Wardrobe offer, visible in both the runway and selected-look views. */
 .gr .gr-head .gr-offer{position:absolute;left:0;bottom:8px;margin:0;color:var(--gr-ink);font-size:10px;letter-spacing:.08em}
 .gr-total-price{display:flex;align-items:baseline;justify-content:flex-end;gap:9px;flex-wrap:wrap}
-.gr-total-price s{color:var(--gr-muted);font-size:10px}
+.gr-total-price s,.gr-total-price .gr-separately{color:var(--gr-muted);font-size:10px}
 .gr-summary .gr-summary__price{align-items:baseline;gap:12px;margin-bottom:5px}
 .gr .gr-offer-note{margin:0 0 12px;font-size:10px;line-height:1.5;color:var(--gr-muted)}
 .gr.is-night .gr-offer-note{color:#d4dbe3}
