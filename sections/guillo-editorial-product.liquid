@@ -1,3 +1,7 @@
+{%- comment -%}Product discovery markup generated from Shopify's live product and variant data.{%- endcomment -%}
+<script type="application/ld+json" id="guillo-product-structured-data">
+  {{ product | structured_data }}
+</script>
 {% if product.handle contains 'bellagio' %}{{ 'guillo-bellagio.css' | asset_url | stylesheet_tag }}{% endif %}
 {%- liquid
   assign rating = product.metafields.reviews.rating.value.rating | plus: 0
