@@ -130,7 +130,7 @@
 
 {%- if ff_ok -%}
   {{ 'guillo-fit-finder.css' | asset_url | stylesheet_tag }}
-  {% if ff_kind == 'bottom' %}<script src="{{ 'guillo-fit-finder.js' | asset_url }}" defer></script>{% else %}<script src="{{ 'guillo-editorial-fit-finder.js' | asset_url }}" defer></script>{% endif %}
+  <script src="{{ 'guillo-fit-finder.js' | asset_url }}" defer></script>
 
   <script type="application/json" data-gff-data>
     {
@@ -141,6 +141,7 @@
       "leg": {{ ff_leg }},
       "thighCut": {{ ff_thigh_cut | json }},
       "name": {{ product.title | json }},
+      "image": {{ product.featured_image | image_url: width: 120 | json }},
       "short": {{ ff_short | json }},
       "price": {{ product.selected_or_first_available_variant.price | money | json }},
       "sizes": [
@@ -210,3 +211,4 @@
     </div>
   </div>
 {%- endif -%}
+

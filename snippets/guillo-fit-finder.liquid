@@ -122,6 +122,7 @@
       "leg": {{ ff_leg }},
       "thighCut": {{ ff_thigh_cut | json }},
       "name": {{ product.title | json }},
+      "image": {{ product.featured_image | image_url: width: 120 | json }},
       "short": {{ ff_short | json }},
       "price": {{ product.selected_or_first_available_variant.price | money | json }},
       "sizes": [
@@ -191,3 +192,4 @@
     </div>
   </div>
 {%- endif -%}
+
