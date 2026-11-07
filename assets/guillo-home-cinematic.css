@@ -8,7 +8,7 @@
  .gh-home-preview .gc-header__logo{position:absolute;left:50%;top:30px;transform:translateX(-50%);width:160px;height:27px;padding:0;line-height:0;isolation:isolate;transition:none}
  .gh-home-preview .gc-header__logo>img{display:none!important}
  .gh-brand{display:block;position:relative;width:100%;height:100%;pointer-events:none}
- .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(.8);opacity:1}
+ .gh-home-preview .gc-header__logo .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(.8);opacity:1}
  .gh-home-preview #header-group .gc-header__row{z-index:1}
  .gh-home-preview .gc-header__desktop-nav{display:flex;position:absolute;top:88px;left:50%;transform:translateX(-50%);grid-column:auto;grid-row:auto;padding:0;gap:clamp(28px,3vw,52px);align-items:center;justify-content:center;transition:none}
  .gh-home-preview .gc-header__desktop-nav a,.gh-home-preview .gc-header__desktop-nav button{font:400 10px/1.5 var(--g-sans);letter-spacing:.2em;padding:11px 0;background:none;border:0;text-transform:uppercase;color:inherit;text-decoration:none;white-space:nowrap}
@@ -48,7 +48,7 @@
  .gh-home-preview.gh-scrolled .gc-header__row{height:104px!important}
  .gh-home-preview.gh-scrolled .gc-header__logo{width:138px;height:23px;top:20px}
  .gh-home-preview.gh-scrolled .gc-header__desktop-nav{top:64px}
- .gh-home-preview.gh-scrolled .gh-brand__art,.gh-home-preview #header-group.gc-has-mega .gh-brand__art,.gh-home-preview #header-group.gc-has-search .gh-brand__art{filter:brightness(0);opacity:1}
+ .gh-home-preview.gh-scrolled .gc-header__logo .gh-brand__art,.gh-home-preview #header-group.gc-has-mega .gh-brand__art,.gh-home-preview #header-group.gc-has-search .gh-brand__art{filter:brightness(0);opacity:1}
  .gh-home-preview .gc-header__logo:focus-visible,.gh-home-tools :is(a,button,summary):focus-visible{outline:1px solid currentColor;outline-offset:6px}
 }
 @media(min-width:1024px) and (max-width:1249px){
