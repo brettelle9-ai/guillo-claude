@@ -8,7 +8,7 @@
  .gh-home-preview .gc-header__logo{position:absolute;left:50%;top:30px;transform:translateX(-50%);width:160px;height:27px;padding:0;line-height:0;isolation:isolate;transition:none}
  .gh-home-preview .gc-header__logo>img{display:none!important}
  .gh-brand{display:block;position:relative;width:100%;height:100%;pointer-events:none}
- .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);opacity:1;animation:gh-editorial-logo .7s ease-out both}
+ .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(.8);opacity:1}
  .gh-home-preview #header-group .gc-header__row{z-index:1}
  .gh-home-preview .gc-header__desktop-nav{display:flex;position:absolute;top:88px;left:50%;transform:translateX(-50%);grid-column:auto;grid-row:auto;padding:0;gap:clamp(28px,3vw,52px);align-items:center;justify-content:center;transition:none}
  .gh-home-preview .gc-header__desktop-nav a,.gh-home-preview .gc-header__desktop-nav button{font:400 10px/1.5 var(--g-sans);letter-spacing:.2em;padding:11px 0;background:none;border:0;text-transform:uppercase;color:inherit;text-decoration:none;white-space:nowrap}
@@ -65,5 +65,12 @@
  .gh-home-preview .gc-mega__feature small{display:block;font-size:11px;margin-top:9px}
 }
 
-@keyframes gh-editorial-logo{from{opacity:.25}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){.gh-brand__art{animation:none!important}}
+
+
+.gh-brand__sheen{display:none}
+@media(min-width:1024px){
+ .gh-brand__sheen{display:block;position:absolute;inset:0;z-index:3;pointer-events:none;mask-image:var(--gh-wordmark-mask);mask-size:100% 100%;mask-repeat:no-repeat;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.12) 43%,rgba(255,255,255,.95) 50%,rgba(255,255,255,.12) 57%,transparent 65%);background-size:300% 100%;background-position:100% 0;animation:gh-wordmark-light 1.65s cubic-bezier(.25,.1,.3,1) .15s both}
+ .gh-home-preview.gh-scrolled .gh-brand__sheen,.gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) .gh-brand__sheen{display:none}
+}
+@keyframes gh-wordmark-light{from{background-position:100% 0}to{background-position:0% 0}}
+@media(prefers-reduced-motion:reduce){.gh-brand__sheen{display:none!important}}
