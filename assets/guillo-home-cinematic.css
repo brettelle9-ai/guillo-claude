@@ -75,5 +75,5 @@
 /* Handwritten campaign signature; the two lines join into one on desktop. */
 .gh-home-preview .gh-hero__content h1.gh-handwriting{display:flex;align-items:center;justify-content:center;gap:12px;width:auto;max-width:100%;margin:0;font-size:0;line-height:1;letter-spacing:0;text-shadow:none}
 .gh-handwriting__line{display:block;flex:none;height:76px;width:calc(76px * var(--line-ratio));overflow:visible;fill:none;stroke:currentColor;stroke-width:21;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:767px){.gh-home-preview .gh-hero__content h1.gh-handwriting{flex-direction:column;gap:0}.gh-handwriting__line{height:68px;width:calc(68px * var(--line-ratio))}}
+@media(max-width:1023px){.gh-home-preview .gh-hero__content h1.gh-handwriting{flex-direction:column;gap:0}.gh-handwriting__line{height:auto;width:min(86vw,calc(68px * var(--line-ratio)));aspect-ratio:var(--line-ratio)}}
 @media(prefers-reduced-motion:reduce){.gh-handwriting__line path{stroke-dashoffset:0!important}}
