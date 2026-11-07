@@ -11,7 +11,7 @@
  .gh-home-preview .gc-header__logo .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);opacity:1}
  .gh-home-preview #header-group .gc-header__row{z-index:1}
  .gh-home-preview .gc-header__desktop-nav{display:flex;position:absolute;top:88px;left:50%;transform:translateX(-50%);grid-column:auto;grid-row:auto;padding:0;gap:clamp(28px,3vw,52px);align-items:center;justify-content:center;transition:none}
- .gh-home-preview .gc-header__desktop-nav a,.gh-home-preview .gc-header__desktop-nav button{font:400 10px/1.5 var(--g-sans);letter-spacing:.2em;padding:11px 0;background:none;border:0;text-transform:uppercase;color:inherit;text-decoration:none;white-space:nowrap}
+ .gh-home-preview .gc-header__desktop-nav a,.gh-home-preview .gc-header__desktop-nav button{font:400 12px/1.5 var(--g-sans);letter-spacing:3px;padding:11px 0;background:none;border:0;text-transform:uppercase;color:inherit;text-decoration:none;white-space:nowrap}
  .gh-home-preview .gc-header__desktop-nav a:after{content:'';display:block;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s;margin-top:3px;opacity:.65}
  .gh-home-preview .gc-header__desktop-nav a:hover:after,.gh-home-preview .gc-header__desktop-nav a[aria-expanded=true]:after{transform:scaleX(1)}
  .gh-home-preview .gc-header__actions{position:absolute;top:14px;right:27px;gap:23px}
@@ -36,11 +36,11 @@
  .gh-home-preview .gh-hero{height:100svh;min-height:650px;max-height:none;background:#172027;overflow:hidden}
  .gh-home-preview .gh-hero:after{background:linear-gradient(180deg,rgba(3,9,16,.03) 20%,rgba(3,9,16,.15) 55%,rgba(3,9,16,.2))}
  .gh-home-preview .gh-hero__content{justify-content:center;gap:22px;padding:180px 30px 85px;transform:translateY(15px)}
- .gh-home-preview .gh-hero__content h1{font:400 32px/1.25 var(--g-display);letter-spacing:.005em;max-width:740px;text-shadow:0 1px 12px #0002}
+ .gh-home-preview .gh-hero__content h1{font:300 28px/32px var(--g-sans);letter-spacing:.02em;max-width:740px;text-shadow:0 1px 12px #0002}
  .gh-home-preview .gh-hero__content>p{font-size:13px;font-weight:400;letter-spacing:.02em;margin:0;line-height:1.6}
  .gh-home-preview .gh-hero__content>.gh-button{display:none}
  .gh-hero__desktop-actions{display:flex;align-items:center;gap:43px;margin-top:8px}
- .gh-hero__desktop-actions a{font:400 11px/1.5 var(--g-sans);letter-spacing:.17em;text-transform:uppercase;text-decoration:none;padding:0 3px 8px;border-bottom:1px solid #ffffffa6;min-width:145px;transition:border-color .2s}
+ .gh-hero__desktop-actions a{font:400 14px/1.5 var(--g-sans);letter-spacing:2.8px;text-transform:uppercase;text-decoration:none;padding:0 3px 8px;border-bottom:1px solid #ffffffa6;min-width:170px;transition:border-color .2s}
  .gh-hero__desktop-actions a:hover{border-color:#fff}
  .gh-home-preview .gh-hero:before{content:'';position:absolute;bottom:21px;left:calc(50% - 17px);width:34px;height:5px;border:1px solid #ffffff80;border-radius:4px;z-index:2}
  /* Keep normal menu/search contrast and a compact masthead after scrolling. */
@@ -53,7 +53,7 @@
 }
 @media(min-width:1024px) and (max-width:1249px){
  .gh-home-preview .gc-mega{display:grid;grid-template-columns:1fr 1fr;position:absolute;top:100%;left:0;right:0;z-index:3;height:min(600px,72dvh);max-height:calc(100dvh - var(--gc-sticky-offset) - 25px);background:#f7f7f7;color:#252525;font:400 12px/1.6 var(--g-sans)}
- .gh-home-preview .gc-mega__left{min-width:0;display:flex;flex-direction:column;padding:26px 12px 20px;overflow:auto}
+ .gh-home-preview .gc-mega__left{min-width:0;display:flex;flex-direction:column;padding:36px clamp(36px,4.5vw,88px) 28px;overflow:auto}
  .gh-home-preview .gc-mega__columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:16px;flex:1;align-content:start}
  .gh-home-preview .gc-mega__heading{display:block;color:#858585;text-decoration:none;margin:0 0 21px}
  .gh-home-preview .gc-mega ul{list-style:none;padding:0;margin:0;display:grid;gap:18px}
@@ -68,3 +68,6 @@
 
 /* Entrance is triggered after the visible campaign media is ready, on every screen size. */
 .gh-home-preview .gh-hero{overflow:hidden}
+
+/* Light, clean campaign typography, matched to the supplied desktop reference. */
+.gh-home-preview .gh-hero__content h1{font-family:var(--g-sans);font-size:28px;font-weight:300;line-height:32px;letter-spacing:.02em}
