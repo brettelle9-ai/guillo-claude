@@ -15,10 +15,9 @@
   const headline=hero.querySelector('h1'),actions=matchMedia('(min-width:1024px)').matches?hero.querySelector('.gh-hero__desktop-actions'):hero.querySelector('.gh-hero__content>.gh-button');
   const easing='cubic-bezier(.16,1,.3,1)',animations=[];let started=false,cancelled=false,watchdog;
   const prepare=(el,frames,duration,delay=0)=>{if(!el)return;const a=el.animate(frames,{duration,delay,easing,fill:'both'});a.pause();a.currentTime=0;animations.push(a);a.finished.then(()=>a.cancel()).catch(()=>{});};
-  prepare(media,[{transform:'scale(1.015)',opacity:1},{transform:'scale(1)',opacity:1}],1900);
-  const words=[...headline.querySelectorAll('.gh-heading-word>span')];
-  words.forEach((word,i)=>prepare(word,[{transform:'translateY(110%) rotate(3deg)'},{transform:'translateY(0) rotate(0deg)'}],1400,200+i*200));
-  prepare(actions,[{opacity:.2,transform:'translateY(16px)'},{opacity:1,transform:'translateY(0)'}],1300,300);
+  const finalSpacing=getComputedStyle(headline).letterSpacing;
+  prepare(headline,[{clipPath:'inset(-10% 100% -15% 0)',opacity:.35,letterSpacing:matchMedia('(min-width:1024px)').matches?'.045em':finalSpacing},{clipPath:'inset(-10% -2% -15% 0)',opacity:1,letterSpacing:finalSpacing}],1800,150);
+  animations[0].effect.updateTiming({easing:'cubic-bezier(.45,0,.2,1)'});
   const cancel=()=>{cancelled=true;clearTimeout(watchdog);animations.forEach(a=>a.cancel());hero.dataset.entrance='skipped';};
   const start=async()=>{if(started||cancelled)return;if(document.hidden){document.addEventListener('visibilitychange',()=>{if(!document.hidden)start();},{once:true});return;}started=true;clearTimeout(watchdog);
    if(document.fonts)await Promise.race([document.fonts.load('400 48px "Bodoni Moda"').catch(()=>{}),new Promise(resolve=>setTimeout(resolve,700))]);
