@@ -72,6 +72,8 @@
 /* Light, clean campaign typography, matched to the supplied desktop reference. */
 .gh-home-preview .gh-hero__content h1{font-family:var(--g-sans);font-size:28px;font-weight:300;line-height:32px;letter-spacing:.02em}
 
-/* Restrained Roman lettering for the campaign headline. */
-.gh-home-preview .gh-hero__content h1{font-family:'Cinzel',Georgia,serif;font-size:clamp(26px,2.45vw,38px);font-weight:400;line-height:1.45;letter-spacing:.085em;text-transform:uppercase;max-width:1000px;text-wrap:balance}
-@media(max-width:767px){.gh-home-preview .gh-hero__content h1{font-size:25px;line-height:1.5;letter-spacing:.065em;max-width:330px}}
+/* Italian editorial typography with individual word reveals. */
+.gh-home-preview .gh-hero__content h1{font-family:'Bodoni Moda',Didot,Georgia,serif;font-size:clamp(36px,3.8vw,60px);font-weight:400;line-height:1.25;letter-spacing:-.015em;text-transform:none;max-width:1100px;text-wrap:balance}
+.gh-heading-word{display:inline-block;overflow:hidden;vertical-align:bottom;padding:0 .045em .12em;margin:0 -.045em -.12em}
+.gh-heading-word>span{display:inline-block;transform-origin:0 100%}
+@media(max-width:767px){.gh-home-preview .gh-hero__content h1{font-size:clamp(34px,8vw,44px);line-height:1.2;letter-spacing:-.02em;max-width:360px}}
