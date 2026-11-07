@@ -77,3 +77,5 @@
 .gh-heading-word{display:inline-block;overflow:hidden;vertical-align:bottom;padding:0 .045em .12em;margin:0 -.045em -.12em}
 .gh-heading-word>span{display:inline-block;transform-origin:0 100%}
 @media(max-width:767px){.gh-home-preview .gh-hero__content h1{font-size:clamp(34px,8vw,44px);line-height:1.2;letter-spacing:-.02em;max-width:360px}}
+
+.gh-heading-word+.gh-heading-word{margin-left:.2em}
