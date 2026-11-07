@@ -14,14 +14,14 @@
     const norm = s => String(s ?? '').replace(/[″′"'\s]/g,'').replace(/2xl/i,'xxl').toLowerCase();
     const clamp = (n,a,b) => Math.max(a,Math.min(b,n));
     const key = 'guillo-size-advisor-v3-' + garment;
-    const S = {step:1,h:180,w:80,imperial:false,route:'estimate',usual:null,shoulders:null,abdomen:null,seat:null,fit:null,chosen:null};
+    const S = {step:1,h:180,w:80,imperial:false,route:'estimate',usual:null,shoulders:null,abdomen:null,seat:null,thighs:null,fit:null,chosen:null};
     try {
       const saved = JSON.parse(localStorage.getItem(key));
       if (saved) {
         if (Number.isFinite(saved.h)) S.h = clamp(saved.h,145,210);
         if (Number.isFinite(saved.w)) S.w = clamp(saved.w,45,160);
         S.imperial = !!saved.imperial;
-        ['shoulders','abdomen','seat','fit'].forEach(k => {if ([0,1,2].includes(saved[k])) S[k]=saved[k];});
+        ['shoulders','abdomen','seat','thighs','fit'].forEach(k => {if ([0,1,2].includes(saved[k])) S[k]=saved[k];});
         // Usual size is a label, never an array index from another product's chart.
         const i = P.sizes.findIndex(s => norm(s) === norm(saved.usual));
         if (i >= 0) S.usual = i;
@@ -40,6 +40,11 @@
     root.querySelector('[data-gff-strip]').hidden = true;
     root.querySelector('.gff__mark').textContent = 'Size advisor';
     root.querySelector('.gff__product').hidden = true;
+    const headerProgress=document.createElement('span');
+    headerProgress.className='gff__header-progress';
+    headerProgress.setAttribute('role','status');
+    root.querySelector('.gff__head').insertBefore(headerProgress,root.querySelector('[data-gff-close].gff__close'));
+    let renderedStep=null;
     let opened=false,lastFocus=null,previousOverflow='',previousPadding='';
     const variants = () => {try {return JSON.parse(document.querySelector('[data-variant-data]')?.textContent || '[]');} catch {return [];}};
     const variantFor = i => variants().find(v => (v.options || [v.option1]).some(o=>norm(o)===norm(P.sizes[i])));
@@ -63,10 +68,11 @@
     }
     function icon(type,n=1) {
       let path='';
-      if(type==='person')return '<svg viewBox="0 0 70 200" fill="none" aria-hidden="true"><circle cx="35" cy="16" r="9"/><path d="M23 32Q35 27 47 32L51 88H43L41 185H34L31 106L29 185H22L21 88H14L18 42Q18 34 23 32ZM29 36V88M41 36V88M22 88H43M31 33V26M39 33V26"/></svg>';
-      if(type==='shoulders')path=`M${14-n*3} 13L24 8Q32 15 40 8L${50+n*3} 13L47 57H17Z M24 8L26 18H38L40 8`;
-      if(type==='abdomen')path=n===0?'M23 9Q27 31 24 57M41 9Q37 31 40 57M28 9H36':n===1?'M23 9Q23 31 22 57M41 9Q41 31 42 57M29 10Q27 35 29 57M35 10Q37 35 35 57':'M23 9Q13 33 23 57M41 9Q51 33 41 57M29 9Q24 33 29 57M35 9Q40 33 35 57';
-      if(type==='seat')path=`M23 9Q${21-n*5} 32 20 43L24 57M41 9Q${43+n*5} 32 44 43L40 57M32 20V37M32 37Q${25-n*2} 45 20 43M32 37Q${39+n*2} 45 44 43`;
+      if(type==='person')return '<svg viewBox="0 0 70 200" fill="none" aria-hidden="true"><path d="M35 7C24 7 24 25 30 29L29 34C26 37 18 37 16 44C13 55 12 72 12 87C12 92 17 93 19 88L22 61C23 78 21 88 23 99L24 181C24 186 31 187 32 181L35 117L38 181C39 187 46 186 46 181L47 99C49 88 47 78 48 61L51 88C53 93 58 92 58 87C58 72 57 55 54 44C52 37 44 37 41 34L40 29C46 25 46 7 35 7Z"/><path d="M29 34Q35 39 41 34M24 94Q35 98 46 94M35 98V117M27 47Q35 51 43 47" opacity=".5"/></svg>';
+      if(type==='shoulders')path=`M${16-n*3} 17Q19 13 25 12L27 7Q32 11 37 7L39 12Q45 13 ${48+n*3} 17L${51+n*2} 30L45 33L42 25Q39 40 42 57H22Q25 40 22 25L19 33L${13-n*2} 30Z M25 12Q32 19 39 12`;
+      if(type==='abdomen')path=`M23 7Q${26-n*5} 20 ${24-n*3} 33Q${23-n*4} 47 24 57M41 7Q${38+n*5} 20 ${40+n*3} 33Q${41+n*4} 47 40 57M30 8Q32 11 34 8M31 34H33`;
+      if(type==='seat')path=`M23 8Q${21-n*3} 20 ${21-n*3} 34Q${20-n*2} 44 24 57M41 8Q${43+n*3} 20 ${43+n*3} 34Q${44+n*2} 44 40 57M32 17V35M32 35Q24 43 ${21-n*3} 34M32 35Q40 43 ${43+n*3} 34M23 8Q32 12 41 8`;
+      if(type==='thighs')path=`M18 8Q32 12 46 8L${47+n*2} 24Q${48+n*2} 39 43 58H35L32 29L29 58H21Q${16-n*2} 39 ${17-n*2} 24Z M22 13Q32 17 42 13M32 17V29`;
       if(type==='fit')path=`M${22-n*4} 9L27 6Q32 12 37 6L${42+n*4} 9L${45+n*3} 57H${19-n*3}Z M27 6V15H37V6`;
       return `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="${path}"/></svg>`;
     }
@@ -76,22 +82,27 @@
     function first() {
       if (bottom) return intro(1,'Your measurements','') + '<div class="gff__units"><button type="button" data-unit="0" aria-pressed="'+!S.imperial+'">cm / kg</button><button type="button" data-unit="1" aria-pressed="'+S.imperial+'">ft / lb</button></div><div class="gff__measurements"><div class="gff__person">'+icon('person')+'</div><div>'+slider('h','Height',145,210)+slider('w','Weight',45,160)+'</div></div>' + usualWaist();
       return intro(1,"Your measurements",'')+`<div class="gff__units"><button type="button" data-unit="0" aria-pressed="${!S.imperial}">cm / kg</button><button type="button" data-unit="1" aria-pressed="${S.imperial}">ft / lb</button></div>`+(S.route==='estimate'?`<div class="gff__measurements"><div class="gff__person">${icon('person')}</div><div>${slider('h','Height',145,210)}${slider('w','Weight',45,160)}</div></div><button class="gff__text" type="button" data-route="usual">I know my usual size</button>`:`<p class="gff__question">Your usual ${esc(garment)} size</p><div class="gff__usual">${P.sizes.map((s,i)=>`<button type="button" data-usual="${i}" aria-pressed="${S.usual===i}">${esc(s)}</button>`).join('')}</div><button class="gff__text" type="button" data-route="estimate">Use height and weight instead</button>`);}
-    const groups = [{key:'shoulders',label:'Shoulders',options:['Narrow','Regular','Broad']},{key:'abdomen',label:'Abdomen',options:['Flat','Regular','Rounded']},{key:'seat',label:'Seat',options:['Flatter','Regular','Fuller']}];
+    const groups = bottom
+      ? [{key:'thighs',label:'Thighs',options:['Lean','Regular','Muscular']},{key:'seat',label:'Seat',options:['Flatter','Regular','Fuller']},{key:'abdomen',label:'Abdomen',options:['Flat','Regular','Rounded']}]
+      : [{key:'shoulders',label:'Shoulders',options:['Narrow','Regular','Broad']},{key:'abdomen',label:'Abdomen',options:['Flat','Regular','Rounded']}];
     function second(){return intro(2,'Your shape.','Choose the closest match for each area.')+groups.map(g=>`<fieldset class="gff__shape"><legend>${g.label}</legend><div>${g.options.map((label,i)=>`<button type="button" data-shape="${g.key}" data-choice="${i}" aria-pressed="${S[g.key]===i}">${icon(g.key,i)}<span>${label}</span></button>`).join('')}</div></fieldset>`).join('');}
     const fitNames=['Close','As designed','Relaxed'], fitNotes=['Closer through the body.','The intended fit of this piece.','A little more room to move.'];
     function productCard(){return `<div class="gff__product-card">${P.image?`<img src="${esc(P.image)}" alt="" width="44" height="56">`:''}<div><span>${esc(P.name)}</span><small>${esc(P.price)}</small></div></div>`;}
     function third(){return productCard()+intro(3,'How do you like it to fit?','Choose how closely you like your clothes to sit.')+`<div class="gff__fits">${fitNames.map((label,i)=>`<button type="button" data-fit="${i}" aria-pressed="${S.fit===i}">${icon('fit',i)}<span><strong>${label}</strong><small>${fitNotes[i]}</small></span><i aria-hidden="true"></i></button>`).join('')}</div>`;}
     function result(){
       const r=recommendation(),i=S.chosen??r.idx,v=variantFor(i);
-      return productCard()+`<div class="gff__result"><span class="gff__eyebrow">${i===r.idx?'Your suggested size':'Your selected size'}</span><div class="gff__circle"><span>${esc(P.sizes[i])}</span></div><h2 tabindex="-1" data-gff-heading>${fitNames[S.fit]} fit</h2><p>${bottom?'Based on your usual waist size and preferred fit.':S.route==='usual'?'Based on your usual size and preferred fit.':'Estimated from your height, weight, shape and preferred fit.'}</p><div class="gff__size-rail">${P.sizes.map((s,j)=>`<button type="button" data-result-size="${j}" aria-pressed="${j===i}" aria-label="Size ${esc(s)}${j===r.idx?', recommended':''}"><span>${esc(s)}</span>${j===r.idx?'<small>Suggested</small>':''}</button>`).join('')}</div><p class="gff__chart">${bottom?'Waist':'Chest'} in size guide: <strong>${measure(P.chart[i])}</strong>${P.leg&&P.inside?.[i]?`<br>Inside leg: <strong>${measure(P.inside[i])}</strong>`:''}</p><p class="gff__caution">${r.limited?'You may be outside this cut’s size range. Compare your measurements with the size guide before ordering.':'This is a guide. Compare the measurements with your size guide before choosing.'}</p>${v&&!v.available?'<p class="gff__stock">This size is currently unavailable. Select it to request a restock notification.</p>':''}<button class="gff__text" type="button" data-restart>Change my answers</button></div>`;
+      return productCard()+`<div class="gff__result"><h2 class="gff__result-heading" tabindex="-1" data-gff-heading>${i===r.idx?'Your suggested size':'Your selected size'}</h2><div class="gff__circle"><span>${esc(P.sizes[i])}</span></div><p class="gff__result-summary">${fitNames[S.fit]} fit. ${bottom?'Based on your usual waist size.':S.route==='usual'?'Based on your usual size.':'Estimated from your measurements and shape.'}</p><div class="gff__size-rail">${P.sizes.map((s,j)=>`<button type="button" data-result-size="${j}" aria-pressed="${j===i}" aria-label="Size ${esc(s)}${j===r.idx?', recommended':''}"><span>${esc(s)}</span>${j===r.idx?'<small>Suggested</small>':''}</button>`).join('')}</div>${r.limited?'<p class="gff__caution">You may be outside this cut’s size range. Check the measurements before ordering.</p>':''}${v&&!v.available?'<p class="gff__stock">Currently unavailable. Select this size to request a restock notification.</p>':''}<details class="gff__measurement-details"><summary>Check measurements</summary><p class="gff__chart">${bottom?'Waist':'Chest'}: <strong>${measure(P.chart[i])}</strong>${P.leg&&P.inside?.[i]?`<br>Inside leg: <strong>${measure(P.inside[i])}</strong>`:''}</p><p class="gff__caution">Size guidance is approximate. Compare these measurements with the full size guide.</p></details><button class="gff__text" type="button" data-restart>Change my answers</button></div>`;
     }
     function ready(){return S.step===1?(bottom?S.usual!=null:(S.route==='estimate'||S.usual!=null)):S.step===2?groups.every(g=>S[g.key]!=null):S.fit!=null;}
     function render(focus=false){
       root.dataset.step=String(S.step);body.innerHTML=S.step===1?first():S.step===2?second():S.step===3?third():result();
       foot.hidden=false;back.hidden=S.step===1;back.innerHTML=S.step===4?'Edit answers':'←';back.setAttribute('aria-label',S.step===4?'Edit answers':'Previous step');
-      next.disabled=!ready();next.textContent=S.step===4?`Use size ${P.sizes[S.chosen??recommendation().idx]} →`:S.step===3?'See my size →':'Continue →';
-      foot.querySelector('[data-gff-progress]')?.remove();
-      const progress=document.createElement('div');progress.dataset.gffProgress='';progress.className='gff__progress';progress.setAttribute('aria-label',S.step===4?'Recommendation ready':`Step ${S.step} of 3`);progress.innerHTML=[1,2,3].map(n=>`<i class="${S.step>=n?'is-on':''}"></i>`).join('');foot.insertBefore(progress,next);
+      next.disabled=!ready();next.textContent=S.step===4?`Select ${P.sizes[S.chosen??recommendation().idx]} →`:S.step===3?'See my size →':'Continue →';
+      headerProgress.textContent=S.step===4?'Your fit':S.step+' of 3';
+      if(renderedStep!==S.step) {
+        if(renderedStep!==null && !matchMedia('(prefers-reduced-motion: reduce)').matches) body.animate([{opacity:0,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:180,easing:'ease-out'});
+        renderedStep=S.step;
+      }
       body.scrollTop=0;
       if(focus)body.querySelector('[data-gff-heading]')?.focus({preventScroll:true});
     }
