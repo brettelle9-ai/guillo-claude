@@ -2,6 +2,10 @@
 {{ 'guillo-editorial-home.css' | asset_url | stylesheet_tag }}
 {{ 'guillo-home-cinematic.css' | asset_url | stylesheet_tag }}
 <link rel="preload" as="image" href="{{ 'guillo-wordmark-black.png' | asset_url }}">
+<script>
+(function(){if(!matchMedia('(min-width:1024px)').matches||matchMedia('(prefers-reduced-motion: reduce)').matches)return;var preview=new URLSearchParams(location.search).get('intro')==='preview',seen=false;try{seen=!!sessionStorage.getItem('guillo-studio-entry-v1');}catch(e){}if(preview||!seen){document.documentElement.classList.add('gh-studio-entry');document.documentElement.dataset.ghStudioStart=String(Date.now());try{sessionStorage.setItem('guillo-studio-entry-v1','1');}catch(e){}}})();
+</script>
+<div class="gh-studio-intro" data-gh-studio-intro aria-hidden="true"><div class="gh-studio-intro__signature"><img src="{{ 'guillo-wordmark-black.png' | asset_url }}" width="720" height="120" alt=""><span>Mediterranean menswear</span></div></div>
 {% endif %}
 {%- capture search_icon -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>{%- endcapture -%}
 {%- assign preview_menu = linklists['guillo-redesign-main'] | default: section.settings.menu -%}

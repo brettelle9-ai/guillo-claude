@@ -8,6 +8,11 @@
   country?.addEventListener('keydown',e=>{if(e.key==='Escape'){country.open=false;country.querySelector('summary').focus();}});
   document.addEventListener('pointerdown',e=>{if(country?.open&&!country.contains(e.target))country.open=false;});
 
+  const studio=document.querySelector('[data-gh-studio-intro]'),root=document.documentElement;
+  const studioActive=root.classList.contains('gh-studio-entry');
+  const finishStudio=()=>{root.classList.remove('gh-studio-entry');studio?.remove();document.removeEventListener('keydown',skipStudio,true);};
+  const skipStudio=()=>{if(root.classList.contains('gh-studio-entry'))finishStudio();};
+  if(studioActive){studio?.addEventListener('click',finishStudio,{once:true});document.addEventListener('keydown',skipStudio,true);studio?.addEventListener('animationend',e=>{if(e.animationName==='gh-studio-curtain')finishStudio();});setTimeout(finishStudio,2300);}else studio?.remove();
   const hero=document.querySelector('.gh-hero'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
   if(!hero||reduced.matches||!hero.animate||window.scrollY>80)return;
   const image=hero.querySelector('picture img'),video=hero.querySelector('video');
@@ -24,7 +29,7 @@
   prepare(actions,[{opacity:.2,transform:'translateY(16px)'},{opacity:1,transform:'translateY(0)'}],1300,300);
   const cancel=()=>{cancelled=true;clearTimeout(watchdog);animations.forEach(a=>a.cancel());hero.dataset.entrance='skipped';};
   const start=()=>{if(started||cancelled)return;if(document.hidden){document.addEventListener('visibilitychange',()=>{if(!document.hidden)start();},{once:true});return;}started=true;clearTimeout(watchdog);
-   requestAnimationFrame(()=>requestAnimationFrame(()=>{if(cancelled)return;hero.dataset.entrance='playing';animations.forEach(a=>a.play());Promise.allSettled(animations.map(a=>a.finished)).then(()=>{if(!cancelled)hero.dataset.entrance='complete';});}));
+   const reveal=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{if(cancelled)return;hero.dataset.entrance='playing';animations.forEach(a=>a.play());Promise.allSettled(animations.map(a=>a.finished)).then(()=>{if(!cancelled)hero.dataset.entrance='complete';});}));const remaining=root.classList.contains('gh-studio-entry')?Math.max(0,800-(Date.now()-Number(root.dataset.ghStudioStart||0))):0;if(remaining)setTimeout(reveal,remaining);else reveal();
   };
   hero.dataset.entrance='waiting';
   if(image){if(image.complete){image.decode().catch(()=>{}).then(start);}else{image.addEventListener('load',()=>image.decode().catch(()=>{}).then(start),{once:true});image.addEventListener('error',start,{once:true});}}
