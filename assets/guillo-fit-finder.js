@@ -13,7 +13,7 @@
     const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const norm = s => String(s ?? '').replace(/[″′"'\s]/g,'').replace(/2xl/i,'xxl').toLowerCase();
     const clamp = (n,a,b) => Math.max(a,Math.min(b,n));
-    const key = 'guillo-size-advisor-v2-' + garment;
+    const key = 'guillo-size-advisor-v3-' + garment;
     const S = {step:1,h:180,w:80,imperial:false,route:'estimate',usual:null,shoulders:null,abdomen:null,seat:null,fit:null,chosen:null};
     try {
       const saved = JSON.parse(localStorage.getItem(key));
@@ -52,14 +52,14 @@
       // Shape refines the existing body estimate. The usual-size path preserves
       // the established whole-size fit rule, without double-counting shape.
       estimate += (S.abdomen-1)*2 + (bottom ? 0 : (S.shoulders-1)*2);
-      let base = S.route==='usual' && S.usual != null ? S.usual : P.chart.findIndex(n=>n>=estimate-1.5);
+      let base = (bottom || S.route==='usual') && S.usual != null ? S.usual : P.chart.findIndex(n=>n>=estimate-1.5);
       if(base<0)base=P.chart.length-1;
       const shift=S.fit===0 ? -1 : S.fit===2 ? 1 : 0;
-      const seat=bottom && S.seat===2 && S.fit!==0 ? 1 : 0;
-      const wanted=base+shift+seat;
+      // Shape describes the cut; it must not silently change a known waist size.
+      const wanted=base+shift;
       const idx=clamp(wanted,0,P.sizes.length-1);
       const gap=P.chart.length>1 ? P.chart[1]-P.chart[0] : 5;
-      return {idx,limited:wanted!==idx || (S.route==='estimate' && (estimate>P.chart.at(-1)+gap || estimate<P.chart[0]-gap))};
+      return {idx,limited:wanted!==idx || (!bottom && S.route==='estimate' && (estimate>P.chart.at(-1)+gap || estimate<P.chart[0]-gap))};
     }
     function icon(type,n=1) {
       let path='';
@@ -72,7 +72,10 @@
     }
     function intro(n,title,sub) {return `<div class="gff__intro"><span class="gff__stepno">${String(n).padStart(2,'0')} / 03</span><h2 tabindex="-1" data-gff-heading>${title}</h2><p class="gff__sub">${sub}</p></div>`;}
     function slider(k,label,min,max) {return `<div class="gff__slider"><div class="gff__slider-top"><label for="gff-${k}">${label}</label><span>${unit(k)}</span></div><div class="gff__number"><output for="gff-${k}" data-value="${k}">${value(k)}</output><small>${S.imperial && k==='h'?'':unit(k)}</small></div><div class="gff__slider-control"><button type="button" data-adjust="${k}" data-delta="-1" aria-label="Decrease ${label.toLowerCase()}">−</button><input id="gff-${k}" type="range" min="${min}" max="${max}" value="${S[k]}" data-range="${k}" aria-label="${label}" aria-valuetext="${value(k)} ${unit(k)}"><button type="button" data-adjust="${k}" data-delta="1" aria-label="Increase ${label.toLowerCase()}">+</button></div></div>`;}
-    function first() {return intro(1,"Let's find your fit.",'Two numbers to start. Drag to adjust.')+`<div class="gff__units"><button type="button" data-unit="0" aria-pressed="${!S.imperial}">cm / kg</button><button type="button" data-unit="1" aria-pressed="${S.imperial}">ft / lb</button></div>`+(S.route==='estimate'?`<div class="gff__measurements"><div class="gff__person">${icon('person')}</div><div>${slider('h','Height',145,210)}${slider('w','Weight',45,160)}</div></div><button class="gff__text" type="button" data-route="usual">I know my usual size</button>`:`<p class="gff__question">Your usual ${esc(garment)} size</p><div class="gff__usual">${P.sizes.map((s,i)=>`<button type="button" data-usual="${i}" aria-pressed="${S.usual===i}">${esc(s)}</button>`).join('')}</div><button class="gff__text" type="button" data-route="estimate">Use height and weight instead</button>`);}
+    function usualWaist() { return '<p class="gff__question">Your usual waist size</p><div class="gff__usual">' + P.sizes.map((s,i)=>'<button type="button" data-usual="'+i+'" aria-pressed="'+(S.usual===i)+'">'+esc(s)+'</button>').join('') + '</div><p class="gff__sub">Use the waist size you wear comfortably now. Height and weight alone cannot tell us your waist.</p>'; }
+    function first() {
+      if (bottom) return intro(1,"Let's find your fit.",'Start with your usual waist size.') + usualWaist() + (S.route==='estimate' ? '<div style="margin-top:24px" class="gff__units"><button type="button" data-unit="0" aria-pressed="'+!S.imperial+'">cm / kg</button><button type="button" data-unit="1" aria-pressed="'+S.imperial+'">ft / lb</button></div><div class="gff__measurements"><div class="gff__person">'+icon('person')+'</div><div>'+slider('h','Height',145,210)+slider('w','Weight',45,160)+'</div></div>' : '');
+      return intro(1,"Let's find your fit.",'Two numbers to start. Drag to adjust.')+`<div class="gff__units"><button type="button" data-unit="0" aria-pressed="${!S.imperial}">cm / kg</button><button type="button" data-unit="1" aria-pressed="${S.imperial}">ft / lb</button></div>`+(S.route==='estimate'?`<div class="gff__measurements"><div class="gff__person">${icon('person')}</div><div>${slider('h','Height',145,210)}${slider('w','Weight',45,160)}</div></div><button class="gff__text" type="button" data-route="usual">I know my usual size</button>`:`<p class="gff__question">Your usual ${esc(garment)} size</p><div class="gff__usual">${P.sizes.map((s,i)=>`<button type="button" data-usual="${i}" aria-pressed="${S.usual===i}">${esc(s)}</button>`).join('')}</div><button class="gff__text" type="button" data-route="estimate">Use height and weight instead</button>`);}
     const groups = [{key:'shoulders',label:'Shoulders',options:['Narrow','Regular','Broad']},{key:'abdomen',label:'Abdomen',options:['Flat','Regular','Rounded']},{key:'seat',label:'Seat',options:['Flatter','Regular','Fuller']}];
     function second(){return intro(2,'Your shape.','Choose the closest match for each area.')+groups.map(g=>`<fieldset class="gff__shape"><legend>${g.label}</legend><div>${g.options.map((label,i)=>`<button type="button" data-shape="${g.key}" data-choice="${i}" aria-pressed="${S[g.key]===i}">${icon(g.key,i)}<span>${label}</span></button>`).join('')}</div></fieldset>`).join('');}
     const fitNames=['Close','As designed','Relaxed'], fitNotes=['Closer through the body.','The intended fit of this piece.','A little more room to move.'];
@@ -80,9 +83,9 @@
     function third(){return productCard()+intro(3,'How do you like it to fit?','Choose how closely you like your clothes to sit.')+`<div class="gff__fits">${fitNames.map((label,i)=>`<button type="button" data-fit="${i}" aria-pressed="${S.fit===i}">${icon('fit',i)}<span><strong>${label}</strong><small>${fitNotes[i]}</small></span><i aria-hidden="true"></i></button>`).join('')}</div>`;}
     function result(){
       const r=recommendation(),i=S.chosen??r.idx,v=variantFor(i);
-      return productCard()+`<div class="gff__result"><span class="gff__eyebrow">${i===r.idx?'Your suggested size':'Your selected size'}</span><div class="gff__circle"><span>${esc(P.sizes[i])}</span></div><h2 tabindex="-1" data-gff-heading>${fitNames[S.fit]} fit</h2><p>${S.route==='usual'?'Based on your usual size, shape and preferred fit.':'Estimated from your height, weight, shape and preferred fit.'}</p><div class="gff__size-rail">${P.sizes.map((s,j)=>`<button type="button" data-result-size="${j}" aria-pressed="${j===i}" aria-label="Size ${esc(s)}${j===r.idx?', recommended':''}"><span>${esc(s)}</span>${j===r.idx?'<small>Suggested</small>':''}</button>`).join('')}</div><p class="gff__chart">${bottom?'Waist':'Chest'} in size guide: <strong>${measure(P.chart[i])}</strong>${P.leg&&P.inside?.[i]?`<br>Inside leg: <strong>${measure(P.inside[i])}</strong>`:''}</p><p class="gff__caution">${r.limited?'You may be outside this cut’s size range. Compare your measurements with the size guide before ordering.':'This is a guide. Compare the measurements with your size guide before choosing.'}</p>${v&&!v.available?'<p class="gff__stock">This size is currently unavailable. Select it to request a restock notification.</p>':''}<button class="gff__text" type="button" data-restart>Change my answers</button></div>`;
+      return productCard()+`<div class="gff__result"><span class="gff__eyebrow">${i===r.idx?'Your suggested size':'Your selected size'}</span><div class="gff__circle"><span>${esc(P.sizes[i])}</span></div><h2 tabindex="-1" data-gff-heading>${fitNames[S.fit]} fit</h2><p>${bottom?'Based on your usual waist size and preferred fit.':S.route==='usual'?'Based on your usual size and preferred fit.':'Estimated from your height, weight, shape and preferred fit.'}</p><div class="gff__size-rail">${P.sizes.map((s,j)=>`<button type="button" data-result-size="${j}" aria-pressed="${j===i}" aria-label="Size ${esc(s)}${j===r.idx?', recommended':''}"><span>${esc(s)}</span>${j===r.idx?'<small>Suggested</small>':''}</button>`).join('')}</div><p class="gff__chart">${bottom?'Waist':'Chest'} in size guide: <strong>${measure(P.chart[i])}</strong>${P.leg&&P.inside?.[i]?`<br>Inside leg: <strong>${measure(P.inside[i])}</strong>`:''}</p><p class="gff__caution">${r.limited?'You may be outside this cut’s size range. Compare your measurements with the size guide before ordering.':'This is a guide. Compare the measurements with your size guide before choosing.'}</p>${v&&!v.available?'<p class="gff__stock">This size is currently unavailable. Select it to request a restock notification.</p>':''}<button class="gff__text" type="button" data-restart>Change my answers</button></div>`;
     }
-    function ready(){return S.step===1?(S.route==='estimate'||S.usual!=null):S.step===2?groups.every(g=>S[g.key]!=null):S.fit!=null;}
+    function ready(){return S.step===1?(bottom?S.usual!=null:(S.route==='estimate'||S.usual!=null)):S.step===2?groups.every(g=>S[g.key]!=null):S.fit!=null;}
     function render(focus=false){
       root.dataset.step=String(S.step);body.innerHTML=S.step===1?first():S.step===2?second():S.step===3?third():result();
       foot.hidden=false;back.hidden=S.step===1;back.innerHTML=S.step===4?'Edit answers':'←';back.setAttribute('aria-label',S.step===4?'Edit answers':'Previous step');
