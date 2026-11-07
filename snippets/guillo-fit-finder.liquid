@@ -125,6 +125,10 @@
       "image": {{ product.featured_image | image_url: width: 120 | json }},
       "short": {{ ff_short | json }},
       "price": {{ product.selected_or_first_available_variant.price | money | json }},
+      "priceCents": {{ product.selected_or_first_available_variant.price | json }},
+      "currency": {{ cart.currency.iso_code | default: localization.country.currency.iso_code | json }},
+      "country": {{ localization.country.iso_code | json }},
+      "pairDiscountPercent": {{ shop.metafields.custom.two_piece_discount_percent.value | default: 14 | plus: 0 | json }},
       "sizes": [
         {%- for s in ff_size_list -%}{{ s | json }}{% unless forloop.last %},{% endunless %}{%- endfor -%}
       ],

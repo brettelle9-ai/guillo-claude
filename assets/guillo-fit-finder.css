@@ -170,3 +170,10 @@
 .gff__shape button:active,.gff__fits button:active,.gff__usual button:active,.gff__next:active{transform:none}
 .gff__next:after{display:none}
 }
+
+/* Market-priced two-piece offer, kept below the size recommendation. */
+.gff__pair-offer{margin:18px 0 0;padding:13px 14px;text-align:left;border:1px solid #d7dfe9;border-left:2px solid #243d5c;background:linear-gradient(110deg,#f0f3f7,#f7f9fc)}
+.gff__pair-offer strong{display:block;font-weight:400;font-size:13px;line-height:1.4;color:#1c304c}
+.gff__pair-offer span{display:block;font-size:10px;line-height:1.65;color:#6a7a90;margin-top:5px}
+.gff__pair-offer+.gff__size-rail{margin-top:16px}
+@media(max-height:740px){.gff__pair-offer{margin-top:14px;padding:10px 12px}.gff__pair-offer strong{font-size:12px}}
