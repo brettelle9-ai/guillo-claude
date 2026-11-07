@@ -1,14 +1,1 @@
-<div class="gh-header-atmosphere" aria-hidden="true">
-  <svg class="gh-header-atmosphere__mist" viewBox="0 0 1600 120" preserveAspectRatio="none" focusable="false">
-    <defs>
-      <filter id="GHHeaderMist" x="0" y="0" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency=".005 .025" numOctaves="3" seed="12"/>
-        <feColorMatrix type="matrix" values="0 0 0 0 0.92 0 0 0 0 0.94 0 0 0 0 0.97 1.4 0 0 0 -0.38"/>
-        <feGaussianBlur stdDeviation="4 2"/>
-      </filter>
-      <linearGradient id="GHHeaderMistFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="white" stop-opacity=".8"/><stop offset=".4" stop-color="white" stop-opacity=".5"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
-      <mask id="GHHeaderMistMask"><rect width="1600" height="120" fill="url(#GHHeaderMistFade)"/></mask>
-    </defs>
-    <g mask="url(#GHHeaderMistMask)"><rect width="1600" height="120" filter="url(#GHHeaderMist)"/></g>
-  </svg>
-</div>
+<div class="gh-header-atmosphere" aria-hidden="true"><canvas class="gh-header-atmosphere__canvas" data-gh-cinema-smoke></canvas></div>
