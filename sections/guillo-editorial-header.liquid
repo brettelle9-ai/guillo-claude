@@ -1,6 +1,7 @@
 {%- capture search_icon -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>{%- endcapture -%}
 {%- assign preview_menu = linklists['guillo-redesign-main'] | default: section.settings.menu -%}
 <div class="gc-header" data-gc-header>
+  {% if request.page_type == 'index' %}{% render 'guillo-header-atmosphere' %}{% endif %}
   <div class="gc-header__row">
     <button class="gc-icon-button gc-header__menu" type="button" data-gc-menu-open aria-label="Open menu" aria-controls="GCNavigation" aria-expanded="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>Menu</span></button>
     <a class="gc-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home"><img src="{{ 'guillo-wordmark-black.png' | asset_url }}" width="720" height="120" alt="{{ shop.name | escape }}" loading="eager">{% if request.page_type == 'index' %}{% render 'guillo-cinematic-brand' %}{% endif %}</a>

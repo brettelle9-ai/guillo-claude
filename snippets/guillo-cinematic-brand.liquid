@@ -1,9 +1,4 @@
-{%- comment -%}The supplied PNG is used intact. The SVG viewBox only excludes transparent margins.{%- endcomment -%}
+{%- comment -%}The supplied PNG is intact; the viewBox excludes transparent margins only.{%- endcomment -%}
 <span class="gh-brand" data-gh-brand>
-  <span class="gh-brand__light" aria-hidden="true"></span>
-  <span class="gh-brand__beam gh-brand__beam--left" aria-hidden="true"></span>
-  <span class="gh-brand__beam gh-brand__beam--right" aria-hidden="true"></span>
-  <svg class="gh-brand__haze" viewBox="0 0 600 180" aria-hidden="true" focusable="false"><defs><filter id="GHSmokeTexture" x="-30%" y="-60%" width="160%" height="220%"><feTurbulence type="fractalNoise" baseFrequency=".014 .035" numOctaves="3" seed="9" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="48" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="3"/></filter><radialGradient id="GHSmokeFade"><stop offset="0" stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></radialGradient><mask id="GHSmokeMask"><ellipse cx="300" cy="90" rx="280" ry="84" fill="url(#GHSmokeFade)"/></mask></defs><g mask="url(#GHSmokeMask)"><g class="gh-brand__haze-drift" filter="url(#GHSmokeTexture)" fill="#e4edfa"><path opacity=".36" d="M20 96Q130 20 270 84T580 55L580 91Q450 154 300 104T20 128Z"/><path opacity=".22" d="M35 61Q170 140 330 66T570 93L570 113Q430 56 300 95T35 78Z"/></g></g></svg>
-  <canvas class="gh-brand__smoke" data-gh-brand-smoke width="600" height="200" aria-hidden="true"></canvas>
-  <svg class="gh-brand__art" viewBox="43 80 407 134" width="228" height="75" aria-hidden="true" focusable="false"><image href="{{ 'guillo-home-logo-exact.png' | asset_url }}" width="508" height="290" /></svg>
+  <svg class="gh-brand__art" viewBox="43 80 407 134" width="170" height="56" aria-hidden="true" focusable="false"><image href="{{ 'guillo-home-logo-exact.png' | asset_url }}" width="508" height="290" /></svg>
 </span>
