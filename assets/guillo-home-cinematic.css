@@ -13,12 +13,14 @@
  .gh-brand__beam{position:absolute;z-index:0;left:50%;top:46%;width:260px;height:85px;background:linear-gradient(90deg,rgba(226,237,255,.17),transparent 85%);filter:blur(9px);transform-origin:left center;opacity:.55;clip-path:polygon(0 45%,100% 0,100% 100%,0 55%)}
  .gh-brand__beam--left{transform:translateY(-50%) rotate(165deg)}
  .gh-brand__beam--right{transform:translateY(-50%) rotate(-15deg)}
+ .gh-brand__haze{position:absolute;z-index:1;left:50%;top:44%;width:600px;height:180px;transform:translate(-50%,-50%);max-width:none;mix-blend-mode:screen;pointer-events:none;opacity:.85}
+ .gh-brand__haze-drift{transform-origin:center;animation:gh-smoke-drift 18s ease-in-out infinite alternate}
  .gh-brand__smoke{position:absolute;z-index:1;left:50%;top:42%;width:600px;height:200px;transform:translate(-50%,-50%);opacity:.8;pointer-events:none;max-width:none;mix-blend-mode:screen}
  .gh-home-preview .gc-header__desktop-nav{display:flex;position:absolute;top:119px;left:50%;transform:translateX(-50%);grid-column:auto;grid-row:auto;padding:0;gap:clamp(28px,3vw,52px);align-items:center;justify-content:center;transition:top .4s}
  .gh-home-preview .gc-header__desktop-nav a,.gh-home-preview .gc-header__desktop-nav button{font:400 10px/1.5 var(--g-sans);letter-spacing:.2em;padding:11px 0;background:none;border:0;text-transform:uppercase;color:inherit;text-decoration:none;white-space:nowrap}
  .gh-home-preview .gc-header__desktop-nav a:after{content:'';display:block;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s;margin-top:3px;opacity:.65}
  .gh-home-preview .gc-header__desktop-nav a:hover:after,.gh-home-preview .gc-header__desktop-nav a[aria-expanded=true]:after{transform:scaleX(1)}
- .gh-home-preview .gc-header__actions{position:absolute;top:24px;right:27px;gap:23px}
+ .gh-home-preview .gc-header__actions{position:absolute;top:14px;right:27px;gap:23px}
  .gh-home-preview .gc-header__account{display:flex;align-items:center}
  .gh-home-preview .gh-account-text{display:none}
  .gh-home-preview .gh-account-icon{display:block;width:19px;height:19px}
@@ -35,7 +37,7 @@
  .gh-atmosphere-toggle{opacity:.6}
  .gh-atmosphere-toggle[aria-pressed=true] .gh-pause-lines{display:none}
  .gh-atmosphere-toggle:not([aria-pressed=true]) .gh-play-triangle{display:none}
- .gh-home-preview .gc-header__search{display:flex;position:absolute;top:21px;right:106px;width:222px;height:30px;padding:0;border:0;gap:8px;z-index:2;color:inherit}
+ .gh-home-preview .gc-header__search{display:flex;position:absolute;top:21px;right:126px;width:222px;height:30px;padding:0;border:0;gap:8px;z-index:2;color:inherit}
  .gh-home-preview .gc-header__search input{opacity:0;pointer-events:none;color:inherit;font-size:10px;transition:opacity .2s;padding:6px 0}
  .gh-home-preview .gc-header__search:focus-within input,.gh-home-preview .gc-has-search .gc-header__search input{opacity:1;pointer-events:auto}
  .gh-home-preview .gc-header__search button{padding:4px;color:inherit}
@@ -56,8 +58,8 @@
  .gh-home-preview.gh-scrolled .gc-header__logo{width:158px;height:52px;top:9px}
  .gh-home-preview.gh-scrolled .gc-header__desktop-nav{top:68px}
  .gh-home-preview.gh-scrolled .gh-brand__art,.gh-home-preview #header-group.gc-has-mega .gh-brand__art,.gh-home-preview #header-group.gc-has-search .gh-brand__art{filter:brightness(0);opacity:.9}
- .gh-home-preview.gh-scrolled .gh-brand__light,.gh-home-preview.gh-scrolled .gh-brand__beam,.gh-home-preview.gh-scrolled .gh-brand__smoke,.gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) :is(.gh-brand__light,.gh-brand__beam,.gh-brand__smoke){opacity:0}
- .gh-home-preview.gh-atmosphere-paused .gh-brand__light{animation-play-state:paused}
+ .gh-home-preview.gh-scrolled .gh-brand__light,.gh-home-preview.gh-scrolled .gh-brand__beam,.gh-home-preview.gh-scrolled .gh-brand__smoke,.gh-home-preview.gh-scrolled .gh-brand__haze,.gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) :is(.gh-brand__light,.gh-brand__beam,.gh-brand__smoke,.gh-brand__haze){opacity:0}
+ .gh-home-preview.gh-atmosphere-paused .gh-brand__light,.gh-home-preview.gh-atmosphere-paused .gh-brand__haze-drift{animation-play-state:paused}
  .gh-home-preview .gc-header__logo:focus-visible,.gh-home-tools :is(a,button,summary):focus-visible{outline:1px solid currentColor;outline-offset:6px}
 }
 @media(min-width:1024px) and (max-width:1249px){
@@ -73,5 +75,6 @@
  .gh-home-preview .gc-mega__feature>span{position:absolute;left:15px;right:15px;top:50%;transform:translateY(-50%);text-align:center;font-size:26px}
  .gh-home-preview .gc-mega__feature small{display:block;font-size:11px;margin-top:9px}
 }
+@keyframes gh-smoke-drift{from{transform:translate(-20px,4px) scale(1.04,1.12)}to{transform:translate(27px,-5px) scale(.98,.9)}}
 @keyframes gh-backlight{from{opacity:.65;transform:translate(-50%,-50%) scale(.94)}to{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
-@media(prefers-reduced-motion:reduce){.gh-brand__light{animation:none!important}.gh-brand__smoke{display:none}.gh-home-preview .gc-header__row,.gh-home-preview .gc-header__logo,.gh-home-preview .gc-header__desktop-nav{transition:none!important}}
+@media(prefers-reduced-motion:reduce){.gh-brand__light,.gh-brand__haze-drift{animation:none!important}.gh-brand__smoke{display:none}.gh-home-preview .gc-header__row,.gh-home-preview .gc-header__logo,.gh-home-preview .gc-header__desktop-nav{transition:none!important}}
