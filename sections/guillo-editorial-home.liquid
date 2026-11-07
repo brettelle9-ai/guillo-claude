@@ -12,7 +12,7 @@
       {% if section.settings.hero_image != blank %}{{ section.settings.hero_image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '1000, 1600, 2000, 2400', sizes: '100vw', alt: 'The Guillo shirt collection' }}{% else %}<img src="{{ 'guillo-shirt-campaign-wide.jpg' | asset_url }}" width="1920" height="1080" alt="The Firenze shirt at the villa" fetchpriority="high">{% endif %}
     </picture>
     {%- endif -%}
-    <div class="gh-hero__content"><h1>{{ section.settings.hero_heading | escape }}</h1>{% if section.settings.hero_subheading != blank %}<p>{{ section.settings.hero_subheading | escape }}</p>{% endif %}<a class="gh-button" href="{{ section.settings.hero_link | default: collections.shirts.url }}">{{ section.settings.hero_button | default: 'Shop now' | escape }}</a><div class="gh-hero__desktop-actions"><a href="{{ collections.shirts.url }}">Shop shirts</a><a href="{{ collections.chinos.url }}">Shop chinos</a></div></div>
+    <div class="gh-hero__content">{% render 'guillo-handwritten-heading', heading: section.settings.hero_heading %}{% if section.settings.hero_subheading != blank %}<p>{{ section.settings.hero_subheading | escape }}</p>{% endif %}<a class="gh-button" href="{{ section.settings.hero_link | default: collections.shirts.url }}">{{ section.settings.hero_button | default: 'Shop now' | escape }}</a><div class="gh-hero__desktop-actions"><a href="{{ collections.shirts.url }}">Shop shirts</a><a href="{{ collections.chinos.url }}">Shop chinos</a></div></div>
   </section>
   <div class="gh-notice"><a href="{{ shop.refund_policy.url }}">44-day returns &amp; exchanges · AU &amp; NZ</a></div>
   <section class="gh-categories" aria-label="Shop by category">
