@@ -1,1 +1,4 @@
-<h1 aria-label="{{ heading | escape }}" data-gh-letter-reveal>{% assign words = heading | split: ' ' %}{% for word in words %}<span class="gh-headline-word" aria-hidden="true">{% assign letters = word | split: '' %}{% for letter in letters %}<span class="gh-headline-letter">{{ letter | escape }}</span>{% endfor %}</span>{% endfor %}</h1>
+<h1 aria-label="{{ heading | escape }}" data-gh-letter-reveal style="visibility:hidden">{% assign words = heading | split: ' ' %}{% for word in words %}<span class="gh-headline-word" aria-hidden="true">{% assign letters = word | split: '' %}{% for letter in letters %}<span class="gh-headline-letter">{{ letter | escape }}</span>{% endfor %}</span>{% endfor %}</h1>
+<noscript><style>[data-gh-letter-reveal]{visibility:visible!important}</style></noscript>
+<style>@media(prefers-reduced-motion:reduce){[data-gh-letter-reveal]{visibility:visible!important}}</style>
+<script>(function(){var heading=document.querySelector('[data-gh-letter-reveal]');setTimeout(function(){if(heading&&!heading.dataset.motionReady){heading.dataset.motionSkipped='true';heading.style.visibility='visible';}},6000);})();</script>

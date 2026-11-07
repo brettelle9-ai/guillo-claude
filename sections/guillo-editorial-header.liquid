@@ -1,7 +1,4 @@
 {% if request.page_type == 'index' %}
-<script>
-(function(){if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('gh-headline-motion');setTimeout(function(){document.documentElement.classList.remove('gh-headline-motion');},4500);}})();
-</script>
 {{ 'guillo-editorial-home.css' | asset_url | stylesheet_tag }}
 {{ 'guillo-home-cinematic.css' | asset_url | stylesheet_tag }}
 <link rel="preload" as="image" href="{{ 'guillo-wordmark-black.png' | asset_url }}">
