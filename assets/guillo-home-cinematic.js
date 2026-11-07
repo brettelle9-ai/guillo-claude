@@ -12,13 +12,11 @@
   if(!hero||reduced.matches||!hero.animate||window.scrollY>80)return;
   const image=hero.querySelector('picture img'),video=hero.querySelector('video');
   const media=hero.querySelector(':scope>picture,:scope>.gh-hero__media');
-  const wordmark=matchMedia('(min-width:1024px)').matches?brand:document.querySelector('.gc-header__logo>img');
   const nav=[...document.querySelectorAll('.gc-header__desktop-nav>a')];
   const headline=hero.querySelector('h1'),actions=matchMedia('(min-width:1024px)').matches?hero.querySelector('.gh-hero__desktop-actions'):hero.querySelector('.gh-hero__content>.gh-button');
   const easing='cubic-bezier(.16,1,.3,1)',animations=[];let started=false,cancelled=false,watchdog;
   const prepare=(el,frames,duration,delay=0)=>{if(!el)return;const a=el.animate(frames,{duration,delay,easing,fill:'both'});a.pause();a.currentTime=0;animations.push(a);a.finished.then(()=>a.cancel()).catch(()=>{});};
   prepare(media,[{transform:'scale(1.015)',opacity:1},{transform:'scale(1)',opacity:1}],1900);
-  prepare(wordmark,[{opacity:.35,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],1250,60);
   nav.forEach(el=>prepare(el,[{opacity:.65,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],1100,150));
   if(headline?.matches('[data-gh-handwriting]')){
    const strokes=[...headline.querySelectorAll('path')],lengths=strokes.map(p=>p.getTotalLength()),total=lengths.reduce((a,b)=>a+b,0);let elapsed=300;
