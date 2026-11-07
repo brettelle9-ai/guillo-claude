@@ -22,14 +22,14 @@
   const headline=hero.querySelector('h1'),actions=matchMedia('(min-width:1024px)').matches?hero.querySelector('.gh-hero__desktop-actions'):hero.querySelector('.gh-hero__content>.gh-button');
   const easing='cubic-bezier(.16,1,.3,1)',animations=[];let started=false,cancelled=false,watchdog;
   const prepare=(el,frames,duration,delay=0)=>{if(!el)return;const a=el.animate(frames,{duration,delay,easing,fill:'both'});a.pause();a.currentTime=0;animations.push(a);a.finished.then(()=>a.cancel()).catch(()=>{});};
-  prepare(media,[{transform:'scale(1.065)',opacity:.68},{transform:'scale(1)',opacity:1}],1900);
+  prepare(media,[{transform:studioActive?'scale(1.015)':'scale(1.065)',opacity:studioActive?1:.68},{transform:'scale(1)',opacity:1}],1900);
   prepare(wordmark,[{opacity:.35,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],1250,60);
   nav.forEach(el=>prepare(el,[{opacity:.65,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],1100,150));
   prepare(headline,[{opacity:0,transform:'translateY(20px)'},{opacity:1,transform:'translateY(0)'}],1350,180);
   prepare(actions,[{opacity:.2,transform:'translateY(16px)'},{opacity:1,transform:'translateY(0)'}],1300,300);
   const cancel=()=>{cancelled=true;clearTimeout(watchdog);animations.forEach(a=>a.cancel());hero.dataset.entrance='skipped';};
   const start=()=>{if(started||cancelled)return;if(document.hidden){document.addEventListener('visibilitychange',()=>{if(!document.hidden)start();},{once:true});return;}started=true;clearTimeout(watchdog);
-   const reveal=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{if(cancelled)return;hero.dataset.entrance='playing';animations.forEach(a=>a.play());Promise.allSettled(animations.map(a=>a.finished)).then(()=>{if(!cancelled)hero.dataset.entrance='complete';});}));const remaining=root.classList.contains('gh-studio-entry')?Math.max(0,800-(Date.now()-Number(root.dataset.ghStudioStart||0))):0;if(remaining)setTimeout(reveal,remaining);else reveal();
+   const reveal=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{if(cancelled)return;hero.dataset.entrance='playing';animations.forEach(a=>a.play());Promise.allSettled(animations.map(a=>a.finished)).then(()=>{if(!cancelled)hero.dataset.entrance='complete';});}));const remaining=root.classList.contains('gh-studio-entry')?0:0;if(remaining)setTimeout(reveal,remaining);else reveal();
   };
   hero.dataset.entrance='waiting';
   if(image){if(image.complete){image.decode().catch(()=>{}).then(start);}else{image.addEventListener('load',()=>image.decode().catch(()=>{}).then(start),{once:true});image.addEventListener('error',start,{once:true});}}
