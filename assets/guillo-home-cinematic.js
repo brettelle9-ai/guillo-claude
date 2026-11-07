@@ -18,10 +18,7 @@
   const prepare=(el,frames,duration,delay=0)=>{if(!el)return;const a=el.animate(frames,{duration,delay,easing,fill:'both'});a.pause();a.currentTime=0;animations.push(a);a.finished.then(()=>a.cancel()).catch(()=>{});};
   prepare(media,[{transform:'scale(1.015)',opacity:1},{transform:'scale(1)',opacity:1}],1900);
   nav.forEach(el=>prepare(el,[{opacity:.65,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],1100,150));
-  if(headline?.matches('[data-gh-handwriting]')){
-   const strokes=[...headline.querySelectorAll('path')],lengths=strokes.map(p=>p.getTotalLength()),total=lengths.reduce((a,b)=>a+b,0);let elapsed=300;
-   strokes.forEach((p,i)=>{const duration=lengths[i]/total*3400;prepare(p,[{strokeDasharray:'1',strokeDashoffset:1},{strokeDasharray:'1',strokeDashoffset:0}],duration,elapsed);animations[animations.length-1].effect.updateTiming({easing:'linear'});elapsed+=duration;});
-  }else prepare(headline,[{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],1350,180);
+  prepare(headline,[{opacity:0},{opacity:1}],1200,150);
   prepare(actions,[{opacity:.2,transform:'translateY(16px)'},{opacity:1,transform:'translateY(0)'}],1300,300);
   const cancel=()=>{cancelled=true;clearTimeout(watchdog);animations.forEach(a=>a.cancel());hero.dataset.entrance='skipped';};
   const start=()=>{if(started||cancelled)return;if(document.hidden){document.addEventListener('visibilitychange',()=>{if(!document.hidden)start();},{once:true});return;}started=true;clearTimeout(watchdog);

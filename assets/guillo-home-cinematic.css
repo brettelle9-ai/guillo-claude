@@ -72,8 +72,6 @@
 /* Light, clean campaign typography, matched to the supplied desktop reference. */
 .gh-home-preview .gh-hero__content h1{font-family:var(--g-sans);font-size:28px;font-weight:300;line-height:32px;letter-spacing:.02em}
 
-/* Handwritten campaign signature; the two lines join into one on desktop. */
-.gh-home-preview .gh-hero__content h1.gh-handwriting{display:flex;align-items:center;justify-content:center;gap:12px;width:auto;max-width:100%;margin:0;font-size:0;line-height:1;letter-spacing:0;text-shadow:none}
-.gh-handwriting__line{display:block;flex:none;height:76px;width:calc(76px * var(--line-ratio));overflow:visible;fill:none;stroke:currentColor;stroke-width:21;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:1023px){.gh-home-preview .gh-hero__content h1.gh-handwriting{flex-direction:column;gap:0}.gh-handwriting__line{height:auto;width:min(86vw,calc(68px * var(--line-ratio)));aspect-ratio:var(--line-ratio)}}
-@media(prefers-reduced-motion:reduce){.gh-handwriting__line path{stroke-dashoffset:0!important}}
+/* Restrained Roman lettering for the campaign headline. */
+.gh-home-preview .gh-hero__content h1{font-family:'Cinzel',Georgia,serif;font-size:clamp(26px,2.45vw,38px);font-weight:400;line-height:1.45;letter-spacing:.085em;text-transform:uppercase;max-width:1000px;text-wrap:balance}
+@media(max-width:767px){.gh-home-preview .gh-hero__content h1{font-size:25px;line-height:1.5;letter-spacing:.065em;max-width:330px}}
