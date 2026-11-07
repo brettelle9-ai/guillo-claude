@@ -1,8 +1,14 @@
-{%- comment -%}The exact supplied emblem sits softly behind the original wordmark.{%- endcomment -%}
+{%- comment -%}The exact supplied PNG defines both silhouettes; no logo is recreated.{%- endcomment -%}
 <span class="gh-brand" data-gh-brand>
+  <span class="gh-brand__backlight" aria-hidden="true"></span>
   <svg class="gh-brand__art" viewBox="0 0 407 125" width="160" height="49" aria-hidden="true" focusable="false">
-    <defs><linearGradient id="GHEmblemDissolve" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="white" stop-opacity=".9"/><stop offset=".5" stop-color="white" stop-opacity=".5"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient><mask id="GHEmblemMask"><rect width="407" height="125" fill="url(#GHEmblemDissolve)"/></mask></defs>
-    <g opacity=".28" mask="url(#GHEmblemMask)"><svg x="106" y="0" width="195" height="112" viewBox="199 78 99 57"><image href="{{ 'guillo-home-logo-exact.png' | asset_url }}" width="508" height="290" /></svg></g>
-    <svg x="0" y="58" width="407" height="48" viewBox="43 166 407 48"><image href="{{ 'guillo-home-logo-exact.png' | asset_url }}" width="508" height="290" /></svg>
+    <defs>
+      <mask id="GHExactArtwork" maskUnits="userSpaceOnUse" x="0" y="0" width="508" height="290" style="mask-type:alpha"><image data-gh-logo-source href="{{ 'guillo-home-logo-exact.png' | asset_url }}" width="508" height="290" /></mask>
+      <linearGradient id="GHSilverEmblem" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a1a9b4"/><stop offset=".42" stop-color="#dce1e7"/><stop offset="1" stop-color="#6c7582"/></linearGradient>
+      <linearGradient id="GHEmblemDissolve" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="white" stop-opacity=".95"/><stop offset=".5" stop-color="white" stop-opacity=".65"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+      <mask id="GHEmblemMask"><rect width="407" height="125" fill="url(#GHEmblemDissolve)"/></mask>
+    </defs>
+    <g class="gh-brand__emblem" mask="url(#GHEmblemMask)"><svg x="106" y="0" width="195" height="112" viewBox="199 78 99 57"><rect width="508" height="290" fill="url(#GHSilverEmblem)" mask="url(#GHExactArtwork)"/></svg></g>
+    <svg x="0" y="58" width="407" height="48" viewBox="43 166 407 48"><rect width="508" height="290" fill="currentColor" mask="url(#GHExactArtwork)"/></svg>
   </svg>
 </span>
