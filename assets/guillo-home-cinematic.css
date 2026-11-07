@@ -33,7 +33,7 @@
  .gh-home-preview .gc-header__search:focus-within input,.gh-home-preview .gc-has-search .gc-header__search input{opacity:1;pointer-events:auto}
  .gh-home-preview .gc-header__search button{padding:4px;color:inherit}
  .gh-home-preview .gc-header__search svg{width:18px;height:18px}
- .gh-home-preview .gh-hero{height:100svh;min-height:650px;max-height:none;background:#172027}
+ .gh-home-preview .gh-hero{height:100svh;min-height:650px;max-height:none;background:#172027;overflow:hidden}
  .gh-home-preview .gh-hero:after{background:linear-gradient(180deg,rgba(3,9,16,.03) 20%,rgba(3,9,16,.15) 55%,rgba(3,9,16,.2))}
  .gh-home-preview .gh-hero__content{justify-content:center;gap:22px;padding:180px 30px 85px;transform:translateY(15px)}
  .gh-home-preview .gh-hero__content h1{font:400 32px/1.25 var(--g-display);letter-spacing:.005em;max-width:740px;text-shadow:0 1px 12px #0002}
