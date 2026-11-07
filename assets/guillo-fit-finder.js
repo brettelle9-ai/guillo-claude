@@ -98,7 +98,8 @@
       const previousStep=renderedStep;
       root.dataset.step=String(S.step);body.innerHTML=S.step===1?first():S.step===2?second():S.step===3?third():result();
       foot.hidden=false;back.hidden=S.step===1;back.innerHTML=S.step===4?'Edit answers':'←';back.setAttribute('aria-label',S.step===4?'Edit answers':'Previous step');
-      next.disabled=!ready();next.textContent=S.step===4?`Select ${P.sizes[S.chosen??recommendation().idx]} →`:S.step===3?'See my size →':'Continue →';
+      next.disabled=!ready();const selectedVariant=S.step===4?variantFor(S.chosen??recommendation().idx):null;
+      next.textContent=S.step===4?(selectedVariant&&!selectedVariant.available?'Select & notify me →':'Select & add to cart →'):S.step===3?'See my size →':'Continue →';
       headerProgress.textContent=S.step===4?'Your fit':S.step+' of 3';
       if(previousStep!==S.step) {
         if(!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -141,7 +142,17 @@
       if(t.hasAttribute('data-restart')){S.step=1;render(true);return;}
       if(t===back){S.step=Math.max(1,S.step-1);render(true);return;}
       if(t===next&&ready()){
-        if(S.step===4){const input=select(S.chosen??recommendation().idx);if(input){close();input.focus({preventScroll:true});input.closest('fieldset')?.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}else{next.textContent='Please choose this size on the page';close();}return;}
+        if(S.step===4){
+          const input=select(S.chosen??recommendation().idx);
+          if(!input){close();return;}
+          const form=input.closest('form');
+          const purchase=form?.querySelector('[data-ge-add],button[name="add"],button[type="submit"]');
+          close();
+          // Use the product's own purchase handler for cart, stock and preorder behaviour.
+          if(purchase && !purchase.disabled){purchase.click();}
+          else {input.focus({preventScroll:true});input.closest('fieldset')?.scrollIntoView({block:'center',behavior:'smooth'});}
+          return;
+        }
         S.step++;if(S.step===4){S.chosen=null;remember();}render(true);
       }
     });
