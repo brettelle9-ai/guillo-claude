@@ -5,14 +5,19 @@
  .gh-home-preview #header-group .gc-header,.gh-home-preview #header-group:hover .gc-header,.gh-home-preview #header-group:focus-within .gc-header{background:linear-gradient(180deg,rgba(3,7,12,.86),rgba(8,13,21,.43) 55%,transparent);color:#fff;border:0}
  .gh-home-preview #header-group .gc-header__row{position:relative;display:flex;justify-content:center;height:142px;padding:0 28px;transition:height .4s cubic-bezier(.22,1,.36,1)}
  .gh-home-preview .gc-header__menu{display:none}
- .gh-home-preview .gc-header__logo{position:absolute;left:50%;top:16px;transform:translateX(-50%);width:148px;height:60px;padding:0;line-height:0;isolation:isolate;transition:width .4s,height .4s,top .4s}
+ .gh-home-preview .gc-header__logo{position:absolute;left:50%;top:22px;transform:translateX(-50%);width:160px;height:49px;padding:0;line-height:0;isolation:isolate;transition:width .4s,height .4s,top .4s}
  .gh-home-preview .gc-header__logo>img{display:none!important}
  .gh-brand{display:block;position:relative;width:100%;height:100%;pointer-events:none}
  .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;overflow:visible;filter:brightness(0) invert(1);opacity:.95}
- .gh-header-atmosphere{display:block;position:absolute;inset:0 0 auto;height:142px;overflow:hidden;pointer-events:none;z-index:0;opacity:.86;transition:opacity .35s;contain:paint}
- .gh-header-atmosphere__canvas{display:block;width:100%;height:160px;pointer-events:none}
+ .gh-header-atmosphere{display:block;position:absolute;inset:0 0 auto;height:142px;overflow:hidden;pointer-events:none;z-index:0;opacity:0;transition:opacity 1.8s ease;contain:paint;mask-image:linear-gradient(#000 0%,#000a 55%,transparent 100%)}
+ .gh-header-atmosphere[data-ready=true]{opacity:.86}
+ .gh-header-atmosphere__light{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 16%,rgba(220,231,246,.14),rgba(172,190,215,.045) 35%,transparent 72%)}
+ .gh-header-atmosphere__mist{position:absolute;display:block;max-width:none;object-fit:fill;mix-blend-mode:screen;pointer-events:none}
+ .gh-header-atmosphere__mist--a{left:-18%;top:-20px;width:136%;height:150px;opacity:.77;animation:gh-mist-near 65s ease-in-out infinite alternate}
+ .gh-header-atmosphere__mist--b{left:-26%;top:-5px;width:150%;height:132px;opacity:.43;animation:gh-mist-far 89s ease-in-out infinite alternate}
+ .gh-home-preview.gh-atmosphere-paused .gh-header-atmosphere__mist,.gh-home-preview.gh-scrolled .gh-header-atmosphere__mist,.gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) .gh-header-atmosphere__mist{animation-play-state:paused}
  .gh-home-preview #header-group .gc-header__row{z-index:1}
- .gh-home-preview.gh-scrolled .gh-header-atmosphere,.gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) .gh-header-atmosphere{opacity:0}
+ .gh-home-preview.gh-scrolled .gh-header-atmosphere,.gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) .gh-header-atmosphere{opacity:0;transition-duration:.25s}
  .gh-home-preview .gc-header__desktop-nav{display:flex;position:absolute;top:96px;left:50%;transform:translateX(-50%);grid-column:auto;grid-row:auto;padding:0;gap:clamp(28px,3vw,52px);align-items:center;justify-content:center;transition:top .4s}
  .gh-home-preview .gc-header__desktop-nav a,.gh-home-preview .gc-header__desktop-nav button{font:400 10px/1.5 var(--g-sans);letter-spacing:.2em;padding:11px 0;background:none;border:0;text-transform:uppercase;color:inherit;text-decoration:none;white-space:nowrap}
  .gh-home-preview .gc-header__desktop-nav a:after{content:'';display:block;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s;margin-top:3px;opacity:.65}
@@ -52,7 +57,7 @@
  /* Keep normal menu/search contrast and a compact masthead after scrolling. */
  .gh-home-preview.gh-scrolled #header-group .gc-header,.gh-home-preview #header-group.gc-has-mega .gc-header,.gh-home-preview #header-group.gc-has-search .gc-header{background:#fff!important;color:#252525!important;border-bottom:1px solid #e9e9e9}
  .gh-home-preview.gh-scrolled .gc-header__row{height:104px!important}
- .gh-home-preview.gh-scrolled .gc-header__logo{width:124px;height:50px;top:7px}
+ .gh-home-preview.gh-scrolled .gc-header__logo{width:138px;height:42px;top:12px}
  .gh-home-preview.gh-scrolled .gc-header__desktop-nav{top:64px}
  .gh-home-preview.gh-scrolled .gh-brand__art,.gh-home-preview #header-group.gc-has-mega .gh-brand__art,.gh-home-preview #header-group.gc-has-search .gh-brand__art{filter:brightness(0);opacity:.9}
  .gh-home-preview .gc-header__logo:focus-visible,.gh-home-tools :is(a,button,summary):focus-visible{outline:1px solid currentColor;outline-offset:6px}
@@ -70,4 +75,6 @@
  .gh-home-preview .gc-mega__feature>span{position:absolute;left:15px;right:15px;top:50%;transform:translateY(-50%);text-align:center;font-size:26px}
  .gh-home-preview .gc-mega__feature small{display:block;font-size:11px;margin-top:9px}
 }
-@media(prefers-reduced-motion:reduce){.gh-home-preview .gc-header__row,.gh-home-preview .gc-header__logo,.gh-home-preview .gc-header__desktop-nav{transition:none!important}}
+@keyframes gh-mist-near{from{transform:translate3d(-2%,0,0)}to{transform:translate3d(2%,2px,0)}}
+@keyframes gh-mist-far{from{transform:translate3d(2%,0,0)}to{transform:translate3d(-2%,-2px,0)}}
+@media(prefers-reduced-motion:reduce){.gh-header-atmosphere__mist{animation:none!important}.gh-header-atmosphere{transition:none!important}.gh-home-preview .gc-header__row,.gh-home-preview .gc-header__logo,.gh-home-preview .gc-header__desktop-nav{transition:none!important}}

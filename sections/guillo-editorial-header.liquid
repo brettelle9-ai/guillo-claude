@@ -1,3 +1,8 @@
+{% if request.page_type == 'index' %}
+{{ 'guillo-editorial-home.css' | asset_url | stylesheet_tag }}
+{{ 'guillo-home-cinematic.css' | asset_url | stylesheet_tag }}
+<link rel="preload" as="image" href="{{ 'guillo-home-logo-exact.png' | asset_url }}">
+{% endif %}
 {%- capture search_icon -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>{%- endcapture -%}
 {%- assign preview_menu = linklists['guillo-redesign-main'] | default: section.settings.menu -%}
 <div class="gc-header" data-gc-header>
