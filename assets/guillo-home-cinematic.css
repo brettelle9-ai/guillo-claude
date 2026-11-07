@@ -8,7 +8,7 @@
  .gh-home-preview .gc-header__logo{position:absolute;left:50%;top:30px;transform:translateX(-50%);width:160px;height:27px;padding:0;line-height:0;isolation:isolate;transition:none}
  .gh-home-preview .gc-header__logo>img{display:none!important}
  .gh-brand{display:block;position:relative;width:100%;height:100%;pointer-events:none}
- .gh-home-preview .gc-header__logo .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(.8);opacity:1}
+ .gh-home-preview .gc-header__logo .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);opacity:1}
  .gh-home-preview #header-group .gc-header__row{z-index:1}
  .gh-home-preview .gc-header__desktop-nav{display:flex;position:absolute;top:88px;left:50%;transform:translateX(-50%);grid-column:auto;grid-row:auto;padding:0;gap:clamp(28px,3vw,52px);align-items:center;justify-content:center;transition:none}
  .gh-home-preview .gc-header__desktop-nav a,.gh-home-preview .gc-header__desktop-nav button{font:400 10px/1.5 var(--g-sans);letter-spacing:.2em;padding:11px 0;background:none;border:0;text-transform:uppercase;color:inherit;text-decoration:none;white-space:nowrap}
@@ -65,12 +65,19 @@
  .gh-home-preview .gc-mega__feature small{display:block;font-size:11px;margin-top:9px}
 }
 
-
-
-.gh-brand__sheen{display:none}
-@media(min-width:1024px){
- .gh-brand__sheen{display:block;position:absolute;inset:0;z-index:3;pointer-events:none;mask-image:var(--gh-wordmark-mask);mask-size:100% 100%;mask-repeat:no-repeat;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.12) 43%,rgba(255,255,255,.95) 50%,rgba(255,255,255,.12) 57%,transparent 65%);background-size:300% 100%;background-position:100% 0;animation:gh-wordmark-light 1.65s cubic-bezier(.25,.1,.3,1) .15s both}
- .gh-home-preview.gh-scrolled .gh-brand__sheen,.gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) .gh-brand__sheen{display:none}
+/* One coordinated first-screen entrance. Only opacity and transforms animate. */
+@media(min-width:1024px) and (prefers-reduced-motion:no-preference){
+ .gh-home-preview .gh-hero>picture,
+ .gh-home-preview .gh-hero>.gh-hero__media{animation:gh-campaign-arrive 1.8s cubic-bezier(.16,1,.3,1) both;transform-origin:50% 45%}
+ .gh-home-preview .gc-header__logo .gh-brand__art{animation:gh-brand-arrive 1.05s cubic-bezier(.16,1,.3,1) both}
+ .gh-home-preview .gc-header__desktop-nav>a{animation:gh-navigation-arrive .95s cubic-bezier(.16,1,.3,1) .08s both}
+ .gh-home-preview .gh-hero__content>h1,
+ .gh-home-preview .gh-hero__content>p{animation:gh-copy-arrive 1.15s cubic-bezier(.16,1,.3,1) .12s both}
+ .gh-home-preview .gh-hero__desktop-actions{animation:gh-copy-arrive 1.15s cubic-bezier(.16,1,.3,1) .22s both}
+ .gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) .gh-brand__art,
+ .gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) .gc-header__desktop-nav>a{opacity:1!important;transform:none!important}
 }
-@keyframes gh-wordmark-light{from{background-position:100% 0}to{background-position:0% 0}}
-@media(prefers-reduced-motion:reduce){.gh-brand__sheen{display:none!important}}
+@keyframes gh-campaign-arrive{from{transform:scale(1.035);opacity:.82}to{transform:scale(1);opacity:1}}
+@keyframes gh-brand-arrive{from{transform:translateY(5px);opacity:.3}to{transform:translateY(0);opacity:1}}
+@keyframes gh-navigation-arrive{from{transform:translateY(4px);opacity:.55}to{transform:translateY(0);opacity:1}}
+@keyframes gh-copy-arrive{from{transform:translateY(12px);opacity:.15}to{transform:translateY(0);opacity:1}}
