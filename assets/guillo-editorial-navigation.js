@@ -12,7 +12,7 @@
   const openSearch=()=>{if(menu?.open)menu.close();closeMega();search.hidden=false;shade.hidden=false;host.classList.add('gc-has-search');document.body.classList.add('gc-search-open');input.setAttribute('aria-expanded','true');};
   const openMega=trigger=>{if(!desktop.matches)return;closeSearch();clearTimeout(closing);const id=trigger.dataset.gcMegaTrigger;panels.forEach(p=>p.hidden=p.dataset.gcMega!==id);triggers.forEach(t=>t.setAttribute('aria-expanded',String(t===trigger)));shade.hidden=false;host.classList.add('gc-has-mega');};
   triggers.forEach(trigger=>{trigger.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch')openMega(trigger);});trigger.addEventListener('focus',()=>openMega(trigger));trigger.addEventListener('click',()=>openMega(trigger));});
-  header.querySelectorAll('.gc-header__desktop-nav>a').forEach(link=>link.addEventListener('pointerenter',closeMega));
+  header.querySelectorAll('.gc-header__desktop-nav>a:not([data-gc-mega-trigger])').forEach(link=>link.addEventListener('pointerenter',closeMega));
   header.addEventListener('pointerleave',()=>{closing=setTimeout(closeMega,220);});header.addEventListener('pointerenter',()=>clearTimeout(closing));
   header.addEventListener('focusout',e=>{if(!header.contains(e.relatedTarget)&&!search.contains(e.relatedTarget)){closeMega();closeSearch();}});
   header.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();if(!search.hidden){closeSearch(true);return;}const active=triggers.find(t=>t.getAttribute('aria-expanded')==='true');closeMega();active?.focus();closeMega();}});

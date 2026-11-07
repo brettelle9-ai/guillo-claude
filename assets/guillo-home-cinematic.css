@@ -2,18 +2,20 @@
 .gh-header-atmosphere,.gh-brand,.gh-home-tools,.gh-account-icon,.gh-hero__desktop-actions{display:none}
 @media(min-width:1024px){
  .gh-home-preview #header-group{background:transparent!important}
- .gh-home-preview #header-group .gc-header,.gh-home-preview #header-group:hover .gc-header,.gh-home-preview #header-group:focus-within .gc-header{background:linear-gradient(180deg,rgba(6,10,16,.57),rgba(9,15,24,.22) 62%,transparent);color:#fff;border:0}
+ .gh-home-preview #header-group .gc-header,.gh-home-preview #header-group:hover .gc-header,.gh-home-preview #header-group:focus-within .gc-header{background:linear-gradient(180deg,rgba(4,8,13,.73),rgba(9,15,24,.29) 56%,transparent);color:#fff;border:0}
  .gh-home-preview #header-group .gc-header__row{position:relative;display:flex;justify-content:center;height:138px;padding:0 28px;transition:height .4s cubic-bezier(.22,1,.36,1)}
  .gh-home-preview .gc-header__menu{display:none}
- .gh-home-preview .gc-header__logo{position:absolute;left:50%;top:16px;transform:translateX(-50%);width:170px;height:56px;padding:0;line-height:0;isolation:isolate;transition:width .4s,height .4s,top .4s}
+ .gh-home-preview .gc-header__logo{position:absolute;left:50%;top:20px;transform:translateX(-50%);width:170px;height:51px;padding:0;line-height:0;isolation:isolate;transition:width .4s,height .4s,top .4s}
  .gh-home-preview .gc-header__logo>img{display:none!important}
  .gh-brand{display:block;position:relative;width:100%;height:100%;pointer-events:none}
- .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;overflow:visible;filter:brightness(0) invert(1);opacity:.95}
- .gh-header-atmosphere{display:block;position:absolute;inset:0 0 auto;height:96px;overflow:hidden;pointer-events:none;z-index:0;opacity:.26;transition:opacity .35s;contain:paint}
+ .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;overflow:visible;filter:brightness(0) invert(1) drop-shadow(0 0 .6px #d9e1ee);opacity:.95}
+ .gh-header-atmosphere{display:block;position:absolute;inset:0 0 auto;height:96px;overflow:hidden;pointer-events:none;z-index:0;opacity:.34;transition:opacity .35s;contain:paint}
+ .gh-header-atmosphere:before{content:"";position:absolute;left:50%;top:-20px;width:min(690px,70vw);height:120px;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 48%,rgba(214,222,235,.17),rgba(152,169,195,.055) 40%,transparent 70%);filter:blur(12px)}
  .gh-header-atmosphere__mist{position:absolute;left:-10%;top:-8px;width:120%;height:112px;max-width:none;animation:gh-header-mist 52s ease-in-out infinite alternate;will-change:transform}
  .gh-home-preview #header-group .gc-header__row{z-index:1}
  .gh-home-preview.gh-scrolled .gh-header-atmosphere,.gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) .gh-header-atmosphere{opacity:0}
  .gh-home-preview.gh-atmosphere-paused .gh-header-atmosphere__mist{animation-play-state:paused}
+ .gh-home-preview.gh-scrolled .gh-header-atmosphere__mist,.gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) .gh-header-atmosphere__mist{animation-play-state:paused}
  .gh-home-preview .gc-header__desktop-nav{display:flex;position:absolute;top:90px;left:50%;transform:translateX(-50%);grid-column:auto;grid-row:auto;padding:0;gap:clamp(28px,3vw,52px);align-items:center;justify-content:center;transition:top .4s}
  .gh-home-preview .gc-header__desktop-nav a,.gh-home-preview .gc-header__desktop-nav button{font:400 10px/1.5 var(--g-sans);letter-spacing:.2em;padding:11px 0;background:none;border:0;text-transform:uppercase;color:inherit;text-decoration:none;white-space:nowrap}
  .gh-home-preview .gc-header__desktop-nav a:after{content:'';display:block;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s;margin-top:3px;opacity:.65}
@@ -53,7 +55,7 @@
  /* Keep normal menu/search contrast and a compact masthead after scrolling. */
  .gh-home-preview.gh-scrolled #header-group .gc-header,.gh-home-preview #header-group.gc-has-mega .gc-header,.gh-home-preview #header-group.gc-has-search .gc-header{background:#fff!important;color:#252525!important;border-bottom:1px solid #e9e9e9}
  .gh-home-preview.gh-scrolled .gc-header__row{height:100px!important}
- .gh-home-preview.gh-scrolled .gc-header__logo{width:142px;height:47px;top:8px}
+ .gh-home-preview.gh-scrolled .gc-header__logo{width:142px;height:43px;top:10px}
  .gh-home-preview.gh-scrolled .gc-header__desktop-nav{top:60px}
  .gh-home-preview.gh-scrolled .gh-brand__art,.gh-home-preview #header-group.gc-has-mega .gh-brand__art,.gh-home-preview #header-group.gc-has-search .gh-brand__art{filter:brightness(0);opacity:.9}
  .gh-home-preview .gc-header__logo:focus-visible,.gh-home-tools :is(a,button,summary):focus-visible{outline:1px solid currentColor;outline-offset:6px}
