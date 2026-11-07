@@ -1,1 +1,1 @@
-<h1>{{ heading | escape }}</h1>
+<h1 aria-label="{{ heading | escape }}" data-gh-letter-reveal>{% assign words = heading | split: ' ' %}{% for word in words %}<span class="gh-headline-word" aria-hidden="true">{% assign letters = word | split: '' %}{% for letter in letters %}<span class="gh-headline-letter">{{ letter | escape }}</span>{% endfor %}</span>{% endfor %}</h1>

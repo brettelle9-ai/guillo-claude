@@ -74,8 +74,12 @@
 
 /* Italian editorial typography with individual word reveals. */
 .gh-home-preview .gh-hero__content h1{font-family:'Bodoni Moda',Didot,Georgia,serif;font-size:clamp(36px,3.8vw,60px);font-weight:400;line-height:1.25;letter-spacing:-.015em;text-transform:none;max-width:1100px;text-wrap:balance}
-.gh-heading-word{display:inline-block;overflow:hidden;vertical-align:bottom;padding:0 .045em .12em;margin:0 -.045em -.12em}
-.gh-heading-word>span{display:inline-block;transform-origin:0 100%}
 @media(max-width:767px){.gh-home-preview .gh-hero__content h1{font-size:clamp(34px,8vw,44px);line-height:1.2;letter-spacing:-.02em;max-width:360px}}
 
-.gh-heading-word+.gh-heading-word{margin-left:.2em}
+.gh-heading-word+
+/* Reserve the headline before deferred JS runs, preventing a visible reset. */
+html.gh-headline-motion .gh-hero h1:not([data-motion-ready]){visibility:hidden}
+.gh-headline-word{display:inline-block;white-space:nowrap}
+.gh-headline-word+.gh-headline-word{margin-left:.22em}
+.gh-headline-letter{display:inline-block}
+@media(prefers-reduced-motion:reduce){html.gh-headline-motion .gh-hero h1{visibility:visible}}
