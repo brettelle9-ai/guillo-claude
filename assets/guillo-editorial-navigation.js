@@ -2,7 +2,7 @@
  const boot=()=>{
   const header=document.querySelector('[data-gc-header]');if(!header||header.dataset.navigationMounted)return;header.dataset.navigationMounted='true';
   const host=header.closest('#header-group'),menu=document.querySelector('[data-gc-menu]');
-  const desktop=matchMedia('(min-width:1250px)'),reduced=matchMedia('(prefers-reduced-motion:reduce)');
+  const desktop=matchMedia(document.body.classList.contains('gh-home-preview')?'(min-width:1024px)':'(min-width:1250px)'),reduced=matchMedia('(prefers-reduced-motion:reduce)');
   const triggers=[...header.querySelectorAll('[data-gc-mega-trigger]')],panels=[...header.querySelectorAll('[data-gc-mega]')],shade=header.querySelector('[data-gc-mega-shade]');
   const search=header.querySelector('[data-gc-search-panel]'),input=header.querySelector('[data-gc-search-input]'),discovery=search.querySelector('[data-gc-search-discovery]'),results=search.querySelector('[data-gc-search-results]'),heading=search.querySelector('[data-gc-search-heading]'),terms=search.querySelector('[data-gc-search-terms]'),status=search.querySelector('[data-gc-search-status]'),all=search.querySelector('[data-gc-search-all]');
   let closing,debounce,controller,requestNumber=0,suppressSearchFocus=false;
@@ -57,3 +57,4 @@
  };
  document.addEventListener('shopify:section:load',boot);if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+

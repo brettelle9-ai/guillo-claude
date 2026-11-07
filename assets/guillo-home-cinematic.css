@@ -1,0 +1,77 @@
+/* Desktop campaign masthead. The supplied logo pixels are never redrawn. */
+.gh-brand,.gh-home-tools,.gh-account-icon,.gh-hero__desktop-actions{display:none}
+@media(min-width:1024px){
+ .gh-home-preview #header-group{background:transparent!important}
+ .gh-home-preview #header-group .gc-header,.gh-home-preview #header-group:hover .gc-header,.gh-home-preview #header-group:focus-within .gc-header{background:linear-gradient(180deg,rgba(6,10,16,.57),rgba(9,15,24,.22) 62%,transparent);color:#fff;border:0}
+ .gh-home-preview #header-group .gc-header__row{position:relative;display:flex;justify-content:center;height:164px;padding:0 28px;transition:height .4s cubic-bezier(.22,1,.36,1)}
+ .gh-home-preview .gc-header__menu{display:none}
+ .gh-home-preview .gc-header__logo{position:absolute;left:50%;top:17px;transform:translateX(-50%);width:228px;height:75px;padding:0;line-height:0;isolation:isolate;transition:width .4s,height .4s,top .4s}
+ .gh-home-preview .gc-header__logo>img{display:none!important}
+ .gh-brand{display:block;position:relative;width:100%;height:100%;pointer-events:none}
+ .gh-brand__art{position:relative;z-index:2;display:block;width:100%;height:100%;overflow:visible;filter:brightness(0) invert(1) drop-shadow(0 0 .5px #d9e3f1);opacity:.95}
+ .gh-brand__light{position:absolute;z-index:0;left:50%;top:40%;width:300px;height:120px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(220,231,247,.36) 0%,rgba(174,198,230,.12) 32%,transparent 70%);filter:blur(13px);animation:gh-backlight 12s ease-in-out infinite alternate}
+ .gh-brand__beam{position:absolute;z-index:0;left:50%;top:46%;width:260px;height:85px;background:linear-gradient(90deg,rgba(226,237,255,.17),transparent 85%);filter:blur(9px);transform-origin:left center;opacity:.55;clip-path:polygon(0 45%,100% 0,100% 100%,0 55%)}
+ .gh-brand__beam--left{transform:translateY(-50%) rotate(165deg)}
+ .gh-brand__beam--right{transform:translateY(-50%) rotate(-15deg)}
+ .gh-brand__smoke{position:absolute;z-index:1;left:50%;top:42%;width:600px;height:200px;transform:translate(-50%,-50%);opacity:.8;pointer-events:none;max-width:none;mix-blend-mode:screen}
+ .gh-home-preview .gc-header__desktop-nav{display:flex;position:absolute;top:119px;left:50%;transform:translateX(-50%);grid-column:auto;grid-row:auto;padding:0;gap:clamp(28px,3vw,52px);align-items:center;justify-content:center;transition:top .4s}
+ .gh-home-preview .gc-header__desktop-nav a,.gh-home-preview .gc-header__desktop-nav button{font:400 10px/1.5 var(--g-sans);letter-spacing:.2em;padding:11px 0;background:none;border:0;text-transform:uppercase;color:inherit;text-decoration:none;white-space:nowrap}
+ .gh-home-preview .gc-header__desktop-nav a:after{content:'';display:block;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s;margin-top:3px;opacity:.65}
+ .gh-home-preview .gc-header__desktop-nav a:hover:after,.gh-home-preview .gc-header__desktop-nav a[aria-expanded=true]:after{transform:scaleX(1)}
+ .gh-home-preview .gc-header__actions{position:absolute;top:24px;right:27px;gap:23px}
+ .gh-home-preview .gc-header__account{display:flex;align-items:center}
+ .gh-home-preview .gh-account-text{display:none}
+ .gh-home-preview .gh-account-icon{display:block;width:19px;height:19px}
+ .gh-home-preview .gc-header__actions .gc-icon-button svg{width:19px;height:19px}
+ .gh-home-tools{position:absolute;left:27px;top:22px;display:flex;align-items:center;gap:25px;color:inherit;z-index:3}
+ .gh-home-tools>a,.gh-home-tools>button,.gh-country>summary{display:grid;place-items:center;width:24px;height:26px;padding:2px;border:0;background:none;color:inherit;cursor:pointer;list-style:none}
+ .gh-home-tools svg{width:17px;height:17px;stroke-width:1.15}
+ .gh-country>summary::-webkit-details-marker{display:none}
+ .gh-country{position:relative}
+ .gh-country__panel{position:absolute;left:0;top:39px;width:275px;background:#fff;color:#252525;padding:23px;box-shadow:0 8px 35px #0002;border:1px solid #e5e5e5}
+ .gh-country__panel label{display:block;font:400 11px/1.5 var(--g-sans);margin-bottom:14px}
+ .gh-country__panel select{width:100%;font:400 12px/1.5 var(--g-sans);padding:9px;background:white;border:1px solid #ccc;color:#333}
+ .gh-country__panel button{width:100%;font:400 10px/1.5 var(--g-sans);letter-spacing:.1em;margin-top:14px;background:#172237;color:#fff;border:0;padding:11px;cursor:pointer}
+ .gh-atmosphere-toggle{opacity:.6}
+ .gh-atmosphere-toggle[aria-pressed=true] .gh-pause-lines{display:none}
+ .gh-atmosphere-toggle:not([aria-pressed=true]) .gh-play-triangle{display:none}
+ .gh-home-preview .gc-header__search{display:flex;position:absolute;top:21px;right:106px;width:222px;height:30px;padding:0;border:0;gap:8px;z-index:2;color:inherit}
+ .gh-home-preview .gc-header__search input{opacity:0;pointer-events:none;color:inherit;font-size:10px;transition:opacity .2s;padding:6px 0}
+ .gh-home-preview .gc-header__search:focus-within input,.gh-home-preview .gc-has-search .gc-header__search input{opacity:1;pointer-events:auto}
+ .gh-home-preview .gc-header__search button{padding:4px;color:inherit}
+ .gh-home-preview .gc-header__search svg{width:18px;height:18px}
+ .gh-home-preview .gh-hero{height:100svh;min-height:650px;max-height:none;background:#172027}
+ .gh-home-preview .gh-hero:after{background:linear-gradient(180deg,rgba(3,9,16,.03) 20%,rgba(3,9,16,.15) 55%,rgba(3,9,16,.2))}
+ .gh-home-preview .gh-hero__content{justify-content:center;gap:22px;padding:180px 30px 85px;transform:translateY(15px)}
+ .gh-home-preview .gh-hero__content h1{font:400 32px/1.25 var(--g-display);letter-spacing:.005em;max-width:740px;text-shadow:0 1px 12px #0002}
+ .gh-home-preview .gh-hero__content>p{font-size:13px;font-weight:400;letter-spacing:.02em;margin:0;line-height:1.6}
+ .gh-home-preview .gh-hero__content>.gh-button{display:none}
+ .gh-hero__desktop-actions{display:flex;align-items:center;gap:43px;margin-top:8px}
+ .gh-hero__desktop-actions a{font:400 11px/1.5 var(--g-sans);letter-spacing:.17em;text-transform:uppercase;text-decoration:none;padding:0 3px 8px;border-bottom:1px solid #ffffffa6;min-width:145px;transition:border-color .2s}
+ .gh-hero__desktop-actions a:hover{border-color:#fff}
+ .gh-home-preview .gh-hero:before{content:'';position:absolute;bottom:21px;left:calc(50% - 17px);width:34px;height:5px;border:1px solid #ffffff80;border-radius:4px;z-index:2}
+ /* Keep normal menu/search contrast and a compact masthead after scrolling. */
+ .gh-home-preview.gh-scrolled #header-group .gc-header,.gh-home-preview #header-group.gc-has-mega .gc-header,.gh-home-preview #header-group.gc-has-search .gc-header{background:#fff!important;color:#252525!important;border-bottom:1px solid #e9e9e9}
+ .gh-home-preview.gh-scrolled .gc-header__row{height:108px!important}
+ .gh-home-preview.gh-scrolled .gc-header__logo{width:158px;height:52px;top:9px}
+ .gh-home-preview.gh-scrolled .gc-header__desktop-nav{top:68px}
+ .gh-home-preview.gh-scrolled .gh-brand__art,.gh-home-preview #header-group.gc-has-mega .gh-brand__art,.gh-home-preview #header-group.gc-has-search .gh-brand__art{filter:brightness(0);opacity:.9}
+ .gh-home-preview.gh-scrolled .gh-brand__light,.gh-home-preview.gh-scrolled .gh-brand__beam,.gh-home-preview.gh-scrolled .gh-brand__smoke,.gh-home-preview #header-group:is(.gc-has-mega,.gc-has-search) :is(.gh-brand__light,.gh-brand__beam,.gh-brand__smoke){opacity:0}
+ .gh-home-preview.gh-atmosphere-paused .gh-brand__light{animation-play-state:paused}
+ .gh-home-preview .gc-header__logo:focus-visible,.gh-home-tools :is(a,button,summary):focus-visible{outline:1px solid currentColor;outline-offset:6px}
+}
+@media(min-width:1024px) and (max-width:1249px){
+ .gh-home-preview .gc-mega{display:grid;grid-template-columns:1fr 1fr;position:absolute;top:100%;left:0;right:0;z-index:3;height:min(600px,72dvh);max-height:calc(100dvh - var(--gc-sticky-offset) - 25px);background:#f7f7f7;color:#252525;font:400 12px/1.6 var(--g-sans)}
+ .gh-home-preview .gc-mega__left{min-width:0;display:flex;flex-direction:column;padding:26px 12px 20px;overflow:auto}
+ .gh-home-preview .gc-mega__columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:16px;flex:1;align-content:start}
+ .gh-home-preview .gc-mega__heading{display:block;color:#858585;text-decoration:none;margin:0 0 21px}
+ .gh-home-preview .gc-mega ul{list-style:none;padding:0;margin:0;display:grid;gap:18px}
+ .gh-home-preview .gc-mega li a{color:#292929;text-decoration:none}
+ .gh-home-preview .gc-mega__footer{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding-top:25px;font-size:11px}
+ .gh-home-preview .gc-mega__feature{position:relative;display:block;overflow:hidden;color:#fff}
+ .gh-home-preview .gc-mega__feature img{width:100%;height:100%;object-fit:cover}
+ .gh-home-preview .gc-mega__feature>span{position:absolute;left:15px;right:15px;top:50%;transform:translateY(-50%);text-align:center;font-size:26px}
+ .gh-home-preview .gc-mega__feature small{display:block;font-size:11px;margin-top:9px}
+}
+@keyframes gh-backlight{from{opacity:.65;transform:translate(-50%,-50%) scale(.94)}to{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
+@media(prefers-reduced-motion:reduce){.gh-brand__light{animation:none!important}.gh-brand__smoke{display:none}.gh-home-preview .gc-header__row,.gh-home-preview .gc-header__logo,.gh-home-preview .gc-header__desktop-nav{transition:none!important}}
