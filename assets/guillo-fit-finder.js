@@ -91,16 +91,23 @@
     function third(){return productCard()+intro(3,'How do you like it to fit?','Choose how closely you like your clothes to sit.')+`<div class="gff__fits">${fitNames.map((label,i)=>`<button type="button" data-fit="${i}" aria-pressed="${S.fit===i}">${icon('fit',i)}<span><strong>${label}</strong><small>${fitNotes[i]}</small></span><i aria-hidden="true"></i></button>`).join('')}</div>`;}
     function result(){
       const r=recommendation(),i=S.chosen??r.idx,v=variantFor(i);
-      return productCard()+`<div class="gff__result"><h2 class="gff__result-heading" tabindex="-1" data-gff-heading>${i===r.idx?'Your suggested size':'Your selected size'}</h2><div class="gff__circle"><span>${esc(P.sizes[i])}</span></div><p class="gff__result-summary">${fitNames[S.fit]} fit. ${bottom?'Based on your usual waist size.':S.route==='usual'?'Based on your usual size.':'Estimated from your measurements and shape.'}</p><div class="gff__size-rail">${P.sizes.map((s,j)=>`<button type="button" data-result-size="${j}" aria-pressed="${j===i}" aria-label="Size ${esc(s)}${j===r.idx?', recommended':''}"><span>${esc(s)}</span>${j===r.idx?'<small>Suggested</small>':''}</button>`).join('')}</div>${r.limited?'<p class="gff__caution">You may be outside this cut’s size range. Check the measurements before ordering.</p>':''}${v&&!v.available?'<p class="gff__stock">Currently unavailable. Select this size to request a restock notification.</p>':''}<details class="gff__measurement-details"><summary>Check measurements</summary><p class="gff__chart">${bottom?'Waist':'Chest'}: <strong>${measure(P.chart[i])}</strong>${P.leg&&P.inside?.[i]?`<br>Inside leg: <strong>${measure(P.inside[i])}</strong>`:''}</p><p class="gff__caution">Size guidance is approximate. Compare these measurements with the full size guide.</p></details><button class="gff__text" type="button" data-restart>Change my answers</button></div>`;
+      return productCard()+`<div class="gff__result"><h2 class="gff__result-heading" tabindex="-1" data-gff-heading>${i===r.idx?'Your suggested size':'Your selected size'}</h2><div class="gff__circle"><svg class="gff__result-ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="57"/></svg><span>${esc(P.sizes[i])}</span></div><p class="gff__result-summary">${fitNames[S.fit]} fit. ${bottom?'Based on your usual waist size.':S.route==='usual'?'Based on your usual size.':'Estimated from your measurements and shape.'}</p><div class="gff__size-rail">${P.sizes.map((s,j)=>`<button type="button" data-result-size="${j}" aria-pressed="${j===i}" aria-label="Size ${esc(s)}${j===r.idx?', recommended':''}"><span>${esc(s)}</span>${j===r.idx?'<small>Suggested</small>':''}</button>`).join('')}</div>${r.limited?'<p class="gff__caution">You may be outside this cut’s size range. Check the measurements before ordering.</p>':''}${v&&!v.available?'<p class="gff__stock">Currently unavailable. Select this size to request a restock notification.</p>':''}<details class="gff__measurement-details"><summary>Check measurements</summary><p class="gff__chart">${bottom?'Waist':'Chest'}: <strong>${measure(P.chart[i])}</strong>${P.leg&&P.inside?.[i]?`<br>Inside leg: <strong>${measure(P.inside[i])}</strong>`:''}</p><p class="gff__caution">Size guidance is approximate. Compare these measurements with the full size guide.</p></details><button class="gff__text" type="button" data-restart>Change my answers</button></div>`;
     }
     function ready(){return S.step===1?(bottom?S.usual!=null:(S.route==='estimate'||S.usual!=null)):S.step===2?groups.every(g=>S[g.key]!=null):S.fit!=null;}
     function render(focus=false){
+      const previousStep=renderedStep;
       root.dataset.step=String(S.step);body.innerHTML=S.step===1?first():S.step===2?second():S.step===3?third():result();
       foot.hidden=false;back.hidden=S.step===1;back.innerHTML=S.step===4?'Edit answers':'←';back.setAttribute('aria-label',S.step===4?'Edit answers':'Previous step');
       next.disabled=!ready();next.textContent=S.step===4?`Select ${P.sizes[S.chosen??recommendation().idx]} →`:S.step===3?'See my size →':'Continue →';
       headerProgress.textContent=S.step===4?'Your fit':S.step+' of 3';
-      if(renderedStep!==S.step) {
-        if(renderedStep!==null && !matchMedia('(prefers-reduced-motion: reduce)').matches) body.animate([{opacity:0,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:180,easing:'ease-out'});
+      if(previousStep!==S.step) {
+        if(!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          const direction=previousStep && S.step<previousStep ? -1 : 1;
+          [...body.children].forEach((item,i)=>item.animate(
+            [{opacity:0,transform:'translateY('+direction*8+'px)'},{opacity:1,transform:'translateY(0)'}],
+            {duration:360,delay:Math.min(i*28,112),easing:'cubic-bezier(.22,1,.36,1)',fill:'backwards'}
+          ));
+        }
         renderedStep=S.step;
       }
       body.scrollTop=0;
@@ -112,8 +119,14 @@
       if(input){input.click();input.dispatchEvent(new Event('change',{bubbles:true}));return input;}
       return null;
     }
-    function open(){lastFocus=document.activeElement;opened=true;previousOverflow=document.body.style.overflow;previousPadding=document.body.style.paddingRight;const gap=innerWidth-document.documentElement.clientWidth;if(gap)document.body.style.paddingRight=gap+'px';document.body.style.overflow='hidden';root.hidden=false;render();requestAnimationFrame(()=>{root.classList.add('is-open');panel.focus();});}
-    function close(){opened=false;root.classList.remove('is-open');document.body.style.overflow=previousOverflow;document.body.style.paddingRight=previousPadding;setTimeout(()=>{if(!opened)root.hidden=true;},250);lastFocus?.focus();}
+    function open(){lastFocus=document.activeElement;opened=true;previousOverflow=document.body.style.overflow;previousPadding=document.body.style.paddingRight;const gap=innerWidth-document.documentElement.clientWidth;if(gap)document.body.style.paddingRight=gap+'px';document.body.style.overflow='hidden';root.hidden=false;renderedStep=null;render();requestAnimationFrame(()=>{root.classList.add('is-open');panel.focus();});}
+    function close(){opened=false;root.classList.remove('is-open');document.body.style.overflow=previousOverflow;document.body.style.paddingRight=previousPadding;setTimeout(()=>{if(!opened)root.hidden=true;},280);lastFocus?.focus();}
+    function selectionMotion(selector) {
+      if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+      const item=root.querySelector(selector);
+      item?.animate([{transform:'scale(.975)'},{transform:'scale(1)'}],{duration:240,easing:'cubic-bezier(.22,1,.36,1)'});
+      item?.querySelector('svg')?.animate([{opacity:.45,transform:'translateY(2px)'},{opacity:1,transform:'translateY(0)'}],{duration:280,easing:'ease-out'});
+    }
     root.addEventListener('input',e=>{const k=e.target.dataset.range;if(!k)return;S[k]=Number(e.target.value);root.querySelector(`[data-value="${k}"]`).textContent=value(k);e.target.setAttribute('aria-valuetext',`${value(k)} ${unit(k)}`);});
     root.addEventListener('click',e=>{
       const t=e.target.closest('button,[data-gff-close]');if(!t)return;
@@ -121,9 +134,9 @@
       if(t.dataset.unit!=null){S.imperial=t.dataset.unit==='1';render();return;}
       if(t.dataset.adjust){const k=t.dataset.adjust;S[k]=clamp(S[k]+Number(t.dataset.delta),k==='h'?145:45,k==='h'?210:160);render();root.querySelector(`[data-adjust="${k}"][data-delta="${t.dataset.delta}"]`)?.focus();return;}
       if(t.dataset.route){S.route=t.dataset.route;render();return;}
-      if(t.dataset.usual!=null){S.usual=Number(t.dataset.usual);render();return;}
-      if(t.dataset.shape){S[t.dataset.shape]=Number(t.dataset.choice);render();root.querySelector(`[data-shape="${t.dataset.shape}"][data-choice="${t.dataset.choice}"]`)?.focus();return;}
-      if(t.dataset.fit!=null){S.fit=Number(t.dataset.fit);render();root.querySelector(`[data-fit="${t.dataset.fit}"]`)?.focus();return;}
+      if(t.dataset.usual!=null){S.usual=Number(t.dataset.usual);render();selectionMotion('[data-usual="'+S.usual+'"]');return;}
+      if(t.dataset.shape){S[t.dataset.shape]=Number(t.dataset.choice);render();selectionMotion('[data-shape="'+t.dataset.shape+'"][data-choice="'+t.dataset.choice+'"]');root.querySelector(`[data-shape="${t.dataset.shape}"][data-choice="${t.dataset.choice}"]`)?.focus();return;}
+      if(t.dataset.fit!=null){S.fit=Number(t.dataset.fit);render();selectionMotion('[data-fit="'+S.fit+'"]');root.querySelector(`[data-fit="${t.dataset.fit}"]`)?.focus();return;}
       if(t.dataset.resultSize!=null){S.chosen=Number(t.dataset.resultSize);render();return;}
       if(t.hasAttribute('data-restart')){S.step=1;render(true);return;}
       if(t===back){S.step=Math.max(1,S.step-1);render(true);return;}

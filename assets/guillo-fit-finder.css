@@ -137,3 +137,36 @@
 .gff__chart strong{color:#273b57}
 .gff__measurement-details .gff__caution{color:#758398}
 @media(max-width:560px){.gff__panel:before{z-index:1;background:#7f90a6}}
+
+/* Short, deliberate motion. No loops or artificial waiting screens. */
+.gff__panel{transform:translateY(18px) scale(.992);transition:opacity .32s ease,transform .42s cubic-bezier(.22,1,.36,1)}
+.gff.is-open .gff__panel{transform:translateY(0) scale(1)}
+.gff:not(.is-open) .gff__panel{transition-duration:.24s}
+.gff__scrim{transition:opacity .32s ease}
+.gff__head{position:relative}
+.gff__head:after{content:'';position:absolute;left:0;bottom:-1px;height:1px;background:linear-gradient(90deg,#7890ae,#c1cedf);width:33.333%;transition:width .45s cubic-bezier(.22,1,.36,1)}
+.gff[data-step="2"] .gff__head:after{width:66.667%}
+.gff[data-step="3"] .gff__head:after,.gff[data-step="4"] .gff__head:after{width:100%}
+.gff__shape button,.gff__fits button,.gff__usual button{transition:background-color .2s,border-color .2s,color .2s,box-shadow .25s}
+.gff__shape button:hover,.gff__fits button:hover{box-shadow:0 3px 12px rgba(15,31,51,.05)}
+.gff__shape button:active,.gff__fits button:active,.gff__usual button:active{transform:scale(.985)}
+.gff__next{position:relative;overflow:hidden;isolation:isolate}
+.gff__next:after{content:'';position:absolute;inset:-70% auto -70% -65%;width:38%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transform:skewX(-20deg);transition:left .6s ease;pointer-events:none}
+.gff__next:not(:disabled):hover:after{left:130%}
+.gff__next:active{transform:translateY(1px)}
+.gff__circle{position:relative;overflow:visible}
+.gff__result-ring{position:absolute;inset:-5px;width:calc(100% + 10px);height:calc(100% + 10px);fill:none;stroke:#8b9fb9;stroke-width:.7;transform:rotate(-90deg);pointer-events:none}
+.gff__result-ring circle{stroke-dasharray:359;stroke-dashoffset:0;animation:gff-ring-draw .75s cubic-bezier(.22,1,.36,1) both}
+.gff[data-step="4"] .gff__circle{animation:gff-size-arrive .45s cubic-bezier(.22,1,.36,1) both}
+.gff__circle>span{animation:gff-size-text .45s .08s ease-out backwards}
+.gff__measurement-details[open] p{animation:gff-detail-in .22s ease-out}
+@keyframes gff-ring-draw{from{stroke-dashoffset:359;opacity:.3}to{stroke-dashoffset:0;opacity:1}}
+@keyframes gff-size-arrive{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes gff-size-text{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+@keyframes gff-detail-in{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){
+.gff__panel,.gff:not(.is-open) .gff__panel,.gff__scrim,.gff__head:after,.gff__shape button,.gff__fits button,.gff__usual button,.gff__next,.gff__next:after{transition:none}
+.gff[data-step="4"] .gff__circle,.gff__result-ring circle,.gff__circle>span,.gff__measurement-details[open] p{animation:none}
+.gff__shape button:active,.gff__fits button:active,.gff__usual button:active,.gff__next:active{transform:none}
+.gff__next:after{display:none}
+}
