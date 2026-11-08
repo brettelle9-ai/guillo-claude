@@ -1,28 +1,3 @@
-{%- comment -%}Product discovery markup generated from Shopify's live product, variant and review data.{%- endcomment -%}
-{%- liquid
-  assign guillo_product_schema = product | structured_data | strip
-  assign guillo_schema_rating = product.metafields.reviews.rating.value.rating | plus: 0
-  assign guillo_schema_count = product.metafields.reviews.rating_count.value | plus: 0
-  assign guillo_schema_end = guillo_product_schema | size | minus: 1
--%}
-<script type="application/ld+json" id="guillo-product-structured-data">
-{%- if guillo_schema_count > 0 and guillo_schema_rating >= 1 and guillo_schema_rating <= 5 -%}
-  {%- if guillo_product_schema contains '"aggregateRating"' -%}
-    {{ guillo_product_schema }}
-  {%- else -%}
-    {{ guillo_product_schema | slice: 0, guillo_schema_end }},
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": {{ guillo_schema_rating | json }},
-      "reviewCount": {{ guillo_schema_count | json }},
-      "bestRating": 5,
-      "worstRating": 1
-    }}
-  {%- endif -%}
-{%- else -%}
-  {{ guillo_product_schema }}
-{%- endif -%}
-</script>
 {% if product.handle contains 'bellagio' %}{{ 'guillo-bellagio.css' | asset_url | stylesheet_tag }}{% endif %}
 {%- liquid
   assign rating = product.metafields.reviews.rating.value.rating | plus: 0
@@ -124,6 +99,7 @@
     endfor
   endif
 -%}
+{% render 'guillo-product-schema', product: product, availability_mode: availability_mode %}
 <section class="ge-product" data-ge-product data-availability-mode="{{ availability_mode }}" data-add-label="{{ add_label }}" data-product-name="{{ product.title | remove_first: 'The ' | escape }}">
   <div class="ge-main">
     <div class="ge-gallery-wrap">

@@ -1,0 +1,11 @@
+{
+  "name": "guillo-theme-checks",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/structured-data.test.cjs"
+  },
+  "devDependencies": {
+    "@shopify/liquid-html-parser": "2.12.0",
+    "liquidjs": "10.30.1"
+  }
+}

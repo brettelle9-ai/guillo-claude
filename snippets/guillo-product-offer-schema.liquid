@@ -1,0 +1,52 @@
+{% doc %}
+  One variant offer. Australian standard shipping is the only service whose
+  rate and delivery estimate are included here. Source: /pages/shipping and
+  guillo-shipping-panel.liquid, checked 2026-11-08. Keep both in sync.
+  The free-shipping threshold is evaluated for one unit at its offered price,
+  never against the visitor's cart. Preorders have no normal delivery promise.
+
+  @param {object} variant - Shopify variant
+  @param {string} variant_url - Absolute product or selected-variant URL
+  @param {string} currency - Offer's presentment currency
+  @param {string} [availability_mode] - Product section availability mode
+{% enddoc %}
+{%- liquid
+  assign availability = 'https://schema.org/OutOfStock'
+  if variant.available
+    assign availability = 'https://schema.org/InStock'
+    if availability_mode == 'preorder'
+      assign availability = 'https://schema.org/PreOrder'
+    endif
+  endif
+  assign standard_shipping = 9.95
+  if variant.price > 10000
+    assign standard_shipping = 0
+  endif
+-%}
+{
+  "@type": "Offer",
+  "@id": {{ variant_url | append: '#offer' | json }},
+  "url": {{ variant_url | json }},
+  "price": {{ variant.price | divided_by: 100.0 | json }},
+  "priceCurrency": {{ currency | json }},
+  "availability": {{ availability | json }},
+  "hasMerchantReturnPolicy": {
+    "@type": "MerchantReturnPolicy",
+    "applicableCountry": ["AU", "NZ"],
+    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+    "merchantReturnDays": 44,
+    "returnFees": "https://schema.org/FreeReturn",
+    "merchantReturnLink": {{ shop.refund_policy.url | prepend: request.origin | json }}
+  }
+  {%- if currency == 'AUD' and variant.requires_shipping and variant.available and availability_mode != 'preorder' -%},
+    "shippingDetails": {
+      "@type": "OfferShippingDetails",
+      "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "AU"},
+      "shippingRate": {"@type": "MonetaryAmount", "value": {{ standard_shipping | json }}, "currency": "AUD"},
+      "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "transitTime": {"@type": "QuantitativeValue", "minValue": 2, "maxValue": 4, "unitCode": "DAY"}
+      }
+    }
+  {%- endif -%}
+}
