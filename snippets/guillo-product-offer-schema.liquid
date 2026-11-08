@@ -1,0 +1,84 @@
+{% doc %}
+  One variant offer. Shipping uses the active country and only rates published
+  in that offer's currency, from the same source as the delivery panel.
+  Sources: guillo-shipping-rates.liquid and /policies/refund-policy.
+  The free-shipping threshold is evaluated for one unit at its offered price,
+  never against the visitor's cart. Preorders have no normal delivery promise.
+
+  @param {object} variant - Shopify variant
+  @param {string} variant_url - Absolute product or selected-variant URL
+  @param {string} currency - Offer's presentment currency
+  @param {string} [availability_mode] - Product section availability mode
+{% enddoc %}
+{%- liquid
+  assign availability = 'https://schema.org/OutOfStock'
+  if variant.available
+    assign availability = 'https://schema.org/InStock'
+    if availability_mode == 'preorder'
+      assign availability = 'https://schema.org/PreOrder'
+    endif
+  endif
+  assign country = localization.country.iso_code | default: 'AU'
+  capture shipping_data
+    render 'guillo-shipping-rates', country_code: country
+  endcapture
+  assign shipping_data = shipping_data | strip | split: '|'
+  assign standard_shipping = shipping_data[1] | plus: 0
+  if shipping_data[2] != blank
+    assign free_shipping_over = shipping_data[2] | times: 100
+    if variant.price > free_shipping_over
+      assign standard_shipping = 0
+    endif
+  endif
+  assign free_priority_shipping = false
+  if country == 'NZ' and shipping_data[6] != blank
+    assign free_priority_over = shipping_data[6] | times: 100
+    if variant.price > free_priority_over
+      assign free_priority_shipping = true
+    endif
+  endif
+-%}
+{
+  "@type": "Offer",
+  "@id": {{ variant_url | append: '#offer' | json }},
+  "url": {{ variant_url | json }},
+  "price": {{ variant.price | divided_by: 100.0 | json }},
+  "priceCurrency": {{ currency | json }},
+  "availability": {{ availability | json }},
+  "hasMerchantReturnPolicy": {
+    "@type": "MerchantReturnPolicy",
+    "applicableCountry": {{ country | json }},
+    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+    "merchantReturnDays": 44,
+    {%- if country == 'AU' or country == 'NZ' -%}
+      "returnFees": "https://schema.org/FreeReturn",
+    {%- endif -%}
+    "merchantReturnLink": {{ shop.refund_policy.url | prepend: request.origin | json }}
+  }
+  {%- if shipping_data[0] != blank and shipping_data[1] != blank and currency == shipping_data[0] and variant.requires_shipping and variant.available and availability_mode != 'preorder' -%},
+    "shippingDetails": {% if free_priority_shipping %}[{% endif %}{
+      "@type": "OfferShippingDetails",
+      "name": "Standard",
+      "shippingDestination": {"@type": "DefinedRegion", "addressCountry": {{ country | json }}},
+      "shippingRate": {"@type": "MonetaryAmount", "value": {{ standard_shipping | json }}, "currency": {{ currency | json }}}
+      {%- if shipping_data[3] != blank and shipping_data[4] != blank -%},
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {"@type": "QuantitativeValue", "minValue": {{ shipping_data[3] | plus: 0 | json }}, "maxValue": {{ shipping_data[4] | plus: 0 | json }}, "unitCode": "DAY"}
+        }
+      {%- endif -%}
+    }
+    {%- if free_priority_shipping -%},
+      {
+        "@type": "OfferShippingDetails",
+        "name": {{ shipping_data[7] | json }},
+        "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "NZ"},
+        "shippingRate": {"@type": "MonetaryAmount", "value": 0, "currency": "NZD"},
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {"@type": "QuantitativeValue", "minValue": {{ shipping_data[3] | plus: 0 | json }}, "maxValue": {{ shipping_data[4] | plus: 0 | json }}, "unitCode": "DAY"}
+        }
+      }
+    ]{%- endif -%}
+  {%- endif -%}
+}

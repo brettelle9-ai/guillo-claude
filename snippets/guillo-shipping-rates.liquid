@@ -1,0 +1,24 @@
+{% doc %}
+  Published shipping rates shared by the delivery panel and product schema.
+  Source: the existing country-specific panel, checked 2026-11-08.
+  Keep these aligned with checkout when the merchant changes shipping rates.
+
+  Output fields, separated by |:
+  currency, standard rate, standard free-over threshold, minimum/maximum
+  delivery days, express rate, express free-over threshold, express name, zone.
+  Empty fields are unknown or unpublished; they must not be treated as zero.
+  NZ's free threshold applies to priority express, not standard shipping.
+  US standard delivery of 7–10 days was confirmed by Will on 2026-11-08.
+
+  @param {string} country_code - Shopify Markets country ISO code
+{% enddoc %}
+{%- assign europe = 'AT,BE,CZ,DK,FI,FR,DE,GR,IE,IT,LU,NL,NO,PL,PT,ES,SE,CH,HU' | split: ',' -%}
+{%- case country_code -%}
+  {%- when 'AU' -%}AUD|9.95|100|2|4|14.95|200|Express|au
+  {%- when 'NZ' -%}NZD|12||2|4||160|Priority express|nz
+  {%- when 'SG' -%}SGD|15|250|4|6|27|350|Express|sg
+  {%- when 'GB' -%}GBP|16|65|5|8|25|180|Express|gb
+  {%- when 'US' -%}USD|20||7|10|28||Express|us
+  {%- else -%}
+    {%- if europe contains country_code -%}EUR|25||6|9|||Express|eu{%- endif -%}
+{%- endcase -%}

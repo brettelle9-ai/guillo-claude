@@ -23,6 +23,55 @@
     return el;
   };
   let reviews = [], shown = 0;
+  function updateProductSchema(publishedReviews) {
+    const script = document.getElementById('guillo-product-structured-data');
+    if (!script?.dataset.productId) return;
+    const schema = JSON.parse(script.textContent);
+    // Klaviyo's feed and Shopify metafields can contain a collection's totals.
+    // Only reviews attached to this exact product may describe this ProductGroup.
+    const productReviews = publishedReviews.filter(review => {
+      const item = review.product || {};
+      const id = item.shopify_id || item.external_id;
+      const rating = Number(review.rating);
+      return String(id) === script.dataset.productId &&
+        ['Published', 'Featured'].includes(review.status) && !review.is_store &&
+        Number.isFinite(rating) && rating >= 1 && rating <= 5;
+    });
+    delete schema.aggregateRating;
+    delete schema.review;
+    const productScore = section.querySelector('[data-product-review-score]');
+    if (productScore) productScore.hidden = true;
+    if (productReviews.length) {
+      schema.aggregateRating = {
+        '@type': 'AggregateRating',
+        ratingValue: Number((productReviews.reduce((sum, review) => sum + Number(review.rating), 0) / productReviews.length).toFixed(2)),
+        ratingCount: productReviews.length,
+        bestRating: 5,
+        worstRating: 1
+      };
+      if (productScore) {
+        productScore.textContent = `This item: ${schema.aggregateRating.ratingValue} / 5 · ${productReviews.length} published ${productReviews.length === 1 ? 'rating' : 'ratings'}`;
+        productScore.hidden = false;
+      }
+      // These reviews are available in the on-page list, including Read more.
+      const writtenReviews = productReviews.filter(review => review.author?.trim() && review.content?.trim());
+      if (writtenReviews.length) {
+        schema.aggregateRating.reviewCount = writtenReviews.length;
+        schema.review = writtenReviews.slice(0, 10).map(review => {
+          const result = {
+            '@type': 'Review',
+            author: {'@type': 'Person', name: review.author.trim()},
+            reviewBody: review.content,
+            reviewRating: {'@type': 'Rating', ratingValue: Number(review.rating), bestRating: 5, worstRating: 1}
+          };
+          if (review.title?.trim()) result.name = review.title;
+          if (Number.isFinite(Date.parse(review.created_at))) result.datePublished = new Date(review.created_at).toISOString().slice(0, 10);
+          return result;
+        });
+      }
+    }
+    script.textContent = JSON.stringify(schema).replace(/</g, '\\u003c');
+  }
   const mobile = matchMedia('(max-width:749px)');
   function render() {
     const batch = mobile.matches ? (shown === 0 ? 2 : 3) : 5;
@@ -72,6 +121,7 @@
       // Four requests at a time keeps the storefront feed light.
       for (let i = 0; i < products.length; i += 4) results.push(...await Promise.all(products.slice(i, i + 4).map(loadProduct)));
       reviews = [...new Map(results.flat().map(r => [r.id, r])).values()].sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+      updateProductSchema(reviews);
       status.hidden = true;
       if (!reviews.length) { status.hidden = false; status.textContent = 'No reviews yet.'; return; }
       const rating = (reviews.reduce((sum,r) => sum + Number(r.rating), 0) / reviews.length).toFixed(1);
