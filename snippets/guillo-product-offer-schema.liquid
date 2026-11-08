@@ -1,7 +1,7 @@
 {% doc %}
-  One variant offer. Australian standard shipping is the only service whose
-  rate and delivery estimate are included here. Source: /pages/shipping and
-  guillo-shipping-panel.liquid, checked 2026-11-08. Keep both in sync.
+  One variant offer. Shipping uses the active country and only rates published
+  in that offer's currency, from the same source as the delivery panel.
+  Sources: guillo-shipping-rates.liquid and /policies/refund-policy.
   The free-shipping threshold is evaluated for one unit at its offered price,
   never against the visitor's cart. Preorders have no normal delivery promise.
 
@@ -18,9 +18,24 @@
       assign availability = 'https://schema.org/PreOrder'
     endif
   endif
-  assign standard_shipping = 9.95
-  if variant.price > 10000
-    assign standard_shipping = 0
+  assign country = localization.country.iso_code | default: 'AU'
+  capture shipping_data
+    render 'guillo-shipping-rates', country_code: country
+  endcapture
+  assign shipping_data = shipping_data | strip | split: '|'
+  assign standard_shipping = shipping_data[1] | plus: 0
+  if shipping_data[2] != blank
+    assign free_shipping_over = shipping_data[2] | times: 100
+    if variant.price > free_shipping_over
+      assign standard_shipping = 0
+    endif
+  endif
+  assign free_priority_shipping = false
+  if country == 'NZ' and shipping_data[6] != blank
+    assign free_priority_over = shipping_data[6] | times: 100
+    if variant.price > free_priority_over
+      assign free_priority_shipping = true
+    endif
   endif
 -%}
 {
@@ -32,21 +47,38 @@
   "availability": {{ availability | json }},
   "hasMerchantReturnPolicy": {
     "@type": "MerchantReturnPolicy",
-    "applicableCountry": ["AU", "NZ"],
+    "applicableCountry": {{ country | json }},
     "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
     "merchantReturnDays": 44,
-    "returnFees": "https://schema.org/FreeReturn",
+    {%- if country == 'AU' or country == 'NZ' -%}
+      "returnFees": "https://schema.org/FreeReturn",
+    {%- endif -%}
     "merchantReturnLink": {{ shop.refund_policy.url | prepend: request.origin | json }}
   }
-  {%- if currency == 'AUD' and variant.requires_shipping and variant.available and availability_mode != 'preorder' -%},
-    "shippingDetails": {
+  {%- if shipping_data[0] != blank and shipping_data[1] != blank and currency == shipping_data[0] and variant.requires_shipping and variant.available and availability_mode != 'preorder' -%},
+    "shippingDetails": {% if free_priority_shipping %}[{% endif %}{
       "@type": "OfferShippingDetails",
-      "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "AU"},
-      "shippingRate": {"@type": "MonetaryAmount", "value": {{ standard_shipping | json }}, "currency": "AUD"},
-      "deliveryTime": {
-        "@type": "ShippingDeliveryTime",
-        "transitTime": {"@type": "QuantitativeValue", "minValue": 2, "maxValue": 4, "unitCode": "DAY"}
-      }
+      "name": "Standard",
+      "shippingDestination": {"@type": "DefinedRegion", "addressCountry": {{ country | json }}},
+      "shippingRate": {"@type": "MonetaryAmount", "value": {{ standard_shipping | json }}, "currency": {{ currency | json }}}
+      {%- if shipping_data[3] != blank and shipping_data[4] != blank -%},
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {"@type": "QuantitativeValue", "minValue": {{ shipping_data[3] | plus: 0 | json }}, "maxValue": {{ shipping_data[4] | plus: 0 | json }}, "unitCode": "DAY"}
+        }
+      {%- endif -%}
     }
+    {%- if free_priority_shipping -%},
+      {
+        "@type": "OfferShippingDetails",
+        "name": {{ shipping_data[7] | json }},
+        "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "NZ"},
+        "shippingRate": {"@type": "MonetaryAmount", "value": 0, "currency": "NZD"},
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {"@type": "QuantitativeValue", "minValue": {{ shipping_data[3] | plus: 0 | json }}, "maxValue": {{ shipping_data[4] | plus: 0 | json }}, "unitCode": "DAY"}
+        }
+      }
+    ]{%- endif -%}
   {%- endif -%}
 }

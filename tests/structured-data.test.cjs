@@ -9,7 +9,8 @@ const {toLiquidHtmlAST} = require('@shopify/liquid-html-parser');
 const root = path.resolve(__dirname, '..');
 const globalObjects = {
   request: {origin: 'https://example.com'},
-  shop: {name: 'Guillo Clothing', currency: 'AUD', refund_policy: {url: '/policies/refund-policy'}}
+  shop: {name: 'Guillo Clothing', currency: 'AUD', refund_policy: {url: '/policies/refund-policy'}},
+  localization: {country: {iso_code: 'AU', currency: {iso_code: 'AUD'}}}
 };
 const engine = new Liquid({root: path.join(root, 'snippets'), extname: '.liquid', strictFilters: true, globals: globalObjects});
 engine.registerTag('doc', {
@@ -37,15 +38,16 @@ async function render(p = product(), extra = {}) {
     product: p, availability_mode: 'normal', canonical_url: 'https://example.com/products/chino?variant=201',
     request: {origin: 'https://example.com'}, cart: {currency: {iso_code: 'AUD'}},
     shop: {name: 'Guillo Clothing', currency: 'AUD', refund_policy: {url: '/policies/refund-policy'}},
+    localization: globalObjects.localization,
     ...extra
   };
-  const html = await engine.renderFile('guillo-product-schema', context, {globals: {shop: context.shop, request: context.request}});
+  const html = await engine.renderFile('guillo-product-schema', context, {globals: {shop: context.shop, request: context.request, localization: context.localization}});
   const match = html.match(/<script[^>]+>([\s\S]*?)<\/script>/);
   return {html, schema: match ? JSON.parse(match[1]) : null};
 }
 
 test('Shopify parser accepts modified Liquid and new snippets', () => {
-  for (const file of ['snippets/guillo-product-schema.liquid', 'snippets/guillo-product-offer-schema.liquid', 'snippets/guillo-editorial-reviews.liquid', 'sections/guillo-editorial-product.liquid']) {
+  for (const file of ['snippets/guillo-product-schema.liquid', 'snippets/guillo-product-offer-schema.liquid', 'snippets/guillo-shipping-rates.liquid', 'snippets/guillo-shipping-panel.liquid', 'snippets/guillo-editorial-reviews.liquid', 'sections/guillo-editorial-product.liquid']) {
     assert.doesNotThrow(() => toLiquidHtmlAST(fs.readFileSync(path.join(root, file), 'utf8'), {mode: 'strict'}));
   }
 });
@@ -64,7 +66,7 @@ test('variants retain their URLs, prices, SKUs, sizes and availability; descript
     assert.equal(variant.offers.priceCurrency, 'AUD');
     assert.equal(variant.offers.url, `https://example.com/products/chino?variant=${201 + index}`);
     assert.equal(variant.offers.availability, `https://schema.org/${index ? 'OutOfStock' : 'InStock'}`);
-    assert.deepEqual(variant.offers.hasMerchantReturnPolicy.applicableCountry, ['AU', 'NZ']);
+    assert.equal(variant.offers.hasMerchantReturnPolicy.applicableCountry, 'AU');
     assert.equal(variant.offers.hasMerchantReturnPolicy.merchantReturnDays, 44);
     assert.equal(variant.offers.hasMerchantReturnPolicy.merchantReturnLink, 'https://example.com/policies/refund-policy');
     assert.ok(!variant.aggregateRating && !variant.review);
@@ -97,13 +99,102 @@ test('preorders, interest, digital and unavailable variants have no normal shipp
   assert.ok(!(await render(p)).schema.hasVariant[0].offers.shippingDetails);
 });
 
-test('foreign currency never receives AUD charges or unverified overseas free-return claims', async () => {
-  for (const currency of ['NZD', 'GBP', 'SGD', 'USD', 'EUR']) {
-    const {schema} = await render(product(), {cart: {currency: {iso_code: currency}}});
+const market = (country, currency) => ({
+  cart: {currency: {iso_code: currency}},
+  localization: {country: {iso_code: country, currency: {iso_code: currency}}}
+});
+
+test('international standard rates, destination, currency and published estimates are correct', async () => {
+  const cases = [
+    ['NZ', 'NZD', 12000, 12, [2, 4]],
+    ['GB', 'GBP', 6400, 16, [5, 8]],
+    ['GB', 'GBP', 6500, 16, [5, 8]],
+    ['GB', 'GBP', 6501, 0, [5, 8]],
+    ['SG', 'SGD', 25000, 15, [4, 6]],
+    ['SG', 'SGD', 25001, 0, [4, 6]],
+    ['FR', 'EUR', 13800, 25, [6, 9]],
+    ['US', 'USD', 13800, 20, null]
+  ];
+  for (const [country, currency, price, rate, days] of cases) {
+    const p = product(); p.variants[0].price = price;
+    const {schema} = await render(p, market(country, currency));
+    const offer = schema.hasVariant[0].offers, shipping = offer.shippingDetails;
+    assert.equal(offer.price, price / 100);
+    assert.equal(offer.priceCurrency, currency);
+    assert.equal(shipping.name, 'Standard');
+    assert.equal(shipping.shippingDestination.addressCountry, country);
+    assert.equal(shipping.shippingRate.currency, currency);
+    assert.equal(shipping.shippingRate.value, rate);
+    assert.equal(offer.hasMerchantReturnPolicy.applicableCountry, country);
+    assert.equal(offer.hasMerchantReturnPolicy.merchantReturnDays, 44);
+    if (country === 'NZ') assert.equal(offer.hasMerchantReturnPolicy.returnFees, 'https://schema.org/FreeReturn');
+    else assert.ok(!('returnFees' in offer.hasMerchantReturnPolicy));
+    assert.ok(!('returnMethod' in offer.hasMerchantReturnPolicy));
+    if (days) {
+      assert.equal(shipping.deliveryTime.transitTime.minValue, days[0]);
+      assert.equal(shipping.deliveryTime.transitTime.maxValue, days[1]);
+    } else assert.ok(!('deliveryTime' in shipping));
+  }
+});
+
+test('NZ standard stays paid; free priority express is a separate service only above NZ$160', async () => {
+  for (const price of [16000, 16001, 20000]) {
+    const p = product(); p.variants[0].price = price;
+    const {schema} = await render(p, market('NZ', 'NZD'));
+    const details = schema.hasVariant[0].offers.shippingDetails;
+    if (price === 16000) {
+      assert.ok(!Array.isArray(details));
+      assert.equal(details.shippingRate.value, 12);
+    } else {
+      assert.equal(details.length, 2);
+      assert.equal(details[0].name, 'Standard');
+      assert.equal(details[0].shippingRate.value, 12);
+      assert.equal(details[1].name, 'Priority express');
+      assert.equal(details[1].shippingRate.value, 0);
+      assert.equal(details[1].shippingRate.currency, 'NZD');
+    }
+  }
+});
+
+test('currency mismatches and unpublished destinations do not receive invented shipping rates', async () => {
+  for (const [country, currency] of [['GB', 'AUD'], ['AU', 'GBP'], ['SG', 'USD'], ['FR', 'USD'], ['CH', 'CHF'], ['CA', 'CAD'], ['HK', 'HKD']]) {
+    const {schema} = await render(product(), market(country, currency));
     const offer = schema.hasVariant[0].offers;
     assert.equal(offer.priceCurrency, currency);
     assert.ok(!offer.shippingDetails);
-    assert.deepEqual(offer.hasMerchantReturnPolicy.applicableCountry, ['AU', 'NZ']);
+    assert.equal(offer.hasMerchantReturnPolicy.applicableCountry, country);
+    assert.equal(offer.hasMerchantReturnPolicy.merchantReturnDays, 44);
+    if (country !== 'AU' && country !== 'NZ') assert.ok(!offer.hasMerchantReturnPolicy.returnFees);
+  }
+});
+
+test('international preorder and unavailable variants have no normal delivery promise', async () => {
+  for (const [country, currency] of [['GB', 'GBP'], ['NZ', 'NZD'], ['SG', 'SGD'], ['FR', 'EUR'], ['US', 'USD']]) {
+    const {schema} = await render(product(), {...market(country, currency), availability_mode: 'preorder'});
+    assert.equal(schema.hasVariant[0].offers.availability, 'https://schema.org/PreOrder');
+    assert.ok(!schema.hasVariant[0].offers.shippingDetails);
+    assert.ok(!schema.hasVariant[1].offers.shippingDetails);
+  }
+});
+
+async function renderShippingPanel(country) {
+  const localization = {country: {iso_code: country}};
+  return engine.renderFile('guillo-shipping-panel', {localization}, {globals: {localization}});
+}
+
+test('delivery panel retains the published rates, thresholds and services from the shared source', async () => {
+  const expectations = {
+    AU: ['Standard $9.95, free on orders over $100.', 'Express $14.95, free on orders over $200.'],
+    NZ: ['Standard NZ$12.', 'Priority express free on orders over NZ$160.'],
+    GB: ['5 to 8 days.', 'Standard £16, free on orders over £65.', 'Express £25, free on orders over £180.'],
+    SG: ['Standard S$15, free on orders over S$250.', 'Express S$27, free on orders over S$350.'],
+    FR: ['6 to 9 days.', 'Standard €25.'],
+    US: ['Standard US$20.', 'Express US$28.'],
+    CA: ['Shipping options and cost for your country are shown at checkout.']
+  };
+  for (const [country, texts] of Object.entries(expectations)) {
+    const html = await renderShippingPanel(country);
+    for (const text of texts) assert.ok(html.includes(text), `${country}: ${text}`);
   }
 });
 
@@ -195,4 +286,4 @@ test('review data cannot terminate the JSON-LD script', async () => {
   assert.ok(!text.includes('<'));
 });
 
-module.exports = {render, loadReviews};
+module.exports = {render, loadReviews, renderShippingPanel};

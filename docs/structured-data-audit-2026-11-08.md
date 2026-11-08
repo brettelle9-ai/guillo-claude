@@ -13,8 +13,8 @@ All 43 public products returned by `/products.json?limit=250` were checked. Thei
 | Field | Current evidence | Proposed treatment |
 | --- | --- | --- |
 | `description` | Present on all parent products/groups; omitted on child size variants. This is an observable omission, rather than missing catalogue copy. | Render the actual Shopify description on the parent and every child Product. No invented fallback copy. |
-| `shippingDetails` | Absent from offers. Australian rates and delivery estimates are published. | Add the published Australian standard service to available physical variants offered in AUD. Omit normal shipping estimates for preorders and unavailable variants. Leave unverified international services out. |
-| `hasMerchantReturnPolicy` | Absent from offers. Refund policy states 44 days from delivery; the banner and delivery panel advertise free returns in AU/NZ. | Add a finite 44-day policy with free returns applicable only to AU/NZ, linked to the actual policy. Do not infer international return costs or a return method. |
+| `shippingDetails` | Absent from offers. Country-specific rates are published in the delivery panel. | Add AU, NZ, UK, SG, US and the existing European-zone standard services when the active country and offer currency match. NZ also includes its published free priority express when eligible. Omit normal shipping estimates for preorders/unavailable variants and unverified country/currency pairs. |
+| `hasMerchantReturnPolicy` | Absent from offers. Refund policy states 44 days from delivery; the banner and delivery panel advertise free returns in AU/NZ. | Add the 44-day policy for the active country. Include free return fees only for AU/NZ; omit unknown international fees and the return method. Link to the actual policy. |
 | `aggregateRating` | Some stored totals describe collections rather than the exact item. | Compute only from published/featured, non-store reviews whose product ID matches the page. Omit when no valid ratings exist. |
 | `review` | No individual review markup. Reviews load from Klaviyo's public storefront feed. | Use real author, text, score and date from that same feed, for this exact product only. No placeholder reviews. |
 
@@ -24,13 +24,26 @@ All five are optional/recommended fields in this context, rather than current el
 
 Sources: [shipping page](https://guilloclothing.com/pages/shipping), [refund policy](https://guilloclothing.com/policies/refund-policy), and the live product delivery panel / `guillo-shipping-panel.liquid`.
 
-- Australian standard: AUD 9.95, free on orders **over** AUD 100. The offer evaluates the published threshold for one unit at its current offered price; it does not depend on the visitor's cart.
-- Published Australian delivery estimate: 2–4 days. This is represented as the service's transit estimate. No separate handling-time guarantee is added.
-- Express is advertised as AUD 14.95, free over AUD 200. This PR uses only standard service, so it does not guess a separate express delivery estimate.
-- Returns: 44 days from delivery for refund or exchange. Free returns are explicitly advertised for Australia and New Zealand; no free-return claim is made for other countries.
-- Preorder timing follows the product page. Preorders are marked `PreOrder`, without the normal shipping estimate. Interest-only sections emit no purchase schema.
+The delivery panel and product schema now read the same `guillo-shipping-rates.liquid` source. Rates were rechecked against the live localized delivery panel in AUD, NZD, GBP, SGD, EUR and USD. No customer-facing rate or policy wording was changed.
 
-The Shopify REST shipping-zone read returned zones but empty legacy rate arrays. The GraphQL delivery-profile read was denied by the connection's scopes. No permissions were changed and no alternate administrative route was attempted. Rates above are verified against published customer information, not independently against the current checkout configuration. Merchant Center and Search Console settings, which can override page markup, were not changed or verified.
+| Destination | Currency | Standard rate | Free standard threshold | Published country estimate |
+| --- | --- | --- | --- | --- |
+| Australia | AUD | 9.95 | Over 100 | 2–4 days |
+| New Zealand | NZD | 12 | None published | 2–4 days |
+| United Kingdom | GBP | 16 | Over 65 | 5–8 days |
+| Singapore | SGD | 15 | Over 250 | 4–6 days |
+| Existing European zone | EUR | 25 | None published | 6–9 days |
+| United States | USD | 20 | None published | Not published for US specifically |
+
+- The European zone is the existing delivery-panel list: AT, BE, CZ, DK, FI, FR, DE, GR, IE, IT, LU, NL, NO, PL, PT, ES, SE, CH and HU. A EUR shipping rate is emitted only alongside a EUR offer. CHF, CZK, DKK and other mismatched currencies receive no guessed conversion.
+- Free-shipping thresholds use **over**, so GBP 65.00 remains paid and GBP 65.01 qualifies. They are evaluated for one unit at its offered price, never the visitor's cart.
+- New Zealand's **free priority express over NZD 160** is a separate service; standard remains NZD 12. Both use the panel's published NZ country estimate, without inventing a faster express estimate. Paid priority express below its free threshold is not priced because that fee is unpublished.
+- Other express rates stay visible in the delivery panel, sourced from the shared values. They are not assigned guessed, country-specific express delivery estimates in schema.
+- US standard cost is included but `deliveryTime` is omitted. The generic shipping policy says standard 2–8 business days without naming destinations, while the country panel gives Europe 6–9; that generic range is not treated as verified US timing.
+- The 44-day refund/exchange window applies to the active country, including GB, SG, US and the European destinations. Free return fees are stated only for AU/NZ. No international return-postage fee, payer, address or return method is invented. Those business details remain to be confirmed.
+- Unsupported countries receive the published general return window but no invented shipping service. Preorders remain `PreOrder`, without normal shipping timing; interest-only sections emit no purchase schema.
+
+The Shopify REST shipping-zone read returned zones but empty legacy rate arrays. The GraphQL delivery-profile read was denied by the connection's scopes. No permissions were changed and no alternate administrative route was attempted. Rates above are verified against live published customer information in all six currencies, not independently against the current checkout configuration. Merchant Center and Search Console settings, which can override page markup, were not changed or verified.
 
 ## Review accuracy
 
@@ -42,15 +55,20 @@ Product, variant, price, description, shipping and return data are server render
 
 ## Validation
 
-- `npm ci` followed by `npm test`: ten checks cover Shopify Liquid parsing, JSON output, variants, exact price/threshold boundaries, foreign currencies, preorder/interest/unavailable behavior, review pagination/deduplication/product filtering, network failures and script-safe escaping.
-- Local rendering with the fetched catalogue data: **43 products / 209 variants**, including **seven preorder pages**. Prices, 195 non-empty SKUs, image URLs, descriptions, return countries and preorder shipping omissions were checked. The real Luxe Stone feed produced one 5/5 rating and its actual review; Portofino Black produced no rating or review.
+- `npm ci --ignore-scripts` followed by `npm test`: **14 checks pass**. Coverage includes Shopify Liquid parsing, JSON output, international rates/threshold boundaries, currency-country mismatches, NZ standard versus free priority express, shared delivery-panel values, preorder/interest/unavailable behavior, review pagination/deduplication/product filtering, network failures and script-safe escaping.
+- Local rendering with the fetched catalogue data: **43 products / 209 variants**, including **seven preorder pages**. Prices, 195 non-empty SKUs, image URLs, descriptions, active-country returns and preorder shipping omissions were checked again after the country extension. The real Luxe Stone feed produced one 5/5 rating and its actual review; Portofino Black produced no rating or review.
 - Shopify Theme Check 4.0.0: **102 findings on the base and 102 on the proposed theme; no new findings**. Existing findings, including an unrelated image-dimension error, were not expanded into this change.
 - JavaScript syntax and `git diff --check` pass.
-- [Google Rich Results Test, code mode](https://search.google.com/test/rich-results/result?id=pmwVYYXnl4-I1Cf6OQtVXw): the rendered Luxe Stone sample **after its real review feed loads** yields **seven valid merchant listings, one valid product snippet and two valid review snippets**. The submitted JSON was checked against the locally rendered JSON: length 15,436; FNV-1a `71980591`.
+- Localized live samples: **24 Portofino Black variants across six markets**. Prices were read from each live page (AUD 138, NZD 175, GBP 84, SGD 143, EUR 91.95 and USD 116), then checked against the rendered offers. The refactored delivery panel matches the live panel in each market, after whitespace normalization.
+- [UK Google Rich Results Test, code mode](https://search.google.com/test/rich-results/result?id=kh5-WypcsJtilhvb5CyPXA): current rendered GBP Portofino sample yields **four valid merchant listings and one valid product snippet**. At GBP 84 the published over-65 standard threshold correctly gives GBP 0 shipping, destination GB, 5–8 days and 44-day returns. No reviews or free-return fee are fabricated.
+- [US Google Rich Results Test, code mode](https://search.google.com/test/rich-results/result?id=-f4_xhRFZbAyuM7OV71htA): current rendered USD Portofino sample yields **four valid merchant listings and one valid product snippet**, with the published USD 20 standard rate and 44-day returns. Unknown US delivery timing is omitted.
+- [Initial AU review sample](https://search.google.com/test/rich-results/result?id=pmwVYYXnl4-I1Cf6OQtVXw), tested before this country extension: seven valid merchant listings, one product snippet and two review snippets after the real Luxe Stone review loads. The current review calculation is unchanged.
 
-The Google test retains optional `returnMethod` warnings, optional `handlingTime` warnings on in-stock variants, and omitted shipping information on out-of-stock variants. The first two are not filled with assumptions. The test is a code sample, not validation of a deployed Shopify change or a Google indexing/ranking guarantee.
+Remaining Google warnings are honest optional omissions: UK `returnMethod`, `returnFees` and `handlingTime`; US `returnMethod`, `returnFees` and `deliveryTime`; review fields on the unrated Portofino product. The samples validate rendered code, not a deployed Shopify change or an indexing/ranking guarantee.
 
-![Google Rich Results Test: 10 valid items](evidence/guillo-rich-results-test.png)
+![UK Google test: five valid items](evidence/guillo-uk-rich-results-test.png)
+
+![US Google test: five valid items](evidence/guillo-us-rich-results-test.png)
 
 ## Approval and release
 
