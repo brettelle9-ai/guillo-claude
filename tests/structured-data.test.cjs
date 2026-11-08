@@ -113,7 +113,7 @@ test('international standard rates, destination, currency and published estimate
     ['SG', 'SGD', 25000, 15, [4, 6]],
     ['SG', 'SGD', 25001, 0, [4, 6]],
     ['FR', 'EUR', 13800, 25, [6, 9]],
-    ['US', 'USD', 13800, 20, null]
+    ['US', 'USD', 13800, 20, [7, 10]]
   ];
   for (const [country, currency, price, rate, days] of cases) {
     const p = product(); p.variants[0].price = price;
@@ -189,7 +189,7 @@ test('delivery panel retains the published rates, thresholds and services from t
     GB: ['5 to 8 days.', 'Standard £16, free on orders over £65.', 'Express £25, free on orders over £180.'],
     SG: ['Standard S$15, free on orders over S$250.', 'Express S$27, free on orders over S$350.'],
     FR: ['6 to 9 days.', 'Standard €25.'],
-    US: ['Standard US$20.', 'Express US$28.'],
+    US: ['Standard US$20, delivered in 7 to 10 days.', 'Express US$28.'],
     CA: ['Shipping options and cost for your country are shown at checkout.']
   };
   for (const [country, texts] of Object.entries(expectations)) {

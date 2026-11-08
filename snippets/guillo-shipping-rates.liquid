@@ -8,7 +8,7 @@
   delivery days, express rate, express free-over threshold, express name, zone.
   Empty fields are unknown or unpublished; they must not be treated as zero.
   NZ's free threshold applies to priority express, not standard shipping.
-  US delivery days are not specified in the country-specific panel.
+  US standard delivery of 7–10 days was confirmed by Will on 2026-11-08.
 
   @param {string} country_code - Shopify Markets country ISO code
 {% enddoc %}
@@ -18,7 +18,7 @@
   {%- when 'NZ' -%}NZD|12||2|4||160|Priority express|nz
   {%- when 'SG' -%}SGD|15|250|4|6|27|350|Express|sg
   {%- when 'GB' -%}GBP|16|65|5|8|25|180|Express|gb
-  {%- when 'US' -%}USD|20||||28||Express|us
+  {%- when 'US' -%}USD|20||7|10|28||Express|us
   {%- else -%}
     {%- if europe contains country_code -%}EUR|25||6|9|||Express|eu{%- endif -%}
 {%- endcase -%}
