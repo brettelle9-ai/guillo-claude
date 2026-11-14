@@ -36,6 +36,6 @@
     if (scanScheduled || !records.some(record => record.addedNodes.length)) return;
     scanScheduled = true;
     requestAnimationFrame(() => { scanScheduled = false; mount(); });
-  }).observe(document.querySelector('#MainContent') || document.body,{childList:true,subtree:true});
+  }).observe(document.body,{childList:true,subtree:true});
   mount();
 })();
