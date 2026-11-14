@@ -31,6 +31,11 @@
   }
   document.addEventListener('visibilitychange', () => videos.forEach(video => document.hidden ? pause(video) : play(video)));
   reduced.addEventListener('change', () => videos.forEach(video => reduced.matches ? pause(video) : play(video)));
-  new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
+  let scanScheduled = false;
+  new MutationObserver(records => {
+    if (scanScheduled || !records.some(record => record.addedNodes.length)) return;
+    scanScheduled = true;
+    requestAnimationFrame(() => { scanScheduled = false; mount(); });
+  }).observe(document.querySelector('#MainContent') || document.body,{childList:true,subtree:true});
   mount();
 })();

@@ -38,7 +38,9 @@ if (!customElements.get('guillo-runway')) customElements.define('guillo-runway',
     on(this.track,'dragstart',e=>e.preventDefault());
     on(this.track,'wheel',e=>{
       if(this.detail||e.ctrlKey)return;
-      const delta=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;
+      // Don't hijack normal vertical page scrolling; move looks with horizontal gestures only.
+      if(Math.abs(e.deltaX)<=Math.abs(e.deltaY))return;
+      const delta=e.deltaX;
       if(!delta)return;
       const factor=e.deltaMode===1?16:e.deltaMode===2?this.track.clientWidth:1;
       const next=this.target+delta*factor/this.step;

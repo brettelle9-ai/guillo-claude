@@ -16,18 +16,17 @@
   const easing='cubic-bezier(.16,1,.3,1)',animations=[];let started=false,cancelled=false,watchdog;
   const prepare=(el,frames,duration,delay=0)=>{if(!el)return;const a=el.animate(frames,{duration,delay,easing,fill:'both'});a.pause();a.currentTime=0;animations.push(a);a.finished.then(()=>a.cancel()).catch(()=>{});};
   const letters=[...headline.querySelectorAll('.gh-headline-letter')];
-  letters.forEach((letter,i)=>prepare(letter,[{opacity:0,transform:'translateY(4px)',filter:'blur(3px)'},{opacity:1,transform:'translateY(0)',filter:'blur(0px)'}],1800,150+i*46));
+  letters.forEach((letter,i)=>prepare(letter,[{opacity:0,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],1250,120+i*38));
   headline.dataset.motionReady='true';
   const cancel=()=>{headline.style.visibility='visible';headline.dataset.motionReady='true';cancelled=true;clearTimeout(watchdog);animations.forEach(a=>a.cancel());hero.dataset.entrance='skipped';};
   const start=async()=>{if(started||cancelled)return;if(document.hidden){document.addEventListener('visibilitychange',()=>{if(!document.hidden)start();},{once:true});return;}started=true;clearTimeout(watchdog);
-   if(document.fonts)await Promise.race([document.fonts.load('400 48px "Bodoni Moda"').catch(()=>{}),new Promise(resolve=>setTimeout(resolve,1200))]);
-   if(document.fonts&&!document.fonts.check('400 48px "Bodoni Moda"'))headline.style.fontFamily='Georgia,serif';
+   if(document.fonts)await Promise.race([document.fonts.load('400 48px "Bodoni Moda"').catch(()=>{}),new Promise(resolve=>setTimeout(resolve,650))]);
    const reveal=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{if(cancelled)return;hero.dataset.entrance='playing';headline.style.visibility='visible';animations.forEach(a=>a.play());Promise.allSettled(animations.map(a=>a.finished)).then(()=>{if(!cancelled)hero.dataset.entrance='complete';});}));reveal();
   };
   hero.dataset.entrance='waiting';
   if(image){if(image.complete){image.decode().catch(()=>{}).then(start);}else{image.addEventListener('load',()=>image.decode().catch(()=>{}).then(start),{once:true});image.addEventListener('error',start,{once:true});}}
   else if(video&&video.readyState<2){video.addEventListener('loadeddata',start,{once:true});video.addEventListener('error',start,{once:true});}else start();
-  watchdog=setTimeout(start,1800);
+  watchdog=setTimeout(start,1100);
   window.addEventListener('scroll',()=>{if(window.scrollY>80&&hero.dataset.entrance!=='complete')cancel();},{passive:true});
   window.addEventListener('pagehide',cancel,{once:true});reduced.addEventListener('change',e=>{if(e.matches)cancel();});
 
