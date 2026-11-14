@@ -1,14 +1,9 @@
-{% if request.page_type == 'index' %}
-{{ 'guillo-editorial-home.css' | asset_url | stylesheet_tag }}
-{{ 'guillo-home-cinematic.css' | asset_url | stylesheet_tag }}
-<link rel="preload" as="image" href="{{ 'guillo-wordmark-black.png' | asset_url }}">
-{% endif %}
 {%- capture search_icon -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>{%- endcapture -%}
 {%- assign preview_menu = linklists['guillo-redesign-main'] | default: section.settings.menu -%}
 <div class="gc-header" data-gc-header>
   <div class="gc-header__row">
     <button class="gc-icon-button gc-header__menu" type="button" data-gc-menu-open aria-label="Open menu" aria-controls="GCNavigation" aria-expanded="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>Menu</span></button>
-    <a class="gc-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home"><img src="{{ 'guillo-wordmark-black.png' | asset_url }}" width="720" height="120" alt="{{ shop.name | escape }}" loading="eager">{% if request.page_type == 'index' %}{% render 'guillo-cinematic-brand' %}{% endif %}</a>
+    <a class="gc-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home"><img src="{{ 'guillo-wordmark-black.png' | asset_url }}" width="160" height="27" alt="{{ shop.name | escape }}" loading="eager">{% if request.page_type == 'index' %}{% render 'guillo-cinematic-brand' %}{% endif %}</a>
     <nav class="gc-header__desktop-nav" aria-label="Main navigation">
       {%- for link in preview_menu.links limit: 6 -%}
         {%- capture child_id -%}root-{{ forloop.index }}{%- endcapture -%}
@@ -29,18 +24,12 @@
   {% render 'guillo-editorial-search', section: section %}
 </div>
 <dialog class="gc-menu gc-dialog" id="GCNavigation" aria-label="Guillo navigation" data-gc-menu>
-  <div class="gc-menu__top"><button type="button" class="gc-icon-button" data-gc-menu-back aria-label="Back to previous menu" hidden>‹</button><a class="gc-menu__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home"><img src="{{ 'guillo-wordmark-black.png' | asset_url }}" width="720" height="120" alt="{{ shop.name | escape }}"></a><span class="gc-visually-hidden" data-gc-menu-title>Menu</span><button type="button" class="gc-icon-button" data-gc-close aria-label="Close menu" autofocus>×</button></div>
+  <div class="gc-menu__top"><button type="button" class="gc-icon-button" data-gc-menu-back aria-label="Back to previous menu" hidden>‹</button><a class="gc-menu__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home"><img src="{{ 'guillo-wordmark-black.png' | asset_url }}" width="160" height="27" alt="{{ shop.name | escape }}"></a><span class="gc-visually-hidden" data-gc-menu-title>Menu</span><button type="button" class="gc-icon-button" data-gc-close aria-label="Close menu" autofocus>×</button></div>
   <form class="gc-menu__search" action="{{ routes.search_url }}" method="get" role="search"><input type="hidden" name="type" value="product"><input type="search" name="q" placeholder="Try searching for…" data-gc-type-search data-gc-menu-search data-search-terms="{{ section.settings.search_suggestions | escape }}" aria-label="Search products from menu" autocomplete="off"><button type="submit" aria-label="Search">{{ search_icon }}</button></form>
   <div class="gc-menu__body">{% render 'guillo-editorial-menu-panel', links: preview_menu.links, panel_id: 'root', title: 'Menu' %}</div>
   <footer class="gc-menu__footer"><a href="{{ routes.account_url }}">Your account</a>{%- form 'localization', id: 'GCMenuLocalization' -%}<label class="gc-visually-hidden" for="GCCountry">Country and currency</label><select name="country_code" id="GCCountry" data-gc-country>{%- for country in localization.available_countries -%}<option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} · {{ country.currency.iso_code }}</option>{%- endfor -%}</select><button type="submit" aria-label="Update country">→</button>{%- endform -%}</footer>
 </dialog>
-<style>
-  .gh-account-icon{display:none}
-  .gc-collection-preview .gc-header__logo{display:block;padding:0;line-height:0;letter-spacing:0}
-  .gc-header__logo img{display:block;width:160px;height:auto;max-width:100%;object-fit:contain}
-  @media(max-width:749px){.gc-header__logo img{width:146px;max-width:36vw}}
-</style>
-{{ 'guillo-editorial-navigation.css' | asset_url | stylesheet_tag }}
+<style>.gh-account-icon{display:none}</style>
 <script src="{{ 'guillo-editorial-navigation.js' | asset_url }}" defer></script>
 {% schema %}
 {

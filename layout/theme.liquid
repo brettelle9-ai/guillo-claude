@@ -79,6 +79,31 @@
       {{ 'guillo-interaction-details.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'guillo-interaction-details.js' | asset_url }}" defer></script>
     {%- endif -%}
+    {%- if request.page_type == 'index' -%}
+      {{ 'guillo-editorial-home.css' | asset_url | stylesheet_tag }}
+      {{ 'guillo-home-cinematic.css' | asset_url | stylesheet_tag }}
+      <link rel="preload" as="image" href="{{ 'guillo-wordmark-black.png' | asset_url }}">
+    {%- endif -%}
+    {%- if request.page_type == 'index' or request.page_type == 'collection' or request.page_type == 'product' -%}
+      {{ 'guillo-editorial-navigation.css' | asset_url | stylesheet_tag }}
+      <style id="guillo-critical-header">
+        /* Hide the original Horizon header before the replacement is painted. */
+        body.gc-collection-preview #header-group .header-section { display: none !important; }
+        body.gh-home-preview #header-group [id*="header_announcements"] { display: none !important; }
+        /* Fix the header wordmark's size before section scripts or CSS complete. */
+        body.gc-collection-preview .gc-header__logo { display: block; padding: 0; line-height: 0; letter-spacing: 0; }
+        body.gc-collection-preview .gc-header__logo > img,
+        body.gc-collection-preview .gc-menu__brand img { display: block; width: 160px; height: auto; max-width: 100%; object-fit: contain; }
+        @media (max-width: 749px) {
+          body.gc-collection-preview .gc-header__logo > img,
+          body.gc-collection-preview .gc-menu__brand img { width: 146px; max-width: 36vw; }
+        }
+        @media (min-width: 1024px) {
+          body.gh-home-preview .gc-header__logo > img { display: none !important; }
+          body.gh-home-preview .gc-header__logo .gh-brand__art { display: block; width: 100%; height: 100%; object-fit: contain; }
+        }
+      </style>
+    {%- endif -%}
     <script src="{{ 'guillo-modern.js' | asset_url }}" defer></script>
     <script src="{{ 'guillo-menu-hover.js' | asset_url }}" defer></script>
 
