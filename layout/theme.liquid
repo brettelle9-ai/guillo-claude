@@ -105,7 +105,9 @@
       </style>
     {%- endif -%}
     <script src="{{ 'guillo-modern.js' | asset_url }}" defer></script>
-    <script src="{{ 'guillo-menu-hover.js' | asset_url }}" defer></script>
+    {%- unless request.page_type == 'index' or request.page_type == 'collection' or request.page_type == 'product' -%}
+      <script src="{{ 'guillo-menu-hover.js' | asset_url }}" defer></script>
+    {%- endunless -%}
 
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
