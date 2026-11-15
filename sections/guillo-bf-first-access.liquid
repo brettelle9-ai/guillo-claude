@@ -1,0 +1,254 @@
+{% liquid
+  assign bf_shop_url = section.settings.shop_url | default: '/collections/all-collections'
+  assign bf_gift_image = section.settings.gift_image
+  if bf_gift_image == blank and section.settings.gift_product != blank
+    assign bf_gift_image = section.settings.gift_product.featured_image
+  endif
+%}
+
+<section id="GuilloBfAccess-{{ section.id }}" class="guillo-bf-access" style="--bf-petrol: {{ section.settings.petrol_color }};">
+  <div class="gbf-invitation">
+    <span class="gbf-invitation__line"></span>
+    <span>GUILLO / PRIVATE INVITATION / BLACK FRIDAY 2026</span>
+    <span class="gbf-invitation__line"></span>
+  </div>
+
+  <div class="gbf-hero">
+    <div class="gbf-hero__visual">
+      {% if section.settings.hero_image != blank %}
+        <picture>
+          {% if section.settings.hero_mobile != blank %}
+            <source media="(max-width: 749px)" srcset="{{ section.settings.hero_mobile | image_url: width: 1000 }}">
+          {% endif %}
+          {{ section.settings.hero_image | image_url: width: 1800 | image_tag: class: 'gbf-hero__image', loading: 'eager', fetchpriority: 'high', widths: '750, 1000, 1400, 1800', sizes: '(max-width: 749px) 100vw, 55vw', alt: 'Guillo Mediterranean menswear' }}
+        </picture>
+      {% else %}
+        <div class="gbf-hero__placeholder" aria-hidden="true">
+          <span>GU I L L O</span>
+          <i></i>
+        </div>
+      {% endif %}
+      <div class="gbf-hero__photolabel">A MEDITERRANEAN STATE OF MIND</div>
+    </div>
+
+    <div class="gbf-hero__copy">
+      <p class="gbf-eyebrow">BEFORE EVERYONE ELSE</p>
+      <h1>Black Friday.<br><em>First access.</em></h1>
+      <div class="gbf-offer"><span>30<span class="gbf-offer__percent">%</span></span><div>OFF<br>SITEWIDE</div></div>
+      <p class="gbf-intro">The first pick of sizes. The pieces you've had your eye on. Your invitation starts here.</p>
+
+      <div class="gbf-form-wrap" id="bf-signup-{{ section.id }}">
+        {% if section.settings.klaviyo_form_id != blank %}
+          <div class="klaviyo-form-{{ section.settings.klaviyo_form_id | strip | escape }}"></div>
+          {% if request.design_mode %}
+            <p class="gbf-editor-note">Klaviyo form {{ section.settings.klaviyo_form_id }} should be published and the Klaviyo Shopify app embed enabled to display here.</p>
+          {% endif %}
+        {% else %}
+          {% form 'customer', class: 'gbf-fallback-form', id: 'GBFContact' %}
+            <input type="hidden" name="contact[tags]" value="Black Friday First Access 2026">
+            {% if form.posted_successfully? %}
+              <p class="gbf-success">You're on the list. Watch your inbox for your first-access invitation.</p>
+              <a class="gbf-action" href="{{ bf_shop_url }}">BUILD YOUR CART <span aria-hidden="true">→</span></a>
+            {% else %}
+              <label for="GBFEmail-{{ section.id }}">JOIN THE FIRST ACCESS LIST</label>
+              <div class="gbf-email-row">
+                <input id="GBFEmail-{{ section.id }}" name="contact[email]" type="email" required autocomplete="email" placeholder="Your email address">
+                <button type="submit">SECURE ACCESS <span aria-hidden="true">→</span></button>
+              </div>
+              {% if form.errors %}<p role="alert" class="gbf-error">{{ form.errors | default_errors }}</p>{% endif %}
+              <p class="gbf-form-note">By signing up, you agree to receive marketing emails from Guillo. Unsubscribe anytime.</p>
+            {% endif %}
+          {% endform %}
+        {% endif %}
+      </div>
+      <p class="gbf-offer-note">PLUS: A COMPLIMENTARY CLASSICO TEE ON ORDERS $250+</p>
+    </div>
+  </div>
+
+  <div class="gbf-sequence" aria-label="How first access works">
+    <div><span>01</span><strong>REGISTER</strong><p>Leave your email to join the first-access list.</p></div>
+    <div><span>02</span><strong>GET THE INVITATION</strong><p>We'll let you know when your early window opens.</p></div>
+    <div><span>03</span><strong>BUILD YOUR CART</strong><p>Browse now. Choose your sizes before the sale.</p></div>
+  </div>
+
+  <div class="gbf-gift" id="bf-gift-{{ section.id }}">
+    <div class="gbf-gift__visual">
+      {% if bf_gift_image != blank %}
+        {{ bf_gift_image | image_url: width: 1400 | image_tag: class: 'gbf-gift__image', loading: 'lazy', widths: '500, 750, 1000, 1400', sizes: '(max-width: 749px) 100vw, 50vw', alt: 'Guillo Classico Tee' }}
+      {% else %}
+        <div class="gbf-gift__placeholder" aria-hidden="true"><span>THE CLASSICO</span><small>BY GUILLO</small></div>
+      {% endif %}
+      <div class="gbf-gift__tag">THE COMPLIMENTARY GIFT</div>
+    </div>
+    <div class="gbf-gift__content">
+      <p class="gbf-eyebrow">AN EXTRA REASON TO BE FIRST</p>
+      <h2>On us.<br><em>The Classico.</em></h2>
+      <div class="gbf-gift__value">FREE WITH ORDERS $250+ <span>VALUED AT $84</span></div>
+      <p>A wardrobe essential, cut closer through the body and made from a substantial 220gsm fabric with 95% Supima cotton and 5% elastane.</p>
+      <div class="gbf-rule"></div>
+      <div class="gbf-cotton"><span class="gbf-cotton__number">&lt;1%</span><div><strong>AN UNCOMMON COTTON.</strong><p>American-grown Supima represents less than 1% of the world's cotton. Its extra-long fibres feel smoother, resist pilling and help the tee hold its shape.</p></div></div>
+      <div class="gbf-rule"></div>
+      <p class="gbf-colours-title">AVAILABLE IN TWO COLOURS</p>
+      <div class="gbf-colours"><div><i class="gbf-swatch gbf-swatch--offwhite"></i><span>Off White</span></div><div><i class="gbf-swatch gbf-swatch--blue"></i><span>Blue</span></div></div>
+      <p class="gbf-small">Complimentary gift available on qualifying Black Friday orders while stocks last. Colour and size availability may vary.</p>
+      <a class="gbf-text-link" href="{{ bf_shop_url }}">PREPARE YOUR WARDROBE <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+
+  <div class="gbf-cta">
+    <p class="gbf-eyebrow">YOUR FIRST ACCESS STARTS HERE</p>
+    <h2>Make your selections.<br><em>Be ready when it opens.</em></h2>
+    <p>Add your favourites to your cart now. Your cart is not a reservation, and Black Friday prices will apply only when the sale is live.</p>
+    <a class="gbf-action" href="{{ bf_shop_url }}">BUILD YOUR CART <span aria-hidden="true">→</span></a>
+  </div>
+
+  <div class="gbf-faq">
+    <p class="gbf-eyebrow">THE DETAILS</p>
+    <h2>Before the doors open.</h2>
+    <div class="gbf-faq__list">
+      <details><summary>How do I get first access?<span aria-hidden="true">+</span></summary><div>Enter your email above and we'll send your invitation when the first-access window opens. You can add an optional mobile number if you'd also like SMS updates.</div></details>
+      <details><summary>Can I build my cart now?<span aria-hidden="true">+</span></summary><div>Yes. Browse the collection, choose your sizes and add your pieces to your cart. Items are not reserved until checkout, and the Black Friday discount is not active yet.</div></details>
+      <details><summary>How does the complimentary Classico Tee work?<span aria-hidden="true">+</span></summary><div>Qualifying Black Friday orders of $250+ are eligible for a complimentary Classico Tee, valued at $84, while stocks last. Available in Off White or Blue, subject to sizes and availability. Gift details will be confirmed during the sale.</div></details>
+      <details><summary>Will the 30% discount apply now?<span aria-hidden="true">+</span></summary><div>No. You can browse and prepare your cart now. The 30% sitewide promotion begins when the Black Friday sale officially opens.</div></details>
+      <details><summary>Does signing up for SMS matter?<span aria-hidden="true">+</span></summary><div>No. Email is enough for first access. Mobile updates are optional and require separate consent.</div></details>
+    </div>
+  </div>
+</section>
+
+<style>
+  #GuilloBfAccess-{{ section.id }} { color:#171d1d;background:#fff;font-family:var(--font-body--family,Arial,sans-serif);overflow:hidden; }
+  #GuilloBfAccess-{{ section.id }} * { box-sizing:border-box; }
+  #GuilloBfAccess-{{ section.id }} h1,#GuilloBfAccess-{{ section.id }} h2,#GuilloBfAccess-{{ section.id }} p { margin:0; }
+  #GuilloBfAccess-{{ section.id }} h1,#GuilloBfAccess-{{ section.id }} h2 { font-family:var(--font-heading--family,Georgia,serif);font-weight:400;letter-spacing:-.037em;line-height:1.05; }
+  #GuilloBfAccess-{{ section.id }} em { font-weight:400;font-style:italic; }
+  #GuilloBfAccess-{{ section.id }} a { color:inherit;text-decoration:none; }
+  #GuilloBfAccess-{{ section.id }} .gbf-eyebrow {font-size:10px;letter-spacing:.24em;font-weight:600;}
+  #GuilloBfAccess-{{ section.id }} .gbf-invitation {height:45px;background:#0f2526;color:#eef5f3;display:flex;align-items:center;justify-content:center;gap:22px;font-size:10px;letter-spacing:.2em;text-align:center;padding:0 18px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-invitation__line {display:block;height:1px;width:46px;background:#628282;}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero {display:grid;grid-template-columns:1fr 1fr;min-height:720px;background:#102c2e;color:#f6f9f5;}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero__visual {position:relative;min-height:620px;overflow:hidden;background:linear-gradient(145deg,#374747,#122628 78%);}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero__visual:after {content:"";pointer-events:none;position:absolute;inset:0;background:linear-gradient(90deg,transparent 65%,rgba(16,44,46,.25));}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero__image {height:100%;width:100%;position:absolute;inset:0;object-fit:cover;filter:saturate(.83);}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero__placeholder {height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:32px;opacity:.34;}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero__placeholder span {font-family:Georgia,serif;font-size:clamp(36px,6vw,96px);letter-spacing:.17em;white-space:nowrap;}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero__placeholder i {height:130px;width:1px;background:#e4eeeb;transform:rotate(20deg);}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero__photolabel {position:absolute;z-index:2;bottom:28px;left:32px;font-size:10px;letter-spacing:.22em;}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero__copy {background:radial-gradient(ellipse at 120% 10%,var(--bf-petrol),#112c2e 65%);padding:80px clamp(28px,6vw,100px) 74px;display:flex;flex-direction:column;justify-content:center;}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero h1 {font-size:clamp(52px,5.3vw,91px);margin:25px 0 21px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-hero h1 em {color:#c1d4cf;}
+  #GuilloBfAccess-{{ section.id }} .gbf-offer {display:flex;align-items:center;gap:16px;padding:8px 0 14px;border-bottom:1px solid rgba(226,241,235,.27);width:max-content;}
+  #GuilloBfAccess-{{ section.id }} .gbf-offer>span {font-family:var(--font-heading--family,Georgia,serif);font-size:clamp(73px,8vw,122px);line-height:.88;letter-spacing:-.08em;}
+  #GuilloBfAccess-{{ section.id }} .gbf-offer__percent {font-size:.5em;vertical-align:top;line-height:1.2;}
+  #GuilloBfAccess-{{ section.id }} .gbf-offer>div {font-size:15px;letter-spacing:.19em;line-height:1.8;}
+  #GuilloBfAccess-{{ section.id }} .gbf-intro {font-size:14px;line-height:1.8;color:#dce9e5;max-width:410px;margin:23px 0 25px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-form-wrap {background:#f7f8f6;color:#1a2b2a;max-width:485px;width:100%;padding:14px;min-height:100px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-fallback-form {padding:7px 4px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-fallback-form label {font-size:11px;font-weight:600;letter-spacing:.16em;display:block;margin-bottom:13px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-email-row {display:flex;flex-wrap:wrap;gap:8px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-email-row input {flex:1 1 180px;min-height:50px;background:#fff;border:1px solid #cad4d0;border-radius:0;padding:0 14px;color:#172826;outline-offset:2px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-email-row button,#GuilloBfAccess-{{ section.id }} .gbf-action {display:inline-flex;align-items:center;justify-content:center;gap:28px;min-height:50px;padding:0 17px;border:1px solid #174749;background:#174749;color:#fff;font-size:11px;letter-spacing:.13em;font-weight:600;cursor:pointer;text-align:center;transition:background .25s,border-color .25s;}
+  #GuilloBfAccess-{{ section.id }} .gbf-email-row button:hover,#GuilloBfAccess-{{ section.id }} .gbf-action:hover {background:#266369;border-color:#266369;}
+  #GuilloBfAccess-{{ section.id }} .gbf-form-note,#GuilloBfAccess-{{ section.id }} .gbf-error {font-size:10px;color:#556260;line-height:1.55;margin-top:11px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-success {font-size:15px;line-height:1.7;margin-bottom:16px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-offer-note {margin-top:24px;color:#c8dad5;font-size:10px;letter-spacing:.15em;line-height:1.7;}
+  #GuilloBfAccess-{{ section.id }} .gbf-editor-note {font-size:11px;color:#485857;padding:6px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-sequence {display:grid;grid-template-columns:repeat(3,1fr);max-width:1250px;margin:auto;padding:52px 35px;gap:18px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-sequence>div {padding:0 30px;border-right:1px solid #d8e1df;}
+  #GuilloBfAccess-{{ section.id }} .gbf-sequence>div:last-child {border:0;}
+  #GuilloBfAccess-{{ section.id }} .gbf-sequence span {display:block;color:#3d7473;font-family:Georgia,serif;font-size:26px;margin-bottom:16px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-sequence strong {display:block;letter-spacing:.14em;font-size:11px;margin-bottom:8px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-sequence p {font-size:13px;line-height:1.65;color:#56615f;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift {display:grid;grid-template-columns:1fr 1fr;min-height:690px;background:#f4f6f4;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift__visual {background:#dce5e3;position:relative;min-height:570px;overflow:hidden;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift__image {display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift__placeholder {display:flex;height:100%;align-items:center;justify-content:center;flex-direction:column;color:#6c8885;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift__placeholder span {font-family:Georgia,serif;font-size:clamp(40px,6vw,90px);letter-spacing:-.04em;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift__placeholder small {letter-spacing:.25em;margin-top:10px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift__tag {position:absolute;bottom:20px;left:20px;padding:12px 15px;background:rgba(250,252,250,.9);font-size:10px;letter-spacing:.15em;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift__content {padding:clamp(40px,6.3vw,110px) clamp(26px,7vw,118px);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift h2 {font-size:clamp(48px,5vw,80px);margin:26px 0;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift__value {background:#174749;color:white;font-size:11px;letter-spacing:.12em;padding:13px 17px;margin-bottom:21px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift__value span {opacity:.72;margin-left:11px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-gift__content>p:not(.gbf-eyebrow):not(.gbf-colours-title):not(.gbf-small) {font-size:15px;line-height:1.85;color:#454f4d;}
+  #GuilloBfAccess-{{ section.id }} .gbf-rule {width:100%;height:1px;background:#ced9d5;margin:27px 0;}
+  #GuilloBfAccess-{{ section.id }} .gbf-cotton {display:flex;align-items:flex-start;gap:22px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-cotton__number {font-size:clamp(36px,4vw,57px);font-family:Georgia,serif;letter-spacing:-.06em;color:#1b5050;white-space:nowrap;}
+  #GuilloBfAccess-{{ section.id }} .gbf-cotton strong {font-size:11px;letter-spacing:.13em;}
+  #GuilloBfAccess-{{ section.id }} .gbf-cotton p {font-size:12px;color:#596260;line-height:1.8;margin-top:8px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-colours-title {font-size:10px;letter-spacing:.17em;font-weight:600;margin-bottom:13px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-colours {display:flex;gap:25px;margin-bottom:14px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-colours>div {display:flex;align-items:center;gap:9px;font-size:12px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-swatch {width:18px;height:18px;border:1px solid #bac2be;border-radius:50%;display:inline-block;}
+  #GuilloBfAccess-{{ section.id }} .gbf-swatch--offwhite {background:#eeeae0;}
+  #GuilloBfAccess-{{ section.id }} .gbf-swatch--blue {background:#5a7fa2;}
+  #GuilloBfAccess-{{ section.id }} .gbf-small {font-size:10px;line-height:1.6;color:#6b7571;}
+  #GuilloBfAccess-{{ section.id }} .gbf-text-link {display:inline-flex;margin-top:24px;padding-bottom:7px;border-bottom:1px solid #2e5a5a;font-size:11px;font-weight:600;letter-spacing:.11em;gap:30px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-cta {background:#123538;color:#f2f6f3;text-align:center;padding:95px 22px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-cta h2 {font-size:clamp(41px,4.8vw,68px);margin:23px 0;}
+  #GuilloBfAccess-{{ section.id }} .gbf-cta p:not(.gbf-eyebrow) {font-size:14px;line-height:1.8;color:#c5d4d0;max-width:500px;margin:0 auto 30px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-cta .gbf-action {background:#e4eeea;border-color:#e4eeea;color:#173f40;}
+  #GuilloBfAccess-{{ section.id }} .gbf-cta .gbf-action:hover {background:#fff;border-color:#fff;}
+  #GuilloBfAccess-{{ section.id }} .gbf-faq {max-width:850px;margin:auto;padding:84px 24px 100px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-faq h2 {font-size:clamp(33px,4vw,52px);margin:18px 0 35px;}
+  #GuilloBfAccess-{{ section.id }} .gbf-faq details {border-top:1px solid #dce5e1;}
+  #GuilloBfAccess-{{ section.id }} .gbf-faq details:last-child {border-bottom:1px solid #dce5e1;}
+  #GuilloBfAccess-{{ section.id }} .gbf-faq summary {cursor:pointer;padding:22px 0;display:flex;justify-content:space-between;gap:20px;list-style:none;font-size:15px;font-weight:500;}
+  #GuilloBfAccess-{{ section.id }} .gbf-faq summary::-webkit-details-marker {display:none;}
+  #GuilloBfAccess-{{ section.id }} .gbf-faq summary span {font-size:20px;line-height:1;color:#4b7e7a;}
+  #GuilloBfAccess-{{ section.id }} .gbf-faq details[open] summary span {transform:rotate(45deg);}
+  #GuilloBfAccess-{{ section.id }} .gbf-faq details>div {padding:0 35px 23px 0;color:#5b6561;font-size:14px;line-height:1.85;}
+  @media(max-width:980px) {
+    #GuilloBfAccess-{{ section.id }} .gbf-hero__copy {padding:45px 28px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-gift__content {padding:45px 34px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-sequence>div {padding:0 10px;}
+  }
+  @media(max-width:749px) {
+    #GuilloBfAccess-{{ section.id }} .gbf-invitation {font-size:8px;letter-spacing:.14em;height:40px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-invitation__line {display:none;}
+    #GuilloBfAccess-{{ section.id }} .gbf-hero {display:flex;flex-direction:column;min-height:0;}
+    #GuilloBfAccess-{{ section.id }} .gbf-hero__visual {height:320px;min-height:0;flex-shrink:0;}
+    #GuilloBfAccess-{{ section.id }} .gbf-hero__photolabel {font-size:9px;left:20px;bottom:17px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-hero__copy {padding:39px 22px 52px;min-height:0;}
+    #GuilloBfAccess-{{ section.id }} .gbf-hero h1 {font-size:clamp(45px,13vw,70px);margin:18px 0;}
+    #GuilloBfAccess-{{ section.id }} .gbf-offer>span {font-size:91px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-offer>div {font-size:13px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-intro {margin:19px 0 21px;font-size:13px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-form-wrap {max-width:none;}
+    #GuilloBfAccess-{{ section.id }} .gbf-sequence {grid-template-columns:1fr;padding:33px 24px;gap:0;}
+    #GuilloBfAccess-{{ section.id }} .gbf-sequence>div {display:grid;grid-template-columns:52px 1fr;column-gap:8px;border-right:0;border-bottom:1px solid #dde6e2;padding:15px 0;}
+    #GuilloBfAccess-{{ section.id }} .gbf-sequence>div:last-child {border:0;}
+    #GuilloBfAccess-{{ section.id }} .gbf-sequence span {grid-row:span 2;margin:0;}
+    #GuilloBfAccess-{{ section.id }} .gbf-sequence strong {margin:2px 0 5px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-gift {display:flex;flex-direction:column;}
+    #GuilloBfAccess-{{ section.id }} .gbf-gift__visual {min-height:0;height:380px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-gift__content {padding:48px 23px 60px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-gift h2 {font-size:55px;margin:20px 0;}
+    #GuilloBfAccess-{{ section.id }} .gbf-gift__value {font-size:10px;letter-spacing:.06em;}
+    #GuilloBfAccess-{{ section.id }} .gbf-cotton {gap:16px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-cta {padding:75px 23px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-cta h2 {font-size:43px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-faq {padding:61px 23px 80px;}
+    #GuilloBfAccess-{{ section.id }} .gbf-faq summary {font-size:14px;}
+  }
+  @media(prefers-reduced-motion:reduce) {
+    #GuilloBfAccess-{{ section.id }} .gbf-action,#GuilloBfAccess-{{ section.id }} .gbf-email-row button {transition:none;}
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Guillo BF First Access",
+  "tag": "section",
+  "class": "guillo-bf-first-access-section",
+  "settings": [
+    { "type": "color", "id": "petrol_color", "label": "Mediterranean petrol accent", "default": "#24545A" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero photo – desktop" },
+    { "type": "image_picker", "id": "hero_mobile", "label": "Hero photo – mobile" },
+    { "type": "text", "id": "klaviyo_form_id", "label": "Klaviyo embed form ID", "default": "S9HYYw", "info": "Publish the Klaviyo embed form and enable the Klaviyo Shopify app embed." },
+    { "type": "url", "id": "shop_url", "label": "Build Your Cart destination", "info": "Point this to the Black Friday-themed Shop All collection once prepared." },
+    { "type": "product", "id": "gift_product", "label": "Classico gift product (image fallback)" },
+    { "type": "image_picker", "id": "gift_image", "label": "Classico gift campaign photo" }
+  ],
+  "presets": [{ "name": "Guillo BF First Access" }]
+}
+{% endschema %}
