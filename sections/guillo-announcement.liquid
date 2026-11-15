@@ -35,8 +35,14 @@
       assign bar_background = section.settings.bar_background | default: '#f1f3f4'
       assign bar_text = section.settings.bar_text | default: '#14232c'
   endcase
+  assign bf_early_bar = false
+  if page.handle == 'black-friday-first-access' or collection.handle == 'black-friday'
+    assign bf_early_bar = true
+    assign bar_background = '#205B60'
+    assign bar_text = '#ffffff'
+  endif
 -%}
-<div class="guillo-announce" style="--guillo-ann-background:{{ bar_background }};--guillo-ann-text:{{ bar_text }};">
+<div class="guillo-announce{% if bf_early_bar %} guillo-announce--bf-early{% endif %}" style="--guillo-ann-background:{{ bar_background }};--guillo-ann-text:{{ bar_text }};">
   {%- liquid
     assign cc = localization.country.iso_code | default: ''
     assign shown = ''
@@ -65,6 +71,9 @@
     <span aria-hidden="true">&#8249;</span>
   </button>
   <div class="guillo-announce__messages" data-ann-track>
+    {% if bf_early_bar %}
+      <a class="guillo-announce__msg guillo-announce__msg--link is-current" href="{% if page.handle == 'black-friday-first-access' %}#black-friday-signup{% else %}/pages/black-friday-first-access#black-friday-signup{% endif %}">BLACK FRIDAY &nbsp; · &nbsp; 30% OFF SITEWIDE &nbsp; · &nbsp; SECURE FIRST ACCESS</a>
+    {% else %}
     {%- assign first_visible = true -%}
     {%- for block in section.blocks -%}
       {%- capture block_key -%},{{ block.id }},{%- endcapture -%}
@@ -91,11 +100,19 @@
       {%- endif -%}
       {%- assign first_visible = false -%}
     {%- endfor -%}
+    {% endif %}
   </div>
   <button type="button" class="guillo-announce__nav" data-ann-next aria-label="Next announcement">
     <span aria-hidden="true">&#8250;</span>
   </button>
 </div>
+<style>
+.guillo-announce.guillo-announce--bf-early{height:58px;min-height:58px;padding:0 15px;letter-spacing:.17em}
+.guillo-announce--bf-early .guillo-announce__nav{display:none!important}
+.guillo-announce--bf-early .guillo-announce__messages,.guillo-announce--bf-early .guillo-announce__msg{height:58px}
+.guillo-announce--bf-early .guillo-announce__msg{font-size:11px;letter-spacing:.17em;text-decoration:none}
+@media(max-width:749px){.guillo-announce.guillo-announce--bf-early{height:51px;min-height:51px;padding:0 7px}.guillo-announce--bf-early .guillo-announce__messages,.guillo-announce--bf-early .guillo-announce__msg{height:51px}.guillo-announce--bf-early .guillo-announce__msg{font-size:9px;letter-spacing:.08em}}
+</style>
 
 {% stylesheet %}
   .guillo-announce {

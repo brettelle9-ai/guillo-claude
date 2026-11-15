@@ -17,10 +17,9 @@
 @media(max-width:749px){#gbe-shop-{{ section.id }} .gbe-shop-header{grid-template-columns:1fr;gap:22px;padding:39px 20px 34px}#gbe-shop-{{ section.id }} h1{font-size:42px}#gbe-shop-{{ section.id }} .gbe-shop-bar{font-size:9px;letter-spacing:.12em;min-height:52px}#gbe-shop-{{ section.id }} .gbe-shop-btn{width:100%}#gbe-shop-{{ section.id }} .gbe-shop-steps{gap:11px;padding:17px 12px;font-size:9px;justify-content:space-between}#gbe-shop-{{ section.id }} .gbe-shop-steps span{max-width:95px}#gbe-shop-{{ section.id }} .gbe-shop-gift{font-size:11px;text-align:center;line-height:1.6;flex-wrap:wrap}}
 </style>
 <section id="gbe-shop-{{ section.id }}">
-<div class="gbe-shop-bar">{{ section.settings.bar | escape }}</div>
 <div class="gbe-shop-header"><div><span class="gbe-shop-label">GUILLO / PRIVATE ACCESS</span><h1>{{ section.settings.title | escape }}</h1><p class="gbe-shop-sub">{{ section.settings.body | escape }}</p></div><a class="gbe-shop-btn" href="{{ section.settings.signup_link | default: '/pages/black-friday-first-access' }}">SECURE FIRST ACCESS</a></div>
 <div class="gbe-shop-steps"><span><b>01 /</b> BROWSE THE COLLECTION</span><span><b>02 /</b> BUILD YOUR CART</span><span><b>03 /</b> SHOP WHEN ACCESS OPENS</span></div>
-{% if localization.country.iso_code == 'AU' %}<div class="gbe-shop-gift"><span><b>AN EXTRA THANK YOU:</b> Complimentary 95% Supima cotton Classico Tee on eligible orders $250+ during Black Friday. <a href="/pages/black-friday-first-access#g-bf-early-{{ section.id }}">Details</a></span></div>{% endif %}
+{% if localization.country.iso_code == 'AU' %}<div class="gbe-shop-gift"><span><b>AN EXTRA THANK YOU:</b> Complimentary 95% Supima cotton Classico Tee on eligible orders $250+ during Black Friday. <a href="/pages/black-friday-first-access">Details</a></span></div>{% endif %}
 </section>
 {% schema %}
 {"name":"BF Shop First Look","settings":[

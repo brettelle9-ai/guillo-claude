@@ -77,7 +77,6 @@
 @media(prefers-reduced-motion:reduce){#g-bf-early-{{ section.id }} .gbe-button,#g-bf-early-{{ section.id }} .gbe-tee-image img{transition:none}}
 </style>
 <section id="g-bf-early-{{ section.id }}" class="gbe-root">
-  <div class="gbe-bar" role="note">{{ section.settings.announcement | escape }}</div>
   <div class="gbe-hero">
     <div class="gbe-scene">
       {% if section.settings.hero_image != blank %}
@@ -91,7 +90,7 @@
         <p>{{ section.settings.left_subheading | escape }}</p>
       </div>
     </div>
-    <div class="gbe-panel">
+    <div class="gbe-panel" id="black-friday-signup">
       <div class="gbe-panel-inner">
         <div class="gbe-step"><span>PRIVATE ACCESS</span><span class="gbe-step-line"></span><span data-gbe-progress>01 / 02</span></div>
         <div data-gbe-step="email">
@@ -122,7 +121,7 @@
           </form>
         </div>
         <div data-gbe-step="done" hidden>
-          <span class="gbe-tiny gbe-confirmation">GUILL0 PRIVATE ACCESS / CONFIRMED</span>
+          <span class="gbe-tiny gbe-confirmation">GUILLO PRIVATE ACCESS / CONFIRMED</span>
           <h1>First access, secured.</h1>
           <p data-gbe-success-text>You're on the list. Now's the time to explore the collection and build your cart. We'll email you when your early-access window opens.</p>
           <a href="{{ section.settings.shop_link | default: '/collections/black-friday' }}" class="gbe-button" data-gbe-shop-link>BUILD YOUR CART</a>
