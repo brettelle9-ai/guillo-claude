@@ -1,0 +1,35 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "intro": {
+      "type": "guillo-bf-shop-intro",
+      "settings": {
+        "bar": "BLACK FRIDAY  ·  30% OFF SITEWIDE  ·  FIRST ACCESS",
+        "title": "Build your Black Friday cart.",
+        "body": "Browse the collection and choose your pieces before the doors open. Your 30% offer will activate during the Black Friday access window, not before.",
+        "signup_link": "/pages/black-friday-first-access"
+      }
+    },
+    "editorial": {
+      "type": "guillo-editorial-collection",
+      "settings": {
+        "heading": "THE BLACK FRIDAY EDIT",
+        "description": "Select your pieces now and prepare your cart. The 30% offer will activate when first access begins.",
+        "products_per_page": 48,
+        "card_media_default": "auto"
+      }
+    }
+  },
+  "order": [
+    "intro",
+    "editorial"
+  ]
+}
