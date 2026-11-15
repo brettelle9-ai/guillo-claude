@@ -1,0 +1,32 @@
+{% comment %}Black Friday early-access browsing header, separate from active sale pricing.{% endcomment %}
+<style>
+#gbe-shop-{{ section.id }}{--bf:#205B60;--ink:#161b1d;font-family:var(--font-body-family,Arial,sans-serif)}
+#gbe-shop-{{ section.id }} *{box-sizing:border-box}
+#gbe-shop-{{ section.id }} .gbe-shop-bar{background:var(--bf);color:white;text-align:center;min-height:56px;display:flex;justify-content:center;align-items:center;padding:13px 15px;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+#gbe-shop-{{ section.id }} .gbe-shop-header{display:grid;grid-template-columns:1fr auto;align-items:end;gap:30px;max-width:1440px;margin:0 auto;padding:60px clamp(22px,5vw,90px) 46px}
+#gbe-shop-{{ section.id }} .gbe-shop-label{color:var(--bf);font-size:10px;text-transform:uppercase;letter-spacing:.24em}
+#gbe-shop-{{ section.id }} h1{font:400 clamp(38px,4.4vw,70px)/1.09 var(--font-heading-family,Georgia,serif);letter-spacing:-.04em;margin:17px 0 16px}
+#gbe-shop-{{ section.id }} .gbe-shop-sub{max-width:620px;font-size:14px;line-height:1.7;color:#627070;margin:0}
+#gbe-shop-{{ section.id }} .gbe-shop-btn{display:inline-flex;justify-content:center;align-items:center;min-height:47px;border:1px solid var(--bf);padding:13px 25px;text-decoration:none;color:var(--bf);text-transform:uppercase;font-size:10px;font-weight:600;letter-spacing:.14em;white-space:nowrap;transition:background .25s,color .25s}
+#gbe-shop-{{ section.id }} .gbe-shop-btn:hover{background:var(--bf);color:white}
+#gbe-shop-{{ section.id }} .gbe-shop-steps{display:flex;justify-content:center;gap:clamp(20px,5vw,80px);border-top:1px solid #e2e8e8;border-bottom:1px solid #e2e8e8;padding:18px 24px;color:#5d6b6b;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+#gbe-shop-{{ section.id }} .gbe-shop-steps b{color:var(--bf);margin-right:7px;font-size:10px;font-weight:500}
+#gbe-shop-{{ section.id }} .gbe-shop-gift{display:flex;align-items:center;gap:15px;justify-content:center;background:#e9f1f0;padding:12px 25px;color:#263a3b;font-size:12px}
+#gbe-shop-{{ section.id }} .gbe-shop-gift b{font-weight:600}
+#gbe-shop-{{ section.id }} .gbe-shop-gift a{color:var(--bf);text-underline-offset:3px}
+@media(max-width:749px){#gbe-shop-{{ section.id }} .gbe-shop-header{grid-template-columns:1fr;gap:22px;padding:39px 20px 34px}#gbe-shop-{{ section.id }} h1{font-size:42px}#gbe-shop-{{ section.id }} .gbe-shop-bar{font-size:9px;letter-spacing:.12em;min-height:52px}#gbe-shop-{{ section.id }} .gbe-shop-btn{width:100%}#gbe-shop-{{ section.id }} .gbe-shop-steps{gap:11px;padding:17px 12px;font-size:9px;justify-content:space-between}#gbe-shop-{{ section.id }} .gbe-shop-steps span{max-width:95px}#gbe-shop-{{ section.id }} .gbe-shop-gift{font-size:11px;text-align:center;line-height:1.6;flex-wrap:wrap}}
+</style>
+<section id="gbe-shop-{{ section.id }}">
+<div class="gbe-shop-bar">{{ section.settings.bar | escape }}</div>
+<div class="gbe-shop-header"><div><span class="gbe-shop-label">GUILLO / PRIVATE ACCESS</span><h1>{{ section.settings.title | escape }}</h1><p class="gbe-shop-sub">{{ section.settings.body | escape }}</p></div><a class="gbe-shop-btn" href="{{ section.settings.signup_link | default: '/pages/black-friday-first-access' }}">SECURE FIRST ACCESS</a></div>
+<div class="gbe-shop-steps"><span><b>01 /</b> BROWSE THE COLLECTION</span><span><b>02 /</b> BUILD YOUR CART</span><span><b>03 /</b> SHOP WHEN ACCESS OPENS</span></div>
+{% if localization.country.iso_code == 'AU' %}<div class="gbe-shop-gift"><span><b>AN EXTRA THANK YOU:</b> Complimentary 95% Supima cotton Classico Tee on eligible orders $250+ during Black Friday. <a href="/pages/black-friday-first-access#g-bf-early-{{ section.id }}">Details</a></span></div>{% endif %}
+</section>
+{% schema %}
+{"name":"BF Shop First Look","settings":[
+{"type":"text","id":"bar","label":"Announcement bar","default":"BLACK FRIDAY  ·  30% OFF SITEWIDE  ·  FIRST ACCESS"},
+{"type":"text","id":"title","label":"Heading","default":"Build your Black Friday cart."},
+{"type":"textarea","id":"body","label":"Intro text","default":"Browse the collection and choose your pieces before the doors open. Your 30% offer will activate during the Black Friday access window, not before."},
+{"type":"url","id":"signup_link","label":"Signup destination"}
+],"presets":[{"name":"BF Shop First Look"}]}
+{% endschema %}
