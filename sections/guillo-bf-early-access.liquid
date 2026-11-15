@@ -1,0 +1,216 @@
+{% comment %}Guillo Black Friday early access: isolated, not linked to live sale discounts.{% endcomment %}
+{% liquid
+  assign tee_offwhite = all_products['the-classico-raglan-tee-off-white']
+  assign tee_blue = all_products['the-classico-raglan-tee-blue']
+%}
+<style>
+#g-bf-early-{{ section.id }}{--petrol:{{ section.settings.petrol | default: '#205B60' }};--ink:#151b1e;--pearl:#f7f8f8;--silver:#b9c4c4;--bronze:#ead9bd;color:var(--ink);background:#fff;font-family:var(--font-body-family,Arial,sans-serif)}
+#g-bf-early-{{ section.id }} *{box-sizing:border-box}
+#g-bf-early-{{ section.id }} .gbe-bar{display:flex;align-items:center;justify-content:center;text-align:center;min-height:58px;padding:14px 22px;background:var(--petrol);color:#fff;letter-spacing:.18em;font-size:11px;font-weight:500;text-transform:uppercase}
+#g-bf-early-{{ section.id }} .gbe-bar span{color:var(--bronze);margin:0 17px}
+#g-bf-early-{{ section.id }} .gbe-hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(420px,.92fr);min-height:620px;background:#151b1e}
+#g-bf-early-{{ section.id }} .gbe-scene{position:relative;min-height:560px;overflow:hidden;background:#111a1b}
+#g-bf-early-{{ section.id }} .gbe-scene img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;object-position:center}
+#g-bf-early-{{ section.id }} .gbe-scene:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,12,15,.37),rgba(5,12,15,.10) 65%),linear-gradient(0deg,rgba(8,15,17,.62),transparent 50%)}
+#g-bf-early-{{ section.id }} .gbe-scene-copy{position:absolute;z-index:1;bottom:58px;left:clamp(24px,5vw,90px);right:35px;color:#fff}
+#g-bf-early-{{ section.id }} .gbe-tiny{display:block;font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:500}
+#g-bf-early-{{ section.id }} .gbe-scene-copy .gbe-tiny{color:var(--bronze)}
+#g-bf-early-{{ section.id }} .gbe-scene-copy h2{font-family:var(--font-heading-family,Georgia,serif);font-size:clamp(36px,4.3vw,74px);font-weight:400;line-height:1.04;letter-spacing:-.045em;color:white;max-width:490px;margin:22px 0 15px}
+#g-bf-early-{{ section.id }} .gbe-scene-copy p{color:rgba(255,255,255,.78);font-size:14px;margin:0}
+#g-bf-early-{{ section.id }} .gbe-panel{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:65px clamp(28px,5vw,84px);color:#fff;background:radial-gradient(ellipse at 110% 0%,rgba(32,91,96,.27),transparent 57%),#151b1e}
+#g-bf-early-{{ section.id }} .gbe-panel-inner{width:100%;max-width:440px}
+#g-bf-early-{{ section.id }} .gbe-step{display:flex;gap:10px;align-items:center;color:var(--bronze);font-size:10px;letter-spacing:.22em;text-transform:uppercase}
+#g-bf-early-{{ section.id }} .gbe-step-line{width:34px;height:1px;background:var(--bronze);opacity:.6}
+#g-bf-early-{{ section.id }} .gbe-panel h1{font-family:var(--font-heading-family,Georgia,serif);font-size:clamp(34px,3.4vw,56px);font-weight:400;line-height:1.08;letter-spacing:-.035em;color:white;margin:26px 0 18px}
+#g-bf-early-{{ section.id }} .gbe-panel p{font-size:14px;line-height:1.8;color:#c9d0d0;margin:0 0 27px}
+#g-bf-early-{{ section.id }} .gbe-offer{font-size:12px;letter-spacing:.15em;color:var(--bronze);text-transform:uppercase;margin:0 0 27px}
+#g-bf-early-{{ section.id }} .gbe-flap{display:inline-flex;gap:3px;margin-left:9px;vertical-align:middle}
+#g-bf-early-{{ section.id }} .gbe-flap b{display:flex;align-items:center;justify-content:center;background:linear-gradient(#293133 0 49%,#101719 50%);color:#fff;width:25px;height:38px;font-size:22px;position:relative;font-weight:500}
+#g-bf-early-{{ section.id }} .gbe-flap b:after{content:'';position:absolute;top:50%;height:1px;background:rgba(0,0,0,.8);left:0;right:0}
+#g-bf-early-{{ section.id }} label.gbe-label{display:block;font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:#ced4d2;margin:0 0 10px}
+#g-bf-early-{{ section.id }} input[type=email],#g-bf-early-{{ section.id }} input[type=tel],#g-bf-early-{{ section.id }} select{font-family:inherit;color:#fff;background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.38);border-radius:0;min-height:54px;width:100%;padding:13px 16px;font-size:15px;box-shadow:none}
+#g-bf-early-{{ section.id }} input::placeholder{color:#899495}
+#g-bf-early-{{ section.id }} input:focus-visible,#g-bf-early-{{ section.id }} select:focus-visible,#g-bf-early-{{ section.id }} button:focus-visible,#g-bf-early-{{ section.id }} a:focus-visible{outline:2px solid #b8dfdf;outline-offset:3px}
+#g-bf-early-{{ section.id }} .gbe-button{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;padding:12px 20px;background:var(--petrol);border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none;cursor:pointer;text-transform:uppercase;letter-spacing:.17em;font-family:inherit;font-size:11px;font-weight:600;transition:background .25s ease,border .25s ease}
+#g-bf-early-{{ section.id }} .gbe-button:hover{background:#31777c;border-color:rgba(255,255,255,.7)}
+#g-bf-early-{{ section.id }} .gbe-button:disabled{opacity:.55;cursor:wait}
+#g-bf-early-{{ section.id }} .gbe-email-action{margin-top:12px}
+#g-bf-early-{{ section.id }} .gbe-consent{font-size:10.5px!important;color:#a1aaaa!important;margin:14px 0 0!important;line-height:1.55!important}
+#g-bf-early-{{ section.id }} .gbe-consent a{color:#dde5e4;text-decoration:underline;text-underline-offset:3px}
+#g-bf-early-{{ section.id }} .gbe-error{color:#ffc9b8;font-size:12px;margin-top:10px;min-height:16px}
+#g-bf-early-{{ section.id }} [hidden]{display:none!important}
+#g-bf-early-{{ section.id }} .gbe-phone-row{display:grid;grid-template-columns:110px 1fr;gap:8px}
+#g-bf-early-{{ section.id }} .gbe-phone-row select{padding:10px 8px}
+#g-bf-early-{{ section.id }} .gbe-sms-check{display:flex;gap:12px;align-items:flex-start;line-height:1.6;font-size:11px;color:#c0c9c8;margin:20px 0}
+#g-bf-early-{{ section.id }} .gbe-sms-check input{flex:0 0 17px;width:17px;height:17px;margin-top:1px;accent-color:#3b8588}
+#g-bf-early-{{ section.id }} .gbe-skip{display:block;width:100%;background:none;border:0;color:#bcc4c3;text-decoration:underline;text-underline-offset:4px;font-size:11px;cursor:pointer;margin-top:20px;padding:7px}
+#g-bf-early-{{ section.id }} .gbe-confirmation{color:var(--bronze)!important}
+#g-bf-early-{{ section.id }} .gbe-gift{padding:clamp(70px,8vw,120px) max(24px,calc((100vw - 1260px)/2));background:#f9fafa}
+#g-bf-early-{{ section.id }} .gbe-gift-head{text-align:center;max-width:640px;margin:0 auto 45px}
+#g-bf-early-{{ section.id }} .gbe-gift-head .gbe-tiny{color:var(--petrol)}
+#g-bf-early-{{ section.id }} .gbe-gift h2{font:400 clamp(32px,3.6vw,56px)/1.12 var(--font-heading-family,Georgia,serif);letter-spacing:-.034em;margin:20px 0 17px}
+#g-bf-early-{{ section.id }} .gbe-gift-head p{font-size:14px;color:#5a6565;line-height:1.8;margin:0}
+#g-bf-early-{{ section.id }} .gbe-tee-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+#g-bf-early-{{ section.id }} .gbe-tee-image{display:block;aspect-ratio:4/4.4;overflow:hidden;background:#e9eeee}
+#g-bf-early-{{ section.id }} .gbe-tee-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .65s ease}
+#g-bf-early-{{ section.id }} .gbe-tee-image:hover img{transform:scale(1.025)}
+#g-bf-early-{{ section.id }} .gbe-tee-meta{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:14px}
+#g-bf-early-{{ section.id }} .gbe-tee-name{font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+#g-bf-early-{{ section.id }} .gbe-tee-meta small{font-size:11px;color:#7b8585}
+#g-bf-early-{{ section.id }} .gbe-details{display:flex;gap:35px;justify-content:center;flex-wrap:wrap;border-top:1px solid #dce3e3;margin-top:46px;padding-top:27px;color:#5b6566;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+#g-bf-early-{{ section.id }} .gbe-details i{font-style:normal;color:var(--petrol);margin-right:8px}
+#g-bf-early-{{ section.id }} .gbe-bottom-cta{text-align:center;background:#e6eeee;padding:75px 24px}
+#g-bf-early-{{ section.id }} .gbe-bottom-cta h2{font:400 clamp(30px,3vw,48px)/1.12 var(--font-heading-family,Georgia,serif);letter-spacing:-.03em;margin:0 0 14px}
+#g-bf-early-{{ section.id }} .gbe-bottom-cta p{font-size:14px;color:#5a6565;margin:0 0 26px}
+#g-bf-early-{{ section.id }} .gbe-bottom-cta a{display:inline-flex;width:auto;min-width:250px}
+#g-bf-early-{{ section.id }} .gbe-faq{background:#fff;max-width:840px;margin:0 auto;padding:88px 24px 100px}
+#g-bf-early-{{ section.id }} .gbe-faq h2{font:400 40px/1.2 var(--font-heading-family,Georgia,serif);margin:0 0 36px;text-align:center}
+#g-bf-early-{{ section.id }} .gbe-faq details{border-bottom:1px solid #dbe2e2}
+#g-bf-early-{{ section.id }} .gbe-faq details:first-of-type{border-top:1px solid #dbe2e2}
+#g-bf-early-{{ section.id }} .gbe-faq summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:15px;font-size:14px;padding:22px 2px}
+#g-bf-early-{{ section.id }} .gbe-faq summary::-webkit-details-marker{display:none}
+#g-bf-early-{{ section.id }} .gbe-faq summary:after{content:'+';font-size:24px;font-weight:300;color:var(--petrol)}
+#g-bf-early-{{ section.id }} .gbe-faq details[open] summary:after{content:'−'}
+#g-bf-early-{{ section.id }} .gbe-faq details p{font-size:13px;color:#657071;line-height:1.75;padding:0 40px 21px 2px;margin:0}
+@media(max-width:1000px){#g-bf-early-{{ section.id }} .gbe-hero{grid-template-columns:1fr 1fr}#g-bf-early-{{ section.id }} .gbe-panel{padding:55px 32px}}
+@media(max-width:749px){#g-bf-early-{{ section.id }} .gbe-bar{min-height:52px;font-size:9px;line-height:1.5;letter-spacing:.10em;padding:12px 10px}#g-bf-early-{{ section.id }} .gbe-bar span{margin:0 8px}#g-bf-early-{{ section.id }} .gbe-hero{grid-template-columns:1fr}#g-bf-early-{{ section.id }} .gbe-scene{min-height:310px}#g-bf-early-{{ section.id }} .gbe-scene-copy{bottom:32px;left:26px}#g-bf-early-{{ section.id }} .gbe-scene-copy h2{font-size:40px;margin:14px 0 8px}#g-bf-early-{{ section.id }} .gbe-panel{padding:48px 25px 62px}#g-bf-early-{{ section.id }} .gbe-panel h1{font-size:41px}#g-bf-early-{{ section.id }} .gbe-gift{padding:66px 18px}#g-bf-early-{{ section.id }} .gbe-gift h2{font-size:35px}#g-bf-early-{{ section.id }} .gbe-tee-grid{gap:10px}#g-bf-early-{{ section.id }} .gbe-tee-name{font-size:11px}#g-bf-early-{{ section.id }} .gbe-tee-meta{flex-direction:column;align-items:flex-start;gap:2px;margin-top:9px}#g-bf-early-{{ section.id }} .gbe-details{gap:12px 24px;margin-top:33px}#g-bf-early-{{ section.id }} .gbe-faq{padding:65px 24px}}
+@media(prefers-reduced-motion:reduce){#g-bf-early-{{ section.id }} .gbe-button,#g-bf-early-{{ section.id }} .gbe-tee-image img{transition:none}}
+</style>
+<section id="g-bf-early-{{ section.id }}" class="gbe-root">
+  <div class="gbe-bar" role="note">{{ section.settings.announcement | escape }}</div>
+  <div class="gbe-hero">
+    <div class="gbe-scene">
+      {% if section.settings.hero_image != blank %}
+        {{ section.settings.hero_image | image_url: width: 1600 | image_tag: loading: 'eager', widths: '600,1000,1600', sizes: '(max-width:749px) 100vw,55vw', alt: 'Guillo menswear campaign' }}
+      {% else %}
+        <img src="{{ 'guillo-black-drive-01.jpg' | asset_url }}" loading="eager" alt="Guillo menswear campaign">
+      {% endif %}
+      <div class="gbe-scene-copy">
+        <span class="gbe-tiny">Guillo / Black Friday 2026</span>
+        <h2>{{ section.settings.left_heading | escape }}</h2>
+        <p>{{ section.settings.left_subheading | escape }}</p>
+      </div>
+    </div>
+    <div class="gbe-panel">
+      <div class="gbe-panel-inner">
+        <div class="gbe-step"><span>PRIVATE ACCESS</span><span class="gbe-step-line"></span><span data-gbe-progress>01 / 02</span></div>
+        <div data-gbe-step="email">
+          <h1>{{ section.settings.heading | escape }}</h1>
+          <div class="gbe-offer">BLACK FRIDAY <span class="gbe-flap" aria-label="30% off"><b>3</b><b>0</b><b>%</b></span> <span>OFF SITEWIDE</span></div>
+          <p>{{ section.settings.description | escape }}</p>
+          <form data-gbe-email-form>
+            <label class="gbe-label" for="gbe-email-{{ section.id }}">YOUR EMAIL ADDRESS</label>
+            <input id="gbe-email-{{ section.id }}" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+            <button type="submit" class="gbe-button gbe-email-action" data-gbe-email-btn>SECURE FIRST ACCESS</button>
+            <div class="gbe-error" data-gbe-email-error role="alert" aria-live="polite"></div>
+            <p class="gbe-consent">By submitting, you agree to receive Guillo marketing emails and Black Friday updates. Unsubscribe anytime. <a href="/policies/privacy-policy">Privacy policy</a>.</p>
+          </form>
+        </div>
+        <div data-gbe-step="sms" hidden>
+          <h1>You're on the list.</h1>
+          <p>Your email access is saved. Want the invitation by text as well? It's entirely optional.</p>
+          <form data-gbe-sms-form>
+            <label class="gbe-label" for="gbe-phone-{{ section.id }}">MOBILE NUMBER (OPTIONAL)</label>
+            <div class="gbe-phone-row">
+              <select aria-label="Country calling code" data-gbe-prefix><option value="+61">AU +61</option><option value="+44">UK +44</option><option value="+65">SG +65</option><option value="+64">NZ +64</option></select>
+              <input id="gbe-phone-{{ section.id }}" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="Mobile number">
+            </div>
+            <label class="gbe-sms-check"><input type="checkbox" data-gbe-sms-consent><span>Yes, send me Guillo marketing SMS and my Black Friday access invitation. Message frequency varies. Consent is optional, not a condition of purchase. Carrier charges may apply. Reply STOP to opt out.</span></label>
+            <button type="submit" class="gbe-button" data-gbe-sms-btn>ADD SMS ACCESS</button>
+            <div class="gbe-error" data-gbe-sms-error role="alert" aria-live="polite"></div>
+            <button type="button" class="gbe-skip" data-gbe-skip>NO THANKS, CONTINUE</button>
+          </form>
+        </div>
+        <div data-gbe-step="done" hidden>
+          <span class="gbe-tiny gbe-confirmation">GUILL0 PRIVATE ACCESS / CONFIRMED</span>
+          <h1>First access, secured.</h1>
+          <p data-gbe-success-text>You're on the list. Now's the time to explore the collection and build your cart. We'll email you when your early-access window opens.</p>
+          <a href="{{ section.settings.shop_link | default: '/collections/black-friday' }}" class="gbe-button" data-gbe-shop-link>BUILD YOUR CART</a>
+          <p class="gbe-consent">The sale prices will activate when Black Friday access officially opens.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if localization.country.iso_code == 'AU' %}
+  <div class="gbe-gift" id="gbe-classico-{{ section.id }}">
+    <div class="gbe-gift-head">
+      <span class="gbe-tiny">AN EXTRA THANK YOU / AUSTRALIA</span>
+      <h2>{{ section.settings.gift_heading | escape }}</h2>
+      <p>{{ section.settings.gift_copy | escape }}</p>
+    </div>
+    <div class="gbe-tee-grid">
+      {% if tee_offwhite != blank %}<div><a class="gbe-tee-image" href="{{ tee_offwhite.url }}">{{ tee_offwhite.featured_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '400,700,1200', sizes: '(max-width:749px) 50vw,43vw', alt: 'Classico Tee in Off White' }}</a><div class="gbe-tee-meta"><span class="gbe-tee-name">OFF WHITE</span><small>Classico / Supima cotton</small></div></div>{% endif %}
+      {% if tee_blue != blank %}<div><a class="gbe-tee-image" href="{{ tee_blue.url }}">{{ tee_blue.featured_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '400,700,1200', sizes: '(max-width:749px) 50vw,43vw', alt: 'Classico Tee in Blue' }}</a><div class="gbe-tee-meta"><span class="gbe-tee-name">BLUE</span><small>Classico / Supima cotton</small></div></div>{% endif %}
+    </div>
+    <div class="gbe-details"><span><i>01</i>95% Supima cotton</span><span><i>02</i>Long-staple fibres</span><span><i>03</i>5% elastane / 220gsm</span><span><i>04</i>Only when your order qualifies</span></div>
+  </div>
+  {% endif %}
+  <div class="gbe-bottom-cta"><h2>Choose now. Shop first.</h2><p>Explore the Black Friday collection, find your sizes and prepare your wardrobe.</p><a class="gbe-button" href="#g-bf-early-{{ section.id }}">SECURE YOUR ACCESS</a></div>
+  <div class="gbe-faq">
+    <h2>Before the doors open.</h2>
+    <details><summary>How does first access work?</summary><p>Enter your email to join the early-access list. We’ll email you the invitation and timing ahead of the public Black Friday launch.</p></details>
+    <details><summary>Can I build my cart before the sale?</summary><p>Yes. Once registered, use “Build Your Cart” to browse the collection and select your pieces. Prices remain at their regular levels until the Black Friday offer begins. Cart contents aren't reserved and availability can change.</p></details>
+    <details><summary>When will the 30% discount apply?</summary><p>30% off sitewide begins during the announced Black Friday promotional window. Joining now does not activate the discount early. Eligible items, final terms and availability will be shown when the sale starts.</p></details>
+    {% if localization.country.iso_code == 'AU' %}
+    <details><summary>How do I get the complimentary Classico Tee?</summary><p>During the qualifying Australian Black Friday promotion, eligible orders of $250 or more can receive a complimentary Classico Tee, while stock lasts. It comes in Off White and Blue and is crafted from 95% Supima cotton and 5% elastane. Size and colour availability may vary. The gift is not available simply for joining the list.</p></details>
+    {% endif %}
+    <details><summary>Do I need to add my mobile number?</summary><p>No. Your email signup is enough. SMS updates are completely optional and require separate consent.</p></details>
+  </div>
+</section>
+<script>
+(function(){
+  const root=document.getElementById('g-bf-early-{{ section.id }}');if(!root||root.dataset.ready)return;root.dataset.ready='1';
+  const site='YgJzQa', emailList='SYRitJ',smsList='RJPdeu';
+  const steps={email:root.querySelector('[data-gbe-step="email"]'),sms:root.querySelector('[data-gbe-step="sms"]'),done:root.querySelector('[data-gbe-step="done"]')};
+  const prog=root.querySelector('[data-gbe-progress]');
+  let email='';
+  const show=step=>{Object.keys(steps).forEach(k=>steps[k].hidden=k!==step);prog.textContent=step==='email'?'01 / 02':step==='sms'?'02 / 02':'ACCESS READY';};
+  async function subscribe(list,attributes){
+    const res=await fetch('https://a.klaviyo.com/client/subscriptions/?company_id='+encodeURIComponent(site),{
+      method:'POST',headers:{'Content-Type':'application/vnd.api+json','Accept':'application/vnd.api+json','revision':'2026-07-15'},
+      body:JSON.stringify({data:{type:'subscription',attributes:{profile:{data:{type:'profile',attributes}}},relationships:{list:{data:{type:'list',id:list}}}}})
+    });if(!res.ok)throw new Error('We could not save this just yet. Please try again.');return res;
+  }
+  root.querySelector('[data-gbe-email-form]').addEventListener('submit',async function(e){
+    e.preventDefault();const err=root.querySelector('[data-gbe-email-error]'),btn=root.querySelector('[data-gbe-email-btn]');
+    const field=root.querySelector('input[type=email]');if(!field.reportValidity())return;
+    email=field.value.trim().toLowerCase();err.textContent='';btn.disabled=true;btn.textContent='SECURING ACCESS…';
+    try{await subscribe(emailList,{email,subscriptions:{email:{marketing:{consent:'SUBSCRIBED'}}},properties:{'Guillo BF Signup Source':'Black Friday First Access 2026'}});show('sms');}
+    catch(ex){err.textContent=ex.message||'Could not subscribe. Please try again.';}
+    finally{btn.disabled=false;btn.textContent='SECURE FIRST ACCESS';}
+  });
+  root.querySelector('[data-gbe-skip]').addEventListener('click',()=>show('done'));
+  root.querySelector('[data-gbe-sms-form]').addEventListener('submit',async function(e){
+    e.preventDefault();const err=root.querySelector('[data-gbe-sms-error]'),btn=root.querySelector('[data-gbe-sms-btn]');
+    const input=root.querySelector('[data-gbe-sms-form] input[type=tel]');
+    const consent=root.querySelector('[data-gbe-sms-consent]');
+    if(!consent.checked){err.textContent='Please tick the SMS consent box, or select No thanks.';return;}
+    let digits=input.value.replace(/[^0-9]/g,'').replace(/^0+/,'');
+    const prefix=root.querySelector('[data-gbe-prefix]').value;
+    const number=prefix+digits;
+    if(digits.length<7||digits.length>12||number.length>16){err.textContent='Enter a valid mobile number, or skip SMS.';return;}
+    err.textContent='';btn.disabled=true;btn.textContent='ADDING SMS ACCESS…';
+    try{await subscribe(smsList,{email,phone_number:number,subscriptions:{sms:{marketing:{consent:'SUBSCRIBED'}}}});root.querySelector('[data-gbe-success-text]').textContent='Your email access is secured. Please follow any SMS confirmation instructions to activate text updates. Explore the collection and build your cart ahead of the sale.';show('done');}
+    catch(ex){err.textContent=ex.message||'Could not subscribe to SMS. Please try again or skip.';}
+    finally{btn.disabled=false;btn.textContent='ADD SMS ACCESS';}
+  });
+})();
+</script>
+{% schema %}
+{
+  "name": "BF First Access 2026",
+  "settings": [
+    {"type":"color","id":"petrol","label":"Mediterranean petrol","default":"#205B60"},
+    {"type":"text","id":"announcement","label":"Announcement bar","default":"BLACK FRIDAY  ·  30% OFF SITEWIDE  ·  SECURE FIRST ACCESS"},
+    {"type":"image_picker","id":"hero_image","label":"Campaign image"},
+    {"type":"text","id":"left_heading","label":"Editorial headline","default":"The doors open early."},
+    {"type":"text","id":"left_subheading","label":"Editorial subtitle","default":"An invitation to shop before the rest."},
+    {"type":"text","id":"heading","label":"Signup headline","default":"Your invitation starts here."},
+    {"type":"textarea","id":"description","label":"Signup copy","default":"A private invitation to Guillo's Black Friday. Register now to receive first access before the public sale opens."},
+    {"type":"url","id":"shop_link","label":"Build cart destination"},
+    {"type":"text","id":"gift_heading","label":"Gift headline","default":"A Classico Tee. On us."},
+    {"type":"textarea","id":"gift_copy","label":"Gift description","default":"Spend $250 or more during our Australian Black Friday promotion and receive a complimentary Classico Tee, while stock lasts. Made with 95% Supima cotton, a rare extra-long-staple cotton prized for its softness and strength. Available in Off White and Blue."}
+  ],
+  "presets":[{"name":"BF First Access 2026"}]
+}
+{% endschema %}
