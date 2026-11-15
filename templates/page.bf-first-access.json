@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "guillo-bf-first-access",
+      "settings": {
+        "petrol_color": "#24545A",
+        "klaviyo_form_id": "S9HYYw"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
