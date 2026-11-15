@@ -1,0 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "guillo-bf-early-access",
+      "settings": {
+        "petrol": "#205B60",
+        "announcement": "BLACK FRIDAY  ·  30% OFF SITEWIDE  ·  SECURE FIRST ACCESS",
+        "left_heading": "The doors open early.",
+        "left_subheading": "An invitation to shop before the rest.",
+        "heading": "Your invitation starts here.",
+        "description": "A private invitation to Guillo's Black Friday. Register now to receive first access before the public sale opens.",
+        "shop_link": "/collections/black-friday",
+        "gift_heading": "A Classico Tee. On us.",
+        "gift_copy": "Spend $250 or more during our Australian Black Friday promotion and receive a complimentary Classico Tee, while stock lasts. Made with 95% Supima cotton, a rare extra-long-staple cotton prized for its softness and strength. Available in Off White and Blue."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
